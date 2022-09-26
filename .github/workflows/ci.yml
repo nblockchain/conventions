@@ -1,4 +1,4 @@
-name: Build & test on ubuntu
+name: Run unit tests & check conventions
 
 on: [push, pull_request]
 

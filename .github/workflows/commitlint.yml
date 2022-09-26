@@ -1,4 +1,4 @@
-name: commitlint check
+name: commitlint check for PRs
 
 on: pull_request
 
