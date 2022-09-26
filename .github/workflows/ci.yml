@@ -7,10 +7,13 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Install dependencies of commitlint
-        run: sudo apt install --yes npm && npm install @commitlint/config-conventional
+      - name: Install required dependencies
+        run: |
+          sudo apt install --yes npm
+          npm install @commitlint/config-conventional
+          yarn add --dev jest typescript ts-jest @types/jest
       - name: Run tests to validate our plugins
-        run: yarn add --dev jest typescript ts-jest @types/jest && yarn jest
+        run: yarn jest
 
   sanitycheck:
     runs-on: ubuntu-20.04
