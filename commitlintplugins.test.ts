@@ -1,15 +1,5 @@
 const { spawnSync } = require('child_process');
 
-const ls = spawnSync('ls', ['-lh', '/usr']);
-const unexistent = spawnSync('thiscommandshouldnotexist', ['--foo']);
-
-test('spawnSync1', () => {
-    expect(ls.error).toBe(undefined);
-});
-test('spawnSync2', () => {
-    expect(unexistent.error).not.toBe(undefined);
-});
-
 let commitMsgWithNoSpace = 'foo:bar'
 test('type-space-after-colon1', () => {
     let typeSpaceAfterColon1 = spawnSync('npx', ['commitlint', '--verbose'], { input: commitMsgWithNoSpace });
