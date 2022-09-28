@@ -25,6 +25,12 @@ module.exports = {
         // * Detect WIP commits without a number.
         // * Reject #XYZ refs in favour for full URLs.
         // * If full URL for commit found, reject in favour for just the commit hash.
+        // * Reject some stupid obvious words: change, update, modify (if first word after colon, error; otherwise warning).
+        // * Think of how to reject this shitty commit message: https://github.com/nblockchain/NOnion/pull/34/commits/9ffcb373a1147ed1c729e8aca4ffd30467255594
+        // * Title should not have dot at the end.
+        // * Each body's paragraph should begin with uppercase and end with dot.
+        // * Second line of commit msg should always be blank.
+        // * Check for trailing spaces (at the start and end of each line)
 
         {
             rules: {
