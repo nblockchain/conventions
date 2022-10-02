@@ -12,6 +12,8 @@ jobs:
           sudo apt install --yes npm
           npm install @commitlint/config-conventional
           yarn add --dev jest typescript ts-jest @types/jest
+      - name: Print versions
+        run: git --version && node --version && npx commitlint --version
       - name: Run tests to validate our plugins
         run: yarn jest
 
