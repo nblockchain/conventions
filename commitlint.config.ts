@@ -24,7 +24,8 @@ module.exports = {
     },
     plugins: [
         // TODO (ideas for more rules):
-        // * Don't put space before parentheses or slash in area/scope.
+        // * Don't put space before parentheses (or slash) in area/scope.
+        // * Prefer slash over backslash in area/scope (Linux and macOS are majority over Windows lol)
         // * Better rule than body-max-line-length that ignores line if it starts with `[x] ` where x is a number.
         // * 'body-full-stop' which finds paragraphs in body without full-stop (which ignores lines in same way as suggested above).
         // * 'body-paragraph-uppercase' which finds paragraphs in body starting with lowercase.
