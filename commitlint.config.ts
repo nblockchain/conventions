@@ -35,6 +35,10 @@ module.exports = {
         {
             rules: {
                 'type-space-after-colon': ({header}: {header:any}) => {
+                    if (header === null || header === undefined) {
+                        // otherwise, String(null) might give us the stupid string "null"
+                        throw new Error('Unexpected header===null or header===undefined happened');
+                    }
                     // to convert from 'any' type
                     let headerStr = String(header);
 
@@ -55,6 +59,10 @@ module.exports = {
 
                 // NOTE: we use 'header' instead of 'subject' as a workaround to this bug: https://github.com/conventional-changelog/commitlint/issues/3404
                 'subject-lowercase': ({header}: {header:any}) => {
+                    if (header === null || header === undefined) {
+                        // otherwise, String(null) might give us the stupid string "null"
+                        throw new Error('Unexpected header===null or header===undefined happened');
+                    }
                     // to convert from 'any' type
                     let headerStr = String(header);
 
