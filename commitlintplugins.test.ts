@@ -70,6 +70,20 @@ test('subject-lowercase6', () => {
 test('subject-lowercase7', () => {
     let commitMsgWithRareCharInArea3 = "foo,bar: Baz";
     let subjectLowerCase7 = runCommitLintOnMsg(commitMsgWithRareCharInArea3);
-    //console.log("=============>" + subjectLowerCase7.stdout);
     expect(subjectLowerCase7.status).not.toBe(0);
+});
+
+
+test('type-space-after-comma1', () => {
+    let commitMsgWithSpaceAfterCommaInType = "foo, bar: bla bla blah";
+    let typeSpaceAfterComma1 = runCommitLintOnMsg(commitMsgWithSpaceAfterCommaInType);
+    expect(typeSpaceAfterComma1.status).not.toBe(0);
+});
+
+
+test('type-space-after-comma2', () => {
+    let commitMsgWithNoSpaceAfterCommaInType = "foo,bar: bla bla blah";
+    let typeSpaceAfterComma2 = runCommitLintOnMsg(commitMsgWithNoSpaceAfterCommaInType);
+    //console.log("=============>" + typeSpaceAfterComma2.stdout);
+    expect(typeSpaceAfterComma2.status).toBe(0);
 });
