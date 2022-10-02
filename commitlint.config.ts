@@ -11,10 +11,10 @@ module.exports = {
         'type-empty': [1, 'never'],
         'type-space-after-colon': [2, 'always'],
         'subject-lowercase': [2, 'always'],
+        'type-space-after-comma': [2, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
-        // * Don't put space after comma in area/scope (type).
         // * Don't put space before parentheses or slash in area/scope.
         // * Better rule than body-max-line-length that ignores line if it starts with `[x] ` where x is a number.
         // * 'body-full-stop' which finds paragraphs in body without full-stop (which ignores lines in same way as suggested above).
@@ -85,6 +85,33 @@ module.exports = {
                     return [
                         !offence,
                         `Please use lowercase as the first letter for your subject, i.e. the text after your area/scope`
+                    ];
+                },
+                'type-space-after-comma': ({header}: {header:any}) => {
+                    if (header === null || header === undefined) {
+                        // otherwise, String(null) might give us the stupid string "null"
+                        throw new Error('Unexpected type===null or type===undefined happened');
+                    }
+                    // to convert from 'any' type
+                    let headerStr = String(header);
+
+                    let offence = false;
+                    let colonIndex = headerStr.indexOf(":");
+                    if (colonIndex >= 0){
+                        let areaOrScope = headerStr.substring(0, colonIndex);
+                        let commaIndex = (areaOrScope.indexOf(','));
+                        while (commaIndex >= 0) {
+                            if (areaOrScope[commaIndex + 1] === ' ') {
+                                offence = true;
+                            }
+                            areaOrScope = areaOrScope.substring(commaIndex + 1);
+                            commaIndex = (areaOrScope.indexOf(','));
+                        }
+                    }
+
+                    return [
+                        !offence,
+                        `No need to use space after comma in the area/scope (so that commit title can be shorter)`
                     ];
                 }
             }
