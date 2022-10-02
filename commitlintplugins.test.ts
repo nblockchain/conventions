@@ -45,6 +45,27 @@ test('subject-lowercase3', () => {
 test('subject-lowercase4', () => {
     let commitMsgWithNonAlphanumericAfterColon = "foo: 3 tests added"
     let subjectLowerCase4 = spawnSync('npx', ['commitlint', '--verbose'], { input: commitMsgWithNonAlphanumericAfterColon });
-    //console.log("=============>" + subjectLowerCase4.stdout);
     expect(subjectLowerCase4.status).toBe(0);
+});
+
+
+test('subject-lowercase5', () => {
+    let commitMsgWithRareCharInArea1 = "foo.bar: Baz"
+    let subjectLowerCase5 = spawnSync('npx', ['commitlint', '--verbose'], { input: commitMsgWithRareCharInArea1 });
+    expect(subjectLowerCase5.status).not.toBe(0);
+});
+
+
+test('subject-lowercase6', () => {
+    let commitMsgWithRareCharInArea2 = "foo-bar: Baz"
+    let subjectLowerCase6 = spawnSync('npx', ['commitlint', '--verbose'], { input: commitMsgWithRareCharInArea2 });
+    expect(subjectLowerCase6.status).not.toBe(0);
+});
+
+
+test('subject-lowercase7', () => {
+    let commitMsgWithRareCharInArea3 = "foo,bar: Baz"
+    let subjectLowerCase7 = spawnSync('npx', ['commitlint', '--verbose'], { input: commitMsgWithRareCharInArea3 });
+    //console.log("=============>" + subjectLowerCase7.stdout);
+    expect(subjectLowerCase7.status).not.toBe(0);
 });
