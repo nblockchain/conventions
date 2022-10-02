@@ -52,20 +52,26 @@ module.exports = {
                         `Please place a space after the first colon character in your commit message title`
                     ];
                 },
-                'subject-lowercase': ({subject}: {subject:any}) => {
+
+                // NOTE: we use 'header' instead of 'subject' as a workaround to this bug: https://github.com/conventional-changelog/commitlint/issues/3404
+                'subject-lowercase': ({header}: {header:any}) => {
                     // to convert from 'any' type
-                    let subjectStr = String(subject);
+                    let headerStr = String(header);
 
                     let offence = false;
-                    if (subjectStr != null && subjectStr.length > 1) {
-                        let firstIsUpperCase = subjectStr[0].toUpperCase() == subjectStr[0];
-                        let firstIsLowerCase = subjectStr[0].toLowerCase() == subjectStr[0];
-                        let secondIsUpperCase = subjectStr[1].toUpperCase() == subjectStr[1];
-                        let secondIsLowerCase = subjectStr[1].toLowerCase() == subjectStr[1];
+                    let colonFirstIndex = headerStr.indexOf(":");
+                    if ((colonFirstIndex > 0) && (headerStr.length > colonFirstIndex)) {
+                        let subject = headerStr.substring(colonFirstIndex + 1).trim();
+                        if (subject != null && subject.length > 1) {
+                            let firstIsUpperCase = subject[0].toUpperCase() == subject[0];
+                            let firstIsLowerCase = subject[0].toLowerCase() == subject[0];
+                            let secondIsUpperCase = subject[1].toUpperCase() == subject[1];
+                            let secondIsLowerCase = subject[1].toLowerCase() == subject[1];
 
-                        offence = firstIsUpperCase && (!firstIsLowerCase)
-                            // to whitelist acronyms
-                            && (!secondIsUpperCase) && secondIsLowerCase;
+                            offence = firstIsUpperCase && (!firstIsLowerCase)
+                                // to whitelist acronyms
+                                && (!secondIsUpperCase) && secondIsLowerCase;
+                        }
                     }
 
                     return [
