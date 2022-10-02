@@ -30,7 +30,7 @@ module.exports = {
         // * Title should not have dot at the end.
         // * Each body's paragraph should begin with uppercase and end with dot.
         // * Second line of commit msg should always be blank.
-        // * Check for trailing spaces (at the start and end of each line)
+        // * Check for trailing spaces (at the start and end of each line) or too many spaces (e.g. 2 spaces after colon)
 
         {
             rules: {
