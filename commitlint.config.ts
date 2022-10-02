@@ -1,5 +1,5 @@
 // to convert from 'any' type
-function convertHeaderToString(header): string {
+function convertHeaderToString(header: any): string {
     if (header === null || header === undefined) {
         // otherwise, String(null) might give us the stupid string "null"
         throw new Error('Unexpected header===null or header===undefined happened');
