@@ -7,20 +7,26 @@ function convertHeaderToString(header: any): string {
     return String(header);
 }
 
+enum RuleStatus {
+    Disabled = 0,
+    Warning = 1,
+    Error = 2,
+}
+
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
-        'body-leading-blank': [1, 'always'],
+        'body-leading-blank': [RuleStatus.Warning, 'always'],
 // disable this one until we find a way for URLs to be allowed:
-//      'body-max-line-length': [2, 'always', 64],
-        'footer-leading-blank': [1, 'always'],
-        'footer-max-line-length': [2, 'always', 150],
-        'header-max-length': [2, 'always', 50],
-        'subject-full-stop': [2, 'never', '.'],
-        'type-empty': [1, 'never'],
-        'type-space-after-colon': [2, 'always'],
-        'subject-lowercase': [2, 'always'],
-        'type-space-after-comma': [2, 'always'],
+//      'body-max-line-length': [RuleStatus.Error, 'always', 64],
+        'footer-leading-blank': [RuleStatus.Warning, 'always'],
+        'footer-max-line-length': [RuleStatus.Error, 'always', 150],
+        'header-max-length': [RuleStatus.Error, 'always', 50],
+        'subject-full-stop': [RuleStatus.Error, 'never', '.'],
+        'type-empty': [RuleStatus.Warning, 'never'],
+        'type-space-after-colon': [RuleStatus.Error, 'always'],
+        'subject-lowercase': [RuleStatus.Error, 'always'],
+        'type-space-after-comma': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
