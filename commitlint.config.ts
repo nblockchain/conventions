@@ -125,8 +125,17 @@ module.exports = {
 
                         let lines = bodyStr.split(/\r?\n/);
                         for (let line of lines) {
-                            if (line.length > 64 && line.indexOf(" ") >= 0) {
-                                offence = true;
+                            if (line.length > 64) {
+
+                                // it's a URL
+                                let containsASpace = line.indexOf(" ") >= 0;
+
+                                // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
+                                let startsWithRef = (line[0] == "[" && line.indexOf("] ") > 0);
+
+                                if (containsASpace && (!startsWithRef)) {
+                                    offence = true;
+                                }
                             }
                         }
                     }
