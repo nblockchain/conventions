@@ -133,7 +133,9 @@ module.exports = {
                                 // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
                                 let startsWithRef = (line[0] == "[" && line.indexOf("] ") > 0);
 
-                                if (containsASpace && (!startsWithRef)) {
+                                let startWithFixesSentence = (line.indexOf("Fixes ") == 0);
+
+                                if (containsASpace && (!startsWithRef) && (!startWithFixesSentence)) {
                                     offence = true;
                                 }
                             }

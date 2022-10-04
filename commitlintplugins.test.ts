@@ -126,9 +126,21 @@ test('body-max-line-length4', () => {
     let commitMsgWithUrlThatExceedsBodyMaxLineLength =
         "foo: this is only a title" + "\n\n" + "bla blah[1] bla\n\n[1] someUrl://" + seventyChars;
     let bodyMaxLineLength4 = runCommitLintOnMsg(commitMsgWithUrlThatExceedsBodyMaxLineLength);
-    //console.log("=============>" + bodyMaxLineLength4.stdout);
 
     // because URLs in footer can bypass the limit
     expect(bodyMaxLineLength4.status).toBe(0);
+});
+
+
+test('body-max-line-length5', () => {
+    let tenDigits = "1234567890";
+    let seventyChars = tenDigits + tenDigits + tenDigits + tenDigits + tenDigits + tenDigits + tenDigits;
+    let commitMsgWithUrlThatExceedsBodyMaxLineLength =
+        "foo: this is only a title" + "\n\n" + "Fixes someUrl://" + seventyChars;
+    let bodyMaxLineLength5 = runCommitLintOnMsg(commitMsgWithUrlThatExceedsBodyMaxLineLength);
+    //console.log("=============>" + bodyMaxLineLength5.stdout);
+
+    // because URLs in "Fixes <URL>" sentence can bypass the limit
+    expect(bodyMaxLineLength5.status).toBe(0);
 });
 
