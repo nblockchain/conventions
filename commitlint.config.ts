@@ -17,8 +17,9 @@ module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
         'body-leading-blank': [RuleStatus.Warning, 'always'],
-// disable this one until we find a way for URLs to be allowed:
-//      'body-max-line-length': [RuleStatus.Error, 'always', 64],
+
+        // TODO: are URLs whitelisted?
+        'body-max-line-length': [RuleStatus.Error, 'always', 64],
         'footer-leading-blank': [RuleStatus.Warning, 'always'],
         'footer-max-line-length': [RuleStatus.Error, 'always', 150],
         'header-max-length': [RuleStatus.Error, 'always', 50],

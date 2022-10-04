@@ -98,3 +98,14 @@ test('body-max-line-length1', () => {
     expect(bodyMaxLineLength1.status).toBe(0);
 });
 
+
+test('body-max-line-length2', () => {
+    let tenChars = "1234567890";
+    let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
+    let commitMsgWithOnlySixtyFiveCharsInBody =
+        "foo,bar: bla bla blah" + "\n\n" + sixtyChars + "12345";
+    let bodyMaxLineLength2 = runCommitLintOnMsg(commitMsgWithOnlySixtyFiveCharsInBody);
+    //console.log("=============>" + bodyMaxLineLength2.stdout);
+    expect(bodyMaxLineLength2.status).not.toBe(0);
+});
+
