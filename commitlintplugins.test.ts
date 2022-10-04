@@ -84,6 +84,17 @@ test('type-space-after-comma1', () => {
 test('type-space-after-comma2', () => {
     let commitMsgWithNoSpaceAfterCommaInType = "foo,bar: bla bla blah";
     let typeSpaceAfterComma2 = runCommitLintOnMsg(commitMsgWithNoSpaceAfterCommaInType);
-    //console.log("=============>" + typeSpaceAfterComma2.stdout);
     expect(typeSpaceAfterComma2.status).toBe(0);
 });
+
+
+test('body-max-line-length1', () => {
+    let tenChars = "1234567890";
+    let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
+    let commitMsgWithOnlySixtyFourCharsInBody =
+        "foo,bar: bla bla blah" + "\n\n" + sixtyChars + "1234";
+    let bodyMaxLineLength1 = runCommitLintOnMsg(commitMsgWithOnlySixtyFourCharsInBody);
+    //console.log("=============>" + bodyMaxLineLength1.stdout);
+    expect(bodyMaxLineLength1.status).toBe(0);
+});
+
