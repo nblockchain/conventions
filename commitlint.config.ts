@@ -13,11 +13,13 @@ enum RuleStatus {
     Error = 2,
 }
 
+let bodyMaxLineLength = 64;
+
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
         'body-leading-blank': [RuleStatus.Warning, 'always'],
-        'body-soft-max-line-length': [RuleStatus.Error, 'always', 64],
+        'body-soft-max-line-length': [RuleStatus.Error, 'always'],
         'footer-leading-blank': [RuleStatus.Warning, 'always'],
         'footer-max-line-length': [RuleStatus.Error, 'always', 150],
         'header-max-length': [RuleStatus.Error, 'always', 50],
@@ -125,7 +127,7 @@ module.exports = {
 
                         let lines = bodyStr.split(/\r?\n/);
                         for (let line of lines) {
-                            if (line.length > 64) {
+                            if (line.length > bodyMaxLineLength) {
 
                                 // it's a URL
                                 let containsASpace = line.indexOf(" ") >= 0;
@@ -137,6 +139,7 @@ module.exports = {
 
                                 if (containsASpace && (!startsWithRef) && (!startWithFixesSentence)) {
                                     offence = true;
+                                    break;
                                 }
                             }
                         }
