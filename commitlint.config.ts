@@ -1,10 +1,10 @@
 // to convert from 'any' type
-function convertHeaderToString(header: any): string {
-    if (header === null || header === undefined) {
+function convertAnyToString(potentialString: any, paramName: string): string {
+    if (potentialString === null || potentialString === undefined) {
         // otherwise, String(null) might give us the stupid string "null"
-        throw new Error('Unexpected header===null or header===undefined happened');
+        throw new Error('Unexpected ' + paramName + '===null or ' + paramName + '===undefined happened');
     }
-    return String(header);
+    return String(potentialString);
 }
 
 enum RuleStatus {
@@ -17,9 +17,7 @@ module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
         'body-leading-blank': [RuleStatus.Warning, 'always'],
-
-        // TODO: are URLs whitelisted?
-        'body-max-line-length': [RuleStatus.Error, 'always', 64],
+        'body-soft-max-line-length': [RuleStatus.Error, 'always', 64],
         'footer-leading-blank': [RuleStatus.Warning, 'always'],
         'footer-max-line-length': [RuleStatus.Error, 'always', 150],
         'header-max-length': [RuleStatus.Error, 'always', 50],
@@ -52,7 +50,7 @@ module.exports = {
         {
             rules: {
                 'type-space-after-colon': ({header}: {header:any}) => {
-                    let headerStr = convertHeaderToString(header);
+                    let headerStr = convertAnyToString(header, "header");
 
                     let colonFirstIndex = headerStr.indexOf(":");
 
@@ -71,7 +69,7 @@ module.exports = {
 
                 // NOTE: we use 'header' instead of 'subject' as a workaround to this bug: https://github.com/conventional-changelog/commitlint/issues/3404
                 'subject-lowercase': ({header}: {header:any}) => {
-                    let headerStr = convertHeaderToString(header);
+                    let headerStr = convertAnyToString(header, "header");
 
                     let offence = false;
                     let colonFirstIndex = headerStr.indexOf(":");
@@ -94,8 +92,9 @@ module.exports = {
                         `Please use lowercase as the first letter for your subject, i.e. the text after your area/scope`
                     ];
                 },
+
                 'type-space-after-comma': ({header}: {header:any}) => {
-                    let headerStr = convertHeaderToString(header);
+                    let headerStr = convertAnyToString(header, "header");
 
                     let offence = false;
                     let colonIndex = headerStr.indexOf(":");
@@ -114,6 +113,27 @@ module.exports = {
                     return [
                         !offence,
                         `No need to use space after comma in the area/scope (so that commit title can be shorter)`
+                    ];
+                },
+
+                'body-soft-max-line-length': ({body}: {body:any}) => {
+                    let offence = false;
+
+                    // does msg have a body?
+                    if (body !== null) {
+                        let bodyStr = convertAnyToString(body, "body");
+
+                        let lines = bodyStr.split(/\r?\n/);
+                        for (let line of lines) {
+                            if (line.length > 64 && line.indexOf(" ") >= 0) {
+                                offence = true;
+                            }
+                        }
+                    }
+
+                    return [
+                        !offence,
+                        `Please do not exceed 64 characters in the lines of the commit message's body`
                     ];
                 }
             }

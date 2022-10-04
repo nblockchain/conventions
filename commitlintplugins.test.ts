@@ -89,23 +89,34 @@ test('type-space-after-comma2', () => {
 
 
 test('body-max-line-length1', () => {
-    let tenChars = "1234567890";
+    let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
     let commitMsgWithOnlySixtyFourCharsInBody =
-        "foo,bar: bla bla blah" + "\n\n" + sixtyChars + "1234";
+        "foo: this is only a title" + "\n\n" + sixtyChars + "1234";
     let bodyMaxLineLength1 = runCommitLintOnMsg(commitMsgWithOnlySixtyFourCharsInBody);
-    //console.log("=============>" + bodyMaxLineLength1.stdout);
     expect(bodyMaxLineLength1.status).toBe(0);
 });
 
 
 test('body-max-line-length2', () => {
-    let tenChars = "1234567890";
+    let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
     let commitMsgWithOnlySixtyFiveCharsInBody =
-        "foo,bar: bla bla blah" + "\n\n" + sixtyChars + "12345";
+        "foo: this is only a title" + "\n\n" + sixtyChars + "12345";
     let bodyMaxLineLength2 = runCommitLintOnMsg(commitMsgWithOnlySixtyFiveCharsInBody);
-    //console.log("=============>" + bodyMaxLineLength2.stdout);
     expect(bodyMaxLineLength2.status).not.toBe(0);
+});
+
+
+test('body-max-line-length3', () => {
+    let tenDigits = "1234567890";
+    let seventyChars = tenDigits + tenDigits + tenDigits + tenDigits + tenDigits + tenDigits + tenDigits;
+    let commitMsgWithUrlThatExceedsBodyMaxLineLength =
+        "foo: this is only a title" + "\n\n" + "someUrl://" + seventyChars;
+    let bodyMaxLineLength3 = runCommitLintOnMsg(commitMsgWithUrlThatExceedsBodyMaxLineLength);
+    //console.log("=============>" + bodyMaxLineLength3.stdout);
+
+    // because URLs can bypass the limit
+    expect(bodyMaxLineLength3.status).toBe(0);
 });
 
