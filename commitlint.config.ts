@@ -28,6 +28,7 @@ module.exports = {
         'type-space-after-colon': [RuleStatus.Error, 'always'],
         'subject-lowercase': [RuleStatus.Error, 'always'],
         'type-space-after-comma': [RuleStatus.Error, 'always'],
+        'trailing-whitespace': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -37,7 +38,6 @@ module.exports = {
         // * 'body-full-stop' which finds paragraphs in body without full-stop (which ignores lines in same way as suggested above).
         // * 'body-paragraph-uppercase' which finds paragraphs in body starting with lowercase.
         // * Detect if paragraphs in body have been cropped too shortly (less than 64 chars). -> maybe only a warning
-        // * Detect trailing spaces.
         // * Detect reverts which have not been elaborated.
         // * Detect WIP commits without a number.
         // * Reject #XYZ refs in favour for full URLs.
@@ -47,7 +47,7 @@ module.exports = {
         // * Title should not have dot at the end.
         // * Each body's paragraph should begin with uppercase and end with dot.
         // * Second line of commit msg should always be blank.
-        // * Check for trailing spaces (at the start and end of each line) or too many spaces (e.g. 2 spaces after colon)
+        // * Check for too many spaces (e.g. 2 spaces after colon)
 
         {
             rules: {
@@ -149,7 +149,33 @@ module.exports = {
                         !offence,
                         `Please do not exceed 64 characters in the lines of the commit message's body`
                     ];
-                }
+                },
+
+                'trailing-whitespace': ({raw}: {raw:any}) => {
+                    let rawStr = convertAnyToString(raw, "raw");
+
+                    let offence = false;
+                    let lines = rawStr.split(/\r?\n/);
+                    for (let line of lines) {
+                        if (line[0] == " " || line[0] == "\t") {
+                            offence = true;
+                            break;
+                        }
+
+                        if (line.length > 0) {
+                            let lastChar = line[line.length - 1];
+                            if (lastChar == " " || lastChar == "\t") {
+                                offence = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    return [
+                        !offence,
+                        `Please watch out for leading or ending trailing whitespace`
+                    ];
+                },
             }
         }
     ]

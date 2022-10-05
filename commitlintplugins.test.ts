@@ -138,9 +138,48 @@ test('body-max-line-length5', () => {
     let commitMsgWithUrlThatExceedsBodyMaxLineLength =
         "foo: this is only a title" + "\n\n" + "Fixes someUrl://" + seventyChars;
     let bodyMaxLineLength5 = runCommitLintOnMsg(commitMsgWithUrlThatExceedsBodyMaxLineLength);
-    //console.log("=============>" + bodyMaxLineLength5.stdout);
 
     // because URLs in "Fixes <URL>" sentence can bypass the limit
     expect(bodyMaxLineLength5.status).toBe(0);
 });
 
+
+test('trailing-whitespace1', () => {
+    let commitMsgWithNoTrailingWhiteSpace =
+        "foo: this is only a title" + "\n\n" + "bla blah bla";
+    let trailingWhitespace1 = runCommitLintOnMsg(commitMsgWithNoTrailingWhiteSpace);
+    expect(trailingWhitespace1.status).toBe(0);
+});
+
+
+test('trailing-whitespace2', () => {
+    let commitMsgWithTrailingWhiteSpaceInTitleEnd =
+        "foo: title " + "\n\n" + "bla blah bla";
+    let trailingWhitespace2 = runCommitLintOnMsg(commitMsgWithTrailingWhiteSpaceInTitleEnd);
+    expect(trailingWhitespace2.status).not.toBe(0);
+});
+
+
+test('trailing-whitespace3', () => {
+    let commitMsgWithTrailingWhiteSpaceInTitleStart =
+        " foo: title" + "\n\n" + "bla blah bla";
+    let trailingWhitespace3 = runCommitLintOnMsg(commitMsgWithTrailingWhiteSpaceInTitleStart);
+    expect(trailingWhitespace3.status).not.toBe(0);
+});
+
+
+test('trailing-whitespace4', () => {
+    let commitMsgWithTrailingWhiteSpaceInBodyStart =
+        "foo: title" + "\n\n" + " bla blah bla";
+    let trailingWhitespace4 = runCommitLintOnMsg(commitMsgWithTrailingWhiteSpaceInBodyStart);
+    expect(trailingWhitespace4.status).not.toBe(0);
+});
+
+
+test('trailing-whitespace5', () => {
+    let commitMsgWithTrailingWhiteSpaceInBodyEnd =
+        "foo: title" + "\n\n" + "bla blah bla ";
+    let trailingWhitespace5 = runCommitLintOnMsg(commitMsgWithTrailingWhiteSpaceInBodyEnd);
+    //console.log("=============>" + trailingWhitespace5.stdout);
+    expect(trailingWhitespace5.status).not.toBe(0);
+});
