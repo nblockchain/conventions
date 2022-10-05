@@ -48,6 +48,8 @@ module.exports = {
         // * Each body's paragraph should begin with uppercase and end with dot.
         // * Second line of commit msg should always be blank.
         // * Check for too many spaces (e.g. 2 spaces after colon)
+        // * Detect area/scope wrapped under square brakets instead of "foo: bar" style.
+        // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
 
         {
             rules: {
