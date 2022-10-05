@@ -128,7 +128,15 @@ module.exports = {
                         let bodyStr = convertAnyToString(body, "body");
 
                         let lines = bodyStr.split(/\r?\n/);
+                        let inBigBlock = false;
                         for (let line of lines) {
+                            if (line.length == 3 && line.indexOf("```") == 0) {
+                                inBigBlock = !inBigBlock;
+                                continue;
+                            }
+                            if (inBigBlock) {
+                                continue;
+                            }
                             if (line.length > bodyMaxLineLength) {
 
                                 // it's a URL

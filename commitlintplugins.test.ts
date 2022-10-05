@@ -144,6 +144,18 @@ test('body-max-line-length5', () => {
 });
 
 
+test('body-max-line-length6', () => {
+    let tenChars = "1234 67890";
+    let seventyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
+    let commitMsgWithUrlThatExceedsBodyMaxLineLength =
+        "foo: this is only a title" + "\n\n" + "bar baz\n```\n" + seventyChars + "\n```";
+    let bodyMaxLineLength6 = runCommitLintOnMsg(commitMsgWithUrlThatExceedsBodyMaxLineLength);
+
+    // because ```blocks surrounded like this``` can bypass the limit
+    expect(bodyMaxLineLength6.status).toBe(0);
+});
+
+
 test('trailing-whitespace1', () => {
     let commitMsgWithNoTrailingWhiteSpace =
         "foo: this is only a title" + "\n\n" + "bla blah bla";
