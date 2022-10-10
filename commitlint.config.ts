@@ -15,6 +15,11 @@ enum RuleStatus {
 
 let bodyMaxLineLength = 64;
 
+function isBigBlock(line: string) {
+    let bigBlockDelimiter = "```";
+    return (line.length == bigBlockDelimiter.length) && (line.indexOf("```") == 0);
+}
+
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
@@ -130,7 +135,7 @@ module.exports = {
                         let lines = bodyStr.split(/\r?\n/);
                         let inBigBlock = false;
                         for (let line of lines) {
-                            if (line.length == 3 && line.indexOf("```") == 0) {
+                            if (isBigBlock(line)) {
                                 inBigBlock = !inBigBlock;
                                 continue;
                             }
@@ -166,7 +171,16 @@ module.exports = {
 
                     let offence = false;
                     let lines = rawStr.split(/\r?\n/);
+                    let inBigBlock = false;
                     for (let line of lines) {
+                        if (isBigBlock(line)) {
+                            inBigBlock = !inBigBlock;
+                            continue;
+                        }
+                        if (inBigBlock) {
+                            continue;
+                        }
+
                         if (line[0] == " " || line[0] == "\t") {
                             offence = true;
                             break;
