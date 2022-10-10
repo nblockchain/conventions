@@ -42,7 +42,7 @@ module.exports = {
         // * Better rule than body-max-line-length that ignores line if it starts with `[x] ` where x is a number.
         // * 'body-full-stop' which finds paragraphs in body without full-stop (which ignores lines in same way as suggested above).
         // * 'body-paragraph-uppercase' which finds paragraphs in body starting with lowercase.
-        // * Detect if paragraphs in body have been cropped too shortly (less than 64 chars). -> maybe only a warning
+        // * Detect if paragraphs in body have been cropped too shortly (less than 64 chars). -> maybe only a warning (and/or suggest/implement an auto-unwrapper? see https://superuser.com/questions/610903/how-to-unwrap-80-character-text )
         // * Detect reverts which have not been elaborated.
         // * Detect WIP commits without a number.
         // * Reject #XYZ refs in favour for full URLs.
