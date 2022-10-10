@@ -192,6 +192,14 @@ test('trailing-whitespace5', () => {
     let commitMsgWithTrailingWhiteSpaceInBodyEnd =
         "foo: title" + "\n\n" + "bla blah bla ";
     let trailingWhitespace5 = runCommitLintOnMsg(commitMsgWithTrailingWhiteSpaceInBodyEnd);
-    //console.log("=============>" + trailingWhitespace5.stdout);
     expect(trailingWhitespace5.status).not.toBe(0);
+});
+
+
+test('trailing-whitespace6', () => {
+    let commitMsgWithTrailingWhiteSpaceInCodeBlock =
+        "foo: this is only a title" + "\n\n" + "bar baz:\n\n```\ntype Foo =\n    string\n```";
+    let trailingWhitespace6 = runCommitLintOnMsg(commitMsgWithTrailingWhiteSpaceInCodeBlock);
+    //console.log("=============>" + trailingWhitespace6.stdout);
+    expect(trailingWhitespace6.status).toBe(0);
 });
