@@ -28,13 +28,14 @@ module.exports = {
         'footer-leading-blank': [RuleStatus.Warning, 'always'],
         'footer-max-line-length': [RuleStatus.Error, 'always', 150],
         'header-max-length': [RuleStatus.Error, 'always', 50],
+        'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
         'subject-full-stop': [RuleStatus.Error, 'never', '.'],
         'type-empty': [RuleStatus.Warning, 'never'],
         'type-space-after-colon': [RuleStatus.Error, 'always'],
         'subject-lowercase': [RuleStatus.Error, 'always'],
         'type-space-after-comma': [RuleStatus.Error, 'always'],
         'trailing-whitespace': [RuleStatus.Error, 'always'],
-        'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
+        'type-space-before-paren': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
