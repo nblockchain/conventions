@@ -223,7 +223,7 @@ module.exports = {
 
                     return [
                         !offence,
-                        `Please use slash instead of backslash`
+                        `Please use slash instead of backslash in the area/scope/sub-area section of the title`
                     ];
                 },
             }
