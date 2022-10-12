@@ -228,7 +228,7 @@ test('type-space-before-paren3', () => {
 
 
 test('prefer-slash-over-backslash1', () => {
-    let commitMsgWithBackslash = "foo\bar: bla bla bla";
+    let commitMsgWithBackslash = "foo\\bar: bla bla bla";
     let preferSlashOverBackslash1 = runCommitLintOnMsg(commitMsgWithBackslash);
     expect(preferSlashOverBackslash1.status).not.toBe(0);
 });
