@@ -219,3 +219,9 @@ test('type-space-after-comma2', () => {
     expect(typeSpaceAfterComma2.status).toBe(0);
 });
 
+
+test('type-space-before-paren1', () => {
+    let commitMsgWithNoSpaceBeforeParen = "foo (bar): bla bla bla";
+    let typeSpaceBeforeParen1 = runCommitLintOnMsg(commitMsgWithNoSpaceBeforeParen);
+    expect(typeSpaceBeforeParen1.status).not.toBe(0);
+});
