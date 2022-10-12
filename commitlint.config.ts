@@ -207,6 +207,26 @@ module.exports = {
                         `Please watch out for leading or ending trailing whitespace`
                     ];
                 },
+
+                'type-space-before-paren': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+
+                    let offence = false;
+
+                    let colonIndex = headerStr.indexOf(":");
+                    if (colonIndex >= 0){
+                        let areaOrScope = headerStr.substring(0, colonIndex);
+                        let parenIndex = (areaOrScope.indexOf('('));
+                        if (headerStr[parenIndex - 1] === ' ') {
+                            offence = true;
+                        }
+                    }
+
+                    return [
+                        !offence,
+                        `Please watch out for leading or ending trailing whitespace`
+                    ];
+                },
             }
         }
     ]
