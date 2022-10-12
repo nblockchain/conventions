@@ -218,3 +218,10 @@ test('type-space-before-paren2', () => {
     let typeSpaceBeforeParen2 = runCommitLintOnMsg(commitMsgWithNoSpaceBeforeParen);
     expect(typeSpaceBeforeParen2.status).toBe(0);
 });
+
+
+test('type-space-before-paren3', () => {
+    let commitMsgWithNoSpaceBeforeParen = "(bar): bla bla bla";
+    let typeSpaceBeforeParen3 = runCommitLintOnMsg(commitMsgWithNoSpaceBeforeParen);
+    expect(typeSpaceBeforeParen3.status).toBe(0);
+});
