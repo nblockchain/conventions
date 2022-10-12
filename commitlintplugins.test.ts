@@ -72,6 +72,11 @@ test('body-max-line-length6', () => {
     expect(bodyMaxLineLength6.status).toBe(0);
 });
 
+test('no-ending-dot-in-the-title1', () => {
+    let commitMsgWithEndingDotInTitle= "foo/bar: bla bla blah.";
+    let noEndingDotInTitle1 = runCommitLintOnMsg(commitMsgWithEndingDotInTitle);
+    expect(noEndingDotInTitle1.status).not.toBe(0);
+});
 
 test('subject-lowercase1', () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
