@@ -205,3 +205,9 @@ test('type-space-after-comma2', () => {
     expect(typeSpaceAfterComma2.status).toBe(0);
 });
 
+
+test('prefer-slash-over-backslash1', () => {
+    let commitMsgWithBackslash = "foo\bar: bla bla bla";
+    let preferSlashOverBackslash1 = runCommitLintOnMsg(commitMsgWithBackslash);
+    expect(preferSlashOverBackslash1.status).not.toBe(0);
+});
