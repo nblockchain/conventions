@@ -42,7 +42,7 @@ module.exports = {
         // * Better rule than body-max-line-length that ignores line if it starts with `[x] ` where x is a number.
         // * 'body-full-stop' which finds paragraphs in body without full-stop (which ignores lines in same way as suggested above).
         // * 'body-paragraph-uppercase' which finds paragraphs in body starting with lowercase.
-        // * Detect if paragraphs in body have been cropped too shortly (less than 64 chars). -> maybe only a warning (and/or suggest/implement an auto-unwrapper? see https://superuser.com/questions/610903/how-to-unwrap-80-character-text )
+        // * Detect if paragraphs in body have been cropped too shortly (less than 64 chars), and suggest same auto-wrap command that body-soft-max-line-length suggests, since it unwraps and wraps (both).
         // * Detect reverts which have not been elaborated.
         // * Detect WIP commits without a number.
         // * Reject #XYZ refs in favour for full URLs.
@@ -165,7 +165,7 @@ module.exports = {
 
                     // taken from https://stackoverflow.com/a/66433444/544947 and https://unix.stackexchange.com/a/25208/56844
                     let recommendedUnixCommand =
-                        "git log --format=%B -n 1 $(git log -1 --pretty=format:\"%h\") | cat - > log.txt ; fmt -w 64 -s log.txt > wlog.txt && git commit --amend -F wlog.txt`";
+                        'git log --format=%B -n 1 $(git log -1 --pretty=format:"%h") | cat - > log.txt ; fmt -w 1111 -s log.txt > ulog.txt && fmt -w 64 -s ulog.txt > wlog.txt && git commit --amend -F wlog.txt';
 
                     return [
                         !offence,
