@@ -79,24 +79,11 @@ test('prefer-slash-over-backslash1', () => {
     expect(preferSlashOverBackslash1.status).not.toBe(0);
 });
 
+
 test('prefer-slash-over-backslash2', () => {
     let commitMsgWithSlash = "foo/bar: bla bla bla";
     let preferSlashOverBackslash2 = runCommitLintOnMsg(commitMsgWithSlash);
     expect(preferSlashOverBackslash2.status).toBe(0);
-});
-
-
-test('prefer-slash-over-backslash3', () => {
-    let commitMsgWithSlash = "/bar: bla bla bla";
-    let preferSlashOverBackslash3 = runCommitLintOnMsg(commitMsgWithSlash);
-    expect(preferSlashOverBackslash3.status).toBe(0);
-});
-
-
-test('prefer-slash-over-backslash4', () => {
-    let commitMsgWithBackslash = "\\bar: bla bla bla";
-    let preferSlashOverBackslash4 = runCommitLintOnMsg(commitMsgWithBackslash);
-    expect(preferSlashOverBackslash4.status).not.toBe(0);
 });
 
 
