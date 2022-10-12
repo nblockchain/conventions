@@ -78,6 +78,12 @@ test('no-ending-dot-in-the-title1', () => {
     expect(noEndingDotInTitle1.status).not.toBe(0);
 });
 
+test('no-ending-dot-in-the-title2', () => {
+    let commitMsgWithoutEndingDotInTitle= "foo/bar: bla bla blah";
+    let noEndingDotInTitle2 = runCommitLintOnMsg(commitMsgWithoutEndingDotInTitle);
+    expect(noEndingDotInTitle2.status).toBe(0);
+});
+
 test('subject-lowercase1', () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(commitMsgWithUppercaseAfterColon);
