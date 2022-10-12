@@ -34,6 +34,7 @@ module.exports = {
         'subject-lowercase': [RuleStatus.Error, 'always'],
         'type-space-after-comma': [RuleStatus.Error, 'always'],
         'trailing-whitespace': [RuleStatus.Error, 'always'],
+        'type-space-before-paren': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
