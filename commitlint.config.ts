@@ -35,6 +35,7 @@ module.exports = {
         'type-space-after-comma': [RuleStatus.Error, 'always'],
         'trailing-whitespace': [RuleStatus.Error, 'always'],
         'type-space-before-paren': [RuleStatus.Error, 'always'],
+        'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -227,6 +228,25 @@ module.exports = {
                     return [
                         !offence,
                         `Please watch out for leading or ending trailing whitespace`
+                    ];
+                },
+
+                'prefer-slash-over-backslash': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+
+                    let offence = false;
+
+                    let colonIndex = headerStr.indexOf(":");
+                    if (colonIndex >= 0){
+                        let areaOrScope = headerStr.substring(0, colonIndex);
+                        if (areaOrScope.includes('\\')){
+                            offence = true;
+                        }
+                    }
+
+                    return [
+                        !offence,
+                        `Please use slash instead of backslash`
                     ];
                 },
             }
