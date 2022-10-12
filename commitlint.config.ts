@@ -34,6 +34,7 @@ module.exports = {
         'subject-lowercase': [RuleStatus.Error, 'always'],
         'type-space-after-comma': [RuleStatus.Error, 'always'],
         'trailing-whitespace': [RuleStatus.Error, 'always'],
+        'no-ending-dot-in-title': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -207,6 +208,22 @@ module.exports = {
                         `Please watch out for leading or ending trailing whitespace`
                     ];
                 },
+
+                'no-ending-dot-in-title': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+
+                    let offence = false;
+
+                    if (headerStr.charAt(headerStr.length - 1) === '.'){
+                        offence = true;
+                    }
+
+                    return [
+                        !offence,
+                        `No need to use a dot at the end of the title`
+                    ];
+                },
+
             }
         }
     ]
