@@ -245,7 +245,7 @@ module.exports = {
 
                     return [
                         !offence,
-                        `Please watch out for leading or ending trailing whitespace`
+                        `Please watch out for whitespaces before parentheses`
                     ];
                 },
             }
