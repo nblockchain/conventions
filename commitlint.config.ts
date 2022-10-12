@@ -211,11 +211,7 @@ module.exports = {
                 'no-ending-dot-in-title': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 
-                    let offence = false;
-
-                    if (headerStr.charAt(headerStr.length - 1) === '.'){
-                        offence = true;
-                    }
+                    let offence = headerStr.charAt(headerStr.length - 1) === '.';
 
                     return [
                         !offence,
