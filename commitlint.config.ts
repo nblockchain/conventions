@@ -39,7 +39,6 @@ module.exports = {
     },
     plugins: [
         // TODO (ideas for more rules):
-        // * Don't put space before parentheses (or slash) in area/scope.
         // * Better rule than body-max-line-length that ignores line if it starts with `[x] ` where x is a number.
         // * 'body-full-stop' which finds paragraphs in body without full-stop (which ignores lines in same way as suggested above).
         // * 'body-paragraph-uppercase' which finds paragraphs in body starting with lowercase.
@@ -237,9 +236,11 @@ module.exports = {
                     if (colonIndex >= 0){
                         let areaOrScope = headerStr.substring(0, colonIndex);
                         let parenIndex = (areaOrScope.indexOf('('));
-                        if (headerStr[parenIndex - 1] === ' ') {
-                            offence = true;
-                        }
+                        if (parenIndex >= 1){
+                            if (headerStr[parenIndex - 1] === ' ') {
+                                offence = true;
+                            }
+                        }    
                     }
 
                     return [
