@@ -225,3 +225,10 @@ test('type-space-before-paren3', () => {
     let typeSpaceBeforeParen3 = runCommitLintOnMsg(commitMsgWithNoSpaceBeforeParen);
     expect(typeSpaceBeforeParen3.status).toBe(0);
 });
+
+
+test('prefer-slash-over-backslash1', () => {
+    let commitMsgWithBackslash = "foo\bar: bla bla bla";
+    let preferSlashOverBackslash1 = runCommitLintOnMsg(commitMsgWithBackslash);
+    expect(preferSlashOverBackslash1.status).not.toBe(0);
+});
