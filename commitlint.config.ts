@@ -61,6 +61,25 @@ module.exports = {
 
         {
             rules: {
+                'prefer-slash-over-backslash': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+
+                    let offence = false;
+
+                    let colonIndex = headerStr.indexOf(":");
+                    if (colonIndex >= 0){
+                        let areaOrScope = headerStr.substring(0, colonIndex);
+                        if (areaOrScope.includes('\\')){
+                            offence = true;
+                        }
+                    }
+
+                    return [
+                        !offence,
+                        `Please use slash instead of backslash in the area/scope/sub-area section of the title`
+                    ];
+                },
+
                 'type-space-after-colon': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 
@@ -205,25 +224,6 @@ module.exports = {
                     return [
                         !offence,
                         `Please watch out for leading or ending trailing whitespace`
-                    ];
-                },
-
-                'prefer-slash-over-backslash': ({header}: {header:any}) => {
-                    let headerStr = convertAnyToString(header, "header");
-
-                    let offence = false;
-
-                    let colonIndex = headerStr.indexOf(":");
-                    if (colonIndex >= 0){
-                        let areaOrScope = headerStr.substring(0, colonIndex);
-                        if (areaOrScope.includes('\\')){
-                            offence = true;
-                        }
-                    }
-
-                    return [
-                        !offence,
-                        `Please use slash instead of backslash in the area/scope/sub-area section of the title`
                     ];
                 },
             }
