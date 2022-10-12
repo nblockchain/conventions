@@ -23,6 +23,7 @@ function isBigBlock(line: string) {
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
+        'body-prose': [RuleStatus.Error, 'always'],
         'body-leading-blank': [RuleStatus.Warning, 'always'],
         'body-soft-max-line-length': [RuleStatus.Error, 'always'],
         'footer-leading-blank': [RuleStatus.Warning, 'always'],
@@ -61,6 +62,33 @@ module.exports = {
 
         {
             rules: {
+                'body-prose': ({body}: {body:any}) => {
+                    let offence = false;
+
+                    // does msg have a body?
+                    if (body !== null) {
+                        let bodyStr = convertAnyToString(body, "body");
+                        
+                        for (let par of bodyStr.trim().split('\n\n')){
+                            par = par.trim()
+                            
+                            if (!(par[0].toUpperCase() === par[0])){
+                                offence = true;
+                            }
+
+                            if (!(par[par.length - 1] === '.')){
+                                offence = true;
+                            }
+                        }
+                                        
+                    }
+
+                    return [
+                        !offence,
+                        `Please begin a paragraph with uppercase letter and end it with a dot`
+                    ];
+                },
+                        
                 'prefer-slash-over-backslash': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 
@@ -80,6 +108,8 @@ module.exports = {
                     ];
                 },
 
+
+                
                 'type-space-after-colon': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 
