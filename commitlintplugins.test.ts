@@ -73,6 +73,20 @@ test('body-max-line-length6', () => {
 });
 
 
+test('prefer-slash-over-backslash1', () => {
+    let commitMsgWithBackslash = "foo\\bar: bla bla bla";
+    let preferSlashOverBackslash1 = runCommitLintOnMsg(commitMsgWithBackslash);
+    expect(preferSlashOverBackslash1.status).not.toBe(0);
+});
+
+
+test('prefer-slash-over-backslash2', () => {
+    let commitMsgWithSlash = "foo/bar: bla bla bla";
+    let preferSlashOverBackslash2 = runCommitLintOnMsg(commitMsgWithSlash);
+    expect(preferSlashOverBackslash2.status).toBe(0);
+});
+
+
 test('subject-lowercase1', () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(commitMsgWithUppercaseAfterColon);

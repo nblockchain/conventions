@@ -34,11 +34,11 @@ module.exports = {
         'subject-lowercase': [RuleStatus.Error, 'always'],
         'type-space-after-comma': [RuleStatus.Error, 'always'],
         'trailing-whitespace': [RuleStatus.Error, 'always'],
+        'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
         // * Don't put space before parentheses (or slash) in area/scope.
-        // * Prefer slash over backslash in area/scope (Linux and macOS are majority over Windows lol)
         // * Better rule than body-max-line-length that ignores line if it starts with `[x] ` where x is a number.
         // * 'body-full-stop' which finds paragraphs in body without full-stop (which ignores lines in same way as suggested above).
         // * 'body-paragraph-uppercase' which finds paragraphs in body starting with lowercase.
@@ -61,6 +61,25 @@ module.exports = {
 
         {
             rules: {
+                'prefer-slash-over-backslash': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+
+                    let offence = false;
+
+                    let colonIndex = headerStr.indexOf(":");
+                    if (colonIndex >= 0){
+                        let areaOrScope = headerStr.substring(0, colonIndex);
+                        if (areaOrScope.includes('\\')){
+                            offence = true;
+                        }
+                    }
+
+                    return [
+                        !offence,
+                        `Please use slash instead of backslash in the area/scope/sub-area section of the title`
+                    ];
+                },
+
                 'type-space-after-colon': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 
