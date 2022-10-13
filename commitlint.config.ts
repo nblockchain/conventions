@@ -203,8 +203,15 @@ module.exports = {
                     let colonFirstIndex = headerStr.indexOf(":");
                     if ((colonFirstIndex > 0) && (headerStr.length > colonFirstIndex)) {
                         let subject = headerStr.substring(colonFirstIndex + 1).trim();
+
                         if (subject != null && subject.length > 1) {
-                            offence = isUpperCase(subject[0]) && isLowerCase(subject[1]);
+                            let firstWord = subject.trim().split(' ')[0];
+                            if (firstWord[0].toUpperCase() === firstWord[0]){
+                                let numUpper = firstWord.length - firstWord.replace(/[A-Z]/g, '').length;
+                                if (numUpper < 2){
+                                    offence = true;
+                                }
+                            }
                         }
                     }
 
