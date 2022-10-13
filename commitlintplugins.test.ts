@@ -160,6 +160,27 @@ test('body-max-line-length7', () => {
 });
 
 
+test('empty-wip-1', () => {
+    let commitMsgWithEpmtyWIP = "WIP";
+    let emptyWIP1 = runCommitLintOnMsg(commitMsgWithEpmtyWIP);
+    expect(emptyWIP1.status).not.toBe(0);
+});
+
+
+test('empty-wip-2', () => {
+    let commitMsgWithDescriptionAfterWIP = "WIP: bla bla blah";
+    let emptyWIP2 = runCommitLintOnMsg(commitMsgWithDescriptionAfterWIP);
+    expect(emptyWIP2.status).toBe(0);
+});
+
+
+test('empty-wip-3', () => {
+    let commitMsgWithNumberAfterWIP = "WIP1";
+    let emptyWIP3 = runCommitLintOnMsg(commitMsgWithNumberAfterWIP);
+    expect(emptyWIP3.status).toBe(0);
+});
+
+
 test('prefer-slash-over-backslash1', () => {
     let commitMsgWithBackslash = "foo\\bar: bla bla bla";
     let preferSlashOverBackslash1 = runCommitLintOnMsg(commitMsgWithBackslash);

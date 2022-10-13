@@ -81,6 +81,7 @@ module.exports = {
     rules: {
         'body-leading-blank': [RuleStatus.Warning, 'always'],
         'body-soft-max-line-length': [RuleStatus.Error, 'always'],
+        'empty-wip': [RuleStatus.Error, 'always'],
         'footer-leading-blank': [RuleStatus.Warning, 'always'],
         'footer-max-line-length': [RuleStatus.Error, 'always', 150],
         'header-max-length': [RuleStatus.Error, 'always', 50],
@@ -99,7 +100,6 @@ module.exports = {
         // * Better rule than body-max-line-length that ignores line if it starts with `[x] ` where x is a number.
         // * Detect if paragraphs in body have been cropped too shortly (less than 64 chars), and suggest same auto-wrap command that body-soft-max-line-length suggests, since it unwraps and wraps (both).
         // * Detect reverts which have not been elaborated.
-        // * Detect WIP commits without a number.
         // * Reject #XYZ refs in favour for full URLs.
         // * If full URL for commit found, reject in favour for just the commit hash.
         // * Reject some stupid obvious words: change, update, modify (if first word after colon, error; otherwise warning).
@@ -156,6 +156,15 @@ module.exports = {
                         !offence,
                         `Please begin a paragraph with uppercase letter and end it with a dot`
                     ];
+                },
+
+                'empty-wip': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+                    let offence = headerStr.toLowerCase() === "wip";
+                    return [
+                        !offence,
+                        `Please add a number or description after the WIP prefix`
+                    ]
                 },
 
                 'prefer-slash-over-backslash': ({header}: {header:any}) => {
