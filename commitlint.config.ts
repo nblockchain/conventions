@@ -203,13 +203,23 @@ module.exports = {
                     let colonFirstIndex = headerStr.indexOf(":");
                     if ((colonFirstIndex > 0) && (headerStr.length > colonFirstIndex)) {
                         let subject = headerStr.substring(colonFirstIndex + 1).trim();
+                        if (subject != null && subject.length > 1) {
+                            let firstIsUpperCase = subject[0].toUpperCase() == subject[0];
+                            let firstIsLowerCase = subject[0].toLowerCase() == subject[0];
+                            let secondIsUpperCase = subject[1].toUpperCase() == subject[1];
+                            let secondIsLowerCase = subject[1].toLowerCase() == subject[1];
+
+                            offence = firstIsUpperCase && (!firstIsLowerCase)
+                                // to whitelist acronyms
+                                && (!secondIsUpperCase) && secondIsLowerCase;
+                        }
 
                         if (subject != null && subject.length > 1) {
                             let firstWord = subject.trim().split(' ')[0];
                             if (firstWord[0].toUpperCase() === firstWord[0]){
                                 let numUpper = firstWord.length - firstWord.replace(/[A-Z]/g, '').length;
-                                if (numUpper < 2){
-                                    offence = true;
+                                if (numUpper >= 2){
+                                    offence = false;
                                 }
                             }
                         }
