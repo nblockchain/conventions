@@ -34,6 +34,7 @@ module.exports = {
         'subject-lowercase': [RuleStatus.Error, 'always'],
         'type-space-after-comma': [RuleStatus.Error, 'always'],
         'trailing-whitespace': [RuleStatus.Error, 'always'],
+        'no-ending-dot-in-title': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -49,7 +50,6 @@ module.exports = {
         // * If full URL for commit found, reject in favour for just the commit hash.
         // * Reject some stupid obvious words: change, update, modify (if first word after colon, error; otherwise warning).
         // * Think of how to reject this shitty commit message: https://github.com/nblockchain/NOnion/pull/34/commits/9ffcb373a1147ed1c729e8aca4ffd30467255594
-        // * Title should not have dot at the end.
         // * Each body's paragraph should begin with uppercase and end with dot.
         // * Second line of commit msg should always be blank.
         // * Check for too many spaces (e.g. 2 spaces after colon)
@@ -207,6 +207,18 @@ module.exports = {
                         `Please watch out for leading or ending trailing whitespace`
                     ];
                 },
+
+                'no-ending-dot-in-title': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+
+                    let offence = headerStr.charAt(headerStr.length - 1) === '.';
+
+                    return [
+                        !offence,
+                        `No need to use a dot at the end of the title`
+                    ];
+                },
+
             }
         }
     ]
