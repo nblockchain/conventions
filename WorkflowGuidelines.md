@@ -1,0 +1,48 @@
+# Workflow guidelines
+
+* When contributing a PullRequest, separate your commits in units of work
+(don't mix changes that have different concerns in the same commit). Don't
+forget to include all explanations and reasonings in the commit messages,
+instead of just leaving them as part of the PullRequest description.
+* If you want to contribute a script, do not use PowerShell or Bash, but
+an F# script. The reason to not use PowerShell is a personal preference
+from the maintainer of this project (and his suspicion that it might not
+be 100% guaranteed to be crossplatform); and the reason not to use Bash
+is because it's only Unix compatible (we cannot assume WSL is installed
+in Windows), and in general because it's too undeterministic and old, more
+info here: https://news.ycombinator.com/item?id=33116310
+* Push each commit separately (instead of sending more than 1 commit in a
+single push), so that we can have a CI status for each commit in the MR. This
+is a best practice because it will make sure that the build is not broken in
+between commits (otherwise, future developers may have a hard time when
+trying to bisect bugs). If you have already pushed your commits to the remote
+in one push, this can be re-done by using our [gitpush1by1.fsx](https://github.com/nblockchain/fsx/blob/master/Tools/gitPush1by1.fsx)
+script, or this technique manually: https://stackoverflow.com/a/3230241/544947
+* Git commit messages should follow this style:
+
+```
+Area/Sub-area: short title of what is changed (50 chars max)
+
+Explanation of **why** (and maybe **how** as well, in case there's a part of
+the change that is not self-explanatory). Don't hesitate to be very verbose
+here, adding any references you may need, in this way[1], or even @nicknames of
+people that helped. Manually crop your lines to not be longer than 64 chars.
+
+Fixes https://github.com/nblockchain/geewallet/issues/45
+
+[1] http://foo.bar/baz
+```
+
+As you can see, writing a commit message is generally like writing an e-mail: it
+has a title at the top which is normally a short sentence (but not ended with a
+dot, like most titles), and a body that starts in the 3rd line and which contains
+one or many paragraphs (each ending with a dot, as it's text in prose). In
+particular, the example above would be for a commit message that fixes the
+issue #45. **Area** usually refers to the project name, but without the need
+to include the `GWallet` prefix (for example changing the `GWallet.Backend`
+project would mean you only use `Backend` as area). The **Sub-area** may refer
+to a folder or module inside the area, but it's not a strict mapping.
+
+Do not use long lines (manually crop them with EOLs because git doesn't do this
+automatically).
+
