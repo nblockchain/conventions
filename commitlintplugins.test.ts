@@ -82,7 +82,7 @@ test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
     let commitMsgWithOnlySixtyFourCharsInBody =
-        "foo: this is only a title" + "\n\n" + sixtyChars + "1234";
+        "foo: this is only a title" + "\n\n" + sixtyChars + "123.";
     let bodyMaxLineLength1 = runCommitLintOnMsg(commitMsgWithOnlySixtyFourCharsInBody);
     expect(bodyMaxLineLength1.status).toBe(0);
 });
@@ -92,7 +92,7 @@ test('body-max-line-length2', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
     let commitMsgWithOnlySixtyFiveCharsInBody =
-        "foo: this is only a title" + "\n\n" + sixtyChars + "12345";
+        "foo: this is only a title" + "\n\n" + sixtyChars + "1234.";
     let bodyMaxLineLength2 = runCommitLintOnMsg(commitMsgWithOnlySixtyFiveCharsInBody);
     expect(bodyMaxLineLength2.status).not.toBe(0);
 });
