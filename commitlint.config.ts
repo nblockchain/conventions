@@ -70,6 +70,12 @@ module.exports = {
                         let bodyStr = convertAnyToString(body, "body");
                         
                         for (let par of bodyStr.trim().split('\n\n')){
+
+                            // It's a paragraph that only consists of a block
+                            if (/^```[^]*```$/.test(par.trim())){
+                                continue;
+                            }
+
                             par = par.replace(/```[^]*```/g, '').trim();
 
                             let firstIsUpperCase = par[0].toUpperCase() == par[0];
