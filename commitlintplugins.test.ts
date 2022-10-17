@@ -80,13 +80,6 @@ test('body-prose8', () => {
 });
 
 
-test('allow-PascalCase-after-colon-in-title', () => {
-    let commitMsgWithPascalCaseAfterColon = "foo/bar: PascalCase bla blah";
-    let allowPascalCaseAfterColon1 = runCommitLintOnMsg(commitMsgWithPascalCaseAfterColon);
-    expect(allowPascalCaseAfterColon1.status).toBe(0);
-});
-
-
 test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
@@ -227,6 +220,13 @@ test('subject-lowercase7', () => {
     let commitMsgWithRareCharInArea3 = "foo,bar: Baz";
     let subjectLowerCase7 = runCommitLintOnMsg(commitMsgWithRareCharInArea3);
     expect(subjectLowerCase7.status).not.toBe(0);
+});
+
+
+test('subject-lowercase8', () => {
+    let commitMsgWithPascalCaseAfterColon = "End2End: TestFixtureSetup refactor";
+    let subjectLowerCase8 = runCommitLintOnMsg(commitMsgWithPascalCaseAfterColon);
+    expect(subjectLowerCase8.status).toBe(0);
 });
 
 
