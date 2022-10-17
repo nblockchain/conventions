@@ -109,7 +109,6 @@ module.exports = {
         // * Check for too many spaces (e.g. 2 spaces after colon)
         // * Detect area/scope wrapped under square brakets instead of "foo: bar" style.
         // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
-        // * Allow PascalCase word after colon in title (exception to subject-lowercase rule), e.g.: "End2End: TestFixtureSetup refactor"
         // * Detect if commit hash mention in commit msg actually exists in repo.
         // * Give replacement suggestions in rule that detects too long titles (e.g. and->&, config->cfg, ...)
         // * Detect area(sub-area) in the title that doesn't include area part (e.g., writing (bar) instead of foo(bar))
