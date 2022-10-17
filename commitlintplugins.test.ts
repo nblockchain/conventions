@@ -7,9 +7,67 @@ function runCommitLintOnMsg(inputMsg: string) {
 test('body-prose1', () => {
     let commitMsgWithLowercaseBodyStart =
         "foo: this is only a title" + "\n\n" + "bla blah bla.";
-    let bodyProse = runCommitLintOnMsg(commitMsgWithLowercaseBodyStart);
-    expect(bodyProse.status).not.toBe(0);
+    let bodyProse1 = runCommitLintOnMsg(commitMsgWithLowercaseBodyStart);
+    expect(bodyProse1.status).not.toBe(0);
 });
+
+
+test('body-prose2', () => {
+    let commitMsgWithNumbercaseBodyStart =
+        "foo: this is only a title" + "\n\n" + "1234 bla blah bla.";
+    let bodyProse2 = runCommitLintOnMsg(commitMsgWithNumbercaseBodyStart);
+    expect(bodyProse2.status).toBe(0);
+});
+
+
+test('body-prose3', () => {
+    let commitMsgWithUrl =
+        "foo: this is only a title" + "\n\n" + "someUrl://blahblah.com";
+    let bodyProse3 = runCommitLintOnMsg(commitMsgWithUrl);
+
+    // because URLs can bypass the limit
+    expect(bodyProse3.status).toBe(0);
+});
+
+
+test('body-prose4', () => {
+    let commitMsgWithFootnoteUrl =
+        "foo: this is only a title" + "\n\n" + "Bla blah[1] bla.\n\n[1] someUrl://blahblah.com";
+    let bodyProse4 = runCommitLintOnMsg(commitMsgWithFootnoteUrl);
+
+    // because URLs in footer can bypass the limit
+    expect(bodyProse4.status).toBe(0);
+});
+
+
+test('body-prose5', () => {
+    let commitMsgWithBugUrl =
+        "foo: this is only a title" + "\n\n" + "Fixes someUrl://blahblah.com";
+    let bodyProse5 = runCommitLintOnMsg(commitMsgWithBugUrl);
+
+    // because URLs in "Fixes <URL>" sentence can bypass the limit
+    expect(bodyProse5.status).toBe(0);
+});
+
+
+test('body-prose6', () => {
+    let commitMsgWithBlock =
+        "foo: this is only a title" + "\n\n" + "Bar baz.\n```\n" + 'if (foo) {bar(); }' + "\n```";
+    let bodyProse6 = runCommitLintOnMsg(commitMsgWithBlock);
+
+    // because ```blocks surrounded like this``` can bypass the limit
+    expect(bodyProse6.status).toBe(0);
+});
+
+
+test('body-prose7', () => {
+    let commitMsgWithParagraphEndingWithColon =
+        "foo: this is only a title" + "\n\n" + "Bar baz:\n\nBlah blah.";
+    let bodyProse7 = runCommitLintOnMsg(commitMsgWithParagraphEndingWithColon);
+    //console.log("=============>" + trailingWhitespace6.stdout);
+    expect(bodyProse7.status).toBe(0);
+});
+
 
 test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
