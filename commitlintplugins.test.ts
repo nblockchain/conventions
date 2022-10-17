@@ -41,7 +41,7 @@ test('body-max-line-length4', () => {
     let tenDigits = "1234567890";
     let seventyChars = tenDigits + tenDigits + tenDigits + tenDigits + tenDigits + tenDigits + tenDigits;
     let commitMsgWithUrlThatExceedsBodyMaxLineLength =
-        "foo: this is only a title" + "\n\n" + "bla blah[1] bla\n\n[1] someUrl://" + seventyChars;
+        "foo: this is only a title" + "\n\n" + "Bla blah[1] bla.\n\n[1] someUrl://" + seventyChars;
     let bodyMaxLineLength4 = runCommitLintOnMsg(commitMsgWithUrlThatExceedsBodyMaxLineLength);
 
     // because URLs in footer can bypass the limit
@@ -65,7 +65,7 @@ test('body-max-line-length6', () => {
     let tenChars = "1234 67890";
     let seventyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
     let commitMsgWithUrlThatExceedsBodyMaxLineLength =
-        "foo: this is only a title" + "\n\n" + "bar baz\n```\n" + seventyChars + "\n```";
+        "foo: this is only a title" + "\n\n" + "Bar baz.\n```\n" + seventyChars + "\n```";
     let bodyMaxLineLength6 = runCommitLintOnMsg(commitMsgWithUrlThatExceedsBodyMaxLineLength);
 
     // because ```blocks surrounded like this``` can bypass the limit
@@ -138,7 +138,7 @@ test('subject-lowercase7', () => {
 
 test('trailing-whitespace1', () => {
     let commitMsgWithNoTrailingWhiteSpace =
-        "foo: this is only a title" + "\n\n" + "bla blah bla";
+        "foo: this is only a title" + "\n\n" + "Bla blah bla.";
     let trailingWhitespace1 = runCommitLintOnMsg(commitMsgWithNoTrailingWhiteSpace);
     expect(trailingWhitespace1.status).toBe(0);
 });
@@ -146,7 +146,7 @@ test('trailing-whitespace1', () => {
 
 test('trailing-whitespace2', () => {
     let commitMsgWithTrailingWhiteSpaceInTitleEnd =
-        "foo: title " + "\n\n" + "bla blah bla";
+        "foo: title " + "\n\n" + "Bla blah bla.";
     let trailingWhitespace2 = runCommitLintOnMsg(commitMsgWithTrailingWhiteSpaceInTitleEnd);
     expect(trailingWhitespace2.status).not.toBe(0);
 });
@@ -154,7 +154,7 @@ test('trailing-whitespace2', () => {
 
 test('trailing-whitespace3', () => {
     let commitMsgWithTrailingWhiteSpaceInTitleStart =
-        " foo: title" + "\n\n" + "bla blah bla";
+        " foo: title" + "\n\n" + "Bla blah bla.";
     let trailingWhitespace3 = runCommitLintOnMsg(commitMsgWithTrailingWhiteSpaceInTitleStart);
     expect(trailingWhitespace3.status).not.toBe(0);
 });
@@ -162,7 +162,7 @@ test('trailing-whitespace3', () => {
 
 test('trailing-whitespace4', () => {
     let commitMsgWithTrailingWhiteSpaceInBodyStart =
-        "foo: title" + "\n\n" + " bla blah bla";
+        "foo: title" + "\n\n" + " Bla blah bla.";
     let trailingWhitespace4 = runCommitLintOnMsg(commitMsgWithTrailingWhiteSpaceInBodyStart);
     expect(trailingWhitespace4.status).not.toBe(0);
 });
@@ -170,7 +170,7 @@ test('trailing-whitespace4', () => {
 
 test('trailing-whitespace5', () => {
     let commitMsgWithTrailingWhiteSpaceInBodyEnd =
-        "foo: title" + "\n\n" + "bla blah bla ";
+        "foo: title" + "\n\n" + "Bla blah bla. ";
     let trailingWhitespace5 = runCommitLintOnMsg(commitMsgWithTrailingWhiteSpaceInBodyEnd);
     expect(trailingWhitespace5.status).not.toBe(0);
 });
@@ -178,7 +178,7 @@ test('trailing-whitespace5', () => {
 
 test('trailing-whitespace6', () => {
     let commitMsgWithTrailingWhiteSpaceInCodeBlock =
-        "foo: this is only a title" + "\n\n" + "bar baz:\n\n```\ntype Foo =\n    string\n```";
+        "foo: this is only a title" + "\n\n" + "Bar baz:\n\n```\ntype Foo =\n    string\n```";
     let trailingWhitespace6 = runCommitLintOnMsg(commitMsgWithTrailingWhiteSpaceInCodeBlock);
     //console.log("=============>" + trailingWhitespace6.stdout);
     expect(trailingWhitespace6.status).toBe(0);
