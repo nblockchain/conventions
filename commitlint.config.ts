@@ -74,17 +74,22 @@ module.exports = {
 
                             let firstIsUpperCase = par[0].toUpperCase() == par[0];
                             let firstIsLowerCase = par[0].toLowerCase() == par[0];
-                            let startWithLowercase = firstIsLowerCase && (!firstIsUpperCase)
+                            let startWithLowerCase = firstIsLowerCase && (!firstIsUpperCase);
 
                             let endsWithDot = par[par.length - 1] === '.';
                             
-                            if (startWithLowercase || !endsWithDot){
+                            if (startWithLowerCase || !endsWithDot){
                                 offence = true;
 
-                                let line = bodyStr.split(/\r?\n/)[0];
+                                let line = par.split(/\r?\n/)[0];
+                                
                                 // it's a URL
                                 let containsASpace = line.indexOf(" ") >= 0;
-                                if (!containsASpace){
+                                
+                                // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
+                                let startsWithRef = (line[0] === "[" && line.indexOf("] ") > 0);
+
+                                if ((!containsASpace) || startsWithRef){
                                     offence = false;
                                 }   
                             }
