@@ -70,14 +70,23 @@ module.exports = {
                         let bodyStr = convertAnyToString(body, "body");
                         
                         for (let par of bodyStr.trim().split('\n\n')){
-                            par = par.trim()
-                            
-                            if (!(par[0].toUpperCase() === par[0])){
-                                offence = true;
-                            }
+                            par = par.trim();
 
-                            if (!(par[par.length - 1] === '.')){
+                            let firstIsUpperCase = par[0].toUpperCase() == par[0];
+                            let firstIsLowerCase = par[0].toLowerCase() == par[0];
+                            let startWithLowercase = firstIsLowerCase && (!firstIsUpperCase)
+
+                            let endsWithDot = par[par.length - 1] === '.';
+                            
+                            if (startWithLowercase || !endsWithDot){
                                 offence = true;
+
+                                let line = bodyStr.split(/\r?\n/)[0];
+                                // it's a URL
+                                let containsASpace = line.indexOf(" ") >= 0;
+                                if (!containsASpace){
+                                    offence = false;
+                                }   
                             }
                         }
                                         
