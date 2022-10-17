@@ -245,7 +245,7 @@ module.exports = {
 
                     return [
                         !offence,
-                        `Please watch out for whitespaces before parentheses`
+                        `No need to use space before parentheses in the area/scope/sub-area section of the title`
                     ];
                 },
             }
