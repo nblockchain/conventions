@@ -69,6 +69,15 @@ test('body-prose7', () => {
 });
 
 
+test('body-prose8', () => {
+    let commitMsgWithBlockParagraph=
+        "foo: this is only a title" + "\n\n" + "Bar baz:\n\n```\ntype Foo =\n    string\n```";
+    let bodyProse8 = runCommitLintOnMsg(commitMsgWithBlockParagraph);
+    //console.log("=============>" + bodyProse8.stdout);
+    expect(bodyProse8.status).toBe(0);
+});
+
+
 test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
