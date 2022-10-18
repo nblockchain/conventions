@@ -35,6 +35,7 @@ module.exports = {
         'type-space-after-comma': [RuleStatus.Error, 'always'],
         'trailing-whitespace': [RuleStatus.Error, 'always'],
         'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
+        'empty-second-line': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -61,6 +62,21 @@ module.exports = {
 
         {
             rules: {
+                'empty-second-line': ({raw}: {raw:any}) => {
+                    let rawStr = convertAnyToString(raw, "raw");
+
+                    let offence = false;
+
+                    if (rawStr.indexOf('\n') >= 0){
+                        offence = rawStr.split(/\r?\n/)[1] !== '';
+                    }
+
+                    return [
+                        !offence,
+                        `Second line of commit msg should be blank.`
+                    ];
+                },
+
                 'prefer-slash-over-backslash': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 
