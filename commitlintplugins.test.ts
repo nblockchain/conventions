@@ -55,7 +55,7 @@ test('body-prose6', () => {
         "foo: this is only a title" + "\n\n" + "Bar baz.\n```\n" + 'if (foo) {bar(); }' + "\n```";
     let bodyProse6 = runCommitLintOnMsg(commitMsgWithBlock);
 
-    // because ```blocks surrounded like this``` can bypass the limit
+    // because ```blocks surrounded like this``` can bypass the rule
     expect(bodyProse6.status).toBe(0);
 });
 
@@ -64,7 +64,8 @@ test('body-prose7', () => {
     let commitMsgWithParagraphEndingWithColon =
         "foo: this is only a title" + "\n\n" + "Bar baz:\n\nBlah blah.";
     let bodyProse7 = runCommitLintOnMsg(commitMsgWithParagraphEndingWithColon);
-    //console.log("=============>" + trailingWhitespace6.stdout);
+
+    // because paragraphs can end with a colon
     expect(bodyProse7.status).toBe(0);
 });
 
@@ -73,7 +74,8 @@ test('body-prose8', () => {
     let commitMsgWithBlockParagraph=
         "foo: this is only a title" + "\n\n" + "Bar baz:\n\n```\ntype Foo =\n    string\n```";
     let bodyProse8 = runCommitLintOnMsg(commitMsgWithBlockParagraph);
-    //console.log("=============>" + bodyProse8.stdout);
+
+    // because paragraphs that only consist of a block can bypass the rule
     expect(bodyProse8.status).toBe(0);
 });
 
