@@ -73,6 +73,22 @@ test('body-max-line-length6', () => {
 });
 
 
+test('empty-second-line1', () => {
+    let commitMsgWithNonEmptySecondLine =
+        "foo: this is only a title" + "\n" + "Bar baz.";
+    let emptySecondLine1 = runCommitLintOnMsg(commitMsgWithNonEmptySecondLine);
+    expect(emptySecondLine1.status).not.toBe(0);
+});
+
+
+test('empty-second-line2', () => {
+    let commitMsgWithEmptySecondLine =
+        "foo: this is only a title" + "\n\n" + "Bar baz.";
+    let emptySecondLine2 = runCommitLintOnMsg(commitMsgWithEmptySecondLine);
+    expect(emptySecondLine2.status).toBe(0);
+});
+
+
 test('prefer-slash-over-backslash1', () => {
     let commitMsgWithBackslash = "foo\\bar: bla bla bla";
     let preferSlashOverBackslash1 = runCommitLintOnMsg(commitMsgWithBackslash);
