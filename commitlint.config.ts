@@ -67,8 +67,6 @@ module.exports = {
         // TODO (ideas for more rules):
         // * Don't put space before parentheses (or slash) in area/scope.
         // * Better rule than body-max-line-length that ignores line if it starts with `[x] ` where x is a number.
-        // * 'body-full-stop' which finds paragraphs in body without full-stop (which ignores lines in same way as suggested above).
-        // * 'body-paragraph-uppercase' which finds paragraphs in body starting with lowercase.
         // * Detect if paragraphs in body have been cropped too shortly (less than 64 chars), and suggest same auto-wrap command that body-soft-max-line-length suggests, since it unwraps and wraps (both).
         // * Detect reverts which have not been elaborated.
         // * Detect WIP commits without a number.
@@ -77,7 +75,6 @@ module.exports = {
         // * Reject some stupid obvious words: change, update, modify (if first word after colon, error; otherwise warning).
         // * Think of how to reject this shitty commit message: https://github.com/nblockchain/NOnion/pull/34/commits/9ffcb373a1147ed1c729e8aca4ffd30467255594
         // * Title should not have dot at the end.
-        // * Each body's paragraph should begin with uppercase and end with dot.
         // * Second line of commit msg should always be blank.
         // * Check for too many spaces (e.g. 2 spaces after colon)
         // * Detect area/scope wrapped under square brakets instead of "foo: bar" style.
