@@ -23,7 +23,6 @@ function isBigBlock(line: string) {
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
-        'body-prose': [RuleStatus.Error, 'always'],
         'body-leading-blank': [RuleStatus.Warning, 'always'],
         'body-soft-max-line-length': [RuleStatus.Error, 'always'],
         'footer-leading-blank': [RuleStatus.Warning, 'always'],
@@ -33,6 +32,7 @@ module.exports = {
         'type-empty': [RuleStatus.Warning, 'never'],
         'type-space-after-colon': [RuleStatus.Error, 'always'],
         'subject-lowercase': [RuleStatus.Error, 'always'],
+        'body-prose': [RuleStatus.Error, 'always'],
         'type-space-after-comma': [RuleStatus.Error, 'always'],
         'trailing-whitespace': [RuleStatus.Error, 'always'],
         'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
