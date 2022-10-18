@@ -34,6 +34,18 @@ function isLowerCase(letter: string) {
     return (isLowerCase && !isUpperCase);
 }
 
+function containsASpace(line: string) {
+    return line.indexOf(" ") >= 0;
+}
+
+function isFooterReference(line: string) {
+    return (line[0] === "[" && line.indexOf("] ") > 0);
+}
+
+function isFixesSentence(line: string) {
+    return (line.indexOf("Fixes ") == 0);
+}
+
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
@@ -100,14 +112,14 @@ module.exports = {
                                 let line = paragraph.split(/\r?\n/)[0];
                                 
                                 // it's a URL
-                                let containsASpace = line.indexOf(" ") >= 0;
+                                let containsSpace = containsASpace(line);
                                 
                                 // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
-                                let startsWithRef = (line[0] === "[" && line.indexOf("] ") > 0);
+                                let startsWithRef = isFooterReference(line);
 
-                                let startWithFixesSentence = (line.indexOf("Fixes ") == 0);
+                                let startWithFixesSentence = isFixesSentence(line);
 
-                                if (containsASpace && (!startsWithRef) && (!startWithFixesSentence)) {
+                                if (containsSpace && (!startsWithRef) && (!startWithFixesSentence)) {
                                     offence = true;
                                 }
                             }
@@ -220,14 +232,14 @@ module.exports = {
                             if (line.length > bodyMaxLineLength) {
 
                                 // it's a URL
-                                let containsASpace = line.indexOf(" ") >= 0;
+                                let containsSpace = containsASpace(line);
 
                                 // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
-                                let startsWithRef = (line[0] == "[" && line.indexOf("] ") > 0);
+                                let startsWithRef = isFooterReference(line)
 
-                                let startWithFixesSentence = (line.indexOf("Fixes ") == 0);
+                                let startWithFixesSentence = isFixesSentence(line);
 
-                                if (containsASpace && (!startsWithRef) && (!startWithFixesSentence)) {
+                                if (containsSpace && (!startsWithRef) && (!startWithFixesSentence)) {
                                     offence = true;
                                     break;
                                 }
