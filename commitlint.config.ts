@@ -83,21 +83,21 @@ module.exports = {
                     if (body !== null) {
                         let bodyStr = convertAnyToString(body, "body");
                         
-                        for (let par of bodyStr.trim().split('\n\n')){
+                        for (let paragraph of bodyStr.trim().split('\n\n')){
 
                             // It's a paragraph that only consists of a block
-                            if (/^```[^]*```$/.test(par.trim())){
+                            if (/^```[^]*```$/.test(paragraph.trim())){
                                 continue;
                             }
 
-                            par = par.replace(/```[^]*```/g, '').trim();
+                            paragraph = paragraph.replace(/```[^]*```/g, '').trim();
 
-                            let startWithLowerCase = isLowerCase(par[0])
+                            let startWithLowerCase = isLowerCase(paragraph[0])
 
-                            let endsWithDotOrColon = par[par.length - 1] === '.' || par[par.length - 1] === ':';
+                            let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
                             
                             if (startWithLowerCase || !endsWithDotOrColon){
-                                let line = par.split(/\r?\n/)[0];
+                                let line = paragraph.split(/\r?\n/)[0];
                                 
                                 // it's a URL
                                 let containsASpace = line.indexOf(" ") >= 0;
