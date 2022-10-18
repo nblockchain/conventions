@@ -203,14 +203,7 @@ module.exports = {
                     if ((colonFirstIndex > 0) && (headerStr.length > colonFirstIndex)) {
                         let subject = headerStr.substring(colonFirstIndex + 1).trim();
                         if (subject != null && subject.length > 1) {
-                            let firstIsUpperCase = subject[0].toUpperCase() == subject[0];
-                            let firstIsLowerCase = subject[0].toLowerCase() == subject[0];
-                            let secondIsUpperCase = subject[1].toUpperCase() == subject[1];
-                            let secondIsLowerCase = subject[1].toLowerCase() == subject[1];
-
-                            offence = firstIsUpperCase && (!firstIsLowerCase)
-                                // to whitelist acronyms
-                                && (!secondIsUpperCase) && secondIsLowerCase;
+                            offence = isUpperCase(subject[0]) && isLowerCase(subject[1])
                         }
 
                         if (subject != null && subject.length > 1) {
