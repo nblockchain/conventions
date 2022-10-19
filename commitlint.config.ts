@@ -14,6 +14,7 @@ enum RuleStatus {
 }
 
 let bodyMaxLineLength = 64;
+let headerMaxLineLength = 50;
 
 function assertCharacter(letter: string) {
     if (letter.length !== 1) {
@@ -181,9 +182,25 @@ module.exports = {
                     return [
                         !offence,
                         `Please add a number or description after the WIP prefix`
-                    ]
+                    ];
                 },
 
+                'header-max-length': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+                    let offence = false;
+
+                    let message = `Please do not exceed ${headerMaxLineLength} characters in title;`
+                    if (headerStr.length > 50) {
+                        offence = true;
+                        message = message + '\n' + `You can replace "configuration" with "config" in the commit title to make it shorter.`                
+                    }
+                    
+                    return [
+                        !offence,
+                        message
+                    ];
+                },
+                
                 'prefer-slash-over-backslash': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 
