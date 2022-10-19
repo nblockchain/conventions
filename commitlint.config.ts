@@ -34,8 +34,8 @@ function isLowerCase(letter: string) {
     return (isLowerCase && !isUpperCase);
 }
 
-function containsASpace(line: string) {
-    return line.indexOf(" ") >= 0;
+function mightBeUrl(line: string) {
+    return line.indexOf(" ") < 0;
 }
 
 function isFooterReference(line: string) {
@@ -109,14 +109,14 @@ module.exports = {
                                 let line = paragraph.split(/\r?\n/)[0];
                                 
                                 // it's a URL
-                                let containsSpace = containsASpace(line);
+                                let isUrl = mightBeUrl(line);
                                 
                                 // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
                                 let startsWithRef = isFooterReference(line);
 
                                 let startWithFixesSentence = isFixesSentence(line);
 
-                                if (containsSpace && (!startsWithRef) && (!startWithFixesSentence)) {
+                                if ((!isUrl) && (!startsWithRef) && (!startWithFixesSentence)) {
                                     offence = true;
                                 }
                             }
@@ -229,14 +229,14 @@ module.exports = {
                             if (line.length > bodyMaxLineLength) {
 
                                 // it's a URL
-                                let containsSpace = containsASpace(line);
+                                let isUrl = mightBeUrl(line);
 
                                 // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
                                 let startsWithRef = isFooterReference(line)
 
                                 let startWithFixesSentence = isFixesSentence(line);
 
-                                if (containsSpace && (!startsWithRef) && (!startWithFixesSentence)) {
+                                if ((!isUrl) && (!startsWithRef) && (!startWithFixesSentence)) {
                                     offence = true;
                                     break;
                                 }
