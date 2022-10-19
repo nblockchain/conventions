@@ -200,7 +200,7 @@ test('replacement-suggestion1', () => {
     let commitMsgWithThatExceedsHeaderMaxLength =
         "foo: this is only a title with a configuration in it that exceeds header max length";
     let replacementSuggestion1 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
-    let expected_message = `You can replace "configuration" with "config" in the commit title to make it shorter.`
+    let expected_message = `"configuration" -> "config"`
     // console.log('HERE ==========>' + replacementSuggestion1.stdout)
     expect(replacementSuggestion1.status).not.toBe(0);
     expect((replacementSuggestion1.stdout + '').includes(expected_message)).toEqual(true)
@@ -211,7 +211,7 @@ test('replacement-suggestion2', () => {
     let commitMsgWithThatExceedsHeaderMaxLength =
         "foo: this is only a title with a absolute in it that exceeds header max length";
     let replacementSuggestion2 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
-    let expected_message = `You can replace "absolute" with "abs" in the commit title to make it shorter.`
+    let expected_message = `"absolute" -> "abs"`
     // console.log('HERE ==========>' + replacementSuggestion1.stdout)
     expect(replacementSuggestion2.status).not.toBe(0);
     expect((replacementSuggestion2.stdout + '').includes(expected_message)).toEqual(true)
