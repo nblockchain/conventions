@@ -25,7 +25,7 @@ test('body-prose3', () => {
         "foo: this is only a title" + "\n\n" + "someUrl://blahblah.com";
     let bodyProse3 = runCommitLintOnMsg(commitMsgWithUrl);
 
-    // because URLs can bypass the limit
+    // because URLs can bypass the rule
     expect(bodyProse3.status).toBe(0);
 });
 
@@ -35,7 +35,7 @@ test('body-prose4', () => {
         "foo: this is only a title" + "\n\n" + "Bla blah[1] bla.\n\n[1] someUrl://blahblah.com";
     let bodyProse4 = runCommitLintOnMsg(commitMsgWithFootnoteUrl);
 
-    // because URLs in footer can bypass the limit
+    // because URLs in footer can bypass the rule
     expect(bodyProse4.status).toBe(0);
 });
 
@@ -45,7 +45,7 @@ test('body-prose5', () => {
         "foo: this is only a title" + "\n\n" + "Fixes someUrl://blahblah.com";
     let bodyProse5 = runCommitLintOnMsg(commitMsgWithBugUrl);
 
-    // because URLs in "Fixes <URL>" sentence can bypass the limit
+    // because URLs in "Fixes <URL>" sentence can bypass the rule
     expect(bodyProse5.status).toBe(0);
 });
 
