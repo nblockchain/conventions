@@ -76,6 +76,14 @@ function isFooterNote(line: string): boolean {
         isFixesSentence(line);
 }
 
+function isName(word: string) {
+    if (isUpperCase(word[0])) {
+        let numUpperCase = word.length - word.replace(/[A-Z]/g, '').length;
+        return numUpperCase == 1;
+    }
+    return false;
+}
+
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
@@ -203,17 +211,8 @@ module.exports = {
                     if ((colonFirstIndex > 0) && (headerStr.length > colonFirstIndex)) {
                         let subject = headerStr.substring(colonFirstIndex + 1).trim();
                         if (subject != null && subject.length > 1) {
-                            offence = isUpperCase(subject[0]) && isLowerCase(subject[1])
-                        }
-
-                        if (subject != null && subject.length > 1) {
                             let firstWord = subject.trim().split(' ')[0];
-                            if (firstWord[0].toUpperCase() === firstWord[0]){
-                                let numUpper = firstWord.length - firstWord.replace(/[A-Z]/g, '').length;
-                                if (numUpper >= 2){
-                                    offence = false;
-                                }
-                            }
+                            offence = isName(firstWord)
                         }
                     }
 
