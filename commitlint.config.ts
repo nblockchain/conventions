@@ -58,6 +58,7 @@ module.exports = {
         // * Allow PascalCase word after colon in title (exception to subject-lowercase rule), e.g.: "End2End: TestFixtureSetup refactor"
         // * Detect if commit hash mention in commit msg actually exists in repo.
         // * Give replacement suggestions in rule that detects too long titles (e.g. and->&, config->cfg, ...)
+        // * Detect area(sub-area) in the title that doesn't include area part (e.g., writing (bar) instead of foo(bar))
 
         {
             rules: {
