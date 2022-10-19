@@ -35,10 +35,10 @@ module.exports = {
         'type-space-after-comma': [RuleStatus.Error, 'always'],
         'trailing-whitespace': [RuleStatus.Error, 'always'],
         'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
+        'type-space-before-paren': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
-        // * Don't put space before parentheses (or slash) in area/scope.
         // * Better rule than body-max-line-length that ignores line if it starts with `[x] ` where x is a number.
         // * 'body-full-stop' which finds paragraphs in body without full-stop (which ignores lines in same way as suggested above).
         // * 'body-paragraph-uppercase' which finds paragraphs in body starting with lowercase.
@@ -58,6 +58,7 @@ module.exports = {
         // * Allow PascalCase word after colon in title (exception to subject-lowercase rule), e.g.: "End2End: TestFixtureSetup refactor"
         // * Detect if commit hash mention in commit msg actually exists in repo.
         // * Give replacement suggestions in rule that detects too long titles (e.g. and->&, config->cfg, ...)
+        // * Detect area(sub-area) in the title that doesn't include area part (e.g., writing (bar) instead of foo(bar))
 
         {
             rules: {
@@ -224,6 +225,28 @@ module.exports = {
                     return [
                         !offence,
                         `Please watch out for leading or ending trailing whitespace`
+                    ];
+                },
+
+                'type-space-before-paren': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+
+                    let offence = false;
+
+                    let colonIndex = headerStr.indexOf(":");
+                    if (colonIndex >= 0){
+                        let areaOrScope = headerStr.substring(0, colonIndex);
+                        let parenIndex = (areaOrScope.indexOf('('));
+                        if (parenIndex >= 1){
+                            if (headerStr[parenIndex - 1] === ' ') {
+                                offence = true;
+                            }
+                        }    
+                    }
+
+                    return [
+                        !offence,
+                        `No need to use space before parentheses in the area/scope/sub-area section of the title`
                     ];
                 },
             }
