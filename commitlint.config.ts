@@ -176,7 +176,7 @@ module.exports = {
                     if ((colonFirstIndex > 0) && (headerStr.length > colonFirstIndex)) {
                         let subject = headerStr.substring(colonFirstIndex + 1).trim();
                         if (subject != null && subject.length > 1) {
-                            offence = isUpperCase(subject[0]) && isLowerCase(subject[1])
+                            offence = isUpperCase(subject[0]) && isLowerCase(subject[1]);
                         }
                     }
 
