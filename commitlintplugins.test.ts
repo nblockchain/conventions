@@ -231,16 +231,18 @@ test('subject-lowercase8', () => {
 
 
 test('subject-lowercase9', () => {
-    let commitMsgWithNumber = "foo: A1 bar";
-    let subjectLowerCase9 = runCommitLintOnMsg(commitMsgWithNumber);
+    let commitMsgWithCamelCaseAfterColon = "End2End: testFixtureSetup refactor";
+    let subjectLowerCase9 = runCommitLintOnMsg(commitMsgWithCamelCaseAfterColon);
+    // console.log("=============>" + subjectLowerCase9.stdout);
     expect(subjectLowerCase9.status).toBe(0);
 });
 
 
-test('subject-lowercase9', () => {
-    let commitMsgWithCamelCaseAfterColon = "End2End: testFixtureSetup refactor";
-    let subjectLowerCase9 = runCommitLintOnMsg(commitMsgWithCamelCaseAfterColon);
-    expect(subjectLowerCase9.status).toBe(0);
+test('subject-lowercase10', () => {
+    let commitMsgWithNumber = "foo: A1 bar";
+    let subjectLowerCase10 = runCommitLintOnMsg(commitMsgWithNumber);
+    // console.log("=============>" + subjectLowerCase10.stdout);
+    expect(subjectLowerCase10.status).toBe(0);
 });
 
 

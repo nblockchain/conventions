@@ -79,7 +79,8 @@ function isFooterNote(line: string): boolean {
 function isName(word: string) {
     if (isUpperCase(word[0])) {
         let numUpperCase = word.length - word.replace(/[A-Z]/g, '').length;
-        return numUpperCase == 1;
+        let numNonAlphabeticalChars = word.length - word.replace(/[^a-zA-Z]/g, '').length
+        return numUpperCase == 1 && numNonAlphabeticalChars == 0;
     }
     return false;
 }
