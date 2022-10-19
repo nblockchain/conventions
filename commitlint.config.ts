@@ -1,3 +1,5 @@
+import { abbr } from "./abbreviations";
+
 // to convert from 'any' type
 function convertAnyToString(potentialString: any, paramName: string): string {
     if (potentialString === null || potentialString === undefined) {
@@ -189,10 +191,15 @@ module.exports = {
                     let headerStr = convertAnyToString(header, "header");
                     let offence = false;
 
-                    let message = `Please do not exceed ${headerMaxLineLength} characters in title;`
+                    let message = `Please do not exceed ${headerMaxLineLength} characters in title.`;
                     if (headerStr.length > 50) {
                         offence = true;
-                        message = message + '\n' + `You can replace "configuration" with "config" in the commit title to make it shorter.`                
+         
+                        Object.entries(abbr).forEach(([key, value]) => {  
+                            if (headerStr.includes(key.toString())){
+                                message = message + '\n' + `You can replace "${key}" with "${value}" in the commit title to make it shorter.`;             
+                            }
+                        })
                     }
                     
                     return [

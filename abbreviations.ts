@@ -1,4 +1,4 @@
-let abbr = {
+export let abbr = {
     "1 second": "1sec",
     "1second": "1sec",
     "absolute": "abs",
