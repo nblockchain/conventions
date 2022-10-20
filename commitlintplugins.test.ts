@@ -87,6 +87,13 @@ test('prefer-slash-over-backslash2', () => {
 });
 
 
+test('reject-obvious-words1', () => {
+    let commitMsgWithObviousWordAfterColon = "foo: modify bla bla";
+    let rejectObviousWord1 = runCommitLintOnMsg(commitMsgWithObviousWordAfterColon);
+    expect(rejectObviousWord1.status).not.toBe(0);
+});
+
+
 test('subject-lowercase1', () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(commitMsgWithUppercaseAfterColon);
