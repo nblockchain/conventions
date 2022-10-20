@@ -196,25 +196,42 @@ test('prefer-slash-over-backslash2', () => {
 });
 
 
-test('replacement-suggestion1', () => {
+test('header-max-length-with-suggestions1', () => {
     let commitMsgWithThatExceedsHeaderMaxLength =
         "foo: this is only a title with a configuration in it that exceeds header max length";
-    let replacementSuggestion1 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
+    let headerMaxLength1 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
     let expected_message = `"configuration" -> "config"`
     // console.log('HERE ==========>' + replacementSuggestion1.stdout)
-    expect(replacementSuggestion1.status).not.toBe(0);
-    expect((replacementSuggestion1.stdout + '').includes(expected_message)).toEqual(true)
+    expect(headerMaxLength1.status).not.toBe(0);
+    expect((headerMaxLength1.stdout + '').includes(expected_message)).toEqual(true)
 });
 
 
-test('replacement-suggestion2', () => {
+test('header-max-length-with-suggestions2', () => {
     let commitMsgWithThatExceedsHeaderMaxLength =
         "foo: this is only a title with a absolute in it that exceeds header max length";
-    let replacementSuggestion2 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
+    let headerMaxLength2 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
     let expected_message = `"absolute" -> "abs"`
     // console.log('HERE ==========>' + replacementSuggestion1.stdout)
-    expect(replacementSuggestion2.status).not.toBe(0);
-    expect((replacementSuggestion2.stdout + '').includes(expected_message)).toEqual(true)
+    expect(headerMaxLength2.status).not.toBe(0);
+    expect((headerMaxLength2.stdout + '').includes(expected_message)).toEqual(true)
+});
+
+
+test('header-max-length-with-suggestions3', () => {
+    let commitMsgWithOnlyTwentySixCharsInTitle =
+        "foo: this is only a title";
+    let headerMaxLength3 = runCommitLintOnMsg(commitMsgWithOnlyTwentySixCharsInTitle);
+    expect(headerMaxLength3.status).toBe(0);
+});
+
+
+test('header-max-length-with-suggestions4', () => {
+    let tenChars = '1234 12345'
+    let commitMsgWithOnlyFiftyCharsInTitle =
+        "foo: 12345" + tenChars + tenChars + tenChars + tenChars;
+    let headerMaxLength4 = runCommitLintOnMsg(commitMsgWithOnlyFiftyCharsInTitle);
+    expect(headerMaxLength4.status).toBe(0);
 });
 
 
