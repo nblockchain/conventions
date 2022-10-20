@@ -360,6 +360,22 @@ test('subject-lowercase10', () => {
 });
 
 
+test('too-many-spaces1', () => {
+    let commitMsgWithTooManySpacesInTitle =
+        "foo: this is only a  title";
+    let tooManySpaces1 = runCommitLintOnMsg(commitMsgWithTooManySpacesInTitle);
+    expect(tooManySpaces1.status).not.toBe(0);
+});
+
+
+test('too-many-spaces2', () => {
+    let commitMsgWithTooManySpacesInBody =
+        "foo: this is only a title" + "\n\n" + "Bla  blah bla.";
+    let tooManySpaces2 = runCommitLintOnMsg(commitMsgWithTooManySpacesInBody);
+    expect(tooManySpaces2.status).not.toBe(0);
+});
+
+
 test('trailing-whitespace1', () => {
     let commitMsgWithNoTrailingWhiteSpace =
         "foo: this is only a title" + "\n\n" + "Bla blah bla.";
