@@ -460,7 +460,8 @@ module.exports = {
 
                 'too-many-spaces': ({raw}: {raw:any}) => {
                     let rawStr = convertAnyToString(raw, "raw");
-
+                    console.log('===>' + rawStr + '<===')
+                    console.log(rawStr.indexOf('  '))
                     let offence = rawStr.indexOf('  ') >= 0;
 
                     return [

@@ -380,6 +380,7 @@ test('trailing-whitespace1', () => {
     let commitMsgWithNoTrailingWhiteSpace =
         "foo: this is only a title" + "\n\n" + "Bla blah bla.";
     let trailingWhitespace1 = runCommitLintOnMsg(commitMsgWithNoTrailingWhiteSpace);
+    console.log('------->' + trailingWhitespace1.stdout)
     expect(trailingWhitespace1.status).toBe(0);
 });
 
