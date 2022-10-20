@@ -306,7 +306,6 @@ module.exports = {
         // * Think of how to reject this shitty commit message: https://github.com/nblockchain/NOnion/pull/34/commits/9ffcb373a1147ed1c729e8aca4ffd30467255594
         // * Title should not have dot at the end.
         // * Second line of commit msg should always be blank.
-        // * Check for too many spaces (e.g. 2 spaces after colon)
         // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
         // * Detect if commit hash mention in commit msg actually exists in repo.
         // * Detect area(sub-area) in the title that doesn't include area part (e.g., writing (bar) instead of foo(bar))
