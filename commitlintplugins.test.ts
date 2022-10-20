@@ -376,11 +376,19 @@ test('too-many-spaces2', () => {
 });
 
 
+test('too-many-spaces3', () => {
+    let commitMsgWithTooManySpacesInCodeBlock =
+        "foo: this is only a title" + "\n\n" + "Bar baz:\n\n```\ntype   Foo =\nstring\n```";
+    let tooManySpaces3 = runCommitLintOnMsg(commitMsgWithTooManySpacesInCodeBlock);
+    //console.log("=============>" + trailingWhitespace6.stdout);
+    expect(tooManySpaces3.status).toBe(0);
+});
+
+
 test('trailing-whitespace1', () => {
     let commitMsgWithNoTrailingWhiteSpace =
         "foo: this is only a title" + "\n\n" + "Bla blah bla.";
     let trailingWhitespace1 = runCommitLintOnMsg(commitMsgWithNoTrailingWhiteSpace);
-    console.log('------->' + trailingWhitespace1.stdout)
     expect(trailingWhitespace1.status).toBe(0);
 });
 
