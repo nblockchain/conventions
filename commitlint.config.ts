@@ -91,7 +91,7 @@ module.exports = {
                     // does msg have a body?
                     if (body !== null) {
                         let bodyStr = convertAnyToString(body, "body");
-                        
+
                         for (let paragraph of bodyStr.trim().split('\n\n')){
 
                             // It's a paragraph that only consists of a block
@@ -104,13 +104,13 @@ module.exports = {
                             let startWithLowerCase = isLowerCase(paragraph[0])
 
                             let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
-                            
+
                             if (startWithLowerCase || !endsWithDotOrColon){
                                 let line = paragraph.split(/\r?\n/)[0];
                                 
                                 // it's a URL
                                 let isUrl = mightBeUrl(line);
-                                
+
                                 // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
                                 let startsWithRef = isFooterReference(line);
 
@@ -129,7 +129,7 @@ module.exports = {
                         `Please begin a paragraph with uppercase letter and end it with a dot`
                     ];
                 },
-                        
+
                 'prefer-slash-over-backslash': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 
@@ -148,7 +148,7 @@ module.exports = {
                         `Please use slash instead of backslash in the area/scope/sub-area section of the title`
                     ];
                 },
-                
+
                 'type-space-after-colon': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 
