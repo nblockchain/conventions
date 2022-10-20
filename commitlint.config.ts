@@ -15,12 +15,26 @@ enum RuleStatus {
 
 let bodyMaxLineLength = 64;
 
+function assertCharacter(letter: string) {
+    if (letter.length !== 1) {
+        throw Error('This function expects a character as input')
+    }
+}
+
+function assertLine(line: string) {
+    if (line.includes('\n')) {
+        throw Error('This function expects a line as input')
+    }
+}
+
 function isBigBlock(line: string) {
+    assertLine(line);
     let bigBlockDelimiter = "```";
     return (line.length == bigBlockDelimiter.length) && (line.indexOf("```") == 0);
 }
 
 function isUpperCase(letter: string) {
+    assertCharacter(letter);
     let isUpperCase = letter.toUpperCase() == letter;
     let isLowerCase = letter.toLowerCase() == letter;
 
@@ -28,6 +42,7 @@ function isUpperCase(letter: string) {
 }
 
 function isLowerCase(letter: string) {
+    assertCharacter(letter);
     let isUpperCase = letter.toUpperCase() == letter;
     let isLowerCase = letter.toLowerCase() == letter;
 
@@ -35,14 +50,17 @@ function isLowerCase(letter: string) {
 }
 
 function mightBeUrl(line: string) {
+    assertLine(line);
     return line.indexOf(" ") < 0;
 }
 
 function isFooterReference(line: string) {
+    assertLine(line);
     return (line[0] === "[" && line.indexOf("] ") > 0);
 }
 
 function isFixesSentence(line: string) {
+    assertLine(line);
     return (line.indexOf("Fixes ") == 0);
 }
 
