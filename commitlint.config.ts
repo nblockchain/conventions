@@ -462,6 +462,7 @@ module.exports = {
                     let rawStr = convertAnyToString(raw, "raw");
                     console.log('===>' + rawStr + '<===')
                     console.log(rawStr.indexOf('  '))
+                    rawStr = rawStr.replace(/```[^]*```/g, '');
                     let offence = rawStr.indexOf('  ') >= 0;
 
                     return [
