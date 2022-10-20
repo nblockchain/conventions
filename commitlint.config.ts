@@ -294,6 +294,7 @@ module.exports = {
         'type-space-before-paren': [RuleStatus.Error, 'always'],
         'type-with-square-brackets': [RuleStatus.Error, 'always'],
         'proper-issue-refs': [RuleStatus.Error, 'always'],
+        'too-many-spaces': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -456,6 +457,17 @@ module.exports = {
                     ];
                 },
 
+
+                'too-many-spaces': ({raw}: {raw:any}) => {
+                    let rawStr = convertAnyToString(raw, "raw");
+
+                    let offence = rawStr.indexOf('  ') >= 0;
+
+                    return [
+                        !offence,
+                        `Please watch out for too many whitespaces in the text`
+                    ];
+                },
 
                 'type-space-after-colon': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
