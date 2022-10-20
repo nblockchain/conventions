@@ -52,7 +52,7 @@ test('body-prose5', () => {
 
 test('body-prose6', () => {
     let commitMsgWithBlock =
-        "foo: this is only a title" + "\n\n" + "Bar baz.\n\n```\n" + 'if (foo) {bar(); }' + "\n```";
+        "foo: this is only a title\n\nBar baz.\n\n```\nif (foo) { bar(); }\n```";
     let bodyProse6 = runCommitLintOnMsg(commitMsgWithBlock);
 
     // because ```blocks surrounded like this``` can bypass the rule
