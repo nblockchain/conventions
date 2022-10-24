@@ -385,6 +385,14 @@ test('too-many-spaces3', () => {
 });
 
 
+test('too-many-spaces4', () => {
+    let commitMsgWithTwoSpacesAfterSentence =
+        "foo: this is only a title" + "\n\n" + "Bla blah.  blah bla.";
+    let tooManySpaces4 = runCommitLintOnMsg(commitMsgWithTwoSpacesAfterSentence);
+    expect(tooManySpaces4.status).toBe(0);
+});
+
+
 test('trailing-whitespace1', () => {
     let commitMsgWithNoTrailingWhiteSpace =
         "foo: this is only a title" + "\n\n" + "Bla blah bla.";
