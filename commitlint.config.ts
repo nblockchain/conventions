@@ -64,9 +64,15 @@ function isFixesSentence(line: string) {
     return (line.indexOf("Fixes ") == 0);
 }
 
+function isCoAuthoredByTag(line: string) {
+    assertLine(line);
+    return (line.indexOf("Co-authored-by: ") == 0);
+}
+
 function isFooterNote(line: string): boolean {
     assertLine(line);
     return isFooterReference(line) ||
+        isCoAuthoredByTag(line) ||
         isFixesSentence(line);
 }
 
