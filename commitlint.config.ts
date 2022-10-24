@@ -197,7 +197,7 @@ module.exports = {
                         Object.entries(abbr).forEach(([key, value]) => {  
                             if (headerStr.includes(key.toString())){
                                 if (numRecomendations === 0) {
-                                    message = message + 'We recommend the following replacement(s) in your commit title:\n'
+                                    message = message + 'The following replacement(s) in your commit title are recommended:\n'
                                 }
 
                                 message = message + `"${key}" -> "${value}"\n`;             
