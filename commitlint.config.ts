@@ -257,6 +257,10 @@ function includeHashtagRef(text: string) {
     return text.match(`#[0-9]+`) !== null;
 }
 
+function removeCodeBlock(text: string) {
+    return text.replace(/```[^]*```/g, ''); // maybe I should include \n in the pattern
+}
+
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
@@ -422,7 +426,7 @@ module.exports = {
 
                 'reject-hashtag-refs': ({raw}: {raw:any}) => {
                     let rawStr = convertAnyToString(raw, "raw");
-
+                    rawStr = removeCodeBlock(rawStr)
                     let offence = includeHashtagRef(rawStr);
 
                     return [
