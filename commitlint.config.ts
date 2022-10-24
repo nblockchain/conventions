@@ -284,7 +284,6 @@ module.exports = {
         // * Better rule than body-max-line-length that ignores line if it starts with `[x] ` where x is a number.
         // * Detect if paragraphs in body have been cropped too shortly (less than 64 chars), and suggest same auto-wrap command that body-soft-max-line-length suggests, since it unwraps and wraps (both).
         // * Detect reverts which have not been elaborated.
-        // * Reject #XYZ refs in favour for full URLs.
         // * If full URL for commit found, reject in favour for just the commit hash.
         // * Reject some stupid obvious words: change, update, modify (if first word after colon, error; otherwise warning).
         // * Think of how to reject this shitty commit message: https://github.com/nblockchain/NOnion/pull/34/commits/9ffcb373a1147ed1c729e8aca4ffd30467255594
