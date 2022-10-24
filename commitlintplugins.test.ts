@@ -90,7 +90,16 @@ test('prefer-slash-over-backslash2', () => {
 test('reject-obvious-words1', () => {
     let commitMsgWithObviousWordAfterColon = "foo: modify bla bla";
     let rejectObviousWord1 = runCommitLintOnMsg(commitMsgWithObviousWordAfterColon);
+    console.log('==========>' + rejectObviousWord1.stdout)
     expect(rejectObviousWord1.status).not.toBe(0);
+});
+
+
+test('reject-obvious-words2', () => {
+    let commitMsgWithObviousWordAfterColon = "foo: change bla bla";
+    let rejectObviousWord2 = runCommitLintOnMsg(commitMsgWithObviousWordAfterColon);
+    console.log('==========>' + rejectObviousWord2.stdout)
+    expect(rejectObviousWord2.status).not.toBe(0);
 });
 
 
