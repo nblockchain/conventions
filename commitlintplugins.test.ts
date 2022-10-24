@@ -152,6 +152,13 @@ test('prefer-slash-over-backslash2', () => {
 });
 
 
+test('reject-square-bracket-style1', () => {
+    let commitMsgWithSquareBracketStyle = "[foo] bla bla bla";
+    let rejectSquareBracketStyle1 = runCommitLintOnMsg(commitMsgWithSquareBracketStyle);
+    expect(rejectSquareBracketStyle1.status).not.toBe(0);
+});
+
+
 test('subject-lowercase1', () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(commitMsgWithUppercaseAfterColon);
