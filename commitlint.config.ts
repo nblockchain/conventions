@@ -574,7 +574,7 @@ module.exports = {
 
                     // taken from https://stackoverflow.com/a/66433444/544947 and https://unix.stackexchange.com/a/25208/56844
                     let recommendedUnixCommand =
-                        'git log --format=%B -n 1 $(git log -1 --pretty=format:"%h") | cat - > log.txt ; fmt -w 1111 -s log.txt > ulog.txt && fmt -w 64 -s ulog.txt > wlog.txt && git commit --amend -F wlog.txt';
+                        'git log --format=%B -n 1 $(git log -1 --pretty=format:"%h") | cat - > log.txt ; fmt -w 1111 -s log.txt > ulog.txt && fmt -w 64 -s -u ulog.txt > wlog.txt && git commit --amend -F wlog.txt';
 
                     return [
                         !offence,
