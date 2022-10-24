@@ -257,7 +257,7 @@ function includeHashtagRef(text: string) {
     return text.match(`#[0-9]+`) !== null;
 }
 
-function removeCodeBlock(text: string) {
+function removeAllCodeBlocks(text: string) {
     return text.replace(/```[^]*```/g, ''); // maybe I should include \n in the pattern
 }
 
@@ -426,7 +426,7 @@ module.exports = {
 
                 'reject-hashtag-refs': ({raw}: {raw:any}) => {
                     let rawStr = convertAnyToString(raw, "raw");
-                    rawStr = removeCodeBlock(rawStr)
+                    rawStr = removeAllCodeBlocks(rawStr)
                     let offence = includeHashtagRef(rawStr);
 
                     return [
