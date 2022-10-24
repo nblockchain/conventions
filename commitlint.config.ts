@@ -253,6 +253,10 @@ function wordIsStartOfSentence(word: string) {
     return false;
 }
 
+function includeHashtagRef(text: string) {
+    return text.match(`#[0-9]+`) !== null;
+}
+
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
@@ -273,6 +277,7 @@ module.exports = {
         'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
         'type-space-before-paren': [RuleStatus.Error, 'always'],
         'type-with-square-brackets': [RuleStatus.Error, 'always'],
+        'reject-hashtag-refs': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -415,6 +420,18 @@ module.exports = {
                         `Please use slash instead of backslash in the area/scope/sub-area section of the title`
                     ];
                 },
+
+                'reject-hashtag-refs': ({raw}: {raw:any}) => {
+                    let rawStr = convertAnyToString(raw, "raw");
+
+                    let offence = includeHashtagRef(rawStr);
+
+                    return [
+                        !offence,
+                        `Please use full URLs instead of #XYZ refs.`
+                    ];
+                },
+
 
                 'type-space-after-colon': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
