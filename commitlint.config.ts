@@ -460,7 +460,8 @@ module.exports = {
                 'too-many-spaces': ({raw}: {raw:any}) => {
                     let rawStr = convertAnyToString(raw, "raw");
                     rawStr = removeAllCodeBlocks(rawStr);
-                    let offence = rawStr.indexOf('  ') >= 0;
+                    let offence = (rawStr.match(`[^.]  `) !== null);
+                    // && (rawStr.match(`\\.   `) === null)
 
                     return [
                         !offence,
