@@ -267,9 +267,16 @@ test('header-max-length-with-suggestions4', () => {
 
 
 test('reject-hashtag-refs1', () => {
-    let commitMsgWithHashtagRef = "foo/bar: fixes #123";
+    let commitMsgWithHashtagRef = "foo: fixes #123";
     let rejectHashtagRefs1 = runCommitLintOnMsg(commitMsgWithHashtagRef);
     expect(rejectHashtagRefs1.status).not.toBe(0);
+});
+
+
+test('reject-hashtag-refs2', () => {
+    let commitMsgWithFullUrl = "foo: blah blah" + '\n\n' + 'Fixes someUrl://blah.blah/158';
+    let rejectHashtagRefs1 = runCommitLintOnMsg(commitMsgWithFullUrl);
+    expect(rejectHashtagRefs1.status).toBe(0);
 });
 
 
