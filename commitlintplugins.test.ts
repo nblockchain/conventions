@@ -152,20 +152,6 @@ test('prefer-slash-over-backslash2', () => {
 });
 
 
-test('type-with-square-brackets1', () => {
-    let commitMsgWithSquareBracketStyle = "[foo] this is a title";
-    let rejectSquareBracketStyle1 = runCommitLintOnMsg(commitMsgWithSquareBracketStyle);
-    expect(rejectSquareBracketStyle1.status).not.toBe(0);
-});
-
-
-test('type-with-square-brackets2', () => {
-    let commitMsgWithoutSquareBracketStyle = "foo: this is a title";
-    let rejectSquareBracketStyle2 = runCommitLintOnMsg(commitMsgWithoutSquareBracketStyle);
-    expect(rejectSquareBracketStyle2.status).toBe(0);
-});
-
-
 test('subject-lowercase1', () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(commitMsgWithUppercaseAfterColon);
@@ -317,4 +303,18 @@ test('type-space-before-paren3', () => {
     let commitMsgWithNoSpaceBeforeParen = "(bar): bla bla bla";
     let typeSpaceBeforeParen3 = runCommitLintOnMsg(commitMsgWithNoSpaceBeforeParen);
     expect(typeSpaceBeforeParen3.status).toBe(0);
+});
+
+
+test('type-with-square-brackets1', () => {
+    let commitMsgWithSquareBracketStyle = "[foo] this is a title";
+    let rejectSquareBracketStyle1 = runCommitLintOnMsg(commitMsgWithSquareBracketStyle);
+    expect(rejectSquareBracketStyle1.status).not.toBe(0);
+});
+
+
+test('type-with-square-brackets2', () => {
+    let commitMsgWithoutSquareBracketStyle = "foo: this is a title";
+    let rejectSquareBracketStyle2 = runCommitLintOnMsg(commitMsgWithoutSquareBracketStyle);
+    expect(rejectSquareBracketStyle2.status).toBe(0);
 });
