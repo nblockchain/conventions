@@ -1,3 +1,5 @@
+import {obviousWords} from './obviouswords'
+
 // to convert from 'any' type
 function convertAnyToString(potentialString: any, paramName: string): string {
     if (potentialString === null || potentialString === undefined) {
@@ -90,11 +92,11 @@ module.exports = {
                     let titleStartIndex = Math.max(0, colonFirstIndex + 1);
                     let title = headerStr.substring(titleStartIndex, headerStr.length).trim();
                     let firstWordInTitle = title.split(' ')[0];
-                    offence = firstWordInTitle == 'modify'  
+                    offence = obviousWords.includes(firstWordInTitle);  
 
                     return [
                         !offence,
-                        `Please don't use followin`
+                        `Please don't use obvious words such as ${firstWordInTitle} in the commit title`
                     ];
                 },
 
