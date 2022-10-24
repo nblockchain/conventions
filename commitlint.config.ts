@@ -191,7 +191,7 @@ module.exports = {
                     let offence = false;
 
                     let message = `Please do not exceed ${headerMaxLineLength} characters in title.`;
-                    if (headerStr.length > 50) {
+                    if (headerStr.length > headerMaxLineLength) {
                         offence = true;
                         let numRecomendations = 0;
                         Object.entries(abbr).forEach(([key, value]) => {  
