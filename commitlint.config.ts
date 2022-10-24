@@ -81,7 +81,7 @@ module.exports = {
         'trailing-whitespace': [RuleStatus.Error, 'always'],
         'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
         'type-space-before-paren': [RuleStatus.Error, 'always'],
-        'reject-square-bracket-style': [RuleStatus.Error, 'always'],
+        'type-with-square-brackets': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -168,7 +168,7 @@ module.exports = {
                     ];
                 },
 
-                'reject-square-bracket-style': ({header}: {header:any}) => {
+                'type-with-square-brackets': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 
                     let offence = headerStr.match(`^\\[.*\\]`) !== null
