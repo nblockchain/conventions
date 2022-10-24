@@ -387,7 +387,7 @@ test('too-many-spaces3', () => {
 
 test('too-many-spaces4', () => {
     let commitMsgWithTwoSpacesAfterSentence =
-        "foo: this is only a title" + "\n\n" + "Bla blah.  blah bla.";
+        "foo: this is only a title" + "\n\n" + "Bla blah.  Blah bla.";
     let tooManySpaces4 = runCommitLintOnMsg(commitMsgWithTwoSpacesAfterSentence);
     expect(tooManySpaces4.status).toBe(0);
 });
@@ -395,7 +395,7 @@ test('too-many-spaces4', () => {
 
 test('too-many-spaces5', () => {
     let commitMsgWithThreeSpacesAfterSentence =
-        "foo: this is only a title" + "\n\n" + "Bla blah.   blah bla.";
+        "foo: this is only a title" + "\n\n" + "Bla blah.   Blah bla.";
     let tooManySpaces5 = runCommitLintOnMsg(commitMsgWithThreeSpacesAfterSentence);
     expect(tooManySpaces5.status).not.toBe(0);
 });
