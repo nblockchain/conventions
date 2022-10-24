@@ -70,6 +70,16 @@ test('body-prose7', () => {
 });
 
 
+test('body-prose8', () => {
+    let commitMsgWithCoAuthoredByTagThatIsObviouslyNotAParagraph =
+        "foo: this is only a title" + "\n\n" + "Co-authored-by: Jon Doe <jondoe@example.com>";
+    let bodyProse8 = runCommitLintOnMsg(commitMsgWithCoAuthoredByTagThatIsObviouslyNotAParagraph);
+
+    // because Co-authored-by tags don't end with a dot
+    expect(bodyProse8.status).toBe(0);
+});
+
+
 test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
@@ -135,6 +145,18 @@ test('body-max-line-length6', () => {
 
     // because ```blocks surrounded like this``` can bypass the limit
     expect(bodyMaxLineLength6.status).toBe(0);
+});
+
+
+test('body-max-line-length7', () => {
+    let tenChars = "1234567890";
+    let seventyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
+    let commitMsgWithCoAuthoredByTagThatExceedsBodyMaxLineLength =
+        "foo: this is only a title" + "\n\n" + "Co-authored-by: Jon Doe <" + seventyChars + "@example.com>";
+    let bodyMaxLineLength7 = runCommitLintOnMsg(commitMsgWithCoAuthoredByTagThatExceedsBodyMaxLineLength);
+
+    // because Co-authored-by tags can bypass the limit
+    expect(bodyMaxLineLength7.status).toBe(0);
 });
 
 

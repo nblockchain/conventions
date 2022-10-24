@@ -64,6 +64,18 @@ function isFixesSentence(line: string) {
     return (line.indexOf("Fixes ") == 0);
 }
 
+function isCoAuthoredByTag(line: string) {
+    assertLine(line);
+    return (line.indexOf("Co-authored-by: ") == 0);
+}
+
+function isFooterNote(line: string): boolean {
+    assertLine(line);
+    return isFooterReference(line) ||
+        isCoAuthoredByTag(line) ||
+        isFixesSentence(line);
+}
+
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
@@ -130,12 +142,9 @@ module.exports = {
                                 // it's a URL
                                 let isUrl = mightBeUrl(line);
 
-                                // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
-                                let startsWithRef = isFooterReference(line);
+                                let lineIsFooterNote = isFooterNote(line);
 
-                                let startWithFixesSentence = isFixesSentence(line);
-
-                                if ((!isUrl) && (!startsWithRef) && (!startWithFixesSentence)) {
+                                if ((!isUrl) && (!lineIsFooterNote)) {
                                     offence = true;
                                 }
                             }
@@ -250,12 +259,9 @@ module.exports = {
                                 // it's a URL
                                 let isUrl = mightBeUrl(line);
 
-                                // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
-                                let startsWithRef = isFooterReference(line)
+                                let lineIsFooterNote = isFooterNote(line);
 
-                                let startWithFixesSentence = isFixesSentence(line);
-
-                                if ((!isUrl) && (!startsWithRef) && (!startWithFixesSentence)) {
+                                if ((!isUrl) && (!lineIsFooterNote)) {
                                     offence = true;
                                     break;
                                 }
