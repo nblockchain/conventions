@@ -64,6 +64,12 @@ function isFixesSentence(line: string) {
     return (line.indexOf("Fixes ") == 0);
 }
 
+function isFooterNote(line: string): boolean {
+    assertLine(line);
+    return isFooterReference(line) ||
+        isFixesSentence(line);
+}
+
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
@@ -130,12 +136,9 @@ module.exports = {
                                 // it's a URL
                                 let isUrl = mightBeUrl(line);
 
-                                // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
-                                let startsWithRef = isFooterReference(line);
+                                let lineIsFooterNote = isFooterNote(line);
 
-                                let startWithFixesSentence = isFixesSentence(line);
-
-                                if ((!isUrl) && (!startsWithRef) && (!startWithFixesSentence)) {
+                                if ((!isUrl) && (!lineIsFooterNote)) {
                                     offence = true;
                                 }
                             }
@@ -250,12 +253,9 @@ module.exports = {
                                 // it's a URL
                                 let isUrl = mightBeUrl(line);
 
-                                // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
-                                let startsWithRef = isFooterReference(line)
+                                let lineIsFooterNote = isFooterNote(line);
 
-                                let startWithFixesSentence = isFixesSentence(line);
-
-                                if ((!isUrl) && (!startsWithRef) && (!startWithFixesSentence)) {
+                                if ((!isUrl) && (!lineIsFooterNote)) {
                                     offence = true;
                                     break;
                                 }
