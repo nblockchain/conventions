@@ -81,6 +81,7 @@ module.exports = {
         'trailing-whitespace': [RuleStatus.Error, 'always'],
         'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
         'type-space-before-paren': [RuleStatus.Error, 'always'],
+        'reject-square-bracket-style': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -165,6 +166,17 @@ module.exports = {
                     return [
                         !offence,
                         `Please use slash instead of backslash in the area/scope/sub-area section of the title`
+                    ];
+                },
+
+                'reject-square-bracket-style': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+
+                    let offence = headerStr.match(`^\\[.*\\]`) !== null
+
+                    return [
+                        !offence,
+                        `Please use "area/scope: title" style instead of wrapping area/scope under square brakets in your commit message header`
                     ];
                 },
 
