@@ -280,6 +280,14 @@ test('reject-hashtag-refs2', () => {
 });
 
 
+test('reject-hashtag-refs3', () => {
+    let commitMsgWithHashtagRefInBlock =
+        "foo: this is only a title" + "\n\n" + "Bar baz:\n\n```\ntype Foo = string #123\n```";
+    let trailingWhitespace6 = runCommitLintOnMsg(commitMsgWithHashtagRefInBlock);
+    expect(trailingWhitespace6.status).toBe(0);
+});
+
+
 test('subject-lowercase1', () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(commitMsgWithUppercaseAfterColon);
