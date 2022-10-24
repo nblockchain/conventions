@@ -168,17 +168,6 @@ module.exports = {
                     ];
                 },
 
-                'type-with-square-brackets': ({header}: {header:any}) => {
-                    let headerStr = convertAnyToString(header, "header");
-
-                    let offence = headerStr.match(`^\\[.*\\]`) !== null
-
-                    return [
-                        !offence,
-                        `Please use "area/scope: title" or "area(scope): title" style instead of wrapping area/scope under square brackets in your commit message header`
-                    ];
-                },
-
                 'type-space-after-colon': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 
@@ -194,6 +183,17 @@ module.exports = {
                     return [
                         !offence,
                         `Please place a space after the first colon character in your commit message title`
+                    ];
+                },
+
+                'type-with-square-brackets': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+
+                    let offence = headerStr.match(`^\\[.*\\]`) !== null
+
+                    return [
+                        !offence,
+                        `Please use "area/scope: title" or "area(scope): title" style instead of wrapping area/scope under square brackets in your commit message header`
                     ];
                 },
 
