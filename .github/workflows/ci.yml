@@ -5,6 +5,8 @@ on: [push, pull_request]
 jobs:
   tests:
     runs-on: ubuntu-20.04
+    container:
+      image: "ubuntu:20.04"
     steps:
       - uses: actions/checkout@v2
       - name: Install required dependencies
@@ -23,6 +25,8 @@ jobs:
 
   sanitycheck:
     runs-on: ubuntu-20.04
+    container:
+      image: "ubuntu:20.04"
     steps:
       - uses: actions/checkout@v2
         with:
