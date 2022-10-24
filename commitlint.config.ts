@@ -15,9 +15,53 @@ enum RuleStatus {
 
 let bodyMaxLineLength = 64;
 
+function assertCharacter(letter: string) {
+    if (letter.length !== 1) {
+        throw Error('This function expects a character as input')
+    }
+}
+
+function assertLine(line: string) {
+    if (line.includes('\n')) {
+        throw Error('This function expects a line as input')
+    }
+}
+
 function isBigBlock(line: string) {
+    assertLine(line);
     let bigBlockDelimiter = "```";
     return (line.length == bigBlockDelimiter.length) && (line.indexOf("```") == 0);
+}
+
+function isUpperCase(letter: string) {
+    assertCharacter(letter);
+    let isUpperCase = letter.toUpperCase() == letter;
+    let isLowerCase = letter.toLowerCase() == letter;
+
+    return (isUpperCase && !isLowerCase);
+}
+
+function isLowerCase(letter: string) {
+    assertCharacter(letter);
+    let isUpperCase = letter.toUpperCase() == letter;
+    let isLowerCase = letter.toLowerCase() == letter;
+
+    return (isLowerCase && !isUpperCase);
+}
+
+function mightBeUrl(line: string) {
+    assertLine(line);
+    return line.indexOf(" ") < 0;
+}
+
+function isFooterReference(line: string) {
+    assertLine(line);
+    return (line[0] === "[" && line.indexOf("] ") > 0);
+}
+
+function isFixesSentence(line: string) {
+    assertLine(line);
+    return (line.indexOf("Fixes ") == 0);
 }
 
 module.exports = {
@@ -32,6 +76,7 @@ module.exports = {
         'type-empty': [RuleStatus.Warning, 'never'],
         'type-space-after-colon': [RuleStatus.Error, 'always'],
         'subject-lowercase': [RuleStatus.Error, 'always'],
+        'body-prose': [RuleStatus.Error, 'always'],
         'type-space-after-comma': [RuleStatus.Error, 'always'],
         'trailing-whitespace': [RuleStatus.Error, 'always'],
         'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
@@ -40,8 +85,6 @@ module.exports = {
     plugins: [
         // TODO (ideas for more rules):
         // * Better rule than body-max-line-length that ignores line if it starts with `[x] ` where x is a number.
-        // * 'body-full-stop' which finds paragraphs in body without full-stop (which ignores lines in same way as suggested above).
-        // * 'body-paragraph-uppercase' which finds paragraphs in body starting with lowercase.
         // * Detect if paragraphs in body have been cropped too shortly (less than 64 chars), and suggest same auto-wrap command that body-soft-max-line-length suggests, since it unwraps and wraps (both).
         // * Detect reverts which have not been elaborated.
         // * Detect WIP commits without a number.
@@ -50,7 +93,6 @@ module.exports = {
         // * Reject some stupid obvious words: change, update, modify (if first word after colon, error; otherwise warning).
         // * Think of how to reject this shitty commit message: https://github.com/nblockchain/NOnion/pull/34/commits/9ffcb373a1147ed1c729e8aca4ffd30467255594
         // * Title should not have dot at the end.
-        // * Each body's paragraph should begin with uppercase and end with dot.
         // * Second line of commit msg should always be blank.
         // * Check for too many spaces (e.g. 2 spaces after colon)
         // * Detect area/scope wrapped under square brakets instead of "foo: bar" style.
@@ -62,6 +104,51 @@ module.exports = {
 
         {
             rules: {
+                'body-prose': ({body}: {body:any}) => {
+                    let offence = false;
+
+                    // does msg have a body?
+                    if (body !== null) {
+                        let bodyStr = convertAnyToString(body, "body");
+
+                        for (let paragraph of bodyStr.trim().split('\n\n')){
+
+                            // It's a paragraph that only consists of a block
+                            if (/^```[^]*```$/.test(paragraph.trim())){
+                                continue;
+                            }
+
+                            paragraph = paragraph.replace(/```[^]*```/g, '').trim();
+
+                            let startWithLowerCase = isLowerCase(paragraph[0])
+
+                            let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
+
+                            if (startWithLowerCase || !endsWithDotOrColon){
+                                let line = paragraph.split(/\r?\n/)[0];
+                                
+                                // it's a URL
+                                let isUrl = mightBeUrl(line);
+
+                                // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
+                                let startsWithRef = isFooterReference(line);
+
+                                let startWithFixesSentence = isFixesSentence(line);
+
+                                if ((!isUrl) && (!startsWithRef) && (!startWithFixesSentence)) {
+                                    offence = true;
+                                }
+                            }
+                        }
+                                        
+                    }
+
+                    return [
+                        !offence,
+                        `Please begin a paragraph with uppercase letter and end it with a dot`
+                    ];
+                },
+
                 'prefer-slash-over-backslash': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 
@@ -108,14 +195,7 @@ module.exports = {
                     if ((colonFirstIndex > 0) && (headerStr.length > colonFirstIndex)) {
                         let subject = headerStr.substring(colonFirstIndex + 1).trim();
                         if (subject != null && subject.length > 1) {
-                            let firstIsUpperCase = subject[0].toUpperCase() == subject[0];
-                            let firstIsLowerCase = subject[0].toLowerCase() == subject[0];
-                            let secondIsUpperCase = subject[1].toUpperCase() == subject[1];
-                            let secondIsLowerCase = subject[1].toLowerCase() == subject[1];
-
-                            offence = firstIsUpperCase && (!firstIsLowerCase)
-                                // to whitelist acronyms
-                                && (!secondIsUpperCase) && secondIsLowerCase;
+                            offence = isUpperCase(subject[0]) && isLowerCase(subject[1]);
                         }
                     }
 
@@ -168,14 +248,14 @@ module.exports = {
                             if (line.length > bodyMaxLineLength) {
 
                                 // it's a URL
-                                let containsASpace = line.indexOf(" ") >= 0;
+                                let isUrl = mightBeUrl(line);
 
                                 // it's a footer reference, i.e. [1] someUrl://foo/bar/baz
-                                let startsWithRef = (line[0] == "[" && line.indexOf("] ") > 0);
+                                let startsWithRef = isFooterReference(line)
 
-                                let startWithFixesSentence = (line.indexOf("Fixes ") == 0);
+                                let startWithFixesSentence = isFixesSentence(line);
 
-                                if (containsASpace && (!startsWithRef) && (!startWithFixesSentence)) {
+                                if ((!isUrl) && (!startsWithRef) && (!startWithFixesSentence)) {
                                     offence = true;
                                     break;
                                 }

@@ -4,12 +4,77 @@ function runCommitLintOnMsg(inputMsg: string) {
     return spawnSync('npx', ['commitlint', '--verbose'], { input: inputMsg });
 }
 
+test('body-prose1', () => {
+    let commitMsgWithLowercaseBodyStart =
+        "foo: this is only a title" + "\n\n" + "bla blah bla.";
+    let bodyProse1 = runCommitLintOnMsg(commitMsgWithLowercaseBodyStart);
+    expect(bodyProse1.status).not.toBe(0);
+});
+
+
+test('body-prose2', () => {
+    let commitMsgWithNumbercaseBodyStart =
+        "foo: this is only a title" + "\n\n" + "1234 bla blah bla.";
+    let bodyProse2 = runCommitLintOnMsg(commitMsgWithNumbercaseBodyStart);
+    expect(bodyProse2.status).toBe(0);
+});
+
+
+test('body-prose3', () => {
+    let commitMsgWithUrl =
+        "foo: this is only a title" + "\n\n" + "someUrl://blahblah.com";
+    let bodyProse3 = runCommitLintOnMsg(commitMsgWithUrl);
+
+    // because URLs can bypass the rule
+    expect(bodyProse3.status).toBe(0);
+});
+
+
+test('body-prose4', () => {
+    let commitMsgWithFootnoteUrl =
+        "foo: this is only a title" + "\n\n" + "Bla blah[1] bla.\n\n[1] someUrl://blahblah.com";
+    let bodyProse4 = runCommitLintOnMsg(commitMsgWithFootnoteUrl);
+
+    // because URLs in footer can bypass the rule
+    expect(bodyProse4.status).toBe(0);
+});
+
+
+test('body-prose5', () => {
+    let commitMsgWithBugUrl =
+        "foo: this is only a title" + "\n\n" + "Fixes someUrl://blahblah.com";
+    let bodyProse5 = runCommitLintOnMsg(commitMsgWithBugUrl);
+
+    // because URLs in "Fixes <URL>" sentence can bypass the rule
+    expect(bodyProse5.status).toBe(0);
+});
+
+
+test('body-prose6', () => {
+    let commitMsgWithBlock =
+        "foo: this is only a title\n\nBar baz.\n\n```\nif (foo) { bar(); }\n```";
+    let bodyProse6 = runCommitLintOnMsg(commitMsgWithBlock);
+
+    // because ```blocks surrounded like this``` can bypass the rule
+    expect(bodyProse6.status).toBe(0);
+});
+
+
+test('body-prose7', () => {
+    let commitMsgWithParagraphEndingWithColon =
+        "foo: this is only a title" + "\n\n" + "Bar baz:\n\nBlah blah.";
+    let bodyProse7 = runCommitLintOnMsg(commitMsgWithParagraphEndingWithColon);
+
+    // because paragraphs can end with a colon
+    expect(bodyProse7.status).toBe(0);
+});
+
 
 test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
     let commitMsgWithOnlySixtyFourCharsInBody =
-        "foo: this is only a title" + "\n\n" + sixtyChars + "1234";
+        "foo: this is only a title" + "\n\n" + sixtyChars + "123.";
     let bodyMaxLineLength1 = runCommitLintOnMsg(commitMsgWithOnlySixtyFourCharsInBody);
     expect(bodyMaxLineLength1.status).toBe(0);
 });
@@ -19,7 +84,7 @@ test('body-max-line-length2', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
     let commitMsgWithOnlySixtyFiveCharsInBody =
-        "foo: this is only a title" + "\n\n" + sixtyChars + "12345";
+        "foo: this is only a title" + "\n\n" + sixtyChars + "1234.";
     let bodyMaxLineLength2 = runCommitLintOnMsg(commitMsgWithOnlySixtyFiveCharsInBody);
     expect(bodyMaxLineLength2.status).not.toBe(0);
 });
