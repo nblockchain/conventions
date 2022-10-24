@@ -5,12 +5,21 @@ on: [push, pull_request]
 jobs:
   tests:
     runs-on: ubuntu-20.04
+    container:
+      image: "ubuntu:20.04"
     steps:
       - uses: actions/checkout@v2
       - name: Install required dependencies
         run: |
-          sudo apt install --yes npm
+          apt update
+          apt install -y sudo
+          sudo apt install -y git
+          
+          sudo apt install -y curl
+          curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          sudo apt install -y nodejs
           npm install @commitlint/config-conventional
+          sudo npm install -g yarn
           yarn add --dev jest typescript ts-jest @types/jest
       - name: Print versions
         run: |
@@ -23,14 +32,26 @@ jobs:
 
   sanitycheck:
     runs-on: ubuntu-20.04
+    container:
+      image: "ubuntu:20.04"
     steps:
+      - name: Install required dependencies
+        run: |
+          apt update && apt install -y sudo
+          sudo apt install -y git
+          
+          sudo apt install -y curl
+          curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          sudo apt install -y nodejs
       - uses: actions/checkout@v2
         with:
           submodules: recursive
           # needed because of commit-lint, see https://github.com/conventional-changelog/commitlint/issues/3376
           fetch-depth: 0
-      - name: Install dependencies of commitlint
-        run: sudo apt install --yes npm && npm install @commitlint/config-conventional
+      # workaround for https://github.com/actions/runner/issues/2033
+      - name: ownership workaround
+        run: git config --global --add safe.directory '*'
+      - name: Install commitlint
+        run: npm install @commitlint/config-conventional
       - name: Validate current commit (last commit) with commitlint
         run: npx commitlint --from HEAD~1 --to HEAD --verbose
-
