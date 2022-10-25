@@ -193,7 +193,7 @@ module.exports = {
 
                     return [
                         !offence,
-                        `Please use "area/scope: title" or "area(scope): title" style instead of wrapping area/scope under square brackets in your commit message header`
+                        `Please use "area/scope: subject" or "area(scope): subject" style instead of wrapping area/scope under square brackets in your commit message title`
                     ];
                 },
 
