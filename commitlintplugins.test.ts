@@ -181,6 +181,37 @@ test('empty-wip-3', () => {
 });
 
 
+test('footer-notes-misplacement-1', () => {
+    let commitMsgWithRightFooter = "foo: this is only a title" 
+        + "\n\n"+ "Bla bla blah[1]." 
+        + "\n\n" + "Fixes https://some/issue" 
+        + "\n\n" + "[1] http://foo.bar/baz";
+    let footerNotesMisplacement1 = runCommitLintOnMsg(commitMsgWithRightFooter);
+    expect(footerNotesMisplacement1.status).toBe(0);
+})
+
+
+test('footer-notes-misplacement-2', () => {
+    let commitMsgWithWrongFooter = "foo: this is only a title" 
+        + "\n\n" + "Fixes https://some/issue" 
+        + "\n\n"+ "Bla bla blah[1]." 
+        + "\n\n" + "[1] http://foo.bar/baz";
+    let footerNotesMisplacement2 = runCommitLintOnMsg(commitMsgWithWrongFooter);
+    expect(footerNotesMisplacement2.status).not.toBe(0);
+})
+
+
+test('footer-notes-misplacement-3', () => {
+    let commitMsgWithWrongFooter = "foo: this is only a title" 
+        + "\n\n"+ "Bla bla blah[1]." 
+        + "\n\n" + "[1] http://foo.bar/baz"
+        + "\n\n" + "Some other bla bla blah."
+        + "\n\n" + "Fixes https://some/issue";
+    let footerNotesMisplacement3 = runCommitLintOnMsg(commitMsgWithWrongFooter);
+    expect(footerNotesMisplacement3.status).not.toBe(0);
+})
+
+
 test('prefer-slash-over-backslash1', () => {
     let commitMsgWithBackslash = "foo\\bar: bla bla bla";
     let preferSlashOverBackslash1 = runCommitLintOnMsg(commitMsgWithBackslash);
