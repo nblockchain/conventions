@@ -273,6 +273,15 @@ function removeAllCodeBlocks(text: string) {
     return text.replace(/```[^]*```/g, '');
 }
 
+function findUrls(text: string) {
+    var urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.match(urlRegex);
+}
+
+function isCommitUrl(url: string) {
+    return url.includes('/commit/');
+}
+
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
@@ -295,6 +304,7 @@ module.exports = {
         'type-with-square-brackets': [RuleStatus.Error, 'always'],
         'proper-issue-refs': [RuleStatus.Error, 'always'],
         'too-many-spaces': [RuleStatus.Error, 'always'],
+        'commit-hash-alone': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -352,6 +362,28 @@ module.exports = {
                     return [
                         !offence,
                         `Please begin a paragraph with uppercase letter and end it with a dot`
+                    ];
+                },
+
+                'commit-hash-alone': ({raw}: {raw:any}) => {
+                    let rawStr = convertAnyToString(raw, "raw");
+
+                    let offence = false;
+
+                    let urls = findUrls(rawStr)
+
+                    if (urls !== null) {
+                        for (let url of urls.entries()) {
+                            if (isCommitUrl(url.toString())) {
+                                offence = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    return [
+                        !offence,
+                        `Please use the commit hash instead of the commit full URL`
                     ];
                 },
 
