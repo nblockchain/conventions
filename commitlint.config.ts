@@ -425,9 +425,16 @@ module.exports = {
                 },
 
                 'proper-issue-refs': ({raw}: {raw:any}) => {
-                    let rawStr = convertAnyToString(raw, "raw");
-                    rawStr = removeAllCodeBlocks(rawStr)
-                    let offence = includeHashtagRef(rawStr);
+                    let offence = false;
+
+                    let rawStr = convertAnyToString(raw, "raw").trim();
+                    let lineBreakIndex = rawStr.indexOf('\n')
+                    
+                    if (lineBreakIndex >= 0){
+                        let bodyStr = rawStr.substring(lineBreakIndex, )
+                        bodyStr = removeAllCodeBlocks(bodyStr);
+                        offence = includeHashtagRef(bodyStr);
+                    }
 
                     return [
                         !offence,
