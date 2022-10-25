@@ -425,6 +425,7 @@ module.exports = {
                 },
 
                 'proper-issue-refs': ({raw}: {raw:any}) => {
+                    // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
                     let offence = false;
 
                     let rawStr = convertAnyToString(raw, "raw").trim();
