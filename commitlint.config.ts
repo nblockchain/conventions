@@ -281,7 +281,7 @@ module.exports = {
         'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
         'type-space-before-paren': [RuleStatus.Error, 'always'],
         'type-with-square-brackets': [RuleStatus.Error, 'always'],
-        'reject-hashtag-refs': [RuleStatus.Error, 'always'],
+        'proper-issue-refs': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -424,7 +424,7 @@ module.exports = {
                     ];
                 },
 
-                'reject-hashtag-refs': ({raw}: {raw:any}) => {
+                'proper-issue-refs': ({raw}: {raw:any}) => {
                     let rawStr = convertAnyToString(raw, "raw");
                     rawStr = removeAllCodeBlocks(rawStr)
                     let offence = includeHashtagRef(rawStr);

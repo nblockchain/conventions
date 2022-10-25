@@ -266,25 +266,25 @@ test('header-max-length-with-suggestions4', () => {
 });
 
 
-test('reject-hashtag-refs1', () => {
-    let commitMsgWithHashtagRef = "foo: blah blah" + '\n\n' + "Blah blah #123";
-    let rejectHashtagRefs1 = runCommitLintOnMsg(commitMsgWithHashtagRef);
-    expect(rejectHashtagRefs1.status).not.toBe(0);
+test('proper-issue-refs1', () => {
+    let commitMsgWithHashtagRef = "foo: blah blah" + '\n\n' + "Blah blah #123.";
+    let properIssueRefs1 = runCommitLintOnMsg(commitMsgWithHashtagRef);
+    expect(properIssueRefs1.status).not.toBe(0);
 });
 
 
-test('reject-hashtag-refs2', () => {
+test('proper-issue-refs2', () => {
     let commitMsgWithFullUrl = "foo: blah blah" + '\n\n' + 'Fixes someUrl://blah.blah/158';
-    let rejectHashtagRefs1 = runCommitLintOnMsg(commitMsgWithFullUrl);
-    expect(rejectHashtagRefs1.status).toBe(0);
+    let properIssueRefs2 = runCommitLintOnMsg(commitMsgWithFullUrl);
+    expect(properIssueRefs2.status).toBe(0);
 });
 
 
-test('reject-hashtag-refs3', () => {
+test('proper-issue-refs3', () => {
     let commitMsgWithHashtagRefInBlock =
         "foo: this is only a title" + "\n\n" + "Bar baz:\n\n```\ntype Foo = string #123\n```";
-    let trailingWhitespace6 = runCommitLintOnMsg(commitMsgWithHashtagRefInBlock);
-    expect(trailingWhitespace6.status).toBe(0);
+    let properIssueRefs3 = runCommitLintOnMsg(commitMsgWithHashtagRefInBlock);
+    expect(properIssueRefs3.status).toBe(0);
 });
 
 
