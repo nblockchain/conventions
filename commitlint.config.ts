@@ -28,10 +28,9 @@ function assertLine(line: string) {
 }
 
 function assertWord(word: string) {
-    if (word.includes('\n') || word.includes(' ') || word.length <= 1) {
+    if (word.includes('\n') || word.includes(' ')) {
         throw Error("This function expects a word as input.\n" +
-                    "A word doesn't include line breaks and whitespaces.\n" +
-                    "Also it's length must be greater than 1.")
+                    "A word doesn't include line breaks and whitespaces.")
     }
 }
 
