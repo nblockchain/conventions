@@ -253,7 +253,7 @@ function wordIsStartOfSentence(word: string) {
     return false;
 }
 
-function includeHashtagRef(text: string) {
+function includesHashtagRef(text: string) {
     return text.match(`#[0-9]+`) !== null;
 }
 
@@ -434,7 +434,7 @@ module.exports = {
                     if (lineBreakIndex >= 0){
                         let bodyStr = rawStr.substring(lineBreakIndex)
                         bodyStr = removeAllCodeBlocks(bodyStr);
-                        offence = includeHashtagRef(bodyStr);
+                        offence = includesHashtagRef(bodyStr);
                     }
 
                     return [
