@@ -169,6 +169,15 @@ test('commit-hash-alone1', () => {
 });
 
 
+test('commit-hash-alone2', () => {
+    let commitMsgWithCommitHash = 
+        "foo: this is only a title" + "\n\n" + 
+        "This is refering to [1] commit hash.\n\n[1] 3ee07243edc30604088a4b04ca525204ea440710";
+    let commitHashAlone2 = runCommitLintOnMsg(commitMsgWithCommitHash);
+    expect(commitHashAlone2.status).toBe(0);
+});
+
+
 test('empty-wip-1', () => {
     let commitMsgWithEpmtyWIP = "WIP";
     let emptyWIP1 = runCommitLintOnMsg(commitMsgWithEpmtyWIP);
