@@ -326,3 +326,17 @@ test('type-space-before-paren3', () => {
     let typeSpaceBeforeParen3 = runCommitLintOnMsg(commitMsgWithNoSpaceBeforeParen);
     expect(typeSpaceBeforeParen3.status).toBe(0);
 });
+
+
+test('type-with-square-brackets1', () => {
+    let commitMsgWithSquareBrackets = "[foo] this is a title";
+    let typeWithSquareBrackets1 = runCommitLintOnMsg(commitMsgWithSquareBrackets);
+    expect(typeWithSquareBrackets1.status).not.toBe(0);
+});
+
+
+test('type-with-square-brackets2', () => {
+    let commitMsgWithoutSquareBrackets = "foo: this is a title";
+    let typeWithSquareBrackets2 = runCommitLintOnMsg(commitMsgWithoutSquareBrackets);
+    expect(typeWithSquareBrackets2.status).toBe(0);
+});

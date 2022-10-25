@@ -93,6 +93,7 @@ module.exports = {
         'trailing-whitespace': [RuleStatus.Error, 'always'],
         'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
         'type-space-before-paren': [RuleStatus.Error, 'always'],
+        'type-with-square-brackets': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -107,7 +108,6 @@ module.exports = {
         // * Title should not have dot at the end.
         // * Second line of commit msg should always be blank.
         // * Check for too many spaces (e.g. 2 spaces after colon)
-        // * Detect area/scope wrapped under square brakets instead of "foo: bar" style.
         // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
         // * Allow PascalCase word after colon in title (exception to subject-lowercase rule), e.g.: "End2End: TestFixtureSetup refactor"
         // * Detect if commit hash mention in commit msg actually exists in repo.
@@ -192,6 +192,17 @@ module.exports = {
                     return [
                         !offence,
                         `Please place a space after the first colon character in your commit message title`
+                    ];
+                },
+
+                'type-with-square-brackets': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+
+                    let offence = headerStr.match(`^\\[.*\\]`) !== null
+
+                    return [
+                        !offence,
+                        `Please use "area/scope: subject" or "area(scope): subject" style instead of wrapping area/scope under square brackets in your commit message title`
                     ];
                 },
 
