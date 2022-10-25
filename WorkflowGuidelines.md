@@ -11,6 +11,18 @@ be 100% guaranteed to be crossplatform); and the reason not to use Bash
 is because it's only Unix compatible (we cannot assume WSL is installed
 in Windows), and in general because it's too undeterministic and old, more
 info here: https://news.ycombinator.com/item?id=33116310
+* Don't add obvious comments that can be inferred from just reading the code;
+instead, use comments to explain why you're doing something, not what the
+code is doing. Sometimes you can even extract some piece of code as a separate
+function and name the function in such a way that it explains what the code
+is doing and therefore there's no need to add a comment anymore.
+* Add comments on top of code (on a line above it), not next to it, to avoid
+horizontal scrolling.
+* Do not commit commented code; if the code is commented it's better that it
+gets removed. If there's a reason for why the commented piece of code should
+not removed, then write the reason why, in a comment on top of it. Otherwise
+it's extremely confusing for the next developer (which could be your future
+you) to find code that is commented/disabled.
 * Push each commit separately (instead of sending more than 1 commit in a
 single push), so that we can have a CI status for each commit in the MR. This
 is a best practice because it will make sure that the build is not broken in
@@ -39,9 +51,10 @@ dot, like most titles), and a body that starts in the 3rd line and which contain
 one or many paragraphs (each ending with a dot, as it's text in prose). In
 particular, the example above would be for a commit message that fixes the
 issue #45. **Area** usually refers to the project name, but without the need
-to include the `GWallet` prefix (for example changing the `GWallet.Backend`
-project would mean you only use `Backend` as area). The **Sub-area** may refer
-to a folder or module inside the area, but it's not a strict mapping.
+to include the name of the project (e.g. in geewallet, all project names start
+with the `GWallet.` prefix, then there's no need to specify it; so use `Backend`
+as area instead of `GWallet.Backend`). The **Sub-area** may refer to a folder
+or module inside the area, but it's not a strict mapping.
 
 Do not use long lines (manually crop them with EOLs because git doesn't do this
 automatically).
