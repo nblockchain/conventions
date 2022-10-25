@@ -18,6 +18,16 @@ enum RuleStatus {
 let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
 
+function isValidUrl(urlString: string) {
+    // Borrowed from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
+    try { 
+        return Boolean(new URL(urlString)); 
+    }
+    catch(e){ 
+        return false; 
+    }
+}
+
 function assertCharacter(letter: string) {
     if (letter.length !== 1) {
         throw Error('This function expects a character as input')
