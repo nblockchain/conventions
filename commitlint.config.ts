@@ -18,13 +18,19 @@ enum RuleStatus {
 let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
 
-function isValidUrl(urlString: string) {
+function isValidUrl(url: string) {
     // Borrowed from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
     try { 
-        return Boolean(new URL(urlString)); 
+        return Boolean(new URL(url)); 
     }
     catch(e){ 
         return false; 
+    }
+}
+
+function assertUrl(url: string) {
+    if (!isValidUrl(url)) {
+        throw Error('This function expects a url as input')   
     }
 }
 
@@ -112,6 +118,7 @@ function findUrls(text: string) {
 }
 
 function isCommitUrl(url: string) {
+    assertUrl(url)
     return url.includes('/commit/');
 }
 
