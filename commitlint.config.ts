@@ -27,6 +27,14 @@ function assertLine(line: string) {
     }
 }
 
+function assertWord(word: string) {
+    if (word.includes('\n') || word.includes(' ') || word.length <= 1) {
+        throw Error("This function expects a word as input.\n" +
+                    "A word doesn't include line breaks and whitespaces.\n" +
+                    "Also it's length must be greater than 1.")
+    }
+}
+
 function isBigBlock(line: string) {
     assertLine(line);
     let bigBlockDelimiter = "```";
@@ -77,6 +85,7 @@ function isFooterNote(line: string): boolean {
 }
 
 function isName(word: string) {
+    assertWord(word);
     if (isUpperCase(word[0])) {
         let numUpperCase = word.length - word.replace(/[A-Z]/g, '').length;
         let numNonAlphabeticalChars = word.length - word.replace(/[^a-zA-Z]/g, '').length
