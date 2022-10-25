@@ -432,7 +432,7 @@ module.exports = {
                     let lineBreakIndex = rawStr.indexOf('\n')
                     
                     if (lineBreakIndex >= 0){
-                        let bodyStr = rawStr.substring(lineBreakIndex, )
+                        let bodyStr = rawStr.substring(lineBreakIndex)
                         bodyStr = removeAllCodeBlocks(bodyStr);
                         offence = includeHashtagRef(bodyStr);
                     }
