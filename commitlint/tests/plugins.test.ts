@@ -1025,6 +1025,64 @@ test("proper-issue-refs5", () => {
     expect(properIssueRefs5.status).not.toBe(0);
 });
 
+test("default-revert-message1", () => {
+    let commitMsgWithoutDefaultRevertMessage =
+        'Revert "add abbreviations.ts"\n\n' +
+        "This reverts commit 0272f587c7eece147e8d1756116b0b43e11c34ac.";
+    let defaultRevertMessage1 = runCommitLintOnMsg(
+        commitMsgWithoutDefaultRevertMessage
+    );
+    expect(defaultRevertMessage1.status).not.toBe(0);
+});
+
+test("default-revert-message2", () => {
+    let commitMsgWithDefaultRevertMessage =
+        'Revert "add abbreviations.ts"\n\n' +
+        "This reverts commit 0272f587c7eece147e8d1756116b0b43e11c34ac\n" +
+        "because/otherwise bla bla.";
+    let defaultRevertMessage2 = runCommitLintOnMsg(
+        commitMsgWithDefaultRevertMessage
+    );
+    expect(defaultRevertMessage2.status).toBe(0);
+});
+
+test("default-revert-message3", () => {
+    let commitMsgWithoutDefaultRevertMessage = 'Revert "add abbreviations.ts"';
+    let defaultRevertMessage3 = runCommitLintOnMsg(
+        commitMsgWithoutDefaultRevertMessage
+    );
+    expect(defaultRevertMessage3.status).not.toBe(0);
+});
+
+test("default-revert-message4", () => {
+    let commitMsgWithDefaultRevertMessage = "Revert .NET6 upd as it broke CI";
+    let defaultRevertMessage4 = runCommitLintOnMsg(
+        commitMsgWithDefaultRevertMessage
+    );
+    expect(defaultRevertMessage4.status).toBe(0);
+});
+
+test("default-revert-message5", () => {
+    let commitMsgWithoutDefaultRevertMessage =
+        'Revert "add abbreviations.ts"\n\n' +
+        "This reverts commit 0272f587 because bla bla.\n";
+
+    let defaultRevertMessage5 = runCommitLintOnMsg(
+        commitMsgWithoutDefaultRevertMessage
+    );
+    expect(defaultRevertMessage5.status).toBe(0);
+});
+
+test("default-revert-message6", () => {
+    let commitMsgWithDefaultRevertMessage =
+        'Revert "process overhaul" to fix CI\n\n';
+
+    let defaultRevertMessage6 = runCommitLintOnMsg(
+        commitMsgWithDefaultRevertMessage
+    );
+    expect(defaultRevertMessage6.status).toBe(0);
+});
+
 test("subject-lowercase1", () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(
