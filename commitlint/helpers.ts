@@ -37,6 +37,14 @@ export abstract class Helpers {
         return text as string;
     }
 
+    public static assertWhen(when: string) {
+        if (when !== "never" && when !== "always") {
+            throw new Error(
+                'Variable "when" should be either "never" or "always"'
+            );
+        }
+    }
+
     public static assertCharacter(letter: string) {
         if (letter.length !== 1) {
             throw Error("This function expects a character as input");

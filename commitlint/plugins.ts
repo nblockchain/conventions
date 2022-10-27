@@ -278,6 +278,44 @@ export abstract class Plugins {
         ];
     }
 
+    public static defaultRevertMessage(
+        headerStr: string,
+        bodyStr: string | null,
+        when: string
+    ) {
+        let offence = false;
+        let isRevertCommitMessage = headerStr.toLowerCase().includes("revert");
+
+        const negated = when === "never";
+
+        if (isRevertCommitMessage) {
+            let isDefaultRevertHeader =
+                headerStr.match(/^[Rr]evert ".+"$/) !== null;
+
+            if (isDefaultRevertHeader) {
+                if (bodyStr !== null) {
+                    let lines = bodyStr.split("\n");
+                    offence =
+                        lines.length == 1 &&
+                        // 40 is the length of git commit hash.
+                        lines[0].match(/^This reverts commit [^ ]{40}\.$/) !==
+                            null;
+                } else {
+                    offence = true;
+                }
+            }
+
+            offence = negated ? offence : !offence;
+        }
+        return [
+            !offence,
+            (negated
+                ? `Please explain why you're reverting.`
+                : `Please don't change the default revert commit message.`) +
+                Helpers.errMessageSuffix,
+        ];
+    }
+
     public static titleUppercase(headerStr: string) {
         let firstWord = headerStr.split(" ")[0];
         let offence =
