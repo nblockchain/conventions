@@ -209,9 +209,9 @@ test('header-max-length-with-suggestions1', () => {
 
 test('header-max-length-with-suggestions2', () => {
     let commitMsgWithThatExceedsHeaderMaxLength =
-        "foo: this is only a title with a absolute in it that exceeds header max length";
+        "foo: this is only a title with a 1 second in it that exceeds header max length";
     let headerMaxLength2 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
-    let expected_message = `"absolute" -> "abs"`
+    let expected_message = `"1 second" -> "1sec"`
     // console.log('HERE ==========>' + replacementSuggestion1.stdout)
     expect(headerMaxLength2.status).not.toBe(0);
     expect((headerMaxLength2.stdout + '').includes(expected_message)).toEqual(true)
