@@ -1,3 +1,4 @@
+import { None, OptionStatic } from "./commitlint/fpHelpers.js";
 import { Helpers } from "./commitlint/helpers.js";
 import { Plugins } from "./commitlint/plugins.js";
 import { RuleConfigSeverity } from "@commitlint/types";
@@ -62,10 +63,14 @@ export default {
         // disabled because most of the time it doesn't work, due to https://github.com/conventional-changelog/commitlint/issues/3404
         // and anyway we were using this rule only as a warning, not an error (because a scope is not required, e.g. when too broad)
         "type-empty": [RuleConfigSeverity.Disabled, "never"],
+        "default-revert-message": [RuleConfigSeverity.Error, "never"],
     },
+
+    // Commitlint automatically ignores some kinds of commits like Revert commit messages.
+    // We need to set this value to false to apply our rules on these messages.
+    defaultIgnores: false,
     plugins: [
         // TODO (ideas for more rules):
-        // * Detect reverts which have not been elaborated.
         // * Reject some stupid obvious words: change, update, modify (if first word after colon, error; otherwise warning).
         // * Think of how to reject this shitty commit message: https://github.com/nblockchain/NOnion/pull/34/commits/9ffcb373a1147ed1c729e8aca4ffd30467255594
         // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
@@ -139,6 +144,30 @@ export default {
                     let rawStr = extractStringFromCommitlintParam("raw", raw);
 
                     return Plugins.properIssueRefs(rawStr);
+                },
+
+                "default-revert-message": (
+                    {
+                        header,
+                        body,
+                    }: {
+                        header: any;
+                        body: any;
+                    },
+                    when: string
+                ) => {
+                    Helpers.assertWhen(when);
+
+                    let bodyStr = Helpers.convertAnyToString(body);
+                    let headerStr = Helpers.assertNotNone(
+                        Helpers.convertAnyToString(header),
+                        notStringErrorMessage("header")
+                    );
+                    return Plugins.defaultRevertMessage(
+                        headerStr,
+                        bodyStr instanceof None ? null : bodyStr.value,
+                        when
+                    );
                 },
 
                 "title-uppercase": ({ header }: { header: any }) => {
