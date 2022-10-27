@@ -356,6 +356,7 @@ module.exports = {
         'too-many-spaces': [RuleStatus.Error, 'always'],
         'commit-hash-alone': [RuleStatus.Error, 'always'],
         'title-uppercase': [RuleStatus.Error, 'always'],
+        'proper-revert-message': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -602,6 +603,29 @@ module.exports = {
                         `Please use full URLs instead of #XYZ refs.`
                     ];
                 },
+    
+                'proper-revert-message': ({body}: {body:any}) => {
+                    let offence = false;
+                    // does msg have a body?
+                    if (body !== null) {
+                        let bodyStr = convertAnyToString(body, "body").trim();
+                        let lines = bodyStr.split('\n');
+                        console.log(lines)
+                        if (lines.length == 1) {
+                            if (lines[0].match('This reverts commit ') !== null) {
+                                offence = true;
+                            }
+                        }
+                 
+                    } else {
+                        offence = true;
+                    }
+
+                    return [
+                        !offence,
+                        `Please explain why you're reverting`
+                    ];
+                },  
 
                 'title-uppercase': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
@@ -625,6 +649,7 @@ module.exports = {
                         `Please watch out for too many whitespaces in the text`
                     ];
                 },
+              
 
                 'type-space-after-colon': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
