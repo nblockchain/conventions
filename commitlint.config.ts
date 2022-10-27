@@ -186,12 +186,12 @@ module.exports = {
                     ];
                 },
 
-                'header-max-length-with-suggestions': ({header}: {header:any}, _: any, headerMaxLineLength:any) => {
+                'header-max-length-with-suggestions': ({header}: {header:any}, _: any, maxLineLength:any) => {
                     let headerStr = convertAnyToString(header, "header");
                     let offence = false;
 
-                    let message = `Please do not exceed ${headerMaxLineLength} characters in title.`;
-                    if (headerStr.length > headerMaxLineLength) {
+                    let message = `Please do not exceed ${maxLineLength} characters in title.`;
+                    if (headerStr.length > maxLineLength) {
                         offence = true;
                         let numRecomendations = 0;
                         Object.entries(abbr).forEach(([key, value]) => {  
