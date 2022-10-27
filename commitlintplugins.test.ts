@@ -244,6 +244,29 @@ test('subject-lowercase7', () => {
 });
 
 
+test('subject-lowercase8', () => {
+    let commitMsgWithPascalCaseAfterColon = "End2End: TestFixtureSetup refactor";
+    let subjectLowerCase8 = runCommitLintOnMsg(commitMsgWithPascalCaseAfterColon);
+    expect(subjectLowerCase8.status).toBe(0);
+});
+
+
+test('subject-lowercase9', () => {
+    let commitMsgWithCamelCaseAfterColon = "End2End: testFixtureSetup refactor";
+    let subjectLowerCase9 = runCommitLintOnMsg(commitMsgWithCamelCaseAfterColon);
+    // console.log("=============>" + subjectLowerCase9.stdout);
+    expect(subjectLowerCase9.status).toBe(0);
+});
+
+
+test('subject-lowercase10', () => {
+    let commitMsgWithNumber = "foo: A1 bar";
+    let subjectLowerCase10 = runCommitLintOnMsg(commitMsgWithNumber);
+    // console.log("=============>" + subjectLowerCase10.stdout);
+    expect(subjectLowerCase10.status).toBe(0);
+});
+
+
 test('trailing-whitespace1', () => {
     let commitMsgWithNoTrailingWhiteSpace =
         "foo: this is only a title" + "\n\n" + "Bla blah bla.";

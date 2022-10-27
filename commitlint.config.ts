@@ -27,6 +27,13 @@ function assertLine(line: string) {
     }
 }
 
+function assertWord(word: string) {
+    if (word.includes('\n') || word.includes(' ')) {
+        throw Error("This function expects a word as input.\n" +
+                    "A word doesn't include line breaks and whitespaces.")
+    }
+}
+
 function isBigBlock(line: string) {
     assertLine(line);
     let bigBlockDelimiter = "```";
@@ -76,6 +83,16 @@ function isFooterNote(line: string): boolean {
         isFixesSentence(line);
 }
 
+function wordIsStartOfSentence(word: string) {
+    assertWord(word);
+    if (isUpperCase(word[0])) {
+        let numUpperCase = word.length - word.replace(/[A-Z]/g, '').length;
+        let numNonAlphabeticalChars = word.length - word.replace(/[^a-zA-Z]/g, '').length
+        return numUpperCase == 1 && numNonAlphabeticalChars == 0;
+    }
+    return false;
+}
+
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
@@ -109,7 +126,6 @@ module.exports = {
         // * Second line of commit msg should always be blank.
         // * Check for too many spaces (e.g. 2 spaces after colon)
         // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
-        // * Allow PascalCase word after colon in title (exception to subject-lowercase rule), e.g.: "End2End: TestFixtureSetup refactor"
         // * Detect if commit hash mention in commit msg actually exists in repo.
         // * Give replacement suggestions in rule that detects too long titles (e.g. and->&, config->cfg, ...)
         // * Detect area(sub-area) in the title that doesn't include area part (e.g., writing (bar) instead of foo(bar))
@@ -225,7 +241,8 @@ module.exports = {
                     if ((colonFirstIndex > 0) && (headerStr.length > colonFirstIndex)) {
                         let subject = headerStr.substring(colonFirstIndex + 1).trim();
                         if (subject != null && subject.length > 1) {
-                            offence = isUpperCase(subject[0]) && isLowerCase(subject[1]);
+                            let firstWord = subject.trim().split(' ')[0];
+                            offence = wordIsStartOfSentence(firstWord)
                         }
                     }
 
