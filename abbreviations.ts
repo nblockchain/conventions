@@ -69,6 +69,7 @@ export let abbr = {
     "expression": "expr",
     "figure": "fig",
     "first": "1st",
+    "folder": "dir",
     "for example": "e.g.",
     "format": "fmt",
     "func": "fn",
@@ -109,6 +110,7 @@ export let abbr = {
     "operating system": "OS",
     "operation": "op",
     "optional": "opt",
+    "order by": "sort by",
     "parameter": "param",
     "parentheses": "parens",
     "parenthesis": "paren",
@@ -147,6 +149,7 @@ export let abbr = {
     "transaction": "tx",
     "transactions": "txs",
     "unix to dos": "unix2dos",
+    "unsigned integer": "uint",
     "value": "val",
     "variable": "var",
     "yes/no": "y/n"
