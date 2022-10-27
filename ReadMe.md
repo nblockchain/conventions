@@ -1,10 +1,10 @@
-This is a repository that contains several useful stuff that
-other nblockchain repos use, such as:
+This is a repository that contains several useful things that
+other `nblockchain` repos use, such as:
 
-- File with commitlint configuration and plugins
-- A reference .editorconfig
-- An F# style guide
-- Workflow guidelines
+- File with commitlint configuration and plugins.
+- A reference .editorconfig.
+- An F# style guide.
+- Workflow guidelines.
 
 All in all, this is mainly documentation, and some tooling to
 detect bad practices.

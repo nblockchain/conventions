@@ -20,7 +20,7 @@ is doing and therefore there's no need to add a comment anymore.
 horizontal scrolling.
 * Do not commit commented code; if the code is commented it's better that it
 gets removed. If there's a reason for why the commented piece of code should
-not removed, then write the reason why, in a comment on top of it. Otherwise
+not be removed, then write the reason why, in a comment on top of it. Otherwise
 it's extremely confusing for the next developer (which could be your future
 you) to find code that is commented/disabled.
 * Push each commit separately (instead of sending more than 1 commit in a
