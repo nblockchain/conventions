@@ -1,3 +1,5 @@
+import { abbr } from "./abbreviations";
+
 // to convert from 'any' type
 function convertAnyToString(potentialString: any, paramName: string): string {
     if (potentialString === null || potentialString === undefined) {
@@ -14,6 +16,7 @@ enum RuleStatus {
 }
 
 let bodyMaxLineLength = 64;
+let headerMaxLineLength = 50;
 
 function assertCharacter(letter: string) {
     if (letter.length !== 1) {
@@ -101,7 +104,7 @@ module.exports = {
         'empty-wip': [RuleStatus.Error, 'always'],
         'footer-leading-blank': [RuleStatus.Warning, 'always'],
         'footer-max-line-length': [RuleStatus.Error, 'always', 150],
-        'header-max-length': [RuleStatus.Error, 'always', 50],
+        'header-max-length-with-suggestions': [RuleStatus.Error, 'always', headerMaxLineLength],
         'subject-full-stop': [RuleStatus.Error, 'never', '.'],
         'type-empty': [RuleStatus.Warning, 'never'],
         'type-space-after-colon': [RuleStatus.Error, 'always'],
@@ -127,7 +130,6 @@ module.exports = {
         // * Check for too many spaces (e.g. 2 spaces after colon)
         // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
         // * Detect if commit hash mention in commit msg actually exists in repo.
-        // * Give replacement suggestions in rule that detects too long titles (e.g. and->&, config->cfg, ...)
         // * Detect area(sub-area) in the title that doesn't include area part (e.g., writing (bar) instead of foo(bar))
         // * Fix false positive raised by body-prose: "title\n\nParagraph begin. (Some text inside parens.)"
 
@@ -181,9 +183,34 @@ module.exports = {
                     return [
                         !offence,
                         `Please add a number or description after the WIP prefix`
-                    ]
+                    ];
                 },
 
+                'header-max-length-with-suggestions': ({header}: {header:any}, _: any, maxLineLength:any) => {
+                    let headerStr = convertAnyToString(header, "header");
+                    let offence = false;
+
+                    let message = `Please do not exceed ${maxLineLength} characters in title.`;
+                    if (headerStr.length > maxLineLength) {
+                        offence = true;
+                        let numRecomendations = 0;
+                        Object.entries(abbr).forEach(([key, value]) => {  
+                            if (headerStr.includes(key.toString())){
+                                if (numRecomendations === 0) {
+                                    message = message + 'The following replacement(s) in your commit title are recommended:\n'
+                                }
+
+                                message = message + `"${key}" -> "${value}"\n`;             
+                            }
+                        })
+                    }
+                    
+                    return [
+                        !offence,
+                        message
+                    ];
+                },
+                
                 'prefer-slash-over-backslash': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 

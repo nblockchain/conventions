@@ -192,6 +192,46 @@ test('prefer-slash-over-backslash2', () => {
     let commitMsgWithSlash = "foo/bar: bla bla bla";
     let preferSlashOverBackslash2 = runCommitLintOnMsg(commitMsgWithSlash);
     expect(preferSlashOverBackslash2.status).toBe(0);
+
+});
+
+
+test('header-max-length-with-suggestions1', () => {
+    let commitMsgWithThatExceedsHeaderMaxLength =
+        "foo: this is only a title with a configuration in it that exceeds header max length";
+    let headerMaxLength1 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
+    let expected_message = `"configuration" -> "config"`
+    // console.log('HERE ==========>' + replacementSuggestion1.stdout)
+    expect(headerMaxLength1.status).not.toBe(0);
+    expect((headerMaxLength1.stdout + '').includes(expected_message)).toEqual(true)
+});
+
+
+test('header-max-length-with-suggestions2', () => {
+    let commitMsgWithThatExceedsHeaderMaxLength =
+        "foo: this is only a title with a 1 second in it that exceeds header max length";
+    let headerMaxLength2 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
+    let expected_message = `"1 second" -> "1sec"`
+    // console.log('HERE ==========>' + replacementSuggestion1.stdout)
+    expect(headerMaxLength2.status).not.toBe(0);
+    expect((headerMaxLength2.stdout + '').includes(expected_message)).toEqual(true)
+});
+
+
+test('header-max-length-with-suggestions3', () => {
+    let commitMsgWithOnlyTwentySixCharsInTitle =
+        "foo: this is only a title";
+    let headerMaxLength3 = runCommitLintOnMsg(commitMsgWithOnlyTwentySixCharsInTitle);
+    expect(headerMaxLength3.status).toBe(0);
+});
+
+
+test('header-max-length-with-suggestions4', () => {
+    let tenChars = '1234 12345'
+    let commitMsgWithOnlyFiftyCharsInTitle =
+        "foo: 12345" + tenChars + tenChars + tenChars + tenChars;
+    let headerMaxLength4 = runCommitLintOnMsg(commitMsgWithOnlyFiftyCharsInTitle);
+    expect(headerMaxLength4.status).toBe(0);
 });
 
 
