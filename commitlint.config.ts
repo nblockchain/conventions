@@ -315,7 +315,7 @@ module.exports = {
                                 continue;
                             }
 
-                            paragraph = paragraph.replace(/```[^]*```/g, '').trim();
+                            paragraph = removeAllCodeBlocks(paragraph).trim();
 
                             let startWithLowerCase = isLowerCase(paragraph[0])
 
