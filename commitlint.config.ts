@@ -16,7 +16,7 @@ enum RuleStatus {
 }
 
 let bodyMaxLineLength = 64;
-// let headerMaxLineLength = 50;
+let headerMaxLineLength = 50;
 
 function assertCharacter(letter: string) {
     if (letter.length !== 1) {
@@ -104,7 +104,7 @@ module.exports = {
         'empty-wip': [RuleStatus.Error, 'always'],
         'footer-leading-blank': [RuleStatus.Warning, 'always'],
         'footer-max-line-length': [RuleStatus.Error, 'always', 150],
-        'header-max-length-with-suggestions': [RuleStatus.Error, 'always', 50],
+        'header-max-length-with-suggestions': [RuleStatus.Error, 'always', headerMaxLineLength],
         'subject-full-stop': [RuleStatus.Error, 'never', '.'],
         'type-empty': [RuleStatus.Warning, 'never'],
         'type-space-after-colon': [RuleStatus.Error, 'always'],
