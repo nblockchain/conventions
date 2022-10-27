@@ -16,7 +16,10 @@ jobs:
           sudo apt install -y git
           
           sudo apt install -y curl
+          # can't install ubuntu's default nodejs version because we would get this error:
+          # error @commitlint/config-conventional@17.1.0: The engine "node" is incompatible with this module. Expected version ">=v14". Got "12.22.9"
           curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+
           sudo apt install -y nodejs
           npm install @commitlint/config-conventional
           sudo npm install -g yarn
@@ -41,7 +44,10 @@ jobs:
           sudo apt install -y git
           
           sudo apt install -y curl
+          # can't install ubuntu's default nodejs version because we would get this error:
+          # error @commitlint/config-conventional@17.1.0: The engine "node" is incompatible with this module. Expected version ">=v14". Got "12.22.9"
           curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+
           sudo apt install -y nodejs
       - uses: actions/checkout@v2
         with:
