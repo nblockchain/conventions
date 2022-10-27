@@ -258,7 +258,7 @@ function includesHashtagRef(text: string) {
 }
 
 function removeAllCodeBlocks(text: string) {
-    return text.replace(/```[^]*```/g, ''); // maybe I should include \n in the pattern
+    return text.replace(/```[^]*```/g, '');
 }
 
 module.exports = {
