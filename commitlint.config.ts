@@ -83,7 +83,7 @@ function isFooterNote(line: string): boolean {
         isFixesSentence(line);
 }
 
-function isName(word: string) {
+function wordIsStartOfSentence(word: string) {
     assertWord(word);
     if (isUpperCase(word[0])) {
         let numUpperCase = word.length - word.replace(/[A-Z]/g, '').length;
@@ -221,7 +221,7 @@ module.exports = {
                         let subject = headerStr.substring(colonFirstIndex + 1).trim();
                         if (subject != null && subject.length > 1) {
                             let firstWord = subject.trim().split(' ')[0];
-                            offence = isName(firstWord)
+                            offence = wordIsStartOfSentence(firstWord)
                         }
                     }
 
