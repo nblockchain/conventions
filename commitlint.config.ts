@@ -45,7 +45,7 @@ function findRemoteUrls() {
     // }
     let remotes: Set<string> = new Set<string>();
     // remotes.add()
-    console.log(process.env.GITHUB_ACTION_REPOSITORY)
+    console.log(process.env)
 
 
     return remotes;
