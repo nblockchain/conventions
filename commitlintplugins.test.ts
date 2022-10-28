@@ -163,8 +163,9 @@ test('body-max-line-length7', () => {
 test('commit-hash-alone1', () => {
     let commitMsgWithCommitUrl= 
         "foo: this is only a title" + "\n\n" + 
-        "https://github.com/nblockchain/conventions/commit/3ee07243edc30604088a4b04ca525204ea440710";
+        "https://github.com/realmarv/conventions/commit/3ee07243edc30604088a4b04ca525204ea440710";
     let commitHashAlone1 = runCommitLintOnMsg(commitMsgWithCommitUrl);
+    console.log('HERE: ' + commitHashAlone1.stdout)
     expect(commitHashAlone1.status).not.toBe(0);
 });
 
@@ -172,7 +173,7 @@ test('commit-hash-alone1', () => {
 test('commit-hash-alone2', () => {
     let commitMsgWithCommitHash = 
         "foo: this is only a title" + "\n\n" + 
-        "This is refering to [1] commit hash.\n\n[1] 3ee07243edc30604088a4b04ca525204ea440710";
+        "This is referring to [1] commit hash.\n\n[1] 3ee07243edc30604088a4b04ca525204ea440710";
     let commitHashAlone2 = runCommitLintOnMsg(commitMsgWithCommitHash);
     expect(commitHashAlone2.status).toBe(0);
 });
@@ -205,6 +206,7 @@ test('footer-notes-misplacement-1', () => {
         + "\n\n" + "Fixes https://some/issue" 
         + "\n\n" + "[1] http://foo.bar/baz";
     let footerNotesMisplacement1 = runCommitLintOnMsg(commitMsgWithRightFooter);
+    console.log('Footer ====>' + footerNotesMisplacement1.stdout)
     expect(footerNotesMisplacement1.status).toBe(0);
 })
 
