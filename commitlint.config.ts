@@ -1,5 +1,5 @@
 import { abbr } from "./abbreviations";
-const { spawnSync } = require('child_process');
+const { execSync } = require('child_process').execSync;
 
 // to convert from 'any' type
 function convertAnyToString(potentialString: any, paramName: string): string {
@@ -20,7 +20,7 @@ let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
 
 function findRemoteUrls() {
-    const output = spawnSync.execSync('git remote -v', { encoding: 'utf-8' });
+    const output = execSync('git remote -v', { encoding: 'utf-8' });
     let https_regex = /https:\/\/github.com\/([^.]*).git/g
     let ssh_regex = /git@github.com:([^.]*).git/g
     let remotes = new Set<string>;
