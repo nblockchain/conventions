@@ -40,8 +40,6 @@ function findRemoteUrls() {
     return remotes;
 }
 
-// let remotes = findRemoteUrls() 
-
 // function isRelatedToThisRepo(url: string) {
 //     for (let remote of remotes) {
 //         if (url.includes(remote)) {
@@ -240,6 +238,8 @@ module.exports = {
                 'commit-hash-alone': ({raw}: {raw:any}) => {
                     let rawStr = convertAnyToString(raw, "raw");
                     let offence = false;
+
+                    let remotes = findRemoteUrls() 
 
                     // let urls = findUrls(rawStr)
                     // console.log('here1' + remotes)
