@@ -35,6 +35,8 @@ function findRemoteUrls() {
     return remotes
 }
 
+let remotes = findRemoteUrls() 
+
 function isValidUrl(url: string) {
     // Borrowed from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
     try { 
@@ -227,8 +229,7 @@ module.exports = {
                     let offence = false;
 
                     let urls = findUrls(rawStr)
-                    let remoteUrls = findRemoteUrls()
-                    console.log(remoteUrls)
+                    console.log(remotes)
                     if (urls !== null) {
                         for (let url of urls.entries()) {
                             if (isCommitUrl(url.toString())) {
