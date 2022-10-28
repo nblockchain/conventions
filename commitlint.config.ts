@@ -1,5 +1,4 @@
 import { abbr } from "./abbreviations";
-const execSync = require('child_process').execSync;
 
 // to convert from 'any' type
 function convertAnyToString(potentialString: any, paramName: string): string {
@@ -18,47 +17,6 @@ enum RuleStatus {
 
 let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
-
-function findRemoteUrls() {
-    // let output = ""
-    // try {
-    //     output = execSync('git remote -v', { encoding: 'utf-8' }).toString();
-    // }
-    // catch(e){
-    //     console.log(e)
-    // }
-    
-    // let remotes: Set<string> = new Set<string>();
-    // let httpsUrls = output.match(/https:\/\/github.com\/([^.]*).git/g);
-    // let sshUrls = output.match(/git@github.com:([^.]*).git/g);
-    // if (httpsUrls !== null) {
-    //     for (let match of httpsUrls) {
-    //         let remoteRepo = match.substring(19, match.length-4);
-    //         remotes.add(remoteRepo);
-    //     }
-    // }
-    // if (sshUrls !== null) {
-    //     for (let match of sshUrls) {
-    //         let remoteRepo = match.substring(15, match.length-4);   
-    //         remotes.add(remoteRepo);
-    //     }
-    // }
-    let remotes: Set<string> = new Set<string>();
-    // remotes.add()
-    console.log(process.env['GITHUB_REPOSITORY'])
-
-
-    return remotes;
-}
-
-// function isRelatedToThisRepo(url: string) {
-//     for (let remote of remotes) {
-//         if (url.includes(remote)) {
-//             return true;
-//         }
-//     }
-//     return false
-// }
 
 function isValidUrl(url: string) {
     // Borrowed from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
@@ -250,23 +208,20 @@ module.exports = {
                     let rawStr = convertAnyToString(raw, "raw");
                     let offence = false;
 
-                    let remotes = findRemoteUrls() 
+                    let urls = findUrls(rawStr)
+                    let git_repo = process.env['GITHUB_REPOSITORY'];
+                    console.log(git_repo)
+                    if (git_repo !== undefined && urls !== null) {
 
-                    // let urls = findUrls(rawStr)
-                    // console.log('here1' + remotes)
-                    // for (let remote of remotes) {
-                    //     console.log(remote)
-                    // }
-                    // console.log('here2' + urls)
-                    // if (urls !== null) {
-                    //     for (let url of urls.entries()) {
-                    //         let urlStr = url.toString()
-                    //         if (isCommitUrl(urlStr) && isRelatedToThisRepo(urlStr)) {
-                    //             offence = true;
-                    //             break;
-                    //         }
-                    //     }
-                    // }
+                        for (let url of urls.entries()) {
+                            let urlStr = url.toString()
+
+                            if (isCommitUrl(urlStr) && urlStr.includes(git_repo)) {
+                                offence = true;
+                                break;
+                            }
+                        }
+                    }
 
                     return [
                         !offence,
