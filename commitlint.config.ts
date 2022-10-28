@@ -1,5 +1,5 @@
 import { abbr } from "./abbreviations";
-const { execSync } = require('child_process').execSync;
+const execSync = require('child_process').execSync;
 
 // to convert from 'any' type
 function convertAnyToString(potentialString: any, paramName: string): string {
@@ -225,11 +225,11 @@ module.exports = {
 
                 'commit-hash-alone': ({raw}: {raw:any}) => {
                     let rawStr = convertAnyToString(raw, "raw");
-                    console.log(process.env['GITHUB_ACTION_REPOSITORY'])
                     let offence = false;
 
                     let urls = findUrls(rawStr)
-                    console.log(remotes)
+                    console.log('here1' + remotes)
+                    console.log('here2' + urls)
                     if (urls !== null) {
                         for (let url of urls.entries()) {
                             if (isCommitUrl(url.toString())) {
