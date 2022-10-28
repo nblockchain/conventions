@@ -25,7 +25,7 @@ function findRemoteUrls() {
         output = execSync('git remote -v', { encoding: 'utf-8' }).toString();
     }
     catch(e){
-        console.log(e.MessageUps)
+        console.log(e)
     }
     
     let remotes: Set<string> = new Set<string>();
