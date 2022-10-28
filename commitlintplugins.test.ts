@@ -212,6 +212,34 @@ test('footer-notes-misplacement-3', () => {
 })
 
 
+test('footer-references-existence1', () => {
+    let commmitMsgwithCorrectFooter = "foo: this is only a title"
+        + "\n\n"+ "Bla bla blah[1]."
+        + "\n\n" + "[1] http://foo.bar/baz"
+    let footerReferenceExistence1 = runCommitLintOnMsg(commmitMsgwithCorrectFooter);
+    expect(footerReferenceExistence1.status).toBe(0);
+})
+
+
+test('footer-references-existence2', () => {
+    let commmitMsgwithWrongFooter = "foo: this is only a title"
+        + "\n\n"+ "Bla bla blah."
+        + "\n\n" + "[1] http://foo.bar/baz"
+    let footerReferenceExistence2 = runCommitLintOnMsg(commmitMsgwithWrongFooter);
+    expect(footerReferenceExistence2.status).not.toBe(0);
+})
+
+
+test('footer-references-existence3', () => {
+    let commmitMsgwithWrongFooter = "foo: this is only a title"
+        + "\n\n"+ "Bla bla blah[1], and after that [2], then [3]."
+        + "\n\n" + "[1] http://foo.bar/baz"
+        + "\n\n" + "[2] http://foo.bar/baz"
+    let footerReferenceExistence3 = runCommitLintOnMsg(commmitMsgwithWrongFooter);
+    expect(footerReferenceExistence3.status).not.toBe(0);
+})
+
+
 test('prefer-slash-over-backslash1', () => {
     let commitMsgWithBackslash = "foo\\bar: bla bla bla";
     let preferSlashOverBackslash1 = runCommitLintOnMsg(commitMsgWithBackslash);
