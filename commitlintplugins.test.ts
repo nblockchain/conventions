@@ -165,6 +165,7 @@ test('commit-hash-alone1', () => {
         "foo: this is only a title" + "\n\n" + 
         "https://github.com/nblockchain/conventions/commit/3ee07243edc30604088a4b04ca525204ea440710";
     let commitHashAlone1 = runCommitLintOnMsg(commitMsgWithCommitUrl);
+    console.log('HERE ==========>' + commitHashAlone1.stdout)
     expect(commitHashAlone1.status).not.toBe(0);
 });
 
@@ -172,7 +173,7 @@ test('commit-hash-alone1', () => {
 test('commit-hash-alone2', () => {
     let commitMsgWithCommitHash = 
         "foo: this is only a title" + "\n\n" + 
-        "This is refering to [1] commit hash.\n\n[1] 3ee07243edc30604088a4b04ca525204ea440710";
+        "This is referring to [1] commit hash.\n\n[1] 3ee07243edc30604088a4b04ca525204ea440710";
     let commitHashAlone2 = runCommitLintOnMsg(commitMsgWithCommitHash);
     expect(commitHashAlone2.status).toBe(0);
 });

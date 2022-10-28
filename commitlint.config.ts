@@ -206,7 +206,7 @@ module.exports = {
 
                 'commit-hash-alone': ({raw}: {raw:any}) => {
                     let rawStr = convertAnyToString(raw, "raw");
-
+                    console.log(process.env['GITHUB_ACTION_REPOSITORY'])
                     let offence = false;
 
                     let urls = findUrls(rawStr)
