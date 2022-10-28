@@ -38,7 +38,7 @@ function findRemoteUrls() {
         }
     }
     if (sshUrls !== null) {
-        for (let match of output.match(sshUrls)) {
+        for (let match of sshUrls) {
             let remoteRepo = match.substring(15, match.length-4);   
             remotes.add(remoteRepo);
         }
