@@ -24,15 +24,14 @@ function findRemoteUrls() {
     let httpsRegex = /https:\/\/github.com\/([^.]*).git/g;
     // let sshRegex = /git@github.com:([^.]*).git/g;
     let remotes: Set<String> = new Set<string>();
-    // for (let match of output.match(httpsRegex)) {
-    //     let remoteRepo = match.substring(19, match.length-4);
-    //     remotes.add(remoteRepo);
-    // }
+    for (let match of output.match(httpsRegex)) {
+        let remoteRepo = match.substring(19, match.length-4);
+        remotes.add(remoteRepo);
+    }
     // for (let match of output.match(sshRegex)) {
     //     let remoteRepo = match.substring(15, match.length-4);   
     //     remotes.add(remoteRepo);
     // }
-    remotes.add('aaa');
     return remotes;
 }
 
