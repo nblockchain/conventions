@@ -19,26 +19,26 @@ enum RuleStatus {
 let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
 
-// function findRemoteUrls() {
-//     let output = execSync('git remote -v', { encoding: 'utf-8' }).toString();
-//     let remotes: Set<string> = new Set<string>();
-//     let httpsUrls = output.match(/https:\/\/github.com\/([^.]*).git/g);
-//     let sshUrls = output.match(/git@github.com:([^.]*).git/g);
-//     if (httpsUrls !== null) {
-//         for (let match of httpsUrls) {
-//             let remoteRepo = match.substring(19, match.length-4);
-//             remotes.add(remoteRepo);
-//         }
-//     }
-//     if (sshUrls !== null) {
-//         for (let match of output.match(sshUrls)) {
-//             let remoteRepo = match.substring(15, match.length-4);   
-//             remotes.add(remoteRepo);
-//         }
-//     }
+function findRemoteUrls() {
+    let output = execSync('git remote -v', { encoding: 'utf-8' }).toString();
+    let remotes: Set<string> = new Set<string>();
+    let httpsUrls = output.match(/https:\/\/github.com\/([^.]*).git/g);
+    let sshUrls = output.match(/git@github.com:([^.]*).git/g);
+    if (httpsUrls !== null) {
+        for (let match of httpsUrls) {
+            let remoteRepo = match.substring(19, match.length-4);
+            remotes.add(remoteRepo);
+        }
+    }
+    if (sshUrls !== null) {
+        for (let match of output.match(sshUrls)) {
+            let remoteRepo = match.substring(15, match.length-4);   
+            remotes.add(remoteRepo);
+        }
+    }
 
-//     return remotes;
-// }
+    return remotes;
+}
 
 // let remotes = findRemoteUrls() 
 
