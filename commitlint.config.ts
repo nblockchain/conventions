@@ -32,7 +32,8 @@ function findRemoteUrls() {
     //     let remote_repo = match.substring(15, match.length-4);   
     //     remotes.add(remote_repo);
     // }
-    remotes = ['aaa']
+    let remotes : Set<string> = new Set<string>();
+    remotes.add('aaa');
     return remotes;
 }
 
