@@ -20,18 +20,19 @@ let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
 
 function findRemoteUrls() {
-    let output = execSync('git remote -v', { encoding: 'utf-8' }).toString();
-    let https_regex = /https:\/\/github.com\/([^.]*).git/g;
-    let ssh_regex = /git@github.com:([^.]*).git/g;
-    let remotes = new Set<string>();
-    for (let match of output.match(https_regex)) {
-        let remote_repo = match.substring(19, match.length-4);
-        remotes.add(remote_repo);
-    }
-    for (let match of output.match(ssh_regex)) {
-        let remote_repo = match.substring(15, match.length-4);   
-        remotes.add(remote_repo);
-    }
+    // let output = execSync('git remote -v', { encoding: 'utf-8' }).toString();
+    // let https_regex = /https:\/\/github.com\/([^.]*).git/g;
+    // let ssh_regex = /git@github.com:([^.]*).git/g;
+    // let remotes = new Set<string>();
+    // for (let match of output.match(https_regex)) {
+    //     let remote_repo = match.substring(19, match.length-4);
+    //     remotes.add(remote_repo);
+    // }
+    // for (let match of output.match(ssh_regex)) {
+    //     let remote_repo = match.substring(15, match.length-4);   
+    //     remotes.add(remote_repo);
+    // }
+    remotes = ['aaa']
     return remotes;
 }
 
@@ -238,6 +239,9 @@ module.exports = {
 
                     let urls = findUrls(rawStr)
                     console.log('here1' + remotes)
+                    for (let remote of remotes) {
+                        console.log(remote)
+                    }
                     console.log('here2' + urls)
                     if (urls !== null) {
                         for (let url of urls.entries()) {
