@@ -21,12 +21,12 @@ let headerMaxLineLength = 50;
 
 function findRemoteUrls() {
     let output = ""
-    try {
-        output = execSync('git remote -v', { encoding: 'utf-8' }).toString();
-    }
-    catch(e){
-        console.log(e.MessageUps)
-    }
+    // try {
+    //     output = execSync('git remote -v', { encoding: 'utf-8' }).toString();
+    // }
+    // catch(e){
+    //     console.log(e.MessageUps)
+    // }
     
     let remotes: Set<string> = new Set<string>();
     let httpsUrls = output.match(/https:\/\/github.com\/([^.]*).git/g);
