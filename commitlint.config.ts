@@ -20,7 +20,7 @@ let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
 
 function findRemoteUrls() {
-    const output = execSync('git remote -v', { encoding: 'utf-8' });
+    const output = execSync('git remote -v', { encoding: 'utf-8' }).toString();
     let https_regex = /https:\/\/github.com\/([^.]*).git/g;
     let ssh_regex = /git@github.com:([^.]*).git/g;
     let remotes = new Set<string>();
@@ -36,6 +36,15 @@ function findRemoteUrls() {
 }
 
 let remotes = findRemoteUrls() 
+
+function isRelatedToThisRepo(url: string) {
+    for (let remote of remotes) {
+        if (url.includes(remote)) {
+            return true;
+        }
+    }
+    return false
+}
 
 function isValidUrl(url: string) {
     // Borrowed from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
@@ -232,7 +241,8 @@ module.exports = {
                     console.log('here2' + urls)
                     if (urls !== null) {
                         for (let url of urls.entries()) {
-                            if (isCommitUrl(url.toString())) {
+                            let urlStr = url.toString()
+                            if (isCommitUrl(urlStr) && isRelatedToThisRepo(urlStr)) {
                                 offence = true;
                                 break;
                             }
