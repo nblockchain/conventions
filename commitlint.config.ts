@@ -241,21 +241,21 @@ module.exports = {
                     let rawStr = convertAnyToString(raw, "raw");
                     let offence = false;
 
-                    let urls = findUrls(rawStr)
-                    console.log('here1' + remotes)
-                    for (let remote of remotes) {
-                        console.log(remote)
-                    }
-                    console.log('here2' + urls)
-                    if (urls !== null) {
-                        for (let url of urls.entries()) {
-                            let urlStr = url.toString()
-                            if (isCommitUrl(urlStr) && isRelatedToThisRepo(urlStr)) {
-                                offence = true;
-                                break;
-                            }
-                        }
-                    }
+                    // let urls = findUrls(rawStr)
+                    // console.log('here1' + remotes)
+                    // for (let remote of remotes) {
+                    //     console.log(remote)
+                    // }
+                    // console.log('here2' + urls)
+                    // if (urls !== null) {
+                    //     for (let url of urls.entries()) {
+                    //         let urlStr = url.toString()
+                    //         if (isCommitUrl(urlStr) && isRelatedToThisRepo(urlStr)) {
+                    //             offence = true;
+                    //             break;
+                    //         }
+                    //     }
+                    // }
 
                     return [
                         !offence,
