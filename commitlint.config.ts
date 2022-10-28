@@ -227,7 +227,8 @@ module.exports = {
                     let offence = false;
 
                     let urls = findUrls(rawStr)
-
+                    let remoteUrls = findRemoteUrls()
+                    console.log(remoteUrls)
                     if (urls !== null) {
                         for (let url of urls.entries()) {
                             if (isCommitUrl(url.toString())) {
