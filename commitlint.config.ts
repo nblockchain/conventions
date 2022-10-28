@@ -1,4 +1,5 @@
 import { abbr } from "./abbreviations";
+const { spawnSync } = require('child_process');
 
 // to convert from 'any' type
 function convertAnyToString(potentialString: any, paramName: string): string {
@@ -17,6 +18,22 @@ enum RuleStatus {
 
 let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
+
+function findRemoteUrls() {
+    const output = spawnSync.execSync('git remote -v', { encoding: 'utf-8' });
+    let https_regex = /https:\/\/github.com\/([^.]*).git/g
+    let ssh_regex = /git@github.com:([^.]*).git/g
+    let remotes = new Set<string>;
+    for (let match of output.match(https_regex)) {
+        let remote_repo = match.substring(19, match.length-4)
+        remotes.add(remote_repo)
+    }
+    for (let match of output.match(ssh_regex)) {
+        let remote_repo = match.substring(15, match.length-4)      
+        remotes.add(remote_repo)
+    }
+    return remotes
+}
 
 function isValidUrl(url: string) {
     // Borrowed from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
