@@ -23,13 +23,13 @@ function findRemoteUrls() {
     const output = execSync('git remote -v', { encoding: 'utf-8' });
     let https_regex = /https:\/\/github.com\/([^.]*).git/g;
     let ssh_regex = /git@github.com:([^.]*).git/g;
-    let remotes = new Set<string>;
+    let remotes = new Set<string>();
     for (let match of output.match(https_regex)) {
         let remote_repo = match.substring(19, match.length-4);
         remotes.add(remote_repo);
     }
     for (let match of output.match(ssh_regex)) {
-        let remote_repo = match.substring(15, match.length-4)   ;   
+        let remote_repo = match.substring(15, match.length-4);   
         remotes.add(remote_repo);
     }
     return remotes;
