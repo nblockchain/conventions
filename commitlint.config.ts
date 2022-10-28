@@ -20,29 +20,33 @@ let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
 
 function findRemoteUrls() {
-    let output = ""
-    try {
-        output = execSync('git remote -v', { encoding: 'utf-8' }).toString();
-    }
-    catch(e){
-        console.log(e)
-    }
+    // let output = ""
+    // try {
+    //     output = execSync('git remote -v', { encoding: 'utf-8' }).toString();
+    // }
+    // catch(e){
+    //     console.log(e)
+    // }
     
+    // let remotes: Set<string> = new Set<string>();
+    // let httpsUrls = output.match(/https:\/\/github.com\/([^.]*).git/g);
+    // let sshUrls = output.match(/git@github.com:([^.]*).git/g);
+    // if (httpsUrls !== null) {
+    //     for (let match of httpsUrls) {
+    //         let remoteRepo = match.substring(19, match.length-4);
+    //         remotes.add(remoteRepo);
+    //     }
+    // }
+    // if (sshUrls !== null) {
+    //     for (let match of sshUrls) {
+    //         let remoteRepo = match.substring(15, match.length-4);   
+    //         remotes.add(remoteRepo);
+    //     }
+    // }
     let remotes: Set<string> = new Set<string>();
-    let httpsUrls = output.match(/https:\/\/github.com\/([^.]*).git/g);
-    let sshUrls = output.match(/git@github.com:([^.]*).git/g);
-    if (httpsUrls !== null) {
-        for (let match of httpsUrls) {
-            let remoteRepo = match.substring(19, match.length-4);
-            remotes.add(remoteRepo);
-        }
-    }
-    if (sshUrls !== null) {
-        for (let match of sshUrls) {
-            let remoteRepo = match.substring(15, match.length-4);   
-            remotes.add(remoteRepo);
-        }
-    }
+    // remotes.add()
+    console.log(process.env.GITHUB_ACTION_REPOSITORY)
+
 
     return remotes;
 }
