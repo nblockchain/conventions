@@ -11,6 +11,7 @@ detect bad practices.
 
 More things to come:
 - Detect EOF without EOL in files.
+- Detect .fsx files without shebang or +x attrib.
 - Detect files with mixed line endings.
 - Detect use of -latest in `runs-on:` GitHubCI tags.
 - Detect old versions of FSharpLint and fantomas/fantomless
