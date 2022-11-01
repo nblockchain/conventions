@@ -1,26 +1,31 @@
 open System.IO
+open System
 
-let EolAtEof(path: FileInfo) = 
-
-    use streamReader = new StreamReader (path.FullName)
+let EolAtEof(fileInfo: FileInfo) = 
+    use streamReader = new StreamReader (fileInfo.FullName)
     let filetext = streamReader.ReadToEnd()
     
-    if filetext <> "" then
-        (filetext |> Seq.last = '\n')
+    if filetext <> String.Empty then
+        (filetext |> Seq.last |> Char.ToString = Environment.NewLine)
     else
         true
 
-let NotPrefix (prefix: string) (mainStr: string) =
-    not (mainStr.StartsWith(prefix))
+let NotPrefix (prefix: FileInfo) (pathStr: FileInfo) =
+    not (pathStr.FullName.StartsWith prefix.FullName)
 
 let invalidFiles = 
     Directory.GetFiles(".", "*.*", SearchOption.AllDirectories) 
-    |> Seq.filter (NotPrefix "./node_modules")
-    |> Seq.filter (NotPrefix "./.git")
     |> Seq.map (fun pathStr -> FileInfo pathStr)
+    |> Seq.filter (NotPrefix (FileInfo "./node_modules"))
+    |> Seq.filter (NotPrefix (FileInfo "./.git"))
     |> Seq.filter (fun fileInfo -> not (EolAtEof fileInfo))
 
-if invalidFiles |> Seq.length > 0 then
-    let mutable message = "The following files doesn't end with EOL:\n" 
-    invalidFiles |> Seq.iter (fun x -> message <- message + x.FullName + "\n")
+if Seq.length invalidFiles > 0 then
+    let message = 
+        "The following files don't end with EOL:" + 
+        Environment.NewLine + 
+        (invalidFiles 
+        |> Seq.map (fun fileInfo -> fileInfo.FullName)
+        |> String.concat Environment.NewLine)
+        
     failwith message

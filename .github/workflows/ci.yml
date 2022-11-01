@@ -64,4 +64,4 @@ jobs:
       - name: Install dotnet sdk
         run: sudo apt install -y dotnet6
       - name: Run script to make sure all files end with EOL 
-        run: dotnet fsi eofconvention.fsx
+        run: dotnet fsi eofConvention.fsx
