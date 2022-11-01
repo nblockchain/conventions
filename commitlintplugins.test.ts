@@ -360,6 +360,46 @@ test('subject-lowercase10', () => {
 });
 
 
+test('too-many-spaces1', () => {
+    let commitMsgWithTooManySpacesInTitle =
+        "foo: this is only a  title";
+    let tooManySpaces1 = runCommitLintOnMsg(commitMsgWithTooManySpacesInTitle);
+    expect(tooManySpaces1.status).not.toBe(0);
+});
+
+
+test('too-many-spaces2', () => {
+    let commitMsgWithTooManySpacesInBody =
+        "foo: this is only a title" + "\n\n" + "Bla  blah bla.";
+    let tooManySpaces2 = runCommitLintOnMsg(commitMsgWithTooManySpacesInBody);
+    expect(tooManySpaces2.status).not.toBe(0);
+});
+
+
+test('too-many-spaces3', () => {
+    let commitMsgWithTooManySpacesInCodeBlock =
+        "foo: this is only a title" + "\n\n" + "Bar baz:\n\n```\ntype   Foo =\nstring\n```";
+    let tooManySpaces3 = runCommitLintOnMsg(commitMsgWithTooManySpacesInCodeBlock);
+    expect(tooManySpaces3.status).toBe(0);
+});
+
+
+test('too-many-spaces4', () => {
+    let commitMsgWithTwoSpacesAfterSentence =
+        "foo: this is only a title" + "\n\n" + "Bla blah.  Blah bla.";
+    let tooManySpaces4 = runCommitLintOnMsg(commitMsgWithTwoSpacesAfterSentence);
+    expect(tooManySpaces4.status).toBe(0);
+});
+
+
+test('too-many-spaces5', () => {
+    let commitMsgWithThreeSpacesAfterSentence =
+        "foo: this is only a title" + "\n\n" + "Bla blah.   Blah bla.";
+    let tooManySpaces5 = runCommitLintOnMsg(commitMsgWithThreeSpacesAfterSentence);
+    expect(tooManySpaces5.status).not.toBe(0);
+});
+
+
 test('trailing-whitespace1', () => {
     let commitMsgWithNoTrailingWhiteSpace =
         "foo: this is only a title" + "\n\n" + "Bla blah bla.";

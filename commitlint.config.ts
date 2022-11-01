@@ -294,6 +294,7 @@ module.exports = {
         'type-space-before-paren': [RuleStatus.Error, 'always'],
         'type-with-square-brackets': [RuleStatus.Error, 'always'],
         'proper-issue-refs': [RuleStatus.Error, 'always'],
+        'too-many-spaces': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -305,7 +306,6 @@ module.exports = {
         // * Think of how to reject this shitty commit message: https://github.com/nblockchain/NOnion/pull/34/commits/9ffcb373a1147ed1c729e8aca4ffd30467255594
         // * Title should not have dot at the end.
         // * Second line of commit msg should always be blank.
-        // * Check for too many spaces (e.g. 2 spaces after colon)
         // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
         // * Detect if commit hash mention in commit msg actually exists in repo.
         // * Detect area(sub-area) in the title that doesn't include area part (e.g., writing (bar) instead of foo(bar))
@@ -457,6 +457,17 @@ module.exports = {
                 },
 
 
+                'too-many-spaces': ({raw}: {raw:any}) => {
+                    let rawStr = convertAnyToString(raw, "raw");
+                    rawStr = removeAllCodeBlocks(rawStr);
+                    let offence = (rawStr.match(`[^.]  `) !== null);
+
+                    return [
+                        !offence,
+                        `Please watch out for too many whitespaces in the text`
+                    ];
+                },
+
                 'type-space-after-colon': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
 
@@ -562,12 +573,15 @@ module.exports = {
                     }
 
                     // taken from https://stackoverflow.com/a/66433444/544947 and https://unix.stackexchange.com/a/25208/56844
-                    let recommendedUnixCommand =
-                        'git log --format=%B -n 1 $(git log -1 --pretty=format:"%h") | cat - > log.txt ; fmt -w 1111 -s log.txt > ulog.txt && fmt -w 64 -s ulog.txt > wlog.txt && git commit --amend -F wlog.txt';
+                    function getUnixCommand(fmtOption: string){
+                        return `git log --format=%B -n 1 $(git log -1 --pretty=format:"%h") | cat - > log.txt ; fmt -w 1111 -s log.txt > ulog.txt && fmt -w 64 -s ${fmtOption} ulog.txt > wlog.txt && git commit --amend -F wlog.txt`;
+                    }
 
                     return [
                         !offence,
-                        `Please do not exceed ${bodyMaxLineLength} characters in the lines of the commit message's body; we recommend this unix command (for editing the last commit message): ${recommendedUnixCommand}`
+                        `Please do not exceed ${bodyMaxLineLength} characters in the lines of the commit message's body; we recommend this unix command (for editing the last commit message): \n` +
+                        `For Linux users: ${getUnixCommand('-u')}\n` +
+                        `For macOS users: ${getUnixCommand('')}`
                     ];
                 },
 
