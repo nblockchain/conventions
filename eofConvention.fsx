@@ -10,14 +10,14 @@ let EolAtEof(fileInfo: FileInfo) =
     else
         true
 
-let NotPrefix (prefix: FileInfo) (pathStr: FileInfo) =
+let NotPrefix (prefix: DirectoryInfo) (pathStr: FileInfo) =
     not (pathStr.FullName.StartsWith prefix.FullName)
 
 let invalidFiles = 
     Directory.GetFiles(".", "*.*", SearchOption.AllDirectories) 
     |> Seq.map (fun pathStr -> FileInfo pathStr)
-    |> Seq.filter (NotPrefix (FileInfo "./node_modules"))
-    |> Seq.filter (NotPrefix (FileInfo "./.git"))
+    |> Seq.filter (NotPrefix (DirectoryInfo "./node_modules"))
+    |> Seq.filter (NotPrefix (DirectoryInfo "./.git"))
     |> Seq.filter (fun fileInfo -> not (EolAtEof fileInfo))
 
 if Seq.length invalidFiles > 0 then
@@ -29,3 +29,4 @@ if Seq.length invalidFiles > 0 then
         |> String.concat Environment.NewLine)
         
     failwith message
+    
