@@ -560,12 +560,12 @@ module.exports = {
                     ];
                 },
     
-                'proper-revert-message': ({body}: {body:any}) => {
+                'proper-revert-message': ({raw}: {raw:any}) => {
                     let offence = false;
-                    console.log('revert body: ' + body)
+                    console.log('revert raw: ' + raw)
                     // does msg have a body?
-                    if (body !== null) {
-                        let bodyStr = convertAnyToString(body, "body").trim();
+                    if (raw !== null) {
+                        let bodyStr = convertAnyToString(raw, "raw").trim();
                         let lines = bodyStr.split('\n');
                         console.log(lines)
                         if (lines.length == 1) {
