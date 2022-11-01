@@ -265,6 +265,14 @@ function wordIsStartOfSentence(word: string) {
     return false;
 }
 
+function includesHashtagRef(text: string) {
+    return text.match(`#[0-9]+`) !== null;
+}
+
+function removeAllCodeBlocks(text: string) {
+    return text.replace(/```[^]*```/g, '');
+}
+
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
@@ -285,13 +293,13 @@ module.exports = {
         'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
         'type-space-before-paren': [RuleStatus.Error, 'always'],
         'type-with-square-brackets': [RuleStatus.Error, 'always'],
+        'proper-issue-refs': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
         // * Better rule than body-max-line-length that ignores line if it starts with `[x] ` where x is a number.
         // * Detect if paragraphs in body have been cropped too shortly (less than 64 chars), and suggest same auto-wrap command that body-soft-max-line-length suggests, since it unwraps and wraps (both).
         // * Detect reverts which have not been elaborated.
-        // * Reject #XYZ refs in favour for full URLs.
         // * If full URL for commit found, reject in favour for just the commit hash.
         // * Reject some stupid obvious words: change, update, modify (if first word after colon, error; otherwise warning).
         // * Think of how to reject this shitty commit message: https://github.com/nblockchain/NOnion/pull/34/commits/9ffcb373a1147ed1c729e8aca4ffd30467255594
@@ -319,7 +327,7 @@ module.exports = {
                                 continue;
                             }
 
-                            paragraph = paragraph.replace(/```[^]*```/g, '').trim();
+                            paragraph = removeAllCodeBlocks(paragraph).trim();
 
                             let startWithLowerCase = isLowerCase(paragraph[0])
 
@@ -427,6 +435,27 @@ module.exports = {
                         `Please use slash instead of backslash in the area/scope/sub-area section of the title`
                     ];
                 },
+
+                'proper-issue-refs': ({raw}: {raw:any}) => {
+                    let offence = false;
+
+                    let rawStr = convertAnyToString(raw, "raw").trim();
+                    let lineBreakIndex = rawStr.indexOf('\n')
+                    
+                    if (lineBreakIndex >= 0){
+                        // Extracting bodyStr from rawStr rather than using body directly is a 
+                        // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
+                        let bodyStr = rawStr.substring(lineBreakIndex)
+                        bodyStr = removeAllCodeBlocks(bodyStr);
+                        offence = includesHashtagRef(bodyStr);
+                    }
+
+                    return [
+                        !offence,
+                        `Please use full URLs instead of #XYZ refs.`
+                    ];
+                },
+
 
                 'type-space-after-colon': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
