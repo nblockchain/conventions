@@ -562,6 +562,7 @@ module.exports = {
     
                 'proper-revert-message': ({body}: {body:any}) => {
                     let offence = false;
+                    console.log('revert body: ' + body)
                     // does msg have a body?
                     if (body !== null) {
                         let bodyStr = convertAnyToString(body, "body").trim();
