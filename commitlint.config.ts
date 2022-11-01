@@ -461,7 +461,6 @@ module.exports = {
                     let rawStr = convertAnyToString(raw, "raw");
                     rawStr = removeAllCodeBlocks(rawStr);
                     let offence = (rawStr.match(`[^.]  `) !== null);
-                    // && (rawStr.match(`\\.   `) === null)
 
                     return [
                         !offence,
