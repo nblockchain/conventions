@@ -380,7 +380,6 @@ test('too-many-spaces3', () => {
     let commitMsgWithTooManySpacesInCodeBlock =
         "foo: this is only a title" + "\n\n" + "Bar baz:\n\n```\ntype   Foo =\nstring\n```";
     let tooManySpaces3 = runCommitLintOnMsg(commitMsgWithTooManySpacesInCodeBlock);
-    //console.log("=============>" + trailingWhitespace6.stdout);
     expect(tooManySpaces3.status).toBe(0);
 });
 
