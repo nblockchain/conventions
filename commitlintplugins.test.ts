@@ -250,7 +250,6 @@ test('header-max-length-with-suggestions1', () => {
         "foo: this is only a title with a configuration in it that exceeds header max length";
     let headerMaxLength1 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
     let expected_message = `"configuration" -> "config"`
-    // console.log('HERE ==========>' + replacementSuggestion1.stdout)
     expect(headerMaxLength1.status).not.toBe(0);
     expect((headerMaxLength1.stdout + '').includes(expected_message)).toEqual(true)
 });
@@ -261,7 +260,6 @@ test('header-max-length-with-suggestions2', () => {
         "foo: this is only a title with a 1 second in it that exceeds header max length";
     let headerMaxLength2 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
     let expected_message = `"1 second" -> "1sec"`
-    // console.log('HERE ==========>' + replacementSuggestion1.stdout)
     expect(headerMaxLength2.status).not.toBe(0);
     expect((headerMaxLength2.stdout + '').includes(expected_message)).toEqual(true)
 });
@@ -365,7 +363,6 @@ test('subject-lowercase8', () => {
 test('subject-lowercase9', () => {
     let commitMsgWithCamelCaseAfterColon = "End2End: testFixtureSetup refactor";
     let subjectLowerCase9 = runCommitLintOnMsg(commitMsgWithCamelCaseAfterColon);
-    // console.log("=============>" + subjectLowerCase9.stdout);
     expect(subjectLowerCase9.status).toBe(0);
 });
 
@@ -373,7 +370,6 @@ test('subject-lowercase9', () => {
 test('subject-lowercase10', () => {
     let commitMsgWithNumber = "foo: A1 bar";
     let subjectLowerCase10 = runCommitLintOnMsg(commitMsgWithNumber);
-    // console.log("=============>" + subjectLowerCase10.stdout);
     expect(subjectLowerCase10.status).toBe(0);
 });
 
@@ -462,7 +458,6 @@ test('trailing-whitespace6', () => {
     let commitMsgWithTrailingWhiteSpaceInCodeBlock =
         "foo: this is only a title" + "\n\n" + "Bar baz:\n\n```\ntype Foo =\n    string\n```";
     let trailingWhitespace6 = runCommitLintOnMsg(commitMsgWithTrailingWhiteSpaceInCodeBlock);
-    //console.log("=============>" + trailingWhitespace6.stdout);
     expect(trailingWhitespace6.status).toBe(0);
 });
 

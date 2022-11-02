@@ -383,31 +383,21 @@ module.exports = {
                 },
 
                 'commit-hash-alone': ({raw}: {raw:any}) => {
-                    // console.log(raw)
                     let rawStr = convertAnyToString(raw, "raw");
-                    // console.log('raw: ' + rawStr);
                     let offence = false;
 
                     let urls = findUrls(rawStr)
-                    console.log('urls: ' + urls)
-                    console.log(typeof(urls))
-                    if (urls !== null) {
-                        console.log(urls[0])
-                    }
+
                     let gitRepo = process.env['GITHUB_REPOSITORY'];
                     if (gitRepo !== undefined && urls !== null) {
-                        console.log('gitRepo: ' + gitRepo);
                         for (let url of urls.entries()) {
-                            console.log('type' + typeof(url))
                             let urlStr = url[1].toString()
-                            console.log('urlStr: ' + urlStr); 
                             if (isCommitUrl(urlStr) && urlStr.includes(gitRepo)) {
                                 offence = true;
                                 break;
                             }
                         }
                     }
-                    console.log('commit: '+offence);
 
                     return [
                         !offence,
@@ -471,7 +461,6 @@ module.exports = {
                             
                         }
                     }
-                    console.log('footer: ' + offence)
                     return [
                         !offence,
                         `Footer messages must be placed after body paragraphs, please move any message that starts with a "[]" or "Fixes" to the end of the commmit message.`
