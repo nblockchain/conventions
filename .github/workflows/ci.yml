@@ -20,7 +20,7 @@ jobs:
           # error @commitlint/config-conventional@17.1.0: The engine "node" is incompatible with this module. Expected version ">=v14". Got "12.22.9"
           curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 
-          sudo apt install -y nodejs
+          sudo DEBIAN_FRONTEND=noninteractive apt install -y nodejs
           npm install @commitlint/config-conventional
           sudo npm install -g yarn
           yarn add --dev jest typescript ts-jest @types/jest
@@ -48,7 +48,7 @@ jobs:
           # error @commitlint/config-conventional@17.1.0: The engine "node" is incompatible with this module. Expected version ">=v14". Got "12.22.9"
           curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 
-          sudo apt install -y nodejs
+          sudo DEBIAN_FRONTEND=noninteractive apt install -y nodejs
       - uses: actions/checkout@v2
         with:
           submodules: recursive
