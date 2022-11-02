@@ -163,7 +163,7 @@ test('body-max-line-length7', () => {
 test('commit-hash-alone1', () => {
     let commitMsgWithCommitUrl= 
         "foo: this is only a title" + "\n\n" + 
-        `https://github.com/${process.env['GITHUB_REPOSITORY']}/commit/3ee07243edc30604088a4b04ca525204ea440710`;
+        `https://github.com/nblockchain/conventions/commit/3ee07243edc30604088a4b04ca525204ea440710`;
     let commitHashAlone1 = runCommitLintOnMsg(commitMsgWithCommitUrl);
     expect(commitHashAlone1.status).not.toBe(0);
 });
@@ -175,6 +175,15 @@ test('commit-hash-alone2', () => {
         "This is referring to [1] commit hash.\n\n[1] 3ee07243edc30604088a4b04ca525204ea440710";
     let commitHashAlone2 = runCommitLintOnMsg(commitMsgWithCommitHash);
     expect(commitHashAlone2.status).toBe(0);
+});
+
+
+test('commit-hash-alone3', () => {
+    let commitMsgWithExternalCommitUrl =
+        "foo: this is only a title" + "\n\n" +
+        `https://github.com/anotherOrg/anotherRepo/commit/3ee07243edc30604088a4b04ca525204ea440710`;
+    let commitHashAlone3 = runCommitLintOnMsg(commitMsgWithExternalCommitUrl);
+    expect(commitHashAlone3.status).toBe(0);
 });
 
 
