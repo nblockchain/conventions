@@ -6,7 +6,7 @@ let EolAtEof(fileInfo: FileInfo) =
     let filetext = streamReader.ReadToEnd()
     
     if filetext <> String.Empty then
-        (filetext |> Seq.last |> Char.ToString = Environment.NewLine)
+        Seq.last filetext = '\n'
     else
         true
 
@@ -16,8 +16,8 @@ let NotPrefix (prefix: DirectoryInfo) (pathStr: FileInfo) =
 let invalidFiles = 
     Directory.GetFiles(".", "*.*", SearchOption.AllDirectories) 
     |> Seq.map (fun pathStr -> FileInfo pathStr)
-    |> Seq.filter (NotPrefix (DirectoryInfo "./node_modules"))
-    |> Seq.filter (NotPrefix (DirectoryInfo "./.git"))
+    |> Seq.filter (NotPrefix (DirectoryInfo "node_modules"))
+    |> Seq.filter (NotPrefix (DirectoryInfo ".git"))
     |> Seq.filter (fun fileInfo -> not (EolAtEof fileInfo))
 
 if Seq.length invalidFiles > 0 then
@@ -29,4 +29,3 @@ if Seq.length invalidFiles > 0 then
         |> String.concat Environment.NewLine)
         
     failwith message
-    
