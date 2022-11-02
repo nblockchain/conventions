@@ -187,6 +187,22 @@ enum RuleStatus {
 let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
 
+function isValidUrl(url: string) {
+    // Borrowed from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
+    try { 
+        return Boolean(new URL(url)); 
+    }
+    catch(e){ 
+        return false; 
+    }
+}
+
+function assertUrl(url: string) {
+    if (!isValidUrl(url)) {
+        throw Error('This function expects a url as input')   
+    }
+}
+
 function assertCharacter(letter: string) {
     if (letter.length !== 1) {
         throw Error('This function expects a character as input')
@@ -273,6 +289,16 @@ function removeAllCodeBlocks(text: string) {
     return text.replace(/```[^]*```/g, '');
 }
 
+function findUrls(text: string) {
+    var urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.match(urlRegex);
+}
+
+function isCommitUrl(url: string) {
+    assertUrl(url)
+    return url.includes('/commit/');
+}
+
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
@@ -295,6 +321,7 @@ module.exports = {
         'type-with-square-brackets': [RuleStatus.Error, 'always'],
         'proper-issue-refs': [RuleStatus.Error, 'always'],
         'too-many-spaces': [RuleStatus.Error, 'always'],
+        'commit-hash-alone': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -352,6 +379,29 @@ module.exports = {
                     return [
                         !offence,
                         `Please begin a paragraph with uppercase letter and end it with a dot`
+                    ];
+                },
+
+                'commit-hash-alone': ({raw}: {raw:any}) => {
+                    let rawStr = convertAnyToString(raw, "raw");
+                    let offence = false;
+
+                    let urls = findUrls(rawStr)
+
+                    let gitRepo = process.env['GITHUB_REPOSITORY'];
+                    if (gitRepo !== undefined && urls !== null) {
+                        for (let url of urls.entries()) {
+                            let urlStr = url[1].toString()
+                            if (isCommitUrl(urlStr) && urlStr.includes(gitRepo)) {
+                                offence = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    return [
+                        !offence,
+                        `Please use the commit hash instead of the commit full URL`
                     ];
                 },
 
