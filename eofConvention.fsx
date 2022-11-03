@@ -10,14 +10,14 @@ let EolAtEof(fileInfo: FileInfo) =
     else
         true
 
-let NotPrefix (prefix: DirectoryInfo) (pathStr: FileInfo) =
-    not (pathStr.FullName.StartsWith prefix.FullName)
+let NotInDir (dirName: string) (fileInfo: FileInfo) =
+    not (fileInfo.FullName.Contains $"%c{Path.DirectorySeparatorChar}%s{dirName}%c{Path.DirectorySeparatorChar}")
 
 let invalidFiles = 
     Directory.GetFiles(".", "*.*", SearchOption.AllDirectories) 
     |> Seq.map (fun pathStr -> FileInfo pathStr)
-    |> Seq.filter (NotPrefix (DirectoryInfo "node_modules"))
-    |> Seq.filter (NotPrefix (DirectoryInfo ".git"))
+    |> Seq.filter (NotInDir "node_modules")
+    |> Seq.filter (NotInDir ".git")
     |> Seq.filter (fun fileInfo -> not (EolAtEof fileInfo))
 
 if Seq.length invalidFiles > 0 then
