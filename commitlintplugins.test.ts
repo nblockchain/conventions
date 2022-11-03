@@ -87,7 +87,6 @@ test('body-prose9', () => {
         "username/repo@1d23456";
     let bodyProse9 = runCommitLintOnMsg(commitMsgWithCommitReferenceAtTheEndOfBodyParagraph);
 
-    // because Co-authored-by tags don't end with a dot
     expect(bodyProse9.status).toBe(0);
 });
 
