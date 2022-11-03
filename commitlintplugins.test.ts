@@ -80,25 +80,16 @@ test('body-prose8', () => {
 });
 
 
-// test('body-prose9', () => {
-//     let commitMsgWithCommitReferenceAtTheEndOfBodyParagraph =
-//         "foo: this is only a title\n\n" + 
-//         "Foo bar:\n\n" +
-//         "username/repo@9d91718";
-//     let bodyProse9 = runCommitLintOnMsg(commitMsgWithCommitReferenceAtTheEndOfBodyParagraph);
+test('body-prose9', () => {
+    let commitMsgWithCommitReferenceAtTheEndOfBodyParagraph =
+        "foo: this is only a title\n\n" + 
+        "Foo bar:\n" +
+        "username/repo@1d23456";
+    let bodyProse9 = runCommitLintOnMsg(commitMsgWithCommitReferenceAtTheEndOfBodyParagraph);
 
-//     // because Co-authored-by tags don't end with a dot
-//     expect(bodyProse9.status).toBe(0);
-// });
-
-
-// test('body-prose10', () => {
-//     let commitMsgWithTextInsideParenAtTheEndOfParagraph =
-//         "foo: this is only a title" + "\n\n" + "Paragraph begin. (Some text inside parens.)";
-//     let bodyProse10 = runCommitLintOnMsg(commitMsgWithTextInsideParenAtTheEndOfParagraph);
-
-//     expect(bodyProse10.status).toBe(0);
-// });
+    // because Co-authored-by tags don't end with a dot
+    expect(bodyProse9.status).toBe(0);
+});
 
 
 test('body-max-line-length1', () => {
