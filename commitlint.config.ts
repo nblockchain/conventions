@@ -308,6 +308,7 @@ module.exports = {
         'footer-leading-blank': [RuleStatus.Warning, 'always'],
         'footer-max-line-length': [RuleStatus.Error, 'always', 150],
         'footer-notes-misplacement': [RuleStatus.Error, 'always'],
+        'footer-references-existence': [RuleStatus.Error, 'always'],
         'header-max-length-with-suggestions': [RuleStatus.Error, 'always', headerMaxLineLength],
         'subject-full-stop': [RuleStatus.Error, 'never', '.'],
         'type-empty': [RuleStatus.Warning, 'never'],
@@ -464,6 +465,47 @@ module.exports = {
                     return [
                         !offence,
                         `Footer messages must be placed after body paragraphs, please move any message that starts with a "[]" or "Fixes" to the end of the commmit message.`
+                    ]
+                },
+
+                'footer-references-existence': ({body}: {body:any}) => {
+                    let offence = false;
+
+                    if (body !== null) {
+                        let bodyStr = convertAnyToString(body, "body");
+                        let lines = bodyStr.split(/\r?\n/);
+                        let bodyReferences = new Set();
+                        let references = new Set();
+                        for (let line of lines) {
+                            let matches = line.match(/(?<=\[)([0-9]+)(?=\])/g);
+                            if (matches === null) {
+                                continue;
+                            }
+                            for (let match of matches){
+                                if (isFooterReference(line)) {
+                                    references.add(match);
+                                }
+                                else {
+                                    bodyReferences.add(match);
+                                }
+                            }
+                        }
+                        for (let ref of bodyReferences) {
+                            if (!references.has(ref)) {
+                                offence = true;
+                                break;
+                            }
+                        }
+                        for (let ref of references) {
+                            if (!bodyReferences.has(ref)) {
+                                offence = true;
+                                break;
+                            }
+                        }
+                    }
+                    return [
+                        !offence,
+                        "All references in the body must be mentioned in the footer, and vice versa."
                     ]
                 },
 
