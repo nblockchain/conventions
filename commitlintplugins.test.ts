@@ -80,6 +80,17 @@ test('body-prose8', () => {
 });
 
 
+test('body-prose9', () => {
+    let commitMsgWithCommitUrlAtTheEndOfBodyParagraph =
+        "foo: this is only a title\n\n" +
+        "Foo bar:\n" +
+        "https://github.com/username/repo/commit/1234567891234567891234567891234567891234";
+    let bodyProse9 = runCommitLintOnMsg(commitMsgWithCommitUrlAtTheEndOfBodyParagraph);
+
+    expect(bodyProse9.status).toBe(0);
+});
+
+
 test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
@@ -337,6 +348,7 @@ test('proper-issue-refs3', () => {
     let commitMsgWithHashtagRefInBlock =
         "foo: this is only a title" + "\n\n" + "Bar baz:\n\n```\ntype Foo = string #123\n```";
     let properIssueRefs3 = runCommitLintOnMsg(commitMsgWithHashtagRefInBlock);
+    console.log('HERE =======>' + properIssueRefs3.stdout)
     expect(properIssueRefs3.status).toBe(0);
 });
 

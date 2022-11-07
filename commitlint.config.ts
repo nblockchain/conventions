@@ -255,11 +255,6 @@ function isLowerCase(letter: string) {
     return (isLowerCase && !isUpperCase);
 }
 
-function mightBeUrl(line: string) {
-    assertLine(line);
-    return line.indexOf(" ") < 0;
-}
-
 function isFooterReference(line: string) {
     assertLine(line);
     return (line[0] === "[" && line.indexOf("] ") > 0);
@@ -350,12 +345,16 @@ module.exports = {
 
         {
             rules: {
-                'body-prose': ({body}: {body:any}) => {
+                'body-prose': ({raw}: {raw:any}) => {
                     let offence = false;
 
-                    // does msg have a body?
-                    if (body !== null) {
-                        let bodyStr = convertAnyToString(body, "body");
+                    let rawStr = convertAnyToString(raw, "raw").trim();
+                    let lineBreakIndex = rawStr.indexOf('\n');
+
+                    if (lineBreakIndex >= 0){
+                        // Extracting bodyStr from rawStr rather than using body directly is a
+                        // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
+                        let bodyStr = rawStr.substring(lineBreakIndex);
 
                         for (let paragraph of bodyStr.trim().split('\n\n')){
 
@@ -367,17 +366,19 @@ module.exports = {
 
                             let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
 
-                            if (startWithLowerCase || !endsWithDotOrColon){
-                                let firstLine = paragraph.split(/\r?\n/)[0];
-                                
-                                // it's a URL
-                                let isUrl = mightBeUrl(firstLine);
+                            let lines = paragraph.split(/\r?\n/);
 
-                                let lineIsFooterNote = isFooterNote(firstLine);
-
-                                if ((!isUrl) && (!lineIsFooterNote)) {
+                            if (startWithLowerCase) {
+                                if (!(lines.length == 1 && isValidUrl(lines[0]))) {
                                     offence = true;
                                 }
+                            }
+
+                            if (!endsWithDotOrColon &&
+                                !isValidUrl(lines[lines.length - 1]) &&
+                                !isFooterNote(lines[lines.length - 1])) {
+
+                                offence = true;
                             }
                         }
                                         
@@ -658,7 +659,7 @@ module.exports = {
                             if (line.length > bodyMaxLineLength) {
 
                                 // it's a URL
-                                let isUrl = mightBeUrl(line);
+                                let isUrl = isValidUrl(line);
 
                                 let lineIsFooterNote = isFooterNote(line);
 
