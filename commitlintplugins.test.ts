@@ -81,11 +81,11 @@ test('body-prose8', () => {
 
 
 test('body-prose9', () => {
-    let commitMsgWithCommitReferenceAtTheEndOfBodyParagraph =
+    let commitMsgWithCommitUrlAtTheEndOfBodyParagraph =
         "foo: this is only a title\n\n" + 
         "Foo bar:\n" +
-        "username/repo@1d23456";
-    let bodyProse9 = runCommitLintOnMsg(commitMsgWithCommitReferenceAtTheEndOfBodyParagraph);
+        "https://github.com/username/repo/commit/1234567891234567891234567891234567891234";
+    let bodyProse9 = runCommitLintOnMsg(commitMsgWithCommitUrlAtTheEndOfBodyParagraph);
 
     expect(bodyProse9.status).toBe(0);
 });
