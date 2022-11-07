@@ -398,6 +398,7 @@ module.exports = {
 
                 'commit-hash-alone': ({raw}: {raw:any}) => {
                     let rawStr = convertAnyToString(raw, "raw");
+                    console.log('rawStr:' + raw + 'EndOfRawStr')
                     let offence = false;
 
                     let urls = findUrls(rawStr)
