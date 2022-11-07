@@ -359,7 +359,7 @@ module.exports = {
                             if (/^```[^]*```$/.test(paragraph.trim())){
                                 continue;
                             }
-                            console.log("HERE2" + paragraph)
+                            console.log("HERE2" + paragraph +"HERE3")
                             paragraph = removeAllCodeBlocks(paragraph).trim();
                             paragraph = removeAllCommitReferences(paragraph).trim();
 
