@@ -352,7 +352,7 @@ module.exports = {
                     // does msg have a body?
                     if (body !== null) {
                         let bodyStr = convertAnyToString(body, "body");
-
+                        console.log("bodyStr:" + bodyStr)
                         for (let paragraph of bodyStr.trim().split('\n\n')){
 
                             // It's a paragraph that only consists of a block
@@ -370,9 +370,7 @@ module.exports = {
                             let lines = paragraph.split(/\r?\n/)
                             
                             if (startWithLowerCase && 
-                                !isValidUrl(lines[0]) && 
-                                !isFooterNote(lines[0])){
-                                
+                                !isValidUrl(lines[0])) {
                                 offence = true;
                             }
 
