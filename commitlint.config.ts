@@ -368,7 +368,7 @@ module.exports = {
 
                             paragraph = removeAllCodeBlocks(paragraph).trim();
 
-                            let startWithLowerCase = isLowerCase(paragraph[0])
+                            let startWithLowerCase = isLowerCase(paragraph[0]);
 
                             let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
 
@@ -543,12 +543,12 @@ module.exports = {
                     let offence = false;
 
                     let rawStr = convertAnyToString(raw, "raw").trim();
-                    let lineBreakIndex = rawStr.indexOf('\n')
+                    let lineBreakIndex = rawStr.indexOf('\n');
                     
                     if (lineBreakIndex >= 0){
                         // Extracting bodyStr from rawStr rather than using body directly is a 
                         // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
-                        let bodyStr = rawStr.substring(lineBreakIndex)
+                        let bodyStr = rawStr.substring(lineBreakIndex);
                         bodyStr = removeAllCodeBlocks(bodyStr);
                         offence = includesHashtagRef(bodyStr);
                     }
