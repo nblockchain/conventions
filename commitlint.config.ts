@@ -188,6 +188,10 @@ let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
 
 function isValidUrl(url: string) {
+    if (url.indexOf(" ") > 0) {
+        return false;
+    }
+
     // Borrowed from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
     try { 
         return Boolean(new URL(url)); 
@@ -242,11 +246,6 @@ function isLowerCase(letter: string) {
     let isLowerCase = letter.toLowerCase() == letter;
 
     return (isLowerCase && !isUpperCase);
-}
-
-function mightBeUrl(line: string) {
-    assertLine(line);
-    return line.indexOf(" ") < 0;
 }
 
 function isFooterReference(line: string) {
@@ -666,7 +665,7 @@ module.exports = {
                             if (line.length > bodyMaxLineLength) {
 
                                 // it's a URL
-                                let isUrl = mightBeUrl(line);
+                                let isUrl = isValidUrl(line);
 
                                 let lineIsFooterNote = isFooterNote(line);
 
