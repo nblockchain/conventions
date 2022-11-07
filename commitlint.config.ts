@@ -373,12 +373,12 @@ module.exports = {
                             let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
 
                             if (startWithLowerCase || !endsWithDotOrColon){
-                                let line = paragraph.split(/\r?\n/)[0];
+                                let firstLine = paragraph.split(/\r?\n/)[0];
                                 
                                 // it's a URL
-                                let isUrl = mightBeUrl(line);
+                                let isUrl = mightBeUrl(firstLine);
 
-                                let lineIsFooterNote = isFooterNote(line);
+                                let lineIsFooterNote = isFooterNote(firstLine);
 
                                 if ((!isUrl) && (!lineIsFooterNote)) {
                                     offence = true;
