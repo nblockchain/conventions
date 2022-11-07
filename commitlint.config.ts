@@ -361,12 +361,9 @@ module.exports = {
 
                         for (let paragraph of bodyStr.trim().split('\n\n')){
 
-                            // It's a paragraph that only consists of a block
-                            if (/^```[^]*```$/.test(paragraph.trim())){
-                                continue;
-                            }
-
                             paragraph = removeAllCodeBlocks(paragraph).trim();
+                            if (paragraph.length == 0)
+                                continue;
 
                             let startWithLowerCase = isLowerCase(paragraph[0]);
 
