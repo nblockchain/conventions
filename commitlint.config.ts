@@ -340,12 +340,17 @@ module.exports = {
 
         {
             rules: {
-                'body-prose': ({body}: {body:any}) => {
+                'body-prose': ({raw}: {raw:any}) => {
                     let offence = false;
 
-                    // does msg have a body?
-                    if (body !== null) {
-                        let bodyStr = convertAnyToString(body, "body");
+                    let rawStr = convertAnyToString(raw, "raw").trim();
+                    let lineBreakIndex = rawStr.indexOf('\n')
+                    
+                    if (lineBreakIndex >= 0){
+                        // Extracting bodyStr from rawStr rather than using body directly is a 
+                        // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
+                        let bodyStr = rawStr.substring(lineBreakIndex)
+
                         console.log("bodyStr:" + bodyStr)
                         for (let paragraph of bodyStr.trim().split('\n\n')){
 
@@ -398,7 +403,7 @@ module.exports = {
 
                 'commit-hash-alone': ({raw}: {raw:any}) => {
                     let rawStr = convertAnyToString(raw, "raw");
-                    console.log('rawStr:' + raw + 'EndOfRawStr')
+                    console.log('rawStr:' + rawStr + 'EndOfRawStr')
                     let offence = false;
 
                     let urls = findUrls(rawStr)
