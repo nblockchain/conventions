@@ -289,11 +289,6 @@ function removeAllCodeBlocks(text: string) {
     return text.replace(/```[^]*```/g, '');
 }
 
-function removeAllCommitReferences(text: string) {
-    // removes commit references in this format: "username/repo@1d23456 or repo@1d23456"
-    return text.replace(/\b[^\s]+@[^\s]+\b/g, '');
-}
-
 function findUrls(text: string) {
     var urlRegex = /(https?:\/\/[^\s]+)/g;
     return text.match(urlRegex);
@@ -361,7 +356,6 @@ module.exports = {
                             }
                             console.log("HERE2" + paragraph +"HERE3")
                             paragraph = removeAllCodeBlocks(paragraph).trim();
-                            paragraph = removeAllCommitReferences(paragraph).trim();
 
                             let startWithLowerCase = isLowerCase(paragraph[0])
 
