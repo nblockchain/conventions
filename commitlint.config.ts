@@ -188,6 +188,10 @@ let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
 
 function isValidUrl(url: string) {
+    if (url.indexOf(" ") > 0) {
+        return false;
+    }
+
     // Borrowed from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
     try { 
         return Boolean(new URL(url)); 
@@ -244,11 +248,6 @@ function isLowerCase(letter: string) {
     return (isLowerCase && !isUpperCase);
 }
 
-function mightBeUrl(line: string) {
-    assertLine(line);
-    return line.indexOf(" ") < 0;
-}
-
 function isFooterReference(line: string) {
     assertLine(line);
     return (line[0] === "[" && line.indexOf("] ") > 0);
@@ -287,11 +286,6 @@ function includesHashtagRef(text: string) {
 
 function removeAllCodeBlocks(text: string) {
     return text.replace(/```[^]*```/g, '');
-}
-
-function removeAllCommitReferences(text: string) {
-    // removes commit references in this format: "username/repo@1d23456 or repo@1d23456"
-    return text.replace(/\b[^\s]+@[^\s]+\b/g, '');
 }
 
 function findUrls(text: string) {
@@ -346,12 +340,16 @@ module.exports = {
 
         {
             rules: {
-                'body-prose': ({body}: {body:any}) => {
+                'body-prose': ({raw}: {raw:any}) => {
                     let offence = false;
 
-                    // does msg have a body?
-                    if (body !== null) {
-                        let bodyStr = convertAnyToString(body, "body");
+                    let rawStr = convertAnyToString(raw, "raw").trim();
+                    let lineBreakIndex = rawStr.indexOf('\n')
+                    
+                    if (lineBreakIndex >= 0){
+                        // Extracting bodyStr from rawStr rather than using body directly is a 
+                        // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
+                        let bodyStr = rawStr.substring(lineBreakIndex)
 
                         for (let paragraph of bodyStr.trim().split('\n\n')){
 
@@ -359,25 +357,24 @@ module.exports = {
                             if (/^```[^]*```$/.test(paragraph.trim())){
                                 continue;
                             }
-
                             paragraph = removeAllCodeBlocks(paragraph).trim();
-                            paragraph = removeAllCommitReferences(paragraph).trim();
 
                             let startWithLowerCase = isLowerCase(paragraph[0])
 
                             let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
 
-                            if (startWithLowerCase || !endsWithDotOrColon){
-                                let line = paragraph.split(/\r?\n/)[0];
-                                
-                                // it's a URL
-                                let isUrl = mightBeUrl(line);
+                            let lines = paragraph.split(/\r?\n/)
+                            
+                            if (startWithLowerCase && 
+                                !isValidUrl(lines[0])) {
+                                offence = true;
+                            }
 
-                                let lineIsFooterNote = isFooterNote(line);
+                            if (!endsWithDotOrColon && 
+                                !isValidUrl(lines[lines.length - 1]) && 
+                                !isFooterNote(lines[lines.length - 1])) {
 
-                                if ((!isUrl) && (!lineIsFooterNote)) {
-                                    offence = true;
-                                }
+                                offence = true;
                             }
                         }
                                         
@@ -658,7 +655,7 @@ module.exports = {
                             if (line.length > bodyMaxLineLength) {
 
                                 // it's a URL
-                                let isUrl = mightBeUrl(line);
+                                let isUrl = isValidUrl(line);
 
                                 let lineIsFooterNote = isFooterNote(line);
 
