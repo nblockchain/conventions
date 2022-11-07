@@ -367,18 +367,34 @@ module.exports = {
 
                             let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
 
-                            if (startWithLowerCase || !endsWithDotOrColon){
-                                let line = paragraph.split(/\r?\n/)[0];
+                            let lines = paragraph.split(/\r?\n/)
+                            
+                            if (startWithLowerCase && 
+                                !isValidUrl(lines[0]) && 
+                                !isFooterNote(lines[0])){
                                 
-                                // it's a URL
-                                let isUrl = mightBeUrl(line);
-
-                                let lineIsFooterNote = isFooterNote(line);
-
-                                if ((!isUrl) && (!lineIsFooterNote)) {
-                                    offence = true;
-                                }
+                                offence = true;
                             }
+
+                            if (!endsWithDotOrColon && 
+                                !isValidUrl(lines[lines.length - 1]) && 
+                                !isFooterNote(lines[lines.length - 1])) {
+
+                                offence = true;
+                            }
+
+                            // if (startWithLowerCase || !endsWithDotOrColon){
+                            //     let line = lines[0];
+                                
+                            //     // it's a URL
+                            //     let isUrl = mightBeUrl(line);
+
+                            //     let lineIsFooterNote = isFooterNote(line);
+
+                            //     if ((!isUrl) && (!lineIsFooterNote)) {
+                            //         offence = true;
+                            //     }
+                            // }
                         }
                                         
                     }
