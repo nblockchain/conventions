@@ -3,7 +3,20 @@ name: Run unit tests & check conventions
 on: [push, pull_request]
 
 jobs:
-  tests:
+  file-conventions:
+    runs-on: ubuntu-22.04
+    container:
+      image: "ubuntu:22.04"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install required dependencies
+        run: |
+          apt update && apt install -y sudo
+          sudo apt install -y dotnet6
+      - name: Run tests to validate F# scripts
+        run: dotnet test --no-restore --verbosity normal
+
+  commitlint-plugins:
     runs-on: ubuntu-22.04
     container:
       image: "ubuntu:22.04"
