@@ -1,5 +1,9 @@
-﻿namespace fileConventions
+﻿module fileConventions
+open System.IO
+open System
 
-module Say =
-    let hello name =
-        printfn "Hello %s" name
+let HasShebang (fileInfo: FileInfo) =
+    true
+    // use streamReader = new StreamReader (fileInfo.FullName)
+    // let fileText = streamReader.ReadToEnd()
+    // fileText.[..2] = "#!"
