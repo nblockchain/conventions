@@ -14,7 +14,7 @@ jobs:
           apt update && apt install -y sudo
           sudo apt install -y dotnet6
       - name: Run tests to validate F# scripts
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test --no-restore --verbosity normal fileConventions.test.fsproj 
 
   commitlint-plugins:
     runs-on: ubuntu-22.04
