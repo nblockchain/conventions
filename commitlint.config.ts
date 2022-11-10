@@ -358,6 +358,7 @@ module.exports = {
         'title-uppercase': [RuleStatus.Error, 'always'],
         'proper-revert-message': [RuleStatus.Error, 'always'],
     },
+    defaultIgnores: false,
     plugins: [
         // TODO (ideas for more rules):
         // * Detect if paragraphs in body have been cropped too shortly (less than 64 chars), and suggest same auto-wrap command that body-soft-max-line-length suggests, since it unwraps and wraps (both).
