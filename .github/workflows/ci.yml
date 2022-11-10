@@ -85,3 +85,5 @@ jobs:
         run: sudo apt install -y dotnet6
       - name: Run script to make sure all files end with EOL 
         run: dotnet fsi eofConvention.fsx
+      - name: Run script to find files without shebang
+        run: dotnet fsi shebangConvention.fsx
