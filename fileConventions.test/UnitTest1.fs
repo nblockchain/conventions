@@ -10,6 +10,12 @@ let Setup () =
     ()
 
 [<Test>]
-let Test1 () =
-    let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}Dummy.fsx")
+let HasShebangTest1 () =
+    let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyWithoutShebang.fsx")
     Assert.IsFalse(HasShebang(fileInfo))
+
+
+[<Test>]
+let HasShebangTest2 () =
+    let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyWithShebang.fsx")
+    Assert.IsTrue(HasShebang(fileInfo))
