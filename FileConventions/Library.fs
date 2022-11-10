@@ -3,7 +3,6 @@ open System.IO
 open System
 
 let HasShebang (fileInfo: FileInfo) =
-    use streamReader = new StreamReader (fileInfo.FullName)
-    let fileText = streamReader.ReadToEnd()
+    let fileText = File.ReadAllText(fileInfo.FullName)
     fileText.StartsWith("#!")
 
