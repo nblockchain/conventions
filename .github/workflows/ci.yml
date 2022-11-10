@@ -21,7 +21,9 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: compile the FileConventions project
-        run: dotnet build
+        run: |
+          dotnet build FileConventions.Test/FileConventions.Test.fsproj
+          dotnet build FileConventions/FileConventions.fsproj
       - name: Run tests to validate F# scripts
         run: dotnet test FileConventions.Test/FileConventions.Test.fsproj
 
