@@ -9,12 +9,19 @@ jobs:
       image: "ubuntu:22.04"
     steps:
       - uses: actions/checkout@v2
-      - name: Install required dependencies
+      - name: Install reqquired dependencies
         run: |
-          apt update && apt install -y sudo
-          sudo apt install -y dotnet6
+          apt update
+          apt install -y sudo
+          sudo apt install -y curl
+          sudo apt-get install -y libicu-dev
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
       - name: Run tests to validate F# scripts
-        run: dotnet test --no-restore --verbosity normal fileConventions.test/fileConventions.test.fsproj
+        run: dotnet test fileConventions.test/fileConventions.test.fsproj
 
   commitlint-plugins:
     runs-on: ubuntu-22.04
