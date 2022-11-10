@@ -23,7 +23,7 @@ jobs:
       - name: compile the FileConventions project
         run: dotnet build
       - name: Run tests to validate F# scripts
-        run: dotnet test fileConventions.test/fileConventions.test.fsproj
+        run: dotnet test FileConventions.Test/FileConventions.Test.fsproj
 
   commitlint-plugins:
     runs-on: ubuntu-22.04

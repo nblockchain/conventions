@@ -1,4 +1,4 @@
-﻿module fileConventions
+﻿module FileConventions
 open System.IO
 open System
 

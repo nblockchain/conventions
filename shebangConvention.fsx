@@ -2,7 +2,7 @@
 
 open System
 open System.IO
-#load "fileConventions/Library.fs"
+#load "FileConventions/Library.fs"
 
 let NotInDir (dirName: string) (fileInfo: FileInfo) =
     not (fileInfo.FullName.Contains $"%c{Path.DirectorySeparatorChar}%s{dirName}%c{Path.DirectorySeparatorChar}")
@@ -13,7 +13,7 @@ let invalidFiles =
     |> Seq.filter (NotInDir "node_modules")
     |> Seq.filter (NotInDir ".git")
     |> Seq.filter (fun fileInfo -> not (fileInfo.Name = "DummyWithoutShebang.fsx"))
-    |> Seq.filter (fun fileInfo -> not (fileConventions.HasShebang fileInfo))
+    |> Seq.filter (fun fileInfo -> not (FileConventions.HasShebang fileInfo))
 
 if Seq.length invalidFiles > 0 then
     let message = 

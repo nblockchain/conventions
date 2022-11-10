@@ -1,7 +1,7 @@
-module fileConventions.test
+module FileConventions.Test
 open System
 open System.IO
-open fileConventions
+open FileConventions
 open NUnit.Framework
 open NUnit.Framework.Constraints
 

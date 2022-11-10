@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\fileConventions\fileConventions.fsproj" />
+    <ProjectReference Include="..\FileConventions\FileConventions.fsproj" />
   </ItemGroup>
 
 </Project>
