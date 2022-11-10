@@ -1,3 +1,5 @@
+#!/usr/bin/env fsx
+
 open System.IO
 open System
 
