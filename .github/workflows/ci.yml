@@ -21,9 +21,9 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: compile the FileConventions project
-        run: dotnet build FileConventions.Test/FileConventions.Test.fsproj
+        run: dotnet build src/FileConventions.Test/FileConventions.Test.fsproj
       - name: Run tests to validate F# scripts
-        run: dotnet test FileConventions.Test/FileConventions.Test.fsproj
+        run: dotnet test src/FileConventions.Test/FileConventions.Test.fsproj
 
   commitlint-plugins:
     runs-on: ubuntu-22.04

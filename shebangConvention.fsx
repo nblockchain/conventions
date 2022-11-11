@@ -2,7 +2,7 @@
 
 open System
 open System.IO
-#load "FileConventions/Library.fs"
+#load "src/FileConventions/Library.fs"
 
 let NotInDir (dirName: string) (fileInfo: FileInfo) =
     not (fileInfo.FullName.Contains $"%c{Path.DirectorySeparatorChar}%s{dirName}%c{Path.DirectorySeparatorChar}")
