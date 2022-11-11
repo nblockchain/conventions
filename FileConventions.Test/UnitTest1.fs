@@ -20,3 +20,9 @@ let HasShebangTest1 () =
 let HasShebangTest2 () =
     let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyWithShebang.fsx")
     Assert.IsTrue(HasShebang(fileInfo))
+
+
+[<Test>]
+let HasShebangTest3 () =
+    let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyWithWrongShebang.fsx")
+    Assert.IsFalse(HasShebang(fileInfo))
