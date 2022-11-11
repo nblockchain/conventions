@@ -11,18 +11,18 @@ let Setup () =
     ()
 
 [<Test>]
-let HasShebangTest1 () =
+let HasCorrectShebangTest1 () =
     let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyWithoutShebang.fsx")
-    Assert.IsFalse(HasShebang(fileInfo))
+    Assert.IsFalse(HasCorrectShebang(fileInfo))
 
 
 [<Test>]
-let HasShebangTest2 () =
+let HasCorrectShebangTest2 () =
     let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyWithShebang.fsx")
-    Assert.IsTrue(HasShebang(fileInfo))
+    Assert.IsTrue(HasCorrectShebang(fileInfo))
 
 
 [<Test>]
-let HasShebangTest3 () =
+let HasCorrectShebangTest3 () =
     let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyWithWrongShebang.fsx")
-    Assert.IsFalse(HasShebang(fileInfo))
+    Assert.IsFalse(HasCorrectShebang(fileInfo))

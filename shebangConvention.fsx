@@ -16,7 +16,7 @@ let invalidFiles =
     |> Seq.filter (NotInDir "obj")
     |> Seq.filter (fun fileInfo -> not (fileInfo.Name = "DummyWithoutShebang.fsx"))
     |> Seq.filter (fun fileInfo -> not (fileInfo.Name = "DummyWithWrongShebang.fsx"))
-    |> Seq.filter (fun fileInfo -> not (FileConventions.HasShebang fileInfo))
+    |> Seq.filter (fun fileInfo -> not (FileConventions.HasCorrectShebang fileInfo))
 
 if Seq.length invalidFiles > 0 then
     let message = 
