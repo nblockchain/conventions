@@ -12,6 +12,8 @@ let invalidFiles =
     |> Seq.map (fun pathStr -> FileInfo pathStr)
     |> Seq.filter (NotInDir "node_modules")
     |> Seq.filter (NotInDir ".git")
+    |> Seq.filter (NotInDir "bin")
+    |> Seq.filter (NotInDir "obj")
     |> Seq.filter (fun fileInfo -> not (fileInfo.Name = "DummyWithoutShebang.fsx"))
     |> Seq.filter (fun fileInfo -> not (FileConventions.HasShebang fileInfo))
 
