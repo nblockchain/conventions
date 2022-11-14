@@ -570,7 +570,7 @@ module.exports = {
                     if (lineBreakIndex >= 0){
                         // Extracting bodyStr from rawStr rather than using body directly is a 
                         // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
-                        let bodyStr = rawStr.substring(lineBreakIndex)
+                        let bodyStr = rawStr.substring(lineBreakIndex).trim()
                         let lines = bodyStr.split('\n');
                         console.log('lines:' + lines)
                         if (lines.length == 1) {
