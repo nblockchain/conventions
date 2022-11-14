@@ -29,6 +29,12 @@ let HasCorrectShebangTest3 () =
 
 
 [<Test>]
+let HasCorrectShebangTest4() =
+    let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyEmpty.fsx")
+    Assert.IsFalse(HasCorrectShebang(fileInfo))
+
+
+[<Test>]
 let IsExecutable () =
     let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyExecutable.fsx")
     Assert.Fail()
