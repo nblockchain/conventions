@@ -563,20 +563,21 @@ module.exports = {
     
                 'proper-revert-message': ({raw}: {raw:any}) => {
                     let offence = false;
-
-                    // does msg have a body?
-                    if (raw !== null) {
-                        let bodyStr = convertAnyToString(raw, "raw").trim();
+                    
+                    let rawStr = convertAnyToString(raw, "raw").trim();
+                    let lineBreakIndex = rawStr.indexOf('\n')
+                    
+                    if (lineBreakIndex >= 0){
+                        // Extracting bodyStr from rawStr rather than using body directly is a 
+                        // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
+                        let bodyStr = rawStr.substring(lineBreakIndex).trim()
                         let lines = bodyStr.split('\n');
-
+                        console.log('lines:' + lines)
                         if (lines.length == 1) {
                             if (lines[0].match('This reverts commit ') !== null) {
                                 offence = true;
                             }
                         }
-                 
-                    } else {
-                        offence = true;
                     }
 
                     return [
