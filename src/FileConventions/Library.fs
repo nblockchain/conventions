@@ -3,6 +3,9 @@
 open System.Linq
 open System.IO
 open System
+open Mono.Posix
+open Mono.Unix
+open Mono.Unix.Native
 
 let HasCorrectShebang (fileInfo: FileInfo) =
     let fileText = File.ReadLines(fileInfo.FullName)
@@ -14,4 +17,9 @@ let HasCorrectShebang (fileInfo: FileInfo) =
         )
     else
         false
+
+
+let IsExecutable (fileInfo: FileInfo) =
+    let hasExecuteAccess = Syscall.access(fileInfo.FullName, AccessModes.X_OK)
+    hasExecuteAccess
 
