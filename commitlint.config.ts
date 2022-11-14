@@ -573,7 +573,7 @@ module.exports = {
                         let bodyStr = rawStr.substring(lineBreakIndex)
                         bodyStr = convertAnyToString(raw, "raw").trim();
                         let lines = bodyStr.split('\n');
-
+                        console.log('lines:' + lines)
                         if (lines.length == 1) {
                             if (lines[0].match('This reverts commit ') !== null) {
                                 offence = true;
