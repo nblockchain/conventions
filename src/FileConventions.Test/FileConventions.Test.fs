@@ -12,29 +12,29 @@ let Setup () =
 
 [<Test>]
 let HasCorrectShebangTest1 () =
-    let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyFiles{Path.DirectorySeparatorChar}DummyWithoutShebang.fsx")
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "DummyWithoutShebang.fsx")))
     Assert.IsFalse(HasCorrectShebang(fileInfo))
 
 
 [<Test>]
 let HasCorrectShebangTest2 () =
-    let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyFiles{Path.DirectorySeparatorChar}DummyWithShebang.fsx")
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "DummyWithShebang.fsx")))
     Assert.IsTrue(HasCorrectShebang(fileInfo))
 
 
 [<Test>]
 let HasCorrectShebangTest3 () =
-    let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyFiles{Path.DirectorySeparatorChar}DummyWithWrongShebang.fsx")
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "DummyWithWrongShebang.fsx")))
     Assert.IsFalse(HasCorrectShebang(fileInfo))
 
 
 [<Test>]
 let HasCorrectShebangTest4() =
-    let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyFiles{Path.DirectorySeparatorChar}DummyEmpty.fsx")
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "DummyEmpty.fsx")))
     Assert.IsFalse(HasCorrectShebang(fileInfo))
 
 
 [<Test>]
-let IsExecutable () =
-    let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyFiles{Path.DirectorySeparatorChar}DummyExecutable.fsx")
+let IsExecutableTest1 () =
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "DummyExecutable.fsx")))
     Assert.IsTrue(IsExecutable(fileInfo))
