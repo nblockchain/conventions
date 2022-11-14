@@ -572,7 +572,6 @@ module.exports = {
                         // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
                         let bodyStr = rawStr.substring(lineBreakIndex).trim()
                         let lines = bodyStr.split('\n');
-                        console.log('lines:' + lines)
                         if (lines.length == 1) {
                             if (lines[0].match('This reverts commit ') !== null) {
                                 offence = true;

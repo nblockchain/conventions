@@ -348,7 +348,6 @@ test('proper-issue-refs3', () => {
     let commitMsgWithHashtagRefInBlock =
         "foo: this is only a title" + "\n\n" + "Bar baz:\n\n```\ntype Foo = string #123\n```";
     let properIssueRefs3 = runCommitLintOnMsg(commitMsgWithHashtagRefInBlock);
-    console.log('HERE =======>' + properIssueRefs3.stdout)
     expect(properIssueRefs3.status).toBe(0);
 });
 
@@ -358,7 +357,6 @@ test('proper-revert-message1', () => {
         'Revert "add abbreviations.ts"\n\n' + 
         'This reverts commit 0272f587c7eece147e8d1756116b0b43e11c34ac.';
     let properRevertMessage1 = runCommitLintOnMsg(commitMsgWithoutProperRevertMessage);
-    console.log('======>'+properRevertMessage1.stdout)
     expect(properRevertMessage1.status).not.toBe(0);
 });
 
@@ -366,9 +364,9 @@ test('proper-revert-message1', () => {
 test('proper-revert-message2', () => {
     let commitMsgWithProperRevertMessage = 
         'Revert 9bb557e54830690b8a8e403d1b74780d86b07b4c\n\n' + 
-        'We need to revert this commit, otherwise bla bla.'
+        'We need to revert this commit, because/otherwise bla bla.'
     let properRevertMessage2 = runCommitLintOnMsg(commitMsgWithProperRevertMessage);
-    expect(properRevertMessage2.status).not.toBe(0);
+    expect(properRevertMessage2.status).toBe(0);
 });
 
 
