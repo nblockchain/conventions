@@ -38,4 +38,4 @@ let HasCorrectShebangTest4() =
 let IsExecutable () =
     let fileInfo = (FileInfo $"{__SOURCE_DIRECTORY__}{Path.DirectorySeparatorChar}DummyFiles{Path.DirectorySeparatorChar}DummyExecutable.fsx")
     printfn "Log: %A" (IsExecutable(fileInfo))
-    Assert.Fail()
+    Assert.IsTrue(IsExecutable(fileInfo))
