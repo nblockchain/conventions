@@ -368,7 +368,7 @@ test('proper-revert-message2', () => {
         'Revert 9bb557e54830690b8a8e403d1b74780d86b07b4c\n\n' + 
         'We need to revert this commit, because/otherwise bla bla.'
     let properRevertMessage2 = runCommitLintOnMsg(commitMsgWithProperRevertMessage);
-    expect(properRevertMessage2.status).not.toBe(0);
+    expect(properRevertMessage2.status).toBe(0);
 });
 
 
