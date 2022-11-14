@@ -358,7 +358,6 @@ test('proper-revert-message1', () => {
         'Revert "add abbreviations.ts"\n\n' + 
         'This reverts commit 0272f587c7eece147e8d1756116b0b43e11c34ac.';
     let properRevertMessage1 = runCommitLintOnMsg(commitMsgWithoutProperRevertMessage);
-    console.log('======>'+properRevertMessage1.stdout)
     expect(properRevertMessage1.status).not.toBe(0);
 });
 
