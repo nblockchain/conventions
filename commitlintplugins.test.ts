@@ -431,6 +431,16 @@ test('proper-revert-message1', () => {
 });
 
 
+test('proper-revert-message2', () => {
+    let commitMsgWithProperRevertMessage = 
+        'Revert "add abbreviations.ts"\n\n' + 
+        'This reverts commit 0272f587c7eece147e8d1756116b0b43e11c34ac\n' +
+        'because/otherwise bla bla.'
+    let properRevertMessage2 = runCommitLintOnMsg(commitMsgWithProperRevertMessage);
+    expect(properRevertMessage2.status).toBe(0);
+});
+
+
 test('subject-lowercase1', () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(commitMsgWithUppercaseAfterColon);
