@@ -563,12 +563,12 @@ module.exports = {
     
                 'proper-revert-message': ({raw}: {raw:any}) => {
                     let offence = false;
-                    console.log('revert raw: ' + raw)
+
                     // does msg have a body?
                     if (raw !== null) {
                         let bodyStr = convertAnyToString(raw, "raw").trim();
                         let lines = bodyStr.split('\n');
-                        console.log(lines)
+
                         if (lines.length == 1) {
                             if (lines[0].match('This reverts commit ') !== null) {
                                 offence = true;
