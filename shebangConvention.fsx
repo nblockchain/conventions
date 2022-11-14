@@ -2,6 +2,7 @@
 
 open System
 open System.IO
+
 #r "nuget: Mono.Unix, 7.1.0-final.1.21458.1"
 #load "src/FileConventions/Library.fs"
 
@@ -17,6 +18,7 @@ let invalidFiles =
     |> Seq.filter (NotInDir "obj")
     |> Seq.filter (NotInDir "DummyFiles")
     |> Seq.filter (fun fileInfo -> not (FileConventions.HasCorrectShebang fileInfo))
+    |> Seq.filter (fun fileInfo -> not (FileConventions.IsExecutable fileInfo))
 
 if Seq.length invalidFiles > 0 then
     let message = 
