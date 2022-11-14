@@ -658,7 +658,6 @@ module.exports = {
                             }
                             if (line.length > bodyMaxLineLength) {
 
-                                // it's a URL
                                 let isUrl = isValidUrl(line);
 
                                 let lineIsFooterNote = isFooterNote(line);
