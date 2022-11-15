@@ -17,9 +17,7 @@ jobs:
           sudo apt-get install -y libicu-dev
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 6.0.x
+        run: apt install -y dotnet6
       - name: compile the FileConventions project
         run: dotnet build src/FileConventions.Test/FileConventions.Test.fsproj
       - name: Run tests to validate F# scripts
