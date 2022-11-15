@@ -609,7 +609,7 @@ module.exports = {
                     let offence = false;
 
                     // does msg have a body?
-                    if (header.match(/[Rr]evert/) !== null) {
+                    if (header.match(/^[Rr]evert/) !== null) {
                         if (body !== null) {
                             let bodyStr = convertAnyToString(body, "body").trim();
                             let lines = bodyStr.split('\n');
