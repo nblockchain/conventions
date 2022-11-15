@@ -363,8 +363,9 @@ test('proper-revert-message1', () => {
 
 test('proper-revert-message2', () => {
     let commitMsgWithProperRevertMessage = 
-        'Revert 9bb557e54830690b8a8e403d1b74780d86b07b4c\n\n' + 
-        'We need to revert this commit, because/otherwise bla bla.'
+        'Revert "add abbreviations.ts"\n\n' + 
+        'This reverts commit 0272f587c7eece147e8d1756116b0b43e11c34ac,' +
+        'because/otherwise bla bla.'
     let properRevertMessage2 = runCommitLintOnMsg(commitMsgWithProperRevertMessage);
     expect(properRevertMessage2.status).toBe(0);
 });
