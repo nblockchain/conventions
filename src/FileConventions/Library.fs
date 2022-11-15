@@ -1,10 +1,9 @@
 ﻿module FileConventions
 
-open System.Linq
-open System.IO
 open System
-open Mono.Posix
-open Mono.Unix
+open System.IO
+open System.Linq
+
 open Mono.Unix.Native
 
 let HasCorrectShebang (fileInfo: FileInfo) =
