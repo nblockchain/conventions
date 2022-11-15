@@ -22,7 +22,7 @@ let invalidFiles =
 
 if Seq.length invalidFiles > 0 then
     let message = 
-        "The following files don't have shebang:" + 
+        "The following files don't have the correct shebang:" + 
         Environment.NewLine + 
         (invalidFiles 
         |> Seq.map (fun fileInfo -> fileInfo.FullName)
