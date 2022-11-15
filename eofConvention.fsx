@@ -1,4 +1,4 @@
-#!/usr/bin/env dotnet fsi
+#!/usr/bin/env -S dotnet fsi
 
 open System.IO
 open System
