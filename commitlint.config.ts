@@ -605,13 +605,19 @@ module.exports = {
                     ];
                 },
     
-                'proper-revert-message': ({body}: {body:any}) => {
+                'proper-revert-message': ({header, body}: {header: any, body: any}) => {
                     let offence = false;
+
                     // does msg have a body?
-                    if (body !== null) {
-                        let bodyStr = convertAnyToString(body, "body").trim();
-                        let lines = bodyStr.split('\n');
-                        offence = lines[0].match('This reverts commit ') !== null && lines.length == 1;
+                    if (header.match(/[Rr]evert/) !== null) {
+                        if (body !== null) {
+                            let bodyStr = convertAnyToString(body, "body").trim();
+                            let lines = bodyStr.split('\n');
+                            offence = lines[0].match('This reverts commit ') !== null && lines.length == 1;
+                        }
+                        else {
+                            offence = true;
+                        }
                     }
 
                     return [
