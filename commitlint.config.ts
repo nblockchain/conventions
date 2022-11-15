@@ -610,15 +610,7 @@ module.exports = {
                     if (body !== null) {
                         let bodyStr = convertAnyToString(body, "body").trim();
                         let lines = bodyStr.split('\n');
-                        console.log(lines)
-                        if (lines.length == 1) {
-                            if (lines[0].match('This reverts commit ') !== null) {
-                                offence = true;
-                            }
-                        }
-                 
-                    } else {
-                        offence = true;
+                        offence = lines[0].match('This reverts commit ') !== null && lines.length == 1;
                     }
 
                     return [
