@@ -608,8 +608,9 @@ module.exports = {
                 'proper-revert-message': ({header, body}: {header: any, body: any}) => {
                     let offence = false;
 
-                    // does msg have a body?
                     if (header.match(/^[Rr]evert/) !== null) {
+
+                        // does msg have a body?
                         if (body !== null) {
                             let bodyStr = convertAnyToString(body, "body").trim();
                             let lines = bodyStr.split('\n');
