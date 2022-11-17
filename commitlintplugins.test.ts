@@ -442,9 +442,16 @@ test('proper-revert-message2', () => {
 
 
 test('proper-revert-message3', () => {
-    let commitMsgWithProperRevertMessage = 'Revert "add abbreviations.ts"';
-    let properRevertMessage3 = runCommitLintOnMsg(commitMsgWithProperRevertMessage);
+    let commitMsgWithoutProperRevertMessage = 'Revert "add abbreviations.ts"';
+    let properRevertMessage3 = runCommitLintOnMsg(commitMsgWithoutProperRevertMessage);
     expect(properRevertMessage3.status).not.toBe(0);
+});
+
+
+test('proper-revert-message4', () => {
+    let commitMsgWithProperRevertMessage = 'Revert .NET6 upd as it broke CI';
+    let properRevertMessage4 = runCommitLintOnMsg(commitMsgWithProperRevertMessage);
+    expect(properRevertMessage4.status).toBe(0);
 });
 
 
