@@ -10,20 +10,22 @@ let EolAtEof(fileInfo: FileInfo) =
     else
         true
 
-let NotInDir (dirName: string) (fileInfo: FileInfo) =
-    not (fileInfo.FullName.Contains $"%c{Path.DirectorySeparatorChar}%s{dirName}%c{Path.DirectorySeparatorChar}")
+let InDir (dirName: string) (fileInfo: FileInfo) = 
+    fileInfo.FullName.Contains $"%c{Path.DirectorySeparatorChar}%s{dirName}%c{Path.DirectorySeparatorChar}"
 
-let whitelist = [".svg"; ".png"; ".slnf"; ".so"; ".a"; ".dll"; ".pdb"]
+let NotInDirs (dirNames: List<string>) (fileInfo: FileInfo) =
+    not (dirNames 
+        |> Seq.map (fun dirName -> InDir dirName fileInfo)
+        |> Seq.contains true)
+
+let whitelistExtensions = [".svg"; ".png"; ".slnf"; ".so"; ".a"; ".dll"; ".pdb"; ".dylib"]
+let whitelistFolders = ["node_modules"; ".git"; "Debug"; "obj"; "bin"]
 
 let invalidFiles = 
     Directory.GetFiles(".", "*.*", SearchOption.AllDirectories) 
     |> Seq.map (fun pathStr -> FileInfo pathStr)
-    |> Seq.filter (NotInDir "node_modules")
-    |> Seq.filter (NotInDir ".git")
-    |> Seq.filter (NotInDir "Debug")
-    |> Seq.filter (NotInDir "obj")
-    |> Seq.filter (NotInDir "bin")
-    |> Seq.filter (fun fileInfo -> not (List.contains fileInfo.Extension whitelist))
+    |> Seq.filter (NotInDirs whitelistFolders)
+    |> Seq.filter (fun fileInfo -> not (List.contains fileInfo.Extension whitelistExtensions))
     |> Seq.filter (fun fileInfo -> not (EolAtEof fileInfo))
 
 if Seq.length invalidFiles > 0 then
