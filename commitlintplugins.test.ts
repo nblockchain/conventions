@@ -465,6 +465,15 @@ test('proper-revert-message5', () => {
 });
 
 
+test('proper-revert-message6', () => {
+    let commitMsgWithProperRevertMessage = 
+        'Revert "process overhaul" to fix CI\n\n';
+
+    let properRevertMessage6 = runCommitLintOnMsg(commitMsgWithProperRevertMessage);
+    expect(properRevertMessage6.status).toBe(0);
+});
+
+
 test('subject-lowercase1', () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(commitMsgWithUppercaseAfterColon);
