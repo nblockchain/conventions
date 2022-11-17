@@ -614,7 +614,7 @@ module.exports = {
                         if (body !== null) {
                             let bodyStr = convertAnyToString(body, "body").trim();
                             let lines = bodyStr.split('\n');
-                            offence = lines[0].match('This reverts commit ') !== null && lines.length == 1;
+                            offence = lines[0].match(/^This reverts commit [^ ]{40}.$/) !== null && lines.length == 1;
                         }
                         else {
                             offence = true;
