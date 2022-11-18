@@ -13,6 +13,8 @@ jobs:
         run: |
           apt update
           apt install -y sudo
+          # We need to install curl because otherwise CI breaks.
+          # https://github.com/nblockchain/conventions/actions/runs/3487648476/jobs/5835523129
           sudo apt install -y curl
 
       - name: Setup .NET
