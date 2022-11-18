@@ -358,6 +358,8 @@ module.exports = {
         'title-uppercase': [RuleStatus.Error, 'always'],
         'proper-revert-message': [RuleStatus.Error, 'always'],
     },
+    // Commitlint automatically ignores some kinds of commits like Revert commit messages. 
+    // We need to set this value to false to apply our rules on these messages.
     defaultIgnores: false,
     plugins: [
         // TODO (ideas for more rules):
