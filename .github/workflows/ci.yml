@@ -18,7 +18,6 @@ jobs:
           # The SSL connection could not be established, see inner exception. 
           # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot 
           sudo apt install -y curl
-
       - name: Setup .NET
         run: apt install -y dotnet6
       - name: compile the FileConventions project
