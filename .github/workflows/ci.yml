@@ -3,6 +3,29 @@ name: Run unit tests & check conventions
 on: [push, pull_request]
 
 jobs:
+  file-conventions:
+    runs-on: ubuntu-22.04
+    container:
+      image: "ubuntu:22.04"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install required dependencies
+        run: |
+          apt update
+          apt install -y sudo
+          # We need to install curl because otherwise we get these errors in the CI:
+          # Unable to load the service index for source https://api.nuget.org/v3/index.json.
+          # The SSL connection could not be established, see inner exception. 
+          # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot 
+          sudo apt install -y curl
+
+      - name: Setup .NET
+        run: apt install -y dotnet6
+      - name: compile the FileConventions project
+        run: dotnet build src/FileConventions.Test/FileConventions.Test.fsproj
+      - name: Run tests to validate F# scripts
+        run: dotnet test src/FileConventions.Test/FileConventions.Test.fsproj
+        
   tests:
     runs-on: ubuntu-22.04
     container:
@@ -62,6 +85,6 @@ jobs:
       - name: Validate current commit (last commit) with commitlint
         run: npx commitlint --from HEAD~1 --to HEAD --verbose
       - name: Install dotnet sdk
-        run: sudo apt install -y dotnet6
+       run: sudo apt install -y dotnet6
       - name: Run script to make sure all files end with EOL 
-        run: dotnet fsi eofConvention.fsx
+       run: dotnet fsi eofConvention.fsx
