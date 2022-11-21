@@ -67,17 +67,11 @@ let HasBinaryContentTest9 () =
 
 [<Test>]
 let HasBinaryContentTest10 () =
-    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "project.nuget.cache")))
-    Assert.That(HasBinaryContent fileInfo, Is.EqualTo false)
-
-
-[<Test>]
-let HasBinaryContentTest11 () =
     let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "FileConventions.fsproj.nuget.g.targets")))
     Assert.That(HasBinaryContent fileInfo, Is.EqualTo false)
 
 
 [<Test>]
-let HasBinaryContentTest12 () =
+let HasBinaryContentTest11 () =
     let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "FileConventions.fsproj.nuget.g.props")))
     Assert.That(HasBinaryContent fileInfo, Is.EqualTo false)
