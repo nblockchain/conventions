@@ -51,3 +51,27 @@ let HasBinaryContentTest6 () =
 let HasBinaryContentTest7 () =
     let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "white.png")))
     Assert.That(HasBinaryContent fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let HasBinaryContentTest8 () =
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "Program.fs")))
+    Assert.That(HasBinaryContent fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let HasBinaryContentTest9 () =
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "project.assets.json")))
+    Assert.That(HasBinaryContent fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let HasBinaryContentTest10 () =
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "FileConventions.fsproj.nuget.g.targets")))
+    Assert.That(HasBinaryContent fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let HasBinaryContentTest11 () =
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "FileConventions.fsproj.nuget.g.props")))
+    Assert.That(HasBinaryContent fileInfo, Is.EqualTo false)
