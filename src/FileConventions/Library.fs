@@ -2,6 +2,10 @@
 
 open System
 open System.IO
+open System.Linq
 
 let HasBinaryContent (fileInfo: FileInfo) =
-    raise (System.NotImplementedException("You haven't written a test yet!"))
+    let lines = File.ReadLines fileInfo.FullName 
+    lines 
+        |> Seq.map (fun line -> line.Any(fun character -> Char.IsControl(character) && character <> '\r' && character <> '\n'))
+        |> Seq.contains true 

@@ -1,5 +1,6 @@
 module FileConventions.Test
 
+open System
 open System.IO
 
 open NUnit.Framework
