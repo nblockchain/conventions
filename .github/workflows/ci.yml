@@ -13,12 +13,14 @@ jobs:
         run: |
           apt update
           apt install -y sudo
-          # We need to install curl because otherwise CI breaks.
+          # We need to install curl because otherwise CI breaks because
           # https://github.com/nblockchain/conventions/actions/runs/3487648476/jobs/5835523129
-          sudo apt install -y curl
+          # sudo apt install -y curl
 
       - name: Setup .NET
-        run: apt install -y dotnet6
+        run: |
+          apt install -y dotnet6
+          dotnet dev-certs https --trust
       - name: compile the FileConventions project
         run: dotnet build src/FileConventions.Test/FileConventions.Test.fsproj
       - name: Run tests to validate F# scripts
