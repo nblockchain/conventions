@@ -10,4 +10,5 @@ let Setup () =
 
 [<Test>]
 let HasBinaryContentTest1 () =
-    Assert.Pass()
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "FileConventions.Test.pdb")))
+    Assert.That(HasCorrectShebang fileInfo, Is.EqualTo true)
