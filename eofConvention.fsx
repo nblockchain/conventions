@@ -1,6 +1,8 @@
 open System.IO
 open System
 
+#load "src/FileConventions/Library.fs"
+
 let EolAtEof(fileInfo: FileInfo) = 
     use streamReader = new StreamReader (fileInfo.FullName)
     let filetext = streamReader.ReadToEnd()
@@ -18,14 +20,13 @@ let NotInDirs (dirNames: List<string>) (fileInfo: FileInfo) =
         |> Seq.map (fun dirName -> InDir dirName fileInfo)
         |> Seq.contains true)
 
-let whitelistExtensions = [".svg"; ".png"; ".slnf"; ".so"; ".a"; ".dll"; ".pdb"; ".dylib"]
 let whitelistFolders = ["node_modules"; ".git"; "Debug"; "obj"; "bin"; "DummyFiles"]
 
 let invalidFiles = 
     Directory.GetFiles(".", "*.*", SearchOption.AllDirectories) 
     |> Seq.map (fun pathStr -> FileInfo pathStr)
     |> Seq.filter (NotInDirs whitelistFolders)
-    |> Seq.filter (fun fileInfo -> not (List.contains fileInfo.Extension whitelistExtensions))
+    |> Seq.filter (fun fileInfo -> not (FileConventions.HasBinaryContent fileInfo))
     |> Seq.filter (fun fileInfo -> not (EolAtEof fileInfo))
 
 if Seq.length invalidFiles > 0 then
