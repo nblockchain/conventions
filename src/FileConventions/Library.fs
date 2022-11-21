@@ -2,6 +2,9 @@
 
 open System
 open System.IO
+open System.Linq
 
 let HasBinaryContent (fileInfo: FileInfo) =
-    raise (System.NotImplementedException("You haven't written a test yet!"))
+    use streamReader = new StreamReader (fileInfo.FullName)
+    let content = streamReader.ReadToEnd()
+    content.Any(fun ch -> Char.IsControl(ch) && ch <> '\r' && ch <> '\n')
