@@ -13,9 +13,11 @@ jobs:
         run: |
           apt update
           apt install -y sudo
-          # We need to install curl because otherwise CI breaks because
-          # https://github.com/nblockchain/conventions/actions/runs/3487648476/jobs/5835523129
-          # sudo apt install -y curl
+          # We need to install curl otherwise we get these errors in the CI:
+          # Unable to load the service index for source https://api.nuget.org/v3/index.json.
+          # The SSL connection could not be established, see inner exception. 
+          # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot 
+          sudo apt install -y curl
 
       - name: Setup .NET
         run: |
