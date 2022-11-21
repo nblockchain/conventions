@@ -19,7 +19,7 @@ let NotInDirs (dirNames: List<string>) (fileInfo: FileInfo) =
         |> Seq.contains true)
 
 let whitelistExtensions = [".svg"; ".png"; ".slnf"; ".so"; ".a"; ".dll"; ".pdb"; ".dylib"]
-let whitelistFolders = ["node_modules"; ".git"; "Debug"; "obj"; "bin"]
+let whitelistFolders = ["node_modules"; ".git"; "Debug"; "obj"; "bin"; "DummyFiles"]
 
 let invalidFiles = 
     Directory.GetFiles(".", "*.*", SearchOption.AllDirectories) 
