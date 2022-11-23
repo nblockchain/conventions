@@ -1,7 +1,7 @@
 open System.IO
 open System
 
-let MixedLineEnding(fileInfo: FileInfo) = 
+let MixedLineEndings(fileInfo: FileInfo) = 
     use streamReader = new StreamReader (fileInfo.FullName)
     let fileText = streamReader.ReadToEnd()
 
@@ -19,7 +19,7 @@ let invalidFiles =
     |> Seq.map (fun pathStr -> FileInfo pathStr)
     |> Seq.filter (NotInDir "node_modules")
     |> Seq.filter (NotInDir ".git")
-    |> Seq.filter MixedLineEnding
+    |> Seq.filter MixedLineEndings
 
 if Seq.length invalidFiles > 0 then
     let message = 
