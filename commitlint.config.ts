@@ -353,6 +353,8 @@ module.exports = {
                     let offence = false;
 
                     let rawStr = convertAnyToString(raw, "raw").trim();
+                    console.log('========>raw:' + rawStr + '<=========')
+
                     let lineBreakIndex = rawStr.indexOf('\n');
 
                     if (lineBreakIndex >= 0){
@@ -649,7 +651,10 @@ module.exports = {
                     // does msg have a body?
                     if (body !== null) {
                         let bodyStr = convertAnyToString(body, "body");
+                        console.log('==========>bodyStrInMaxLength1' + bodyStr + '<========')
 
+                        bodyStr = removeAllCodeBlocks(bodyStr)
+                        console.log('==========>bodyStrInMaxLength2' + bodyStr + '<========')
                         let lines = bodyStr.split(/\r?\n/);
                         let inBigBlock = false;
                         for (let line of lines) {
@@ -667,6 +672,7 @@ module.exports = {
                                 let lineIsFooterNote = isFooterNote(line);
 
                                 if ((!isUrl) && (!lineIsFooterNote)) {
+                                    console.log('========>line:'+line +'<=========')
                                     offence = true;
                                     break;
                                 }
@@ -689,7 +695,7 @@ module.exports = {
 
                 'trailing-whitespace': ({raw}: {raw:any}) => {
                     let rawStr = convertAnyToString(raw, "raw");
-
+                    rawStr = removeAllCodeBlocks(rawStr)
                     let offence = false;
                     let lines = rawStr.split(/\r?\n/);
                     let inBigBlock = false;
