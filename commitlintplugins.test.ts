@@ -99,7 +99,8 @@ test('body-prose10', () => {
 
     let bodyProse10 = runCommitLintOnMsg(commitMsgWithLargeBody);
     expect(bodyProse10.status).toBe(0);
-})
+});
+
 
 test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
