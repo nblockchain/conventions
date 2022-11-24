@@ -655,17 +655,13 @@ module.exports = {
                         // Extracting bodyStr from rawStr rather than using body directly is a 
                         // workaround for https://github.com/conventional-changelog/commitlint/issues/3428
                         let bodyStr = rawStr.substring(lineBreakIndex);
+                        console.log('==========>bodyStrInMaxLength1' + bodyStr + '<========')
+
+                        bodyStr = removeAllCodeBlocks(bodyStr)
                         console.log('==========>bodyStrInMaxLength2' + bodyStr + '<========')
                         let lines = bodyStr.split(/\r?\n/);
-                        let inBigBlock = false;
+                        
                         for (let line of lines) {
-                            if (isBigBlock(line)) {
-                                inBigBlock = !inBigBlock;
-                                continue;
-                            }
-                            if (inBigBlock) {
-                                continue;
-                            }
                             if (line.length > bodyMaxLineLength) {
 
                                 let isUrl = isValidUrl(line);
