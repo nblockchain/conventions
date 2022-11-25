@@ -584,7 +584,8 @@ module.exports = {
                     let headerStr = convertAnyToString(header, "header");
                     let firstWord = headerStr.split(' ')[0];
                     let offence = headerStr.indexOf(':') < 0 && 
-                                    (wordIsStartOfSentence(firstWord) || isProperNoun(firstWord));
+                                    !wordIsStartOfSentence(firstWord) &&
+                                    !isProperNoun(firstWord);
                     return [
                         !offence,
                         `Please start the title with an upper-case letter if there is no area in the title`
