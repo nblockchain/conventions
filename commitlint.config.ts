@@ -562,7 +562,8 @@ module.exports = {
 
                 'title-uppercase': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
-                    let offence = headerStr.indexOf(':') < 0 && isLowerCase(headerStr[0]);
+                    let firstWord = headerStr.split(' ')[0];
+                    let offence = headerStr.indexOf(':') < 0 && wordIsStartOfSentence(firstWord);
                     return [
                         !offence,
                         `Please start the title with an upper-case letter if there is no area in the title`
