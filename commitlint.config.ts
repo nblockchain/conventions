@@ -333,6 +333,7 @@ module.exports = {
         'proper-issue-refs': [RuleStatus.Error, 'always'],
         'too-many-spaces': [RuleStatus.Error, 'always'],
         'commit-hash-alone': [RuleStatus.Error, 'always'],
+        'title-uppercase': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -559,6 +560,14 @@ module.exports = {
                     ];
                 },
 
+                'title-uppercase': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+                    let offence = headerStr.indexOf(':') < 0 && isLowerCase(headerStr[0]);
+                    return [
+                        !offence,
+                        `Please start the title with an upper-case letter if there is no area in the title`
+                    ];
+                },
 
                 'too-many-spaces': ({raw}: {raw:any}) => {
                     let rawStr = convertAnyToString(raw, "raw");
