@@ -353,7 +353,6 @@ module.exports = {
                     let offence = false;
 
                     let rawStr = convertAnyToString(raw, "raw").trim();
-                    console.log('========>raw:' + rawStr + '<=========')
 
                     let lineBreakIndex = rawStr.indexOf('\n');
 
@@ -655,10 +654,7 @@ module.exports = {
                         // Extracting bodyStr from rawStr rather than using body directly is a 
                         // workaround for https://github.com/conventional-changelog/commitlint/issues/3428
                         let bodyStr = rawStr.substring(lineBreakIndex);
-                        console.log('==========>bodyStrInMaxLength1' + bodyStr + '<========')
-
                         bodyStr = removeAllCodeBlocks(bodyStr)
-                        console.log('==========>bodyStrInMaxLength2' + bodyStr + '<========')
                         let lines = bodyStr.split(/\r?\n/);
                         
                         for (let line of lines) {
@@ -669,7 +665,6 @@ module.exports = {
                                 let lineIsFooterNote = isFooterNote(line);
 
                                 if ((!isUrl) && (!lineIsFooterNote)) {
-                                    console.log('========>line:'+line +'<=========')
                                     offence = true;
                                     break;
                                 }
