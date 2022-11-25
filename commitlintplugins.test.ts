@@ -430,6 +430,13 @@ test('title-uppercase1', () => {
 });
 
 
+test('title-uppercase2', () => {
+    let commitMsgWithoutArea = "Remove logs";
+    let titleUpperCase1 = runCommitLintOnMsg(commitMsgWithoutArea);
+    expect(titleUpperCase1.status).toBe(0);
+});
+
+
 test('too-many-spaces1', () => {
     let commitMsgWithTooManySpacesInTitle =
         "foo: this is only a  title";
