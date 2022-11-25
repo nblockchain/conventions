@@ -432,8 +432,15 @@ test('title-uppercase1', () => {
 
 test('title-uppercase2', () => {
     let commitMsgWithoutArea = "Remove logs";
-    let titleUpperCase1 = runCommitLintOnMsg(commitMsgWithoutArea);
-    expect(titleUpperCase1.status).toBe(0);
+    let titleUpperCase2 = runCommitLintOnMsg(commitMsgWithoutArea);
+    expect(titleUpperCase2.status).toBe(0);
+});
+
+
+test('title-uppercase3', () => {
+    let commitMsgWithoutArea = "testFixtureSetup refactor";
+    let titleUpperCase3 = runCommitLintOnMsg(commitMsgWithoutArea);
+    expect(titleUpperCase3.status).toBe(0);
 });
 
 
