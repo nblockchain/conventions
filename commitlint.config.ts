@@ -281,10 +281,20 @@ function isFooterNote(line: string): boolean {
         isFixesSentence(line);
 }
 
+function numUpperCaseLetters(word: string) {
+    assertWord(word)
+    return word.length - word.replace(/[A-Z]/g, '').length;
+}
+
+function numNonAlphabeticalCharacters(word: string) {
+    assertWord(word)
+    return word.length - word.replace(/[^a-zA-Z]/g, '').length;
+}
+
 function isProperNoun(word: string) {
     assertWord(word)
-    let numUpperCase = word.length - word.replace(/[A-Z]/g, '').length;
-    let numNonAlphabeticalChars = word.length - word.replace(/[^a-zA-Z]/g, '').length
+    let numUpperCase = numUpperCaseLetters(word)
+    let numNonAlphabeticalChars = numNonAlphabeticalCharacters(word)
 
     return (numNonAlphabeticalChars > 0) ||
             (isUpperCase(word[0]) && (numUpperCase > 1)) ||
@@ -294,8 +304,8 @@ function isProperNoun(word: string) {
 function wordIsStartOfSentence(word: string) {
     assertWord(word);
     if (isUpperCase(word[0])) {
-        let numUpperCase = word.length - word.replace(/[A-Z]/g, '').length;
-        let numNonAlphabeticalChars = word.length - word.replace(/[^a-zA-Z]/g, '').length
+        let numUpperCase = numUpperCaseLetters(word)
+        let numNonAlphabeticalChars = numNonAlphabeticalCharacters(word)
         return numUpperCase == 1 && numNonAlphabeticalChars == 0;
     }
     return false;
