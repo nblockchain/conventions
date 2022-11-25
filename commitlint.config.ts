@@ -281,6 +281,16 @@ function isFooterNote(line: string): boolean {
         isFixesSentence(line);
 }
 
+function isProperNoun(word: string) {
+    assertWord(word)
+    let numUpperCase = word.length - word.replace(/[A-Z]/g, '').length;
+    let numNonAlphabeticalChars = word.length - word.replace(/[^a-zA-Z]/g, '').length
+
+    return (numNonAlphabeticalChars > 0) ||
+            (isUpperCase(word[0]) && (numUpperCase > 1)) ||
+            (isLowerCase(word[0]) && (numUpperCase > 0))
+}
+
 function wordIsStartOfSentence(word: string) {
     assertWord(word);
     if (isUpperCase(word[0])) {
@@ -563,7 +573,8 @@ module.exports = {
                 'title-uppercase': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
                     let firstWord = headerStr.split(' ')[0];
-                    let offence = headerStr.indexOf(':') < 0 && wordIsStartOfSentence(firstWord);
+                    let offence = headerStr.indexOf(':') < 0 && 
+                                    (wordIsStartOfSentence(firstWord) || isProperNoun(firstWord));
                     return [
                         !offence,
                         `Please start the title with an upper-case letter if there is no area in the title`
