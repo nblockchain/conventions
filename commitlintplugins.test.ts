@@ -94,7 +94,7 @@ test('body-prose9', () => {
 test('body-prose10', () => {
     let commitMsgWithLargeBody =
         "Network,TorHandshakes: handle handshake fail\n\n"+
-        "```\nThe active test run aborted. System.Exception: Key handshake failed!\n\n"+
+        "```\nThe active test aborted. System.Exception: Key handshake failed!\n\n"+
         "at System.Threading.ThreadPoolWorkQueue.Dispatch()\n```"
 
     let bodyProse10 = runCommitLintOnMsg(commitMsgWithLargeBody);
