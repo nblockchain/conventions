@@ -93,10 +93,14 @@ test('body-prose9', () => {
 
 test('body-prose10', () => {
     let commitMsgWithLargeBody =
-        "Network,TorHandshakes: handle handshake fail\n\n"+
-        "```\nThe active test aborted. System.Exception: Key handshake failed!\n\n"+
-        "at System.Threading.ThreadPoolWorkQueue.Dispatch()\n```"
+`
+Previously, TorHandshakes used failwith to raise handshake
+failed error. Since we need to catch it, as a result of
+replacing generic try-with which lead to a red CI in the
+PR, we had to define its special excpetion and catch that:
 
+\`\`\`The active test run was aborted. Reason: Test host process crashed : Unhandled exception. System.Exception: Key handshake failed!\`\`\`
+`
     let bodyProse10 = runCommitLintOnMsg(commitMsgWithLargeBody);
     expect(bodyProse10.status).toBe(0);
 });
