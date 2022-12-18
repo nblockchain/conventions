@@ -93,11 +93,7 @@ test('body-prose9', () => {
 
 test('body-prose10', () => {
     let commitMsgWithLargeBody =
-`
-Previously, TorHandshakes used failwith to raise handshake
-failed error. Since we need to catch it, as a result of
-replacing generic try-with which lead to a red CI in the
-PR, we had to define its special excpetion and catch that:
+`Network,TorHandshakes: handle handshake fail
 
 \`\`\`The active test run was aborted. Reason: Test host process crashed : Unhandled exception. System.Exception: Key handshake failed!\`\`\`
 `
