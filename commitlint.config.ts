@@ -362,30 +362,32 @@ module.exports = {
 
                         bodyStr = removeAllCodeBlocks(bodyStr).trim();
                         console.log('body=====>' + bodyStr + '<=====body')
+                        
+                        if (bodyStr !== ''){
+                            for (let paragraph of bodyStr.trim().split('\n\n')){
 
-                        for (let paragraph of bodyStr.trim().split('\n\n')){
 
+                                let startWithLowerCase = isLowerCase(paragraph[0]);
 
-                            let startWithLowerCase = isLowerCase(paragraph[0]);
+                                let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
 
-                            let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
+                                let lines = paragraph.split(/\r?\n/);
 
-                            let lines = paragraph.split(/\r?\n/);
+                                if (startWithLowerCase) {
+                                    if (!(lines.length == 1 && isValidUrl(lines[0]))) {
+                                        offence = true;
+                                    }
+                                }
 
-                            if (startWithLowerCase) {
-                                if (!(lines.length == 1 && isValidUrl(lines[0]))) {
+                                if (!endsWithDotOrColon &&
+                                    !isValidUrl(lines[lines.length - 1]) &&
+                                    !isFooterNote(lines[lines.length - 1])) {
+
                                     offence = true;
                                 }
                             }
-
-                            if (!endsWithDotOrColon &&
-                                !isValidUrl(lines[lines.length - 1]) &&
-                                !isFooterNote(lines[lines.length - 1])) {
-
-                                offence = true;
-                            }
+                                            
                         }
-                                        
                     }
 
                     return [
