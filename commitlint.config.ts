@@ -360,11 +360,10 @@ module.exports = {
                         // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
                         let bodyStr = rawStr.substring(lineBreakIndex);
 
+                        bodyStr = removeAllCodeBlocks(bodyStr).trim();
+
                         for (let paragraph of bodyStr.trim().split('\n\n')){
 
-                            paragraph = removeAllCodeBlocks(paragraph).trim();
-                            if (paragraph.length == 0)
-                                continue;
 
                             let startWithLowerCase = isLowerCase(paragraph[0]);
 
