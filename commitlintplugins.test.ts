@@ -190,7 +190,6 @@ replacing generic try-with which lead to a red CI in the
 PR, we had to define its special excpetion and catch that:
 \`\`\`
    The active test run was aborted. Reason: Test host process crashed : Unhandled exception. System.Exception: Key handshake failed!
-   at Microsoft.FSharp.Control.AsyncPrimitives.CallThenInvoke[T,TResult](AsyncActivation\`1 ctxt, TResult result1, FSharpFunc\`2 part2) in F:\\workspace\\_work\\1\\s\\src\\fsharp\\FSharp.Core\\async.fs:line 398
    at NOnion.Utility.MailboxResultUtil.TryExecuteAsyncAndReplyAsResult@25-3.Invoke(AsyncActivation\`1 ctxt) in /home/runner/work/NOnion/NOnion/NOnion/Utility/MailboxUtil.fs:line 25
    at NOnion.Utility.MailboxResultUtil.TryExecuteAsyncAndReplyAsResult@24-6.Invoke(AsyncActivation\`1 ctxt) in /home/runner/work/NOnion/NOnion/NOnion/Utility/MailboxUtil.fs:line 24
    at <StartupCode$NOnion>.$TorCircuit.clo@965-15.Invoke(\`1 ctxt) in /home/runner/work/NOnion/NOnion/NOnion/Network/TorCircuit.fs:line 965
