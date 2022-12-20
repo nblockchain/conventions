@@ -190,15 +190,6 @@ replacing generic try-with which lead to a red CI in the
 PR, we had to define its special excpetion and catch that:
 \`\`\`
    The active test run was aborted. Reason: Test host process crashed : Unhandled exception. System.Exception: Key handshake failed!
-   at Microsoft.FSharp.Control.AsyncPrimitives.CallThenInvoke[T,TResult](AsyncActivation\`1 ctxt, TResult result1, FSharpFunc\`2 part2) in F:\\workspace\\_work\\1\\s\\src\\fsharp\\FSharp.Core\\async.fs:line 398
-   at NOnion.Utility.MailboxResultUtil.TryExecuteAsyncAndReplyAsResult@25-3.Invoke(AsyncActivation\`1 ctxt) in /home/runner/work/NOnion/NOnion/NOnion/Utility/MailboxUtil.fs:line 25
-   at NOnion.Utility.MailboxResultUtil.TryExecuteAsyncAndReplyAsResult@24-6.Invoke(AsyncActivation\`1 ctxt) in /home/runner/work/NOnion/NOnion/NOnion/Utility/MailboxUtil.fs:line 24
-   at <StartupCode$NOnion>.$TorCircuit.clo@965-15.Invoke(\`1 ctxt) in /home/runner/work/NOnion/NOnion/NOnion/Network/TorCircuit.fs:line 965
-   at <StartupCode$NOnion>.$TorCircuit.clo@950-39.Invoke(AsyncActivation\`1 ctxt) in /home/runner/work/NOnion/NOnion/NOnion/Network/TorCircuit.fs:line 950
-   at <StartupCode$FSharp-Core>.$Mailbox.processFirstArrival@303-8.Invoke(AsyncActivation\`1 ctxt) in F:\\workspace\\_work\\1\\s\\src\\fsharp\\FSharp.Core\\mailbox.fs:line 303
-   at Microsoft.FSharp.Control.Trampoline.Execute(FSharpFunc\`2 firstAction) in F:\\workspace\\_work\\1\\s\\src\\fsharp\\FSharp.Core\\async.fs:line 109
---- End of stack trace from previous location where exception was thrown ---
-   at Microsoft.FSharp.Control.AsyncPrimitives.Start@907-1.Invoke(ExceptionDispatchInfo edi) in F:\\workspace\\_work\\1\\s\\src\\fsharp\\FSharp.Core\\async.fs:line 907
    at Microsoft.FSharp.Control.Trampoline.Execute(FSharpFunc\`2 firstAction) in F:\\workspace\\_work\\1\\s\\src\\fsharp\\FSharp.Core\\async.fs:line 109
    at <StartupCode$FSharp-Core>.$Async.-ctor@163-1.Invoke(Object o) in F:\\workspace\\_work\\1\\s\\src\\fsharp\\FSharp.Core\\async.fs:line 165
    at System.Threading.QueueUserWorkItemCallback.Execute()
