@@ -98,6 +98,7 @@ test('body-prose10', () => {
         "at System.Threading.ThreadPoolWorkQueue.Dispatch()\n```"
 
     let bodyProse10 = runCommitLintOnMsg(commitMsgWithLargeBody);
+    console.log('=========>'+bodyProse10.stdout)
     expect(bodyProse10.status).toBe(0);
 })
 
