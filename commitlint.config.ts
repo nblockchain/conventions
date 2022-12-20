@@ -384,8 +384,7 @@ module.exports = {
 
                                     offence = true;
                                 }
-                            }
-                                            
+                            }                                            
                         }
                     }
 
