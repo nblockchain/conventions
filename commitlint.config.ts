@@ -645,7 +645,7 @@ module.exports = {
 
                 'body-soft-max-line-length': ({body}: {body:any}) => {
                     let offence = false;
-
+                    console.log('body=======>'+body+'<=======body')
                     // does msg have a body?
                     if (body !== null) {
                         let bodyStr = convertAnyToString(body, "body");
