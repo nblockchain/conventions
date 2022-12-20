@@ -361,11 +361,9 @@ module.exports = {
                         let bodyStr = rawStr.substring(lineBreakIndex);
 
                         bodyStr = removeAllCodeBlocks(bodyStr).trim();
-                        console.log('body=====>' + bodyStr + '<=====body')
                         
                         if (bodyStr !== ''){
                             for (let paragraph of bodyStr.trim().split('\n\n')){
-
 
                                 let startWithLowerCase = isLowerCase(paragraph[0]);
 
