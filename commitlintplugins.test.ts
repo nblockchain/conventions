@@ -98,7 +98,6 @@ test('body-prose10', () => {
         "at System.Threading.ThreadPoolWorkQueue.Dispatch()\n```"
 
     let bodyProse10 = runCommitLintOnMsg(commitMsgWithLargeBody);
-    console.log('=========>'+bodyProse10.stdout)
     expect(bodyProse10.status).toBe(0);
 })
 
@@ -359,7 +358,6 @@ test('proper-issue-refs3', () => {
     let commitMsgWithHashtagRefInBlock =
         "foo: this is only a title" + "\n\n" + "Bar baz:\n\n```\ntype Foo = string #123\n```";
     let properIssueRefs3 = runCommitLintOnMsg(commitMsgWithHashtagRefInBlock);
-    console.log('HERE =======>' + properIssueRefs3.stdout)
     expect(properIssueRefs3.status).toBe(0);
 });
 
