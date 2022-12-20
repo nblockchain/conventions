@@ -361,6 +361,7 @@ module.exports = {
                         let bodyStr = rawStr.substring(lineBreakIndex);
 
                         bodyStr = removeAllCodeBlocks(bodyStr).trim();
+                        console.log('body=====>' + bodyStr + '<=====body')
 
                         for (let paragraph of bodyStr.trim().split('\n\n')){
 
