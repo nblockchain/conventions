@@ -206,10 +206,11 @@ PR, we had to define its special excpetion and catch that:
    at System.Threading.QueueUserWorkItemCallback.Execute()
    at System.Threading.ThreadPoolWorkQueue.Dispatch()
 \`\`\`
+A very long line. A very long line. A very long line. A very long line. A very long line. A very long line.
 `
     let bodyMaxLineLength8 = runCommitLintOnMsg(commitMsgWithLargeBody);
     console.log('==========>' + bodyMaxLineLength8.stdout)
-    expect(bodyMaxLineLength8.status).toBe(0);
+    expect(bodyMaxLineLength8.status).toBe(1);
 });
 
 
