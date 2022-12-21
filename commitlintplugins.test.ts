@@ -188,9 +188,7 @@ Previously, TorHandshakes used failwith to raise handshake
 failed error. Since we need to catch it, as a result of
 replacing generic try-with which lead to a red CI in the
 PR, we had to define its special excpetion and catch that:
-\`\`\`
 --- End of stack trace from previous location where exception was thrown ---
-\`\`\`
 A very long line. A very long line. A very long line. A very long line. A very long line. A very long line.
 `
     let bodyMaxLineLength8 = runCommitLintOnMsg(commitMsgWithLargeBody);
