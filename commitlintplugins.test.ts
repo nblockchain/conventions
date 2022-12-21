@@ -184,7 +184,7 @@ test('body-max-line-length7', () => {
 test('body-max-line-length8', () => {
     let commitMsgWithLargeBody =
 `Network,TorHandshakes: handle handshake fail
---- Line between dashes ---
+--- Line between dashes
 A very long line. A very long line. A very long line. A very long line. A very long line. A very long line.
 `
     let bodyMaxLineLength8 = runCommitLintOnMsg(commitMsgWithLargeBody);
