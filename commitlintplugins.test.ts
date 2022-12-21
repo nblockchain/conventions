@@ -91,6 +91,16 @@ test('body-prose9', () => {
 });
 
 
+test('body-prose10', () => {
+    let commitMsgWithLargeBody =
+        "Network,TorHandshakes: handle handshake fail\n\n"+
+        "```\nThe active test run was aborted. System.Exception: Key handshake failed!\n\n"+
+        "at System.Threading.ThreadPoolWorkQueue.Dispatch()\n```"
+
+    let bodyProse10 = runCommitLintOnMsg(commitMsgWithLargeBody);
+    expect(bodyProse10.status).toBe(0);
+})
+
 test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
@@ -348,7 +358,6 @@ test('proper-issue-refs3', () => {
     let commitMsgWithHashtagRefInBlock =
         "foo: this is only a title" + "\n\n" + "Bar baz:\n\n```\ntype Foo = string #123\n```";
     let properIssueRefs3 = runCommitLintOnMsg(commitMsgWithHashtagRefInBlock);
-    console.log('HERE =======>' + properIssueRefs3.stdout)
     expect(properIssueRefs3.status).toBe(0);
 });
 

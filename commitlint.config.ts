@@ -360,32 +360,32 @@ module.exports = {
                         // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
                         let bodyStr = rawStr.substring(lineBreakIndex);
 
-                        for (let paragraph of bodyStr.trim().split('\n\n')){
+                        bodyStr = removeAllCodeBlocks(bodyStr).trim();
+                        
+                        if (bodyStr !== ''){
+                            for (let paragraph of bodyStr.trim().split('\n\n')){
 
-                            paragraph = removeAllCodeBlocks(paragraph).trim();
-                            if (paragraph.length == 0)
-                                continue;
+                                let startWithLowerCase = isLowerCase(paragraph[0]);
 
-                            let startWithLowerCase = isLowerCase(paragraph[0]);
+                                let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
 
-                            let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
+                                let lines = paragraph.split(/\r?\n/);
 
-                            let lines = paragraph.split(/\r?\n/);
+                                if (startWithLowerCase) {
+                                    if (!(lines.length == 1 && isValidUrl(lines[0]))) {
+                                        offence = true;
+                                    }
+                                }
 
-                            if (startWithLowerCase) {
-                                if (!(lines.length == 1 && isValidUrl(lines[0]))) {
+                                if (!endsWithDotOrColon &&
+                                    !isValidUrl(lines[lines.length - 1]) &&
+                                    !isFooterNote(lines[lines.length - 1])) {
+
                                     offence = true;
                                 }
                             }
-
-                            if (!endsWithDotOrColon &&
-                                !isValidUrl(lines[lines.length - 1]) &&
-                                !isFooterNote(lines[lines.length - 1])) {
-
-                                offence = true;
-                            }
+                                            
                         }
-                                        
                     }
 
                     return [
