@@ -190,7 +190,6 @@ replacing generic try-with which lead to a red CI in the
 PR, we had to define its special excpetion and catch that:
 \`\`\`
    The active test run was aborted. Reason: Test host process crashed : Unhandled exception. System.Exception: Key handshake failed!
-   at Microsoft.FSharp.Control.Trampoline.Execute(FSharpFunc\`2 firstAction) in F:\\workspace\\_work\\1\\s\\src\\fsharp\\FSharp.Core\\async.fs:line 109
 --- End of stack trace from previous location where exception was thrown ---
    at Microsoft.FSharp.Control.AsyncPrimitives.Start@907-1.Invoke(ExceptionDispatchInfo edi) in F:\\workspace\\_work\\1\\s\\src\\fsharp\\FSharp.Core\\async.fs:line 907
    at Microsoft.FSharp.Control.Trampoline.Execute(FSharpFunc\`2 firstAction) in F:\\workspace\\_work\\1\\s\\src\\fsharp\\FSharp.Core\\async.fs:line 109
