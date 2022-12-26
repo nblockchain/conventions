@@ -101,6 +101,26 @@ test('body-prose10', () => {
     expect(bodyProse10.status).toBe(0);
 })
 
+
+test('body-prose11', () => {
+    let commitMsgWithLargeBody =
+`
+Backend/Ether: catch/retry new -32002 err code
+
+CI on master branch caught this[1]:
+
+\`\`\`
+Unhandled Exception
+\`\`\`
+
+[1] https://github.com/nblockchain/geewallet/actions/runs/3507005645/jobs/5874411684
+`
+
+    let bodyProse11 = runCommitLintOnMsg(commitMsgWithLargeBody);
+    expect(bodyProse11.status).toBe(0);
+})
+
+
 test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
