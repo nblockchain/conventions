@@ -181,6 +181,17 @@ test('body-max-line-length7', () => {
 });
 
 
+test('body-max-line-length8', () => {
+    let commitMsgWithLargeBody =
+        "Network,TorHandshakes: handle handshake fail\n\n" +
+        "--- Line between dashes ---\n" +
+        "A very long line. A very long line. A very long line. A very long line. A very long line. A very long line."
+
+    let bodyMaxLineLength8 = runCommitLintOnMsg(commitMsgWithLargeBody);
+    expect(bodyMaxLineLength8.status).toBe(1);
+});
+
+
 test('commit-hash-alone1', () => {
     let commitMsgWithCommitUrl= 
         "foo: this is only a title" + "\n\n" + 
