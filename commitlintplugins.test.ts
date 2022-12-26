@@ -188,7 +188,6 @@ test('body-max-line-length8', () => {
 A very long line. A very long line. A very long line. A very long line. A very long line. A very long line.
 `
     let bodyMaxLineLength8 = runCommitLintOnMsg(commitMsgWithLargeBody);
-    console.log('==========>' + bodyMaxLineLength8.stdout)
     expect(bodyMaxLineLength8.status).toBe(1);
 });
 
