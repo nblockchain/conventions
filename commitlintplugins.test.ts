@@ -299,6 +299,20 @@ test('footer-references-existence3', () => {
 })
 
 
+test('footer-references-existence4', () => {
+    let commmitMsgwithFooter = 
+        "Backend/Ether: catch/retry new -32002 err code\n\n" +
+        "CI on master branch caught this[1]:\n" +
+        "```\nUnhandled Exception:\n" +
+        "--- Something between dashes ---\n```\n" +
+        "The end of the paragraph.\n\n" +
+        "[1] https://github.com/nblockchain/geewallet/actions/runs/3507005645/jobs/5874411684"
+
+    let footerReferenceExistence4 = runCommitLintOnMsg(commmitMsgwithFooter);
+    expect(footerReferenceExistence4.status).toBe(0);
+})
+
+
 test('prefer-slash-over-backslash1', () => {
     let commitMsgWithBackslash = "foo\\bar: bla bla bla";
     let preferSlashOverBackslash1 = runCommitLintOnMsg(commitMsgWithBackslash);
