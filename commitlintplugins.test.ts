@@ -444,6 +444,13 @@ test('title-uppercase3', () => {
 });
 
 
+test('title-uppercase4', () => {
+    let commitMsgWithLowerCaseArea = "lowercase: area is lowercase";
+    let titleUpperCase4 = runCommitLintOnMsg(commitMsgWithLowerCaseArea);
+    expect(titleUpperCase4.status).toBe(0);
+})
+
+
 test('too-many-spaces1', () => {
     let commitMsgWithTooManySpacesInTitle =
         "foo: this is only a  title";
