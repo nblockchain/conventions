@@ -285,6 +285,21 @@ test('footer-notes-misplacement-3', () => {
 })
 
 
+test('footer-notes-misplacement-4', () => {
+    let commitMsgWithWrongFooter = 
+        "foo: this is only a title\n\n" +
+        "Bla bla blah[1]:\n\n" +
+        "```\nUnhandled Exception:\n--- Something between dashes ---\n```\n\n" +
+        "[1] http://foo.bar/baz\n\n" +
+        "Some other bla bla blah.\n\n" +
+        "Fixes https://some/issue";
+
+    let footerNotesMisplacement4 = runCommitLintOnMsg(commitMsgWithWrongFooter);
+    console.log('====>'+footerNotesMisplacement4.stdout)
+    expect(footerNotesMisplacement4.status).not.toBe(0);
+})
+
+
 test('footer-references-existence1', () => {
     let commmitMsgwithCorrectFooter = "foo: this is only a title"
         + "\n\n"+ "Bla bla blah[1]."
