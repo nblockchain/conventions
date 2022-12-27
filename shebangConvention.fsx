@@ -1,30 +1,28 @@
 #!/usr/bin/env -S dotnet fsi
 
-open System.IO
 open System
+open System.IO
 
-let EolAtEof(fileInfo: FileInfo) = 
-    use streamReader = new StreamReader (fileInfo.FullName)
-    let filetext = streamReader.ReadToEnd()
-    
-    if filetext <> String.Empty then
-        Seq.last filetext = '\n'
-    else
-        true
+#r "nuget: Mono.Unix, 7.1.0-final.1.21458.1"
+#load "src/FileConventions/Library.fs"
 
 let NotInDir (dirName: string) (fileInfo: FileInfo) =
     not (fileInfo.FullName.Contains $"%c{Path.DirectorySeparatorChar}%s{dirName}%c{Path.DirectorySeparatorChar}")
 
 let invalidFiles = 
-    Directory.GetFiles(".", "*.*", SearchOption.AllDirectories) 
+    Directory.GetFiles(".", "*.fsx", SearchOption.AllDirectories) 
     |> Seq.map (fun pathStr -> FileInfo pathStr)
     |> Seq.filter (NotInDir "node_modules")
     |> Seq.filter (NotInDir ".git")
-    |> Seq.filter (fun fileInfo -> not (EolAtEof fileInfo))
+    |> Seq.filter (NotInDir "bin")
+    |> Seq.filter (NotInDir "obj")
+    |> Seq.filter (NotInDir "DummyFiles")
+    |> Seq.filter (fun fileInfo -> (not (FileConventions.HasCorrectShebang fileInfo) || 
+                                    not (FileConventions.IsExecutable fileInfo)))
 
 if Seq.length invalidFiles > 0 then
     let message = 
-        "The following files don't end with EOL:" + 
+        "The following files don't have the correct shebang:" + 
         Environment.NewLine + 
         (invalidFiles 
         |> Seq.map (fun fileInfo -> fileInfo.FullName)
