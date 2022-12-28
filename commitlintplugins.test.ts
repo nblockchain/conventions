@@ -379,6 +379,13 @@ test('header-max-length-with-suggestions4', () => {
 });
 
 
+test('header-max-length-with-suggestions5', () => {
+    let longMergeCommitMessage = "Merge PR #42 from realmarv/fixFooterReferenceExistenceTruncatedBody";
+    let headerMaxLength5 = runCommitLintOnMsg(longMergeCommitMessage);
+    expect(headerMaxLength5.status).toBe(0);
+});
+
+
 test('proper-issue-refs1', () => {
     let commitMsgWithHashtagRef = "foo: blah blah" + '\n\n' + "Blah blah #123.";
     let properIssueRefs1 = runCommitLintOnMsg(commitMsgWithHashtagRef);

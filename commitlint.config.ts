@@ -437,7 +437,7 @@ module.exports = {
                     let offence = false;
 
                     let message = `Please do not exceed ${maxLineLength} characters in title.`;
-                    if (headerStr.length > maxLineLength) {
+                    if (!headerStr.startsWith('Merge ') && headerStr.length > maxLineLength) {
                         offence = true;
                         let numRecomendations = 0;
                         Object.entries(abbr).forEach(([key, value]) => {  
