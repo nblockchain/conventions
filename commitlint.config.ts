@@ -461,14 +461,12 @@ module.exports = {
                     let offence = false;
 
                     let rawStr = convertAnyToString(raw, "raw").trim();
-                    console.log('==raw==>'+rawStr+'<==raw==')
                     let lineBreakIndex = rawStr.indexOf('\n');
 
                     if (lineBreakIndex >= 0){
                         // Extracting bodyStr from rawStr rather than using body directly is a
                         // workaround for https://github.com/conventional-changelog/commitlint/issues/3428
                         let bodyStr = rawStr.substring(lineBreakIndex).trim();
-                        console.log('==body==>'+bodyStr+'<==body==')
                         
                         if (bodyStr !== ''){
                             let seenBody = false;
