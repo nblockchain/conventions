@@ -295,7 +295,6 @@ test('footer-notes-misplacement-4', () => {
         "Fixes https://some/issue";
 
     let footerNotesMisplacement4 = runCommitLintOnMsg(commitMsgWithWrongFooter);
-    console.log('====>'+footerNotesMisplacement4.stdout)
     expect(footerNotesMisplacement4.status).not.toBe(0);
 })
 
