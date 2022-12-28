@@ -492,6 +492,34 @@ test('subject-lowercase10', () => {
 });
 
 
+test('title-uppercase1', () => {
+    let commitMsgWithoutArea = "remove logs";
+    let titleUpperCase1 = runCommitLintOnMsg(commitMsgWithoutArea);
+    expect(titleUpperCase1.status).not.toBe(0);
+});
+
+
+test('title-uppercase2', () => {
+    let commitMsgWithoutArea = "Remove logs";
+    let titleUpperCase2 = runCommitLintOnMsg(commitMsgWithoutArea);
+    expect(titleUpperCase2.status).toBe(0);
+});
+
+
+test('title-uppercase3', () => {
+    let commitMsgWithoutArea = "testFixtureSetup refactor";
+    let titleUpperCase3 = runCommitLintOnMsg(commitMsgWithoutArea);
+    expect(titleUpperCase3.status).toBe(0);
+});
+
+
+test('title-uppercase4', () => {
+    let commitMsgWithLowerCaseArea = "lowercase: area is lowercase";
+    let titleUpperCase4 = runCommitLintOnMsg(commitMsgWithLowerCaseArea);
+    expect(titleUpperCase4.status).toBe(0);
+})
+
+
 test('too-many-spaces1', () => {
     let commitMsgWithTooManySpacesInTitle =
         "foo: this is only a  title";

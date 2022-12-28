@@ -281,11 +281,31 @@ function isFooterNote(line: string): boolean {
         isFixesSentence(line);
 }
 
+function numUpperCaseLetters(word: string) {
+    assertWord(word)
+    return word.length - word.replace(/[A-Z]/g, '').length;
+}
+
+function numNonAlphabeticalCharacters(word: string) {
+    assertWord(word)
+    return word.length - word.replace(/[^a-zA-Z]/g, '').length;
+}
+
+function isProperNoun(word: string) {
+    assertWord(word)
+    let numUpperCase = numUpperCaseLetters(word)
+    let numNonAlphabeticalChars = numNonAlphabeticalCharacters(word)
+
+    return (numNonAlphabeticalChars > 0) ||
+            (isUpperCase(word[0]) && (numUpperCase > 1)) ||
+            (isLowerCase(word[0]) && (numUpperCase > 0))
+}
+
 function wordIsStartOfSentence(word: string) {
     assertWord(word);
     if (isUpperCase(word[0])) {
-        let numUpperCase = word.length - word.replace(/[A-Z]/g, '').length;
-        let numNonAlphabeticalChars = word.length - word.replace(/[^a-zA-Z]/g, '').length
+        let numUpperCase = numUpperCaseLetters(word)
+        let numNonAlphabeticalChars = numNonAlphabeticalCharacters(word)
         return numUpperCase == 1 && numNonAlphabeticalChars == 0;
     }
     return false;
@@ -333,6 +353,7 @@ module.exports = {
         'proper-issue-refs': [RuleStatus.Error, 'always'],
         'too-many-spaces': [RuleStatus.Error, 'always'],
         'commit-hash-alone': [RuleStatus.Error, 'always'],
+        'title-uppercase': [RuleStatus.Error, 'always'],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -580,6 +601,17 @@ module.exports = {
                     ];
                 },
 
+                'title-uppercase': ({header}: {header:any}) => {
+                    let headerStr = convertAnyToString(header, "header");
+                    let firstWord = headerStr.split(' ')[0];
+                    let offence = headerStr.indexOf(':') < 0 && 
+                                    !wordIsStartOfSentence(firstWord) &&
+                                    !isProperNoun(firstWord);
+                    return [
+                        !offence,
+                        `Please start the title with an upper-case letter if there is no area in the title`
+                    ];
+                },
 
                 'too-many-spaces': ({raw}: {raw:any}) => {
                     let rawStr = convertAnyToString(raw, "raw");
