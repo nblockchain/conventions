@@ -457,26 +457,33 @@ module.exports = {
                     ];
                 },
 
-                'footer-notes-misplacement': ({body}: {body:any}) => {
+                'footer-notes-misplacement': ({raw}: {raw:any}) => {
                     let offence = false;
 
-                    if (body !== null) {
-                        let bodyStr = convertAnyToString(body, "body");
+                    let rawStr = convertAnyToString(raw, "raw").trim();
+                    let lineBreakIndex = rawStr.indexOf('\n');
 
-                        let seenBody = false;
-                        let seenFooter = false;
-                        let lines = bodyStr.split(/\r?\n/);
-                        for (let line of lines) {
-                            if (line.length === 0){
-                                continue;
+                    if (lineBreakIndex >= 0){
+                        // Extracting bodyStr from rawStr rather than using body directly is a
+                        // workaround for https://github.com/conventional-changelog/commitlint/issues/3428
+                        let bodyStr = rawStr.substring(lineBreakIndex).trim();
+                        
+                        if (bodyStr !== ''){
+                            let seenBody = false;
+                            let seenFooter = false;
+                            let lines = bodyStr.split(/\r?\n/);
+                            for (let line of lines) {
+                                if (line.length === 0){
+                                    continue;
+                                }
+                                seenBody = seenBody || !isFooterNote(line);
+                                seenFooter = seenFooter || isFooterNote(line);
+                                if (seenFooter && !isFooterNote(line)) {
+                                    offence = true;
+                                    break;
+                                }
+                                
                             }
-                            seenBody = seenBody || !isFooterNote(line);
-                            seenFooter = seenFooter || isFooterNote(line);
-                            if (seenFooter && !isFooterNote(line)) {
-                                offence = true;
-                                break;
-                            }
-                            
                         }
                     }
                     return [
