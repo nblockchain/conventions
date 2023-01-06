@@ -29,10 +29,9 @@ jobs:
           node --version
           npm --version
           npx commitlint --version
-      - name: Install yarn tools
+      - name: Install yarn
         run: |
           sudo npm install -g yarn
-          yarn add --dev jest typescript ts-jest @types/jest
       - name: Print versions
         run: |
           git --version
