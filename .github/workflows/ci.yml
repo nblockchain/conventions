@@ -21,8 +21,6 @@ jobs:
           curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 
           sudo DEBIAN_FRONTEND=noninteractive apt install -y nodejs
-      - name: Install commitlint
-        run: npm install
       - name: Print versions
         run: |
           git --version
