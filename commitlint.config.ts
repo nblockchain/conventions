@@ -174,7 +174,11 @@ module.exports = {
         'too-many-spaces': [RuleStatus.Error, 'always'],
         'commit-hash-alone': [RuleStatus.Error, 'always'],
         'title-uppercase': [RuleStatus.Error, 'always'],
+        'proper-revert-message': [RuleStatus.Error, 'always'],
     },
+    // Commitlint automatically ignores some kinds of commits like Revert commit messages. 
+    // We need to set this value to false to apply our rules on these messages.
+    defaultIgnores: false,
     plugins: [
         // TODO (ideas for more rules):
         // * Detect if paragraphs in body have been cropped too shortly (less than 64 chars), and suggest same auto-wrap command that body-soft-max-line-length suggests, since it unwraps and wraps (both).
@@ -420,6 +424,28 @@ module.exports = {
                         `Please use full URLs instead of #XYZ refs.`
                     ];
                 },
+    
+                'proper-revert-message': ({header, body}: {header: any, body: any}) => {
+                    let offence = false;
+
+                    if (header.match(/^[Rr]evert ".+"$/) !== null) {
+
+                        // does msg have a body?
+                        if (body !== null) {
+                            let bodyStr = convertAnyToString(body, "body").trim();
+                            let lines = bodyStr.split('\n');
+                            offence = lines[0].match(/^This reverts commit [^ ]{40}\.$/) !== null && lines.length == 1;
+                        }
+                        else {
+                            offence = true;
+                        }
+                    }
+
+                    return [
+                        !offence,
+                        `Please explain why you're reverting`
+                    ];
+                },  
 
                 'title-uppercase': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
@@ -443,6 +469,7 @@ module.exports = {
                         `Please watch out for too many whitespaces in the text`
                     ];
                 },
+              
 
                 'type-space-after-colon': ({header}: {header:any}) => {
                     let headerStr = convertAnyToString(header, "header");
