@@ -154,6 +154,7 @@ export let abbr = {
     "select": "sel",
     "sequence": "seq",
     "seven": "7",
+    "similar": "akin",
     "six": "6",
     "single": "lone",
     "software": "sw",
