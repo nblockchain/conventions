@@ -1,4 +1,4 @@
-export let abbr = {
+let abbr = {
     "1 second": "1sec",
     "1second": "1sec",
     "absolute": "abs",
@@ -182,3 +182,5 @@ export let abbr = {
     "yes/no": "y/n",
     "zero": "0",
 }
+
+module.exports = { abbr }

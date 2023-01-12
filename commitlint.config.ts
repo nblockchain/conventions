@@ -1,4 +1,4 @@
-import { abbr } from "./commitlint/abbreviations";
+const { abbr } = require("./commitlint/abbreviations");
 
 // to convert from 'any' type
 function convertAnyToString(potentialString: any, paramName: string): string {
