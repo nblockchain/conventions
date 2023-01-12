@@ -14,15 +14,17 @@ jobs:
           apt update
           apt install -y sudo
           sudo apt install -y git
-          sudo DEBIAN_FRONTEND=noninteractive apt install --yes npm
-      - name: Install commitlint
-        run: npm install
-      - name: Print versions
+          
+          sudo apt install --yes curl
+          # can't install ubuntu's default nodejs version because we would get this error:
+          # error @commitlint/config-conventional@17.1.0: The engine "node" is incompatible with this module. Expected version ">=v14". Got "12.22.9"
+          curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          sudo DEBIAN_FRONTEND=noninteractive apt install --yes nodejs
+
+      - name: Install conventions dependencies
         run: |
-          git --version
-          node --version
-          npm --version
-          npx commitlint --version
+          npm install --global typescript@4.8.4
+          npm install @types/jest
       - name: Install yarn
         run: |
           sudo npm install -g yarn
@@ -32,8 +34,14 @@ jobs:
           node --version
           npm --version
           npx commitlint --version
+      - name: Compile ts files
+        run: |
+          tsc commitlint.config.ts --target es2017 --moduleResolution node
+          tsc commitlintplugins.test.ts --target es2017 --moduleResolution node
       - name: Run tests to validate our plugins
-        run: yarn jest
+        run: |
+          npm install --global jest
+          yarn jest
 
   sanitycheck:
     runs-on: ubuntu-22.04
@@ -44,7 +52,13 @@ jobs:
         run: |
           apt update && apt install -y sudo
           sudo apt install -y git
-          sudo DEBIAN_FRONTEND=noninteractive apt install --yes npm
+          
+          sudo apt install --yes curl
+          # can't install ubuntu's default nodejs version because we would get this error:
+          # error @commitlint/config-conventional@17.1.0: The engine "node" is incompatible with this module. Expected version ">=v14". Got "12.22.9"
+          curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          sudo DEBIAN_FRONTEND=noninteractive apt install --yes nodejs
+
       - uses: actions/checkout@v2
         with:
           submodules: recursive
@@ -53,11 +67,24 @@ jobs:
       # workaround for https://github.com/actions/runner/issues/2033
       - name: ownership workaround
         run: git config --global --add safe.directory '*'
+      - name: Install conventions dependencies
+        run: |
+          npm install --global typescript@4.8.4
+          npm install @types/jest
+
       - name: Print versions
         run: |
           git --version
           node --version
           npm --version
+          npx commitlint --version
+          npx tsc --version
+          npx ts-node --version
+          tsc --version
+      - name: Compile typescript files
+        run: |
+          tsc commitlint.config.ts --target es2017 --moduleResolution node
+          tsc commitlintplugins.test.ts --target es2017 --moduleResolution node
       - name: Validate current commit (last commit) with commitlint
         if: github.event_name == 'push'
         run: ./commitlint.sh --from HEAD~1 --to HEAD --verbose
