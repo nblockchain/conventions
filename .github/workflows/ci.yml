@@ -18,7 +18,7 @@ jobs:
           sudo apt install --yes curl
           # can't install ubuntu's default nodejs version because we would get this error:
           # error @commitlint/config-conventional@17.1.0: The engine "node" is incompatible with this module. Expected version ">=v14". Got "12.22.9"
-          curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
           sudo DEBIAN_FRONTEND=noninteractive apt install --yes nodejs
 
       - name: Install conventions dependencies
@@ -56,7 +56,7 @@ jobs:
           sudo apt install --yes curl
           # can't install ubuntu's default nodejs version because we would get this error:
           # error @commitlint/config-conventional@17.1.0: The engine "node" is incompatible with this module. Expected version ">=v14". Got "12.22.9"
-          curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
           sudo DEBIAN_FRONTEND=noninteractive apt install --yes nodejs
 
       - uses: actions/checkout@v2
