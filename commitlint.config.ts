@@ -277,14 +277,15 @@ module.exports = {
                     let headerStr = convertAnyToString(header, "header");
                     let offence = false;
 
-                    let message = `Please do not exceed ${maxLineLength} characters in title.`;
-                    if (!headerStr.startsWith('Merge ') && headerStr.length > maxLineLength) {
+                    let headerLength = headerStr.length;
+                    let message = `Please do not exceed ${maxLineLength} characters in title (found ${headerLength}).`;
+                    if (!headerStr.startsWith('Merge ') && headerLength > maxLineLength) {
                         offence = true;
                         let numRecomendations = 0;
                         Object.entries(abbr).forEach(([key, value]) => {  
                             if (headerStr.includes(key.toString())){
                                 if (numRecomendations === 0) {
-                                    message = message + 'The following replacement(s) in your commit title are recommended:\n'
+                                    message = message + ' The following replacement(s) in your commit title are recommended:\n'
                                 }
 
                                 message = message + `"${key}" -> "${value}"\n`;             
