@@ -12,6 +12,10 @@ detect bad practices.
 More things to come:
 - Detect .fsx files without shebang or +x attrib.
 - Detect files with mixed line endings.
-- Detect use of -latest in `runs-on:` GitHubCI tags.
 - Detect old versions of FSharpLint and fantomas/fantomless
 being used.
+- Detect unpinned versions, such as:
+    * Use of -latest in `runs-on:` GitHubCI tags.
+    * Use of asterisk (*) in PackageReference items of .NET projects.
+    * Missing the version number in `#r "nuget: ` refs of F# scripts.
+    * Missing the `--version` flag in `dotnet tool install foo` invocations.
