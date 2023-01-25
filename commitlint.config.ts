@@ -17,6 +17,7 @@ enum RuleStatus {
 
 let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
+let errMessageSuffix = "\nFor reference, these are the guidelines that include our commit message conventions: https://github.com/nblockchain/conventions/blob/master/WorkflowGuidelines.md";
 
 function isValidUrl(text: string) {
     if (text.indexOf(" ") >= 0) {
@@ -84,9 +85,9 @@ function isFooterReference(line: string) {
     return (line[0] === "[" && line.indexOf("] ") > 0);
 }
 
-function isFixesSentence(line: string) {
+function isFixesOrClosesSentence(line: string) {
     assertLine(line);
-    return (line.indexOf("Fixes ") == 0);
+    return (line.indexOf("Fixes ") == 0) || (line.indexOf("Closes ") == 0);
 }
 
 function isCoAuthoredByTag(line: string) {
@@ -98,7 +99,7 @@ function isFooterNote(line: string): boolean {
     assertLine(line);
     return isFooterReference(line) ||
         isCoAuthoredByTag(line) ||
-        isFixesSentence(line);
+        isFixesOrClosesSentence(line);
 }
 
 function numUpperCaseLetters(word: string) {
@@ -237,7 +238,8 @@ module.exports = {
 
                     return [
                         !offence,
-                        `Please begin a paragraph with uppercase letter and end it with a dot`
+                        `Please begin a paragraph with uppercase letter and end it with a dot.`
+                            + errMessageSuffix
                     ];
                 },
 
@@ -260,7 +262,8 @@ module.exports = {
 
                     return [
                         !offence,
-                        `Please use the commit hash instead of the commit full URL`
+                        `Please use the commit hash instead of the commit full URL.`
+                            + errMessageSuffix
                     ];
                 },
 
@@ -269,7 +272,8 @@ module.exports = {
                     let offence = headerStr.toLowerCase() === "wip";
                     return [
                         !offence,
-                        `Please add a number or description after the WIP prefix`
+                        `Please add a number or description after the WIP prefix.`
+                            + errMessageSuffix
                     ];
                 },
 
@@ -296,6 +300,7 @@ module.exports = {
                     return [
                         !offence,
                         message
+                            + errMessageSuffix
                     ];
                 },
 
@@ -330,7 +335,8 @@ module.exports = {
                     }
                     return [
                         !offence,
-                        `Footer messages must be placed after body paragraphs, please move any message that starts with a "[]" or "Fixes" to the end of the commmit message.`
+                        `Footer messages must be placed after body paragraphs, please move any message that starts with "Fixes", "Closes" or "[i]" to the end of the commmit message.`
+                            + errMessageSuffix
                     ]
                 },
 
@@ -380,6 +386,7 @@ module.exports = {
                     return [
                         !offence,
                         "All references in the body must be mentioned in the footer, and vice versa."
+                            + errMessageSuffix
                     ]
                 },
 
@@ -398,7 +405,8 @@ module.exports = {
 
                     return [
                         !offence,
-                        `Please use slash instead of backslash in the area/scope/sub-area section of the title`
+                        `Please use slash instead of backslash in the area/scope/sub-area section of the title.`
+                            + errMessageSuffix
                     ];
                 },
 
@@ -419,6 +427,7 @@ module.exports = {
                     return [
                         !offence,
                         `Please use full URLs instead of #XYZ refs.`
+                            + errMessageSuffix
                     ];
                 },
 
@@ -430,7 +439,8 @@ module.exports = {
                                     !isProperNoun(firstWord);
                     return [
                         !offence,
-                        `Please start the title with an upper-case letter if there is no area in the title`
+                        `Please start the title with an upper-case letter if there is no area in the title.`
+                            + errMessageSuffix
                     ];
                 },
 
@@ -441,7 +451,8 @@ module.exports = {
 
                     return [
                         !offence,
-                        `Please watch out for too many whitespaces in the text`
+                        `Please watch out for too many whitespaces in the text.`
+                            + errMessageSuffix
                     ];
                 },
 
@@ -460,6 +471,7 @@ module.exports = {
                     return [
                         !offence,
                         `Please place a space after the first colon character in your commit message title`
+                            + errMessageSuffix
                     ];
                 },
 
@@ -471,6 +483,7 @@ module.exports = {
                     return [
                         !offence,
                         `Please use "area/scope: subject" or "area(scope): subject" style instead of wrapping area/scope under square brackets in your commit message title`
+                            + errMessageSuffix
                     ];
                 },
 
@@ -490,7 +503,8 @@ module.exports = {
 
                     return [
                         !offence,
-                        `Please use lowercase as the first letter for your subject, i.e. the text after your area/scope`
+                        `Please use lowercase as the first letter for your subject, i.e. the text after your area/scope.`
+                            + errMessageSuffix
                     ];
                 },
 
@@ -513,7 +527,8 @@ module.exports = {
 
                     return [
                         !offence,
-                        `No need to use space after comma in the area/scope (so that commit title can be shorter)`
+                        `No need to use space after comma in the area/scope (so that commit title can be shorter).`
+                            + errMessageSuffix
                     ];
                 },
 
@@ -566,6 +581,7 @@ module.exports = {
                         `Please do not exceed ${bodyMaxLineLength} characters in the lines of the commit message's body; we recommend this unix command (for editing the last commit message): \n` +
                         `For Linux users: ${getUnixCommand('-u')}\n` +
                         `For macOS users: ${getUnixCommand('')}`
+                            + errMessageSuffix
                     ];
                 },
 
@@ -600,7 +616,8 @@ module.exports = {
 
                     return [
                         !offence,
-                        `Please watch out for leading or ending trailing whitespace`
+                        `Please watch out for leading or ending trailing whitespace.`
+                            + errMessageSuffix
                     ];
                 },
 
@@ -622,7 +639,8 @@ module.exports = {
 
                     return [
                         !offence,
-                        `No need to use space before parentheses in the area/scope/sub-area section of the title`
+                        `No need to use space before parentheses in the area/scope/sub-area section of the title.`
+                            + errMessageSuffix
                     ];
                 },
             }

@@ -56,6 +56,14 @@ with the `GWallet.` prefix, then there's no need to specify it; so use `Backend`
 as area instead of `GWallet.Backend`). The **Sub-area** may refer to a folder
 or module inside the area, but it's not a strict mapping.
 
+When referencing a bug/issue, as you can see above you can add a sentence at the
+end of the commit message which starts with "Fixes ", followed by the *full URL*
+of the bug/issue; this way, the ticket will be closed when the commit lands in
+the main branch (which in some repos will be called `master`, or `main`). If the
+commit is not really a fix for the issue, but you still want the ticket to be
+closed after the commit lands, then you would use the word `Closes` instead of
+`Fixes`.
+
 Do not use long lines (manually crop them with EOLs because git doesn't do this
 automatically).
 
