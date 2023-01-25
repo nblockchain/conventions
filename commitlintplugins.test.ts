@@ -115,6 +115,16 @@ test('body-prose11', () => {
 })
 
 
+test('body-prose12', () => {
+    let commitMsgWithBugUrl =
+        "foo: this is only a title" + "\n\n" + "Closes someUrl://blahblah.com";
+    let bodyProse12 = runCommitLintOnMsg(commitMsgWithBugUrl);
+
+    // because URLs in "Closes <URL>" sentence can bypass the rule, similar to body-prose5
+    expect(bodyProse12.status).toBe(0);
+});
+
+
 test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
