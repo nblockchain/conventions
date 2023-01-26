@@ -26,7 +26,9 @@ you) to find code that is commented/disabled.
 * Our naming conventions are as follows:
     * Script names (e.g. files with `.sh`, `.bat` or `.fsx` extensions): snake_case.
     * CI job names: kebab-case.
-    * .NET (F# and C#) source files and projects (project names and project file names): PascalCase.
+    * Important public constants: TRAIN_CASE.
+    * .NET (F# and C#) source files and projects (project names and project file names): PascalCase. An exception to this rule is project names and project file names that correspond to a console project which 
+ends up being compiled and packaged in NuGet as a dotnet tool, for example: https://github.com/nblockchain/fsx/tree/master/fsxc
     * .NET APIs: PascalCase (see our [F# Style Guide](FSharpStyleGuide.md) for more info).
     * .NET parameters, local variables & nested functions: camelCase (again, see our [F# Style Guide](FSharpStyleGuide.md) for more info).
 * Push each commit separately (instead of sending more than 1 commit in a
