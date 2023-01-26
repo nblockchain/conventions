@@ -1,9 +1,9 @@
 This is a repository that contains several useful things that other `nblockchain` repos use, such as:
 
-- File with commitlint configuration and plugins.
-- A reference .editorconfig.
-- An F# style guide.
-- Workflow guidelines.
+- [File with commitlint configuration and plugins](commitlint.config.ts).
+- [A reference .editorconfig file](.editorconfig).
+- [An F# style guide](FSharpStyleGuide.md).
+- [Workflow guidelines](WorkflowGuidelines.md).
 
 All in all, this is mainly documentation, and some tooling to detect bad practices.
 
