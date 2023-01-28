@@ -205,12 +205,19 @@ module.exports = {
                         
                         if (bodyStr !== ''){
 
-                            function paragraphHasValidEnding(endingChar: string): boolean {
-                                assertCharacter(endingChar);
-                                return endingChar === '.' ||
+                            function paragraphHasValidEnding(paragraph: string): boolean {
+                                let endingChar = paragraph[paragraph.length - 1];
+                                if (endingChar === '.' ||
                                     endingChar === ':' ||
                                     endingChar === '!' ||
-                                    endingChar === '?';
+                                    endingChar === '?') {
+                                    return true;
+                                }
+                                if (endingChar === ')' && paragraph.length > 1 &&
+                                    paragraphHasValidEnding(paragraph[paragraph.length - 2])) {
+                                    return true;
+                                }
+                                return false;
                             }
 
                             for (let paragraph of bodyStr.split('\n\n')){
@@ -223,7 +230,7 @@ module.exports = {
 
                                 let startWithLowerCase = isLowerCase(paragraph[0]);
 
-                                let validParagraphEnd = paragraphHasValidEnding(paragraph[paragraph.length - 1]);
+                                let validParagraphEnd = paragraphHasValidEnding(paragraph);
 
                                 let lines = paragraph.split(/\r?\n/);
 
