@@ -135,6 +135,16 @@ test('body-prose13', () => {
 });
 
 
+test('body-prose14', () => {
+    let commitMsgWithParagraphEndingWithExclamationMark =
+        "foo: this is only a title" + "\n\n" + "Increase verbosity, because why not!\n\nBlah blah.";
+    let bodyProse14 = runCommitLintOnMsg(commitMsgWithParagraphEndingWithExclamationMark);
+
+    // because paragraphs can end with a question mark
+    expect(bodyProse14.status).toBe(0);
+});
+
+
 test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
