@@ -187,7 +187,6 @@ module.exports = {
         // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
         // * Detect if commit hash mention in commit msg actually exists in repo.
         // * Detect area(sub-area) in the title that doesn't include area part (e.g., writing (bar) instead of foo(bar))
-        // * Fix false positive raised by body-prose: "title\n\nParagraph begin. (Some text inside parens.)"
 
         {
             rules: {
@@ -205,6 +204,22 @@ module.exports = {
                         bodyStr = removeAllCodeBlocks(bodyStr).trim();
                         
                         if (bodyStr !== ''){
+
+                            function paragraphHasValidEnding(paragraph: string): boolean {
+                                let endingChar = paragraph[paragraph.length - 1];
+                                if (endingChar === '.' ||
+                                    endingChar === ':' ||
+                                    endingChar === '!' ||
+                                    endingChar === '?') {
+                                    return true;
+                                }
+                                if (endingChar === ')' && paragraph.length > 1 &&
+                                    paragraphHasValidEnding(paragraph[paragraph.length - 2])) {
+                                    return true;
+                                }
+                                return false;
+                            }
+
                             for (let paragraph of bodyStr.split('\n\n')){
                                 
                                 paragraph = paragraph.trim()
@@ -215,7 +230,7 @@ module.exports = {
 
                                 let startWithLowerCase = isLowerCase(paragraph[0]);
 
-                                let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
+                                let validParagraphEnd = paragraphHasValidEnding(paragraph);
 
                                 let lines = paragraph.split(/\r?\n/);
 
@@ -225,7 +240,7 @@ module.exports = {
                                     }
                                 }
 
-                                if (!endsWithDotOrColon &&
+                                if (!validParagraphEnd &&
                                     !isValidUrl(lines[lines.length - 1]) &&
                                     !isFooterNote(lines[lines.length - 1])) {
 

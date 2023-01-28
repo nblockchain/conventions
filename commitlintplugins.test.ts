@@ -125,6 +125,41 @@ test('body-prose12', () => {
 });
 
 
+test('body-prose13', () => {
+    let commitMsgWithParagraphEndingWithQuestionMark =
+        "foo: this is only a title" + "\n\n" + "Increase verbosity, because why not?\n\nBlah blah.";
+    let bodyProse13 = runCommitLintOnMsg(commitMsgWithParagraphEndingWithQuestionMark);
+
+    // because paragraphs can end with a question mark
+    expect(bodyProse13.status).toBe(0);
+});
+
+
+test('body-prose14', () => {
+    let commitMsgWithParagraphEndingWithExclamationMark =
+        "foo: this is only a title" + "\n\n" + "Increase verbosity, because why not!\n\nBlah blah.";
+    let bodyProse14 = runCommitLintOnMsg(commitMsgWithParagraphEndingWithExclamationMark);
+
+    // because paragraphs can end with a question mark
+    expect(bodyProse14.status).toBe(0);
+});
+
+
+test('body-prose15', () => {
+    let commitMsgWithParagraphEndingInParentheses =
+        "foo: this is only a title" + "\n\n" +
+        "Paragraph begin. (Some text inside parens.)\n\n" +
+        "Paragraph begin. (Some text inside parens?)\n\n" +
+        "Paragraph begin. (Some text inside parens!)\n\n" +
+        "Paragraph begin. Now a smiley! :)\n\n" +
+        "Blah blah."
+    let bodyProse15 = runCommitLintOnMsg(commitMsgWithParagraphEndingInParentheses);
+
+    // because paragraphs can end with a question mark
+    expect(bodyProse15.status).toBe(0);
+});
+
+
 test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
