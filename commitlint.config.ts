@@ -205,6 +205,14 @@ module.exports = {
                         bodyStr = removeAllCodeBlocks(bodyStr).trim();
                         
                         if (bodyStr !== ''){
+
+                            function paragraphHasValidEnding(endingChar: string): boolean {
+                                assertCharacter(endingChar);
+                                return endingChar === '.' ||
+                                    endingChar === ':' ||
+                                    endingChar === '?';
+                            }
+
                             for (let paragraph of bodyStr.split('\n\n')){
                                 
                                 paragraph = paragraph.trim()
@@ -215,7 +223,7 @@ module.exports = {
 
                                 let startWithLowerCase = isLowerCase(paragraph[0]);
 
-                                let endsWithDotOrColon = paragraph[paragraph.length - 1] === '.' || paragraph[paragraph.length - 1] === ':';
+                                let validParagraphEnd = paragraphHasValidEnding(paragraph[paragraph.length - 1]);
 
                                 let lines = paragraph.split(/\r?\n/);
 
@@ -225,7 +233,7 @@ module.exports = {
                                     }
                                 }
 
-                                if (!endsWithDotOrColon &&
+                                if (!validParagraphEnd &&
                                     !isValidUrl(lines[lines.length - 1]) &&
                                     !isFooterNote(lines[lines.length - 1])) {
 
