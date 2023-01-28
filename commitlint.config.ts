@@ -210,6 +210,7 @@ module.exports = {
                                 assertCharacter(endingChar);
                                 return endingChar === '.' ||
                                     endingChar === ':' ||
+                                    endingChar === '!' ||
                                     endingChar === '?';
                             }
 
