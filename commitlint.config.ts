@@ -187,7 +187,6 @@ module.exports = {
         // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
         // * Detect if commit hash mention in commit msg actually exists in repo.
         // * Detect area(sub-area) in the title that doesn't include area part (e.g., writing (bar) instead of foo(bar))
-        // * Fix false positive raised by body-prose: "title\n\nParagraph begin. (Some text inside parens.)"
 
         {
             rules: {
