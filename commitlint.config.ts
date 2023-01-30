@@ -301,8 +301,9 @@ module.exports = {
                     if (!headerStr.startsWith('Merge ') && headerLength > maxLineLength) {
                         offence = true;
                         let numRecomendations = 0;
+                        let lowerCaseHeaderStr = headerStr.toLowerCase()
                         Object.entries(abbr).forEach(([key, value]) => {  
-                            if (headerStr.includes(key.toString())){
+                            if (lowerCaseHeaderStr.includes(key.toString())){
                                 if (numRecomendations === 0) {
                                     message = message + ' The following replacement(s) in your commit title are recommended:\n'
                                 }

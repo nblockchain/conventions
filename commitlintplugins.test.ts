@@ -445,6 +445,16 @@ test('header-max-length-with-suggestions5', () => {
 });
 
 
+test('header-max-length-with-suggestions6', () => {
+    let commitMsgWithThatExceedsHeaderMaxLength =
+        "Upgrade foo bla bla bla bla bla bla bla bla bla bla bla bla bla bla";
+    let headerMaxLength1 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
+    let expected_message = `"upgrade" -> "update"`
+    expect(headerMaxLength1.status).not.toBe(0);
+    expect((headerMaxLength1.stdout + '').includes(expected_message)).toEqual(true)
+});
+
+
 test('proper-issue-refs1', () => {
     let commitMsgWithHashtagRef = "foo: blah blah" + '\n\n' + "Blah blah #123.";
     let properIssueRefs1 = runCommitLintOnMsg(commitMsgWithHashtagRef);
