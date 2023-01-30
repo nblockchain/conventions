@@ -58,10 +58,6 @@ jobs:
           npm install
       - name: Print commitlint version
         run: npx commitlint --version
-      - name: cat package.json
-        run: cat package.json
-      - name: cat package-lock.json
-        run: cat package-lock.json
       - name: Validate current commit (last commit) with commitlint
         if: github.event_name == 'push'
         run: ./commitlint.sh --from HEAD~1 --to HEAD --verbose
