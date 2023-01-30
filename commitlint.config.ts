@@ -4,7 +4,13 @@ import { abbr } from "./commitlint/abbreviations";
 function convertAnyToString(potentialString: any, paramName: string): string {
     if (potentialString === null || potentialString === undefined) {
         // otherwise, String(null) might give us the stupid string "null"
-        throw new Error('Unexpected ' + paramName + '===null or ' + paramName + '===undefined happened');
+        throw new Error(
+            "Unexpected " +
+                paramName +
+                "===null or " +
+                paramName +
+                "===undefined happened"
+        );
     }
     return String(potentialString);
 }
@@ -17,7 +23,8 @@ enum RuleStatus {
 
 let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
-let errMessageSuffix = "\nFor reference, these are the guidelines that include our commit message conventions: https://github.com/nblockchain/conventions/blob/master/WorkflowGuidelines.md";
+let errMessageSuffix =
+    "\nFor reference, these are the guidelines that include our commit message conventions: https://github.com/nblockchain/conventions/blob/master/WorkflowGuidelines.md";
 
 function isValidUrl(text: string) {
     if (text.indexOf(" ") >= 0) {
@@ -25,43 +32,44 @@ function isValidUrl(text: string) {
     }
 
     // Borrowed from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
-    try { 
+    try {
         return Boolean(new URL(text));
-    }
-    catch(e){ 
-        return false; 
+    } catch (e) {
+        return false;
     }
 }
 
 function assertUrl(url: string) {
     if (!isValidUrl(url)) {
-        throw Error('This function expects a url as input')   
+        throw Error("This function expects a url as input");
     }
 }
 
 function assertCharacter(letter: string) {
     if (letter.length !== 1) {
-        throw Error('This function expects a character as input')
+        throw Error("This function expects a character as input");
     }
 }
 
 function assertLine(line: string) {
-    if (line.includes('\n')) {
-        throw Error('This function expects a line as input')
+    if (line.includes("\n")) {
+        throw Error("This function expects a line as input");
     }
 }
 
 function assertWord(word: string) {
-    if (word.includes('\n') || word.includes(' ')) {
-        throw Error("This function expects a word as input.\n" +
-                    "A word doesn't include line breaks and whitespaces.")
+    if (word.includes("\n") || word.includes(" ")) {
+        throw Error(
+            "This function expects a word as input.\n" +
+                "A word doesn't include line breaks and whitespaces."
+        );
     }
 }
 
 function isBigBlock(line: string) {
     assertLine(line);
     let bigBlockDelimiter = "```";
-    return (line.length == bigBlockDelimiter.length) && (line.indexOf("```") == 0);
+    return line.length == bigBlockDelimiter.length && line.indexOf("```") == 0;
 }
 
 function isUpperCase(letter: string) {
@@ -69,7 +77,7 @@ function isUpperCase(letter: string) {
     let isUpperCase = letter.toUpperCase() == letter;
     let isLowerCase = letter.toLowerCase() == letter;
 
-    return (isUpperCase && !isLowerCase);
+    return isUpperCase && !isLowerCase;
 }
 
 function isLowerCase(letter: string) {
@@ -77,56 +85,60 @@ function isLowerCase(letter: string) {
     let isUpperCase = letter.toUpperCase() == letter;
     let isLowerCase = letter.toLowerCase() == letter;
 
-    return (isLowerCase && !isUpperCase);
+    return isLowerCase && !isUpperCase;
 }
 
 function isFooterReference(line: string) {
     assertLine(line);
-    return (line[0] === "[" && line.indexOf("] ") > 0);
+    return line[0] === "[" && line.indexOf("] ") > 0;
 }
 
 function isFixesOrClosesSentence(line: string) {
     assertLine(line);
-    return (line.indexOf("Fixes ") == 0) || (line.indexOf("Closes ") == 0);
+    return line.indexOf("Fixes ") == 0 || line.indexOf("Closes ") == 0;
 }
 
 function isCoAuthoredByTag(line: string) {
     assertLine(line);
-    return (line.indexOf("Co-authored-by: ") == 0);
+    return line.indexOf("Co-authored-by: ") == 0;
 }
 
 function isFooterNote(line: string): boolean {
     assertLine(line);
-    return isFooterReference(line) ||
+    return (
+        isFooterReference(line) ||
         isCoAuthoredByTag(line) ||
-        isFixesOrClosesSentence(line);
+        isFixesOrClosesSentence(line)
+    );
 }
 
 function numUpperCaseLetters(word: string) {
-    assertWord(word)
-    return word.length - word.replace(/[A-Z]/g, '').length;
+    assertWord(word);
+    return word.length - word.replace(/[A-Z]/g, "").length;
 }
 
 function numNonAlphabeticalCharacters(word: string) {
-    assertWord(word)
-    return word.length - word.replace(/[^a-zA-Z]/g, '').length;
+    assertWord(word);
+    return word.length - word.replace(/[^a-zA-Z]/g, "").length;
 }
 
 function isProperNoun(word: string) {
-    assertWord(word)
-    let numUpperCase = numUpperCaseLetters(word)
-    let numNonAlphabeticalChars = numNonAlphabeticalCharacters(word)
+    assertWord(word);
+    let numUpperCase = numUpperCaseLetters(word);
+    let numNonAlphabeticalChars = numNonAlphabeticalCharacters(word);
 
-    return (numNonAlphabeticalChars > 0) ||
-            (isUpperCase(word[0]) && (numUpperCase > 1)) ||
-            (isLowerCase(word[0]) && (numUpperCase > 0))
+    return (
+        numNonAlphabeticalChars > 0 ||
+        (isUpperCase(word[0]) && numUpperCase > 1) ||
+        (isLowerCase(word[0]) && numUpperCase > 0)
+    );
 }
 
 function wordIsStartOfSentence(word: string) {
     assertWord(word);
     if (isUpperCase(word[0])) {
-        let numUpperCase = numUpperCaseLetters(word)
-        let numNonAlphabeticalChars = numNonAlphabeticalCharacters(word)
+        let numUpperCase = numUpperCaseLetters(word);
+        let numNonAlphabeticalChars = numNonAlphabeticalCharacters(word);
         return numUpperCase == 1 && numNonAlphabeticalChars == 0;
     }
     return false;
@@ -137,7 +149,7 @@ function includesHashtagRef(text: string) {
 }
 
 function removeAllCodeBlocks(text: string) {
-    return text.replace(/```[^]*```/g, '');
+    return text.replace(/```[^]*```/g, "");
 }
 
 function findUrls(text: string) {
@@ -146,35 +158,39 @@ function findUrls(text: string) {
 }
 
 function isCommitUrl(url: string) {
-    assertUrl(url)
-    return url.includes('/commit/');
+    assertUrl(url);
+    return url.includes("/commit/");
 }
 
 module.exports = {
-    parserPreset: 'conventional-changelog-conventionalcommits',
+    parserPreset: "conventional-changelog-conventionalcommits",
     rules: {
-        'body-leading-blank': [RuleStatus.Warning, 'always'],
-        'body-soft-max-line-length': [RuleStatus.Error, 'always'],
-        'empty-wip': [RuleStatus.Error, 'always'],
-        'footer-leading-blank': [RuleStatus.Warning, 'always'],
-        'footer-max-line-length': [RuleStatus.Error, 'always', 150],
-        'footer-notes-misplacement': [RuleStatus.Error, 'always'],
-        'footer-references-existence': [RuleStatus.Error, 'always'],
-        'header-max-length-with-suggestions': [RuleStatus.Error, 'always', headerMaxLineLength],
-        'subject-full-stop': [RuleStatus.Error, 'never', '.'],
-        'type-empty': [RuleStatus.Warning, 'never'],
-        'type-space-after-colon': [RuleStatus.Error, 'always'],
-        'subject-lowercase': [RuleStatus.Error, 'always'],
-        'body-prose': [RuleStatus.Error, 'always'],
-        'type-space-after-comma': [RuleStatus.Error, 'always'],
-        'trailing-whitespace': [RuleStatus.Error, 'always'],
-        'prefer-slash-over-backslash': [RuleStatus.Error, 'always'],
-        'type-space-before-paren': [RuleStatus.Error, 'always'],
-        'type-with-square-brackets': [RuleStatus.Error, 'always'],
-        'proper-issue-refs': [RuleStatus.Error, 'always'],
-        'too-many-spaces': [RuleStatus.Error, 'always'],
-        'commit-hash-alone': [RuleStatus.Error, 'always'],
-        'title-uppercase': [RuleStatus.Error, 'always'],
+        "body-leading-blank": [RuleStatus.Warning, "always"],
+        "body-soft-max-line-length": [RuleStatus.Error, "always"],
+        "empty-wip": [RuleStatus.Error, "always"],
+        "footer-leading-blank": [RuleStatus.Warning, "always"],
+        "footer-max-line-length": [RuleStatus.Error, "always", 150],
+        "footer-notes-misplacement": [RuleStatus.Error, "always"],
+        "footer-references-existence": [RuleStatus.Error, "always"],
+        "header-max-length-with-suggestions": [
+            RuleStatus.Error,
+            "always",
+            headerMaxLineLength,
+        ],
+        "subject-full-stop": [RuleStatus.Error, "never", "."],
+        "type-empty": [RuleStatus.Warning, "never"],
+        "type-space-after-colon": [RuleStatus.Error, "always"],
+        "subject-lowercase": [RuleStatus.Error, "always"],
+        "body-prose": [RuleStatus.Error, "always"],
+        "type-space-after-comma": [RuleStatus.Error, "always"],
+        "trailing-whitespace": [RuleStatus.Error, "always"],
+        "prefer-slash-over-backslash": [RuleStatus.Error, "always"],
+        "type-space-before-paren": [RuleStatus.Error, "always"],
+        "type-with-square-brackets": [RuleStatus.Error, "always"],
+        "proper-issue-refs": [RuleStatus.Error, "always"],
+        "too-many-spaces": [RuleStatus.Error, "always"],
+        "commit-hash-alone": [RuleStatus.Error, "always"],
+        "title-uppercase": [RuleStatus.Error, "always"],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -190,93 +206,113 @@ module.exports = {
 
         {
             rules: {
-                'body-prose': ({raw}: {raw:any}) => {
+                "body-prose": ({ raw }: { raw: any }) => {
                     let offence = false;
 
                     let rawStr = convertAnyToString(raw, "raw").trim();
-                    let lineBreakIndex = rawStr.indexOf('\n');
+                    let lineBreakIndex = rawStr.indexOf("\n");
 
-                    if (lineBreakIndex >= 0){
+                    if (lineBreakIndex >= 0) {
                         // Extracting bodyStr from rawStr rather than using body directly is a
                         // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
                         let bodyStr = rawStr.substring(lineBreakIndex);
 
                         bodyStr = removeAllCodeBlocks(bodyStr).trim();
-                        
-                        if (bodyStr !== ''){
 
-                            function paragraphHasValidEnding(paragraph: string): boolean {
-
-                                let paragraphWords = paragraph.split(' ');
-                                let lastWordInParagraph = paragraphWords[paragraphWords.length - 1];
-                                let isParagraphEndingWithUrl = isValidUrl(lastWordInParagraph);
-                                if (isParagraphEndingWithUrl){
-                                    return true
-                                }
-
-                                let endingChar = paragraph[paragraph.length - 1];
-                                if (endingChar === '.' ||
-                                    endingChar === ':' ||
-                                    endingChar === '!' ||
-                                    endingChar === '?') {
+                        if (bodyStr !== "") {
+                            function paragraphHasValidEnding(
+                                paragraph: string
+                            ): boolean {
+                                let paragraphWords = paragraph.split(" ");
+                                let lastWordInParagraph =
+                                    paragraphWords[paragraphWords.length - 1];
+                                let isParagraphEndingWithUrl =
+                                    isValidUrl(lastWordInParagraph);
+                                if (isParagraphEndingWithUrl) {
                                     return true;
                                 }
-                                if (endingChar === ')' && paragraph.length > 1 &&
-                                    paragraphHasValidEnding(paragraph[paragraph.length - 2])) {
+
+                                let endingChar =
+                                    paragraph[paragraph.length - 1];
+                                if (
+                                    endingChar === "." ||
+                                    endingChar === ":" ||
+                                    endingChar === "!" ||
+                                    endingChar === "?"
+                                ) {
+                                    return true;
+                                }
+                                if (
+                                    endingChar === ")" &&
+                                    paragraph.length > 1 &&
+                                    paragraphHasValidEnding(
+                                        paragraph[paragraph.length - 2]
+                                    )
+                                ) {
                                     return true;
                                 }
                                 return false;
                             }
 
-                            for (let paragraph of bodyStr.split('\n\n')){
-                                
-                                paragraph = paragraph.trim()
+                            for (let paragraph of bodyStr.split("\n\n")) {
+                                paragraph = paragraph.trim();
 
-                                if (paragraph === ''){
-                                    continue
+                                if (paragraph === "") {
+                                    continue;
                                 }
 
-                                let startWithLowerCase = isLowerCase(paragraph[0]);
+                                let startWithLowerCase = isLowerCase(
+                                    paragraph[0]
+                                );
 
-                                let validParagraphEnd = paragraphHasValidEnding(paragraph);
+                                let validParagraphEnd =
+                                    paragraphHasValidEnding(paragraph);
 
                                 let lines = paragraph.split(/\r?\n/);
 
                                 if (startWithLowerCase) {
-                                    if (!(lines.length == 1 && isValidUrl(lines[0]))) {
+                                    if (
+                                        !(
+                                            lines.length == 1 &&
+                                            isValidUrl(lines[0])
+                                        )
+                                    ) {
                                         offence = true;
                                     }
                                 }
 
-                                if (!validParagraphEnd &&
+                                if (
+                                    !validParagraphEnd &&
                                     !isValidUrl(lines[lines.length - 1]) &&
-                                    !isFooterNote(lines[lines.length - 1])) {
-
+                                    !isFooterNote(lines[lines.length - 1])
+                                ) {
                                     offence = true;
                                 }
                             }
-                                            
                         }
                     }
 
                     return [
                         !offence,
-                        `Please begin a paragraph with uppercase letter and end it with a dot.`
-                            + errMessageSuffix
+                        `Please begin a paragraph with uppercase letter and end it with a dot.` +
+                            errMessageSuffix,
                     ];
                 },
 
-                'commit-hash-alone': ({raw}: {raw:any}) => {
+                "commit-hash-alone": ({ raw }: { raw: any }) => {
                     let rawStr = convertAnyToString(raw, "raw");
                     let offence = false;
 
-                    let urls = findUrls(rawStr)
+                    let urls = findUrls(rawStr);
 
-                    let gitRepo = process.env['GITHUB_REPOSITORY'];
+                    let gitRepo = process.env["GITHUB_REPOSITORY"];
                     if (gitRepo !== undefined && urls !== null) {
                         for (let url of urls.entries()) {
-                            let urlStr = url[1].toString()
-                            if (isCommitUrl(urlStr) && urlStr.includes(gitRepo)) {
+                            let urlStr = url[1].toString();
+                            if (
+                                isCommitUrl(urlStr) &&
+                                urlStr.includes(gitRepo)
+                            ) {
                                 offence = true;
                                 break;
                             }
@@ -285,75 +321,83 @@ module.exports = {
 
                     return [
                         !offence,
-                        `Please use the commit hash instead of the commit full URL.`
-                            + errMessageSuffix
+                        `Please use the commit hash instead of the commit full URL.` +
+                            errMessageSuffix,
                     ];
                 },
 
-                'empty-wip': ({header}: {header:any}) => {
+                "empty-wip": ({ header }: { header: any }) => {
                     let headerStr = convertAnyToString(header, "header");
                     let offence = headerStr.toLowerCase() === "wip";
                     return [
                         !offence,
-                        `Please add a number or description after the WIP prefix.`
-                            + errMessageSuffix
+                        `Please add a number or description after the WIP prefix.` +
+                            errMessageSuffix,
                     ];
                 },
 
-                'header-max-length-with-suggestions': ({header}: {header:any}, _: any, maxLineLength:number) => {
+                "header-max-length-with-suggestions": (
+                    { header }: { header: any },
+                    _: any,
+                    maxLineLength: any
+                ) => {
                     let headerStr = convertAnyToString(header, "header");
                     let offence = false;
 
                     let headerLength = headerStr.length;
                     let message = `Please do not exceed ${maxLineLength} characters in title (found ${headerLength}).`;
-                    if (!headerStr.startsWith('Merge ') && headerLength > maxLineLength) {
+                    if (
+                        !headerStr.startsWith("Merge ") &&
+                        headerLength > maxLineLength
+                    ) {
                         offence = true;
 
-                        let colonIndex = headerStr.indexOf(':');
+                        let colonIndex = headerStr.indexOf(":");
 
                         let titleWithoutArea = headerStr;
-                        if (colonIndex > 0){
+                        if (colonIndex > 0) {
                             titleWithoutArea = headerStr.substring(colonIndex);
                         }
-                        
+
                         let numRecomendations = 0;
-                        let lowerCaseTitleWithoutArea = titleWithoutArea.toLowerCase();
-                        Object.entries(abbr).forEach(([key, value]) => {  
-                            let pattern = new RegExp("\\b(" + key.toString() + ")\\b")
-                            if (pattern.test(lowerCaseTitleWithoutArea)){
+                        let lowerCaseTitleWithoutArea =
+                            titleWithoutArea.toLowerCase();
+                        Object.entries(abbr).forEach(([key, value]) => {
+                            let pattern = new RegExp(
+                                "\\b(" + key.toString() + ")\\b"
+                            );
+                            if (pattern.test(lowerCaseTitleWithoutArea)) {
                                 if (numRecomendations === 0) {
-                                    message = message + ' The following replacement(s) in your commit title are recommended:\n'
+                                    message =
+                                        message +
+                                        " The following replacement(s) in your commit title are recommended:\n";
                                 }
 
-                                message = message + `"${key}" -> "${value}"\n`;             
+                                message = message + `"${key}" -> "${value}"\n`;
                             }
-                        })
+                        });
                     }
-                    
-                    return [
-                        !offence,
-                        message
-                            + errMessageSuffix
-                    ];
+
+                    return [!offence, message + errMessageSuffix];
                 },
 
-                'footer-notes-misplacement': ({raw}: {raw:any}) => {
+                "footer-notes-misplacement": ({ raw }: { raw: any }) => {
                     let offence = false;
 
                     let rawStr = convertAnyToString(raw, "raw").trim();
-                    let lineBreakIndex = rawStr.indexOf('\n');
+                    let lineBreakIndex = rawStr.indexOf("\n");
 
-                    if (lineBreakIndex >= 0){
+                    if (lineBreakIndex >= 0) {
                         // Extracting bodyStr from rawStr rather than using body directly is a
                         // workaround for https://github.com/conventional-changelog/commitlint/issues/3428
                         let bodyStr = rawStr.substring(lineBreakIndex).trim();
-                        
-                        if (bodyStr !== ''){
+
+                        if (bodyStr !== "") {
                             let seenBody = false;
                             let seenFooter = false;
                             let lines = bodyStr.split(/\r?\n/);
                             for (let line of lines) {
-                                if (line.length === 0){
+                                if (line.length === 0) {
                                     continue;
                                 }
                                 seenBody = seenBody || !isFooterNote(line);
@@ -362,42 +406,42 @@ module.exports = {
                                     offence = true;
                                     break;
                                 }
-                                
                             }
                         }
                     }
                     return [
                         !offence,
-                        `Footer messages must be placed after body paragraphs, please move any message that starts with "Fixes", "Closes" or "[i]" to the end of the commmit message.`
-                            + errMessageSuffix
-                    ]
+                        `Footer messages must be placed after body paragraphs, please move any message that starts with "Fixes", "Closes" or "[i]" to the end of the commmit message.` +
+                            errMessageSuffix,
+                    ];
                 },
 
-                'footer-references-existence': ({raw}: {raw:any}) => {
+                "footer-references-existence": ({ raw }: { raw: any }) => {
                     let offence = false;
 
                     let rawStr = convertAnyToString(raw, "raw").trim();
-                    let lineBreakIndex = rawStr.indexOf('\n');
+                    let lineBreakIndex = rawStr.indexOf("\n");
 
-                    if (lineBreakIndex >= 0){
+                    if (lineBreakIndex >= 0) {
                         // Extracting bodyStr from rawStr rather than using body directly is a
                         // workaround for https://github.com/conventional-changelog/commitlint/issues/3428
                         let bodyStr = rawStr.substring(lineBreakIndex).trim();
 
-                        if (bodyStr !== ''){
+                        if (bodyStr !== "") {
                             let lines = bodyStr.split(/\r?\n/);
                             let bodyReferences = new Set();
                             let references = new Set();
                             for (let line of lines) {
-                                let matches = line.match(/(?<=\[)([0-9]+)(?=\])/g);
+                                let matches = line.match(
+                                    /(?<=\[)([0-9]+)(?=\])/g
+                                );
                                 if (matches === null) {
                                     continue;
                                 }
-                                for (let match of matches){
+                                for (let match of matches) {
                                     if (isFooterReference(line)) {
                                         references.add(match);
-                                    }
-                                    else {
+                                    } else {
                                         bodyReferences.add(match);
                                     }
                                 }
@@ -418,39 +462,43 @@ module.exports = {
                     }
                     return [
                         !offence,
-                        "All references in the body must be mentioned in the footer, and vice versa."
-                            + errMessageSuffix
-                    ]
+                        "All references in the body must be mentioned in the footer, and vice versa." +
+                            errMessageSuffix,
+                    ];
                 },
 
-                'prefer-slash-over-backslash': ({header}: {header:any}) => {
+                "prefer-slash-over-backslash": ({
+                    header,
+                }: {
+                    header: any;
+                }) => {
                     let headerStr = convertAnyToString(header, "header");
 
                     let offence = false;
 
                     let colonIndex = headerStr.indexOf(":");
-                    if (colonIndex >= 0){
+                    if (colonIndex >= 0) {
                         let areaOrScope = headerStr.substring(0, colonIndex);
-                        if (areaOrScope.includes('\\')){
+                        if (areaOrScope.includes("\\")) {
                             offence = true;
                         }
                     }
 
                     return [
                         !offence,
-                        `Please use slash instead of backslash in the area/scope/sub-area section of the title.`
-                            + errMessageSuffix
+                        `Please use slash instead of backslash in the area/scope/sub-area section of the title.` +
+                            errMessageSuffix,
                     ];
                 },
 
-                'proper-issue-refs': ({raw}: {raw:any}) => {
+                "proper-issue-refs": ({ raw }: { raw: any }) => {
                     let offence = false;
 
                     let rawStr = convertAnyToString(raw, "raw").trim();
-                    let lineBreakIndex = rawStr.indexOf('\n');
-                    
-                    if (lineBreakIndex >= 0){
-                        // Extracting bodyStr from rawStr rather than using body directly is a 
+                    let lineBreakIndex = rawStr.indexOf("\n");
+
+                    if (lineBreakIndex >= 0) {
+                        // Extracting bodyStr from rawStr rather than using body directly is a
                         // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
                         let bodyStr = rawStr.substring(lineBreakIndex);
                         bodyStr = removeAllCodeBlocks(bodyStr);
@@ -459,126 +507,135 @@ module.exports = {
 
                     return [
                         !offence,
-                        `Please use full URLs instead of #XYZ refs.`
-                            + errMessageSuffix
+                        `Please use full URLs instead of #XYZ refs.` +
+                            errMessageSuffix,
                     ];
                 },
 
-                'title-uppercase': ({header}: {header:any}) => {
+                "title-uppercase": ({ header }: { header: any }) => {
                     let headerStr = convertAnyToString(header, "header");
-                    let firstWord = headerStr.split(' ')[0];
-                    let offence = headerStr.indexOf(':') < 0 && 
-                                    !wordIsStartOfSentence(firstWord) &&
-                                    !isProperNoun(firstWord);
+                    let firstWord = headerStr.split(" ")[0];
+                    let offence =
+                        headerStr.indexOf(":") < 0 &&
+                        !wordIsStartOfSentence(firstWord) &&
+                        !isProperNoun(firstWord);
                     return [
                         !offence,
-                        `Please start the title with an upper-case letter if there is no area in the title.`
-                            + errMessageSuffix
+                        `Please start the title with an upper-case letter if there is no area in the title.` +
+                            errMessageSuffix,
                     ];
                 },
 
-                'too-many-spaces': ({raw}: {raw:any}) => {
+                "too-many-spaces": ({ raw }: { raw: any }) => {
                     let rawStr = convertAnyToString(raw, "raw");
                     rawStr = removeAllCodeBlocks(rawStr);
-                    let offence = (rawStr.match(`[^.]  `) !== null);
+                    let offence = rawStr.match(`[^.]  `) !== null;
 
                     return [
                         !offence,
-                        `Please watch out for too many whitespaces in the text.`
-                            + errMessageSuffix
+                        `Please watch out for too many whitespaces in the text.` +
+                            errMessageSuffix,
                     ];
                 },
 
-                'type-space-after-colon': ({header}: {header:any}) => {
+                "type-space-after-colon": ({ header }: { header: any }) => {
                     let headerStr = convertAnyToString(header, "header");
 
                     let colonFirstIndex = headerStr.indexOf(":");
 
                     let offence = false;
-                    if ((colonFirstIndex > 0) && (headerStr.length > colonFirstIndex)) {
-                        if (headerStr[colonFirstIndex + 1] != ' ') {
+                    if (
+                        colonFirstIndex > 0 &&
+                        headerStr.length > colonFirstIndex
+                    ) {
+                        if (headerStr[colonFirstIndex + 1] != " ") {
                             offence = true;
                         }
                     }
 
                     return [
                         !offence,
-                        `Please place a space after the first colon character in your commit message title`
-                            + errMessageSuffix
+                        `Please place a space after the first colon character in your commit message title` +
+                            errMessageSuffix,
                     ];
                 },
 
-                'type-with-square-brackets': ({header}: {header:any}) => {
+                "type-with-square-brackets": ({ header }: { header: any }) => {
                     let headerStr = convertAnyToString(header, "header");
 
-                    let offence = headerStr.match(`^\\[.*\\]`) !== null
+                    let offence = headerStr.match(`^\\[.*\\]`) !== null;
 
                     return [
                         !offence,
-                        `Please use "area/scope: subject" or "area(scope): subject" style instead of wrapping area/scope under square brackets in your commit message title`
-                            + errMessageSuffix
+                        `Please use "area/scope: subject" or "area(scope): subject" style instead of wrapping area/scope under square brackets in your commit message title` +
+                            errMessageSuffix,
                     ];
                 },
 
                 // NOTE: we use 'header' instead of 'subject' as a workaround to this bug: https://github.com/conventional-changelog/commitlint/issues/3404
-                'subject-lowercase': ({header}: {header:any}) => {
+                "subject-lowercase": ({ header }: { header: any }) => {
                     let headerStr = convertAnyToString(header, "header");
 
                     let offence = false;
                     let colonFirstIndex = headerStr.indexOf(":");
-                    if ((colonFirstIndex > 0) && (headerStr.length > colonFirstIndex)) {
-                        let subject = headerStr.substring(colonFirstIndex + 1).trim();
+                    if (
+                        colonFirstIndex > 0 &&
+                        headerStr.length > colonFirstIndex
+                    ) {
+                        let subject = headerStr
+                            .substring(colonFirstIndex + 1)
+                            .trim();
                         if (subject != null && subject.length > 1) {
-                            let firstWord = subject.trim().split(' ')[0];
-                            offence = wordIsStartOfSentence(firstWord)
+                            let firstWord = subject.trim().split(" ")[0];
+                            offence = wordIsStartOfSentence(firstWord);
                         }
                     }
 
                     return [
                         !offence,
-                        `Please use lowercase as the first letter for your subject, i.e. the text after your area/scope.`
-                            + errMessageSuffix
+                        `Please use lowercase as the first letter for your subject, i.e. the text after your area/scope.` +
+                            errMessageSuffix,
                     ];
                 },
 
-                'type-space-after-comma': ({header}: {header:any}) => {
+                "type-space-after-comma": ({ header }: { header: any }) => {
                     let headerStr = convertAnyToString(header, "header");
 
                     let offence = false;
                     let colonIndex = headerStr.indexOf(":");
-                    if (colonIndex >= 0){
+                    if (colonIndex >= 0) {
                         let areaOrScope = headerStr.substring(0, colonIndex);
-                        let commaIndex = (areaOrScope.indexOf(','));
+                        let commaIndex = areaOrScope.indexOf(",");
                         while (commaIndex >= 0) {
-                            if (areaOrScope[commaIndex + 1] === ' ') {
+                            if (areaOrScope[commaIndex + 1] === " ") {
                                 offence = true;
                             }
                             areaOrScope = areaOrScope.substring(commaIndex + 1);
-                            commaIndex = (areaOrScope.indexOf(','));
+                            commaIndex = areaOrScope.indexOf(",");
                         }
                     }
 
                     return [
                         !offence,
-                        `No need to use space after comma in the area/scope (so that commit title can be shorter).`
-                            + errMessageSuffix
+                        `No need to use space after comma in the area/scope (so that commit title can be shorter).` +
+                            errMessageSuffix,
                     ];
                 },
 
-                'body-soft-max-line-length': ({raw}: {raw:any}) => {
+                "body-soft-max-line-length": ({ raw }: { raw: any }) => {
                     let offence = false;
 
                     let rawStr = convertAnyToString(raw, "raw").trim();
-                    let lineBreakIndex = rawStr.indexOf('\n');
+                    let lineBreakIndex = rawStr.indexOf("\n");
 
-                    if (lineBreakIndex >= 0){
+                    if (lineBreakIndex >= 0) {
                         // Extracting bodyStr from rawStr rather than using body directly is a
                         // workaround for https://github.com/conventional-changelog/commitlint/issues/3428
                         let bodyStr = rawStr.substring(lineBreakIndex);
 
                         bodyStr = removeAllCodeBlocks(bodyStr).trim();
-                        
-                        if (bodyStr !== ''){
+
+                        if (bodyStr !== "") {
                             let lines = bodyStr.split(/\r?\n/);
                             let inBigBlock = false;
                             for (let line of lines) {
@@ -590,12 +647,11 @@ module.exports = {
                                     continue;
                                 }
                                 if (line.length > bodyMaxLineLength) {
-
                                     let isUrl = isValidUrl(line);
 
                                     let lineIsFooterNote = isFooterNote(line);
 
-                                    if ((!isUrl) && (!lineIsFooterNote)) {
+                                    if (!isUrl && !lineIsFooterNote) {
                                         offence = true;
                                         break;
                                     }
@@ -605,20 +661,20 @@ module.exports = {
                     }
 
                     // taken from https://stackoverflow.com/a/66433444/544947 and https://unix.stackexchange.com/a/25208/56844
-                    function getUnixCommand(fmtOption: string){
+                    function getUnixCommand(fmtOption: string) {
                         return `git log --format=%B -n 1 $(git log -1 --pretty=format:"%h") | cat - > log.txt ; fmt -w 1111 -s log.txt > ulog.txt && fmt -w 64 -s ${fmtOption} ulog.txt > wlog.txt && git commit --amend -F wlog.txt`;
                     }
 
                     return [
                         !offence,
                         `Please do not exceed ${bodyMaxLineLength} characters in the lines of the commit message's body; we recommend this unix command (for editing the last commit message): \n` +
-                        `For Linux users: ${getUnixCommand('-u')}\n` +
-                        `For macOS users: ${getUnixCommand('')}`
-                            + errMessageSuffix
+                            `For Linux users: ${getUnixCommand("-u")}\n` +
+                            `For macOS users: ${getUnixCommand("")}` +
+                            errMessageSuffix,
                     ];
                 },
 
-                'trailing-whitespace': ({raw}: {raw:any}) => {
+                "trailing-whitespace": ({ raw }: { raw: any }) => {
                     let rawStr = convertAnyToString(raw, "raw");
 
                     let offence = false;
@@ -649,34 +705,34 @@ module.exports = {
 
                     return [
                         !offence,
-                        `Please watch out for leading or ending trailing whitespace.`
-                            + errMessageSuffix
+                        `Please watch out for leading or ending trailing whitespace.` +
+                            errMessageSuffix,
                     ];
                 },
 
-                'type-space-before-paren': ({header}: {header:any}) => {
+                "type-space-before-paren": ({ header }: { header: any }) => {
                     let headerStr = convertAnyToString(header, "header");
 
                     let offence = false;
 
                     let colonIndex = headerStr.indexOf(":");
-                    if (colonIndex >= 0){
+                    if (colonIndex >= 0) {
                         let areaOrScope = headerStr.substring(0, colonIndex);
-                        let parenIndex = (areaOrScope.indexOf('('));
-                        if (parenIndex >= 1){
-                            if (headerStr[parenIndex - 1] === ' ') {
+                        let parenIndex = areaOrScope.indexOf("(");
+                        if (parenIndex >= 1) {
+                            if (headerStr[parenIndex - 1] === " ") {
                                 offence = true;
                             }
-                        }    
+                        }
                     }
 
                     return [
                         !offence,
-                        `No need to use space before parentheses in the area/scope/sub-area section of the title.`
-                            + errMessageSuffix
+                        `No need to use space before parentheses in the area/scope/sub-area section of the title.` +
+                            errMessageSuffix,
                     ];
                 },
-            }
-        }
-    ]
+            },
+        },
+    ],
 };
