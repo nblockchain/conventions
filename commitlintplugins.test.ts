@@ -160,6 +160,19 @@ test('body-prose15', () => {
 });
 
 
+test('body-prose16', () => {
+    let commitMsgWithUrlAtTheEndOfParagraph =
+        "Frontend.XF.Android: switch to SDK-style\n\n" +
+        "Strangely enough when opening the new gwallet.android.sln in\n" +
+        "VS4Mac, it asks the user to install the wasm-tools-net6.0\n" +
+        "workload, even though CI works without it.\n\n" +
+        "Original PR: https://github.com/nblockchain/geewallet/pull/190"
+
+    let bodyProse16 = runCommitLintOnMsg(commitMsgWithUrlAtTheEndOfParagraph);
+    expect(bodyProse16.status).toBe(0);
+})
+
+
 test('body-max-line-length1', () => {
     let tenChars = "1234 67890";
     let sixtyChars = tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
