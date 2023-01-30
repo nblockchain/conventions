@@ -308,11 +308,19 @@ module.exports = {
                     let message = `Please do not exceed ${maxLineLength} characters in title (found ${headerLength}).`;
                     if (!headerStr.startsWith('Merge ') && headerLength > maxLineLength) {
                         offence = true;
+
+                        let colonIndex = headerStr.indexOf(':');
+
+                        let titleWithoutArea = headerStr;
+                        if (colonIndex > 0){
+                            titleWithoutArea = headerStr.substring(colonIndex);
+                        }
+                        
                         let numRecomendations = 0;
-                        let lowerCaseHeaderStr = headerStr.toLowerCase()
+                        let lowerCaseTitleWithoutArea = titleWithoutArea.toLowerCase();
                         Object.entries(abbr).forEach(([key, value]) => {  
                             let pattern = new RegExp("\\b(" + key.toString() + ")\\b")
-                            if (pattern.test(lowerCaseHeaderStr)){
+                            if (pattern.test(lowerCaseTitleWithoutArea)){
                                 if (numRecomendations === 0) {
                                     message = message + ' The following replacement(s) in your commit title are recommended:\n'
                                 }
