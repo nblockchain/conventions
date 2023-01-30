@@ -18,7 +18,6 @@ jobs:
       - name: Install conventions dependencies
         run: |
           npm install
-          npm install commitlint@17.4.2
       - name: Install yarn
         run: |
           sudo npm install -g yarn
@@ -57,7 +56,6 @@ jobs:
       - name: Install conventions dependencies
         run: |
           npm install
-          npm install commitlint@17.4.2
       - name: Print commitlint version
         run: npx commitlint --version
       - name: cat package.json
