@@ -50,6 +50,7 @@ export let abbr = {
     "conditional": "cond",
     "config": "cfg",
     "configs": "cfgs",
+    "configure": "config",
     "configuration": "config",
     "configurations": "configs",
     "connection": "conn",
