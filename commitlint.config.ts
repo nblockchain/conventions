@@ -206,6 +206,14 @@ module.exports = {
                         if (bodyStr !== ''){
 
                             function paragraphHasValidEnding(paragraph: string): boolean {
+
+                                let paragraphWords = paragraph.split(' ');
+                                let lastWordInParagraph = paragraphWords[paragraphWords.length - 1];
+                                let isParagraphEndingWithUrl = isValidUrl(lastWordInParagraph);
+                                if (isParagraphEndingWithUrl){
+                                    return true
+                                }
+
                                 let endingChar = paragraph[paragraph.length - 1];
                                 if (endingChar === '.' ||
                                     endingChar === ':' ||
