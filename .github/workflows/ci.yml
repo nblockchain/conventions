@@ -15,8 +15,6 @@ jobs:
           apt install -y sudo
           sudo apt install -y git
           sudo DEBIAN_FRONTEND=noninteractive apt install --yes npm
-      - name: Install commitlint
-        run: npm install
       - name: Print versions
         run: |
           git --version
