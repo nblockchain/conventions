@@ -478,6 +478,26 @@ test('header-max-length-with-suggestions7', () => {
 });
 
 
+test('header-max-length-with-suggestions8', () => {
+    let commitMsgThatExceedsHeaderMaxLength =
+        "title: 1 second bla bla bla bla bla bla bla bla bla bla bla bla bla bla";
+    let headerMaxLength8 = runCommitLintOnMsg(commitMsgThatExceedsHeaderMaxLength);
+    let expected_message = `"1 second" -> "1sec"`
+    expect(headerMaxLength8.status).not.toBe(0);
+    expect((headerMaxLength8.stdout + '').includes(expected_message)).toEqual(true)
+});
+
+
+test('header-max-length-with-suggestions9', () => {
+    let commitMsgThatExceedsHeaderMaxLength =
+        "Configuration simplification bla bla bla bla bla bla bla bla bla bla bla";
+    let headerMaxLength9 = runCommitLintOnMsg(commitMsgThatExceedsHeaderMaxLength);
+    let expected_message = `"configuration" -> "config"`
+    expect(headerMaxLength9.status).not.toBe(0);
+    expect((headerMaxLength9.stdout + '').includes(expected_message)).toEqual(true)
+});
+
+
 test('proper-issue-refs1', () => {
     let commitMsgWithHashtagRef = "foo: blah blah" + '\n\n' + "Blah blah #123.";
     let properIssueRefs1 = runCommitLintOnMsg(commitMsgWithHashtagRef);
