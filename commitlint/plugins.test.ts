@@ -468,6 +468,16 @@ test('header-max-length-with-suggestions6', () => {
 });
 
 
+test('header-max-length-with-suggestions7', () => {
+    let commitMsgThatExceedsHeaderMaxLength =
+        "Fix android build because blah blah very very very very very long title";
+    let headerMaxLength7 = runCommitLintOnMsg(commitMsgThatExceedsHeaderMaxLength);
+    let not_expected_message = `"and" -> "&"`
+    expect(headerMaxLength7.status).not.toBe(0);
+    expect((headerMaxLength7.stdout + '').includes(not_expected_message)).toEqual(false)
+});
+
+
 test('proper-issue-refs1', () => {
     let commitMsgWithHashtagRef = "foo: blah blah" + '\n\n' + "Blah blah #123.";
     let properIssueRefs1 = runCommitLintOnMsg(commitMsgWithHashtagRef);
