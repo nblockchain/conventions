@@ -241,6 +241,8 @@ export let abbr = {
     "statistics": "stats",
     "string": "str",
     "strings": "strs",
+    "suggestion": "hint",
+    "suggestions": "hints",
     "synchronize": "sync",
     "temporary": "tmp",
     "third": "3rd",
