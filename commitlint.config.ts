@@ -300,7 +300,7 @@ module.exports = {
                     ];
                 },
 
-                'header-max-length-with-suggestions': ({header}: {header:any}, _: any, maxLineLength:any) => {
+                'header-max-length-with-suggestions': ({header}: {header:any}, _: any, maxLineLength:number) => {
                     let headerStr = convertAnyToString(header, "header");
                     let offence = false;
 
