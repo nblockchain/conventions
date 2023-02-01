@@ -311,7 +311,8 @@ module.exports = {
                         let numRecomendations = 0;
                         let lowerCaseHeaderStr = headerStr.toLowerCase()
                         Object.entries(abbr).forEach(([key, value]) => {  
-                            if (lowerCaseHeaderStr.includes(key.toString())){
+                            let pattern = new RegExp("\\b(" + key.toString() + ")\\b")
+                            if (pattern.test(lowerCaseHeaderStr)){
                                 if (numRecomendations === 0) {
                                     message = message + ' The following replacement(s) in your commit title are recommended:\n'
                                 }

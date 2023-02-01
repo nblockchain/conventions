@@ -468,6 +468,56 @@ test('header-max-length-with-suggestions6', () => {
 });
 
 
+test('header-max-length-with-suggestions7', () => {
+    let commitMsgThatExceedsHeaderMaxLength =
+        "Fix android build because blah blah very very very very very long title";
+    let headerMaxLength7 = runCommitLintOnMsg(commitMsgThatExceedsHeaderMaxLength);
+    let not_expected_message = `"and" -> "&"`
+    expect(headerMaxLength7.status).not.toBe(0);
+    expect((headerMaxLength7.stdout + '').includes(not_expected_message)).toEqual(false)
+});
+
+
+test('header-max-length-with-suggestions8', () => {
+    let commitMsgThatExceedsHeaderMaxLength =
+        "title: 1 second bla bla bla bla bla bla bla bla bla bla bla bla bla bla";
+    let headerMaxLength8 = runCommitLintOnMsg(commitMsgThatExceedsHeaderMaxLength);
+    let expected_message = `"1 second" -> "1sec"`
+    expect(headerMaxLength8.status).not.toBe(0);
+    expect((headerMaxLength8.stdout + '').includes(expected_message)).toEqual(true)
+});
+
+
+test('header-max-length-with-suggestions9', () => {
+    let commitMsgThatExceedsHeaderMaxLength =
+        "Configuration simplification bla bla bla bla bla bla bla bla bla bla bla";
+    let headerMaxLength9 = runCommitLintOnMsg(commitMsgThatExceedsHeaderMaxLength);
+    let expected_message = `"configuration" -> "config"`
+    expect(headerMaxLength9.status).not.toBe(0);
+    expect((headerMaxLength9.stdout + '').includes(expected_message)).toEqual(true)
+});
+
+
+test('header-max-length-with-suggestions10', () => {
+    let commitMsgThatExceedsHeaderMaxLength =
+        "area: 20 characters more because blah blah very very very very long title";
+    let headerMaxLength10 = runCommitLintOnMsg(commitMsgThatExceedsHeaderMaxLength);
+    let expected_message = `"characters" -> "chars"`
+    expect(headerMaxLength10.status).not.toBe(0);
+    expect((headerMaxLength10.stdout + '').includes(expected_message)).toEqual(true)
+});
+
+
+test('header-max-length-with-suggestions11', () => {
+    let commitMsgThatExceedsHeaderMaxLength =
+        "Split that compares better because blah blah bla very very very long title";
+    let headerMaxLength11 = runCommitLintOnMsg(commitMsgThatExceedsHeaderMaxLength);
+    let not_expected_message = `"compares" -> "cmps"`
+    expect(headerMaxLength11.status).not.toBe(0);
+    expect((headerMaxLength11.stdout + '').includes(not_expected_message)).toEqual(false)
+});
+
+
 test('proper-issue-refs1', () => {
     let commitMsgWithHashtagRef = "foo: blah blah" + '\n\n' + "Blah blah #123.";
     let properIssueRefs1 = runCommitLintOnMsg(commitMsgWithHashtagRef);
