@@ -461,10 +461,20 @@ test('header-max-length-with-suggestions5', () => {
 test('header-max-length-with-suggestions6', () => {
     let commitMsgWithThatExceedsHeaderMaxLength =
         "Upgrade foo bla bla bla bla bla bla bla bla bla bla bla bla bla bla";
-    let headerMaxLength1 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
+    let headerMaxLength6 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
     let expected_message = `"upgrade" -> "update"`
-    expect(headerMaxLength1.status).not.toBe(0);
-    expect((headerMaxLength1.stdout + '').includes(expected_message)).toEqual(true)
+    expect(headerMaxLength6.status).not.toBe(0);
+    expect((headerMaxLength6.stdout + '').includes(expected_message)).toEqual(true)
+});
+
+
+test('header-max-length-with-suggestions7', () => {
+    let commitMsgWithThatExceedsHeaderMaxLength =
+        "configure: this is the very very very very very long title";
+    let headerMaxLength7 = runCommitLintOnMsg(commitMsgWithThatExceedsHeaderMaxLength);
+    let expected_message = `"configure" -> "config"`
+    expect(headerMaxLength7.status).not.toBe(0);
+    expect((headerMaxLength7.stdout + '').includes(expected_message)).toEqual(false)
 });
 
 
