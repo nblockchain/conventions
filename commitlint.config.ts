@@ -1,13 +1,6 @@
 import { abbr } from "./commitlint/abbreviations";
-
-// to convert from 'any' type
-function convertAnyToString(potentialString: any, paramName: string): string {
-    if (potentialString === null || potentialString === undefined) {
-        // otherwise, String(null) might give us the stupid string "null"
-        throw new Error('Unexpected ' + paramName + '===null or ' + paramName + '===undefined happened');
-    }
-    return String(potentialString);
-}
+import { Helpers } from "./commitlint/helpers";
+import { Plugins } from "./commitlint/plugins";
 
 enum RuleStatus {
     Disabled = 0,
@@ -17,27 +10,6 @@ enum RuleStatus {
 
 let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
-let errMessageSuffix = "\nFor reference, these are the guidelines that include our commit message conventions: https://github.com/nblockchain/conventions/blob/master/WorkflowGuidelines.md";
-
-function isValidUrl(text: string) {
-    if (text.indexOf(" ") >= 0) {
-        return false;
-    }
-
-    // Borrowed from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
-    try { 
-        return Boolean(new URL(text));
-    }
-    catch(e){ 
-        return false; 
-    }
-}
-
-function assertUrl(url: string) {
-    if (!isValidUrl(url)) {
-        throw Error('This function expects a url as input')   
-    }
-}
 
 function assertCharacter(letter: string) {
     if (letter.length !== 1) {
@@ -140,16 +112,6 @@ function removeAllCodeBlocks(text: string) {
     return text.replace(/```[^]*```/g, '');
 }
 
-function findUrls(text: string) {
-    var urlRegex = /(https?:\/\/[^\s]+)/g;
-    return text.match(urlRegex);
-}
-
-function isCommitUrl(url: string) {
-    assertUrl(url)
-    return url.includes('/commit/');
-}
-
 module.exports = {
     parserPreset: 'conventional-changelog-conventionalcommits',
     rules: {
@@ -193,7 +155,7 @@ module.exports = {
                 'body-prose': ({raw}: {raw:any}) => {
                     let offence = false;
 
-                    let rawStr = convertAnyToString(raw, "raw").trim();
+                    let rawStr = Helpers.convertAnyToString(raw, "raw").trim();
                     let lineBreakIndex = rawStr.indexOf('\n');
 
                     if (lineBreakIndex >= 0){
@@ -209,7 +171,7 @@ module.exports = {
 
                                 let paragraphWords = paragraph.split(' ');
                                 let lastWordInParagraph = paragraphWords[paragraphWords.length - 1];
-                                let isParagraphEndingWithUrl = isValidUrl(lastWordInParagraph);
+                                let isParagraphEndingWithUrl = Helpers.isValidUrl(lastWordInParagraph);
                                 if (isParagraphEndingWithUrl){
                                     return true
                                 }
@@ -243,13 +205,13 @@ module.exports = {
                                 let lines = paragraph.split(/\r?\n/);
 
                                 if (startWithLowerCase) {
-                                    if (!(lines.length == 1 && isValidUrl(lines[0]))) {
+                                    if (!(lines.length == 1 && Helpers.isValidUrl(lines[0]))) {
                                         offence = true;
                                     }
                                 }
 
                                 if (!validParagraphEnd &&
-                                    !isValidUrl(lines[lines.length - 1]) &&
+                                    !Helpers.isValidUrl(lines[lines.length - 1]) &&
                                     !isFooterNote(lines[lines.length - 1])) {
 
                                     offence = true;
@@ -262,46 +224,27 @@ module.exports = {
                     return [
                         !offence,
                         `Please begin a paragraph with uppercase letter and end it with a dot.`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
 
                 'commit-hash-alone': ({raw}: {raw:any}) => {
-                    let rawStr = convertAnyToString(raw, "raw");
-                    let offence = false;
-
-                    let urls = findUrls(rawStr)
-
-                    let gitRepo = process.env['GITHUB_REPOSITORY'];
-                    if (gitRepo !== undefined && urls !== null) {
-                        for (let url of urls.entries()) {
-                            let urlStr = url[1].toString()
-                            if (isCommitUrl(urlStr) && urlStr.includes(gitRepo)) {
-                                offence = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    return [
-                        !offence,
-                        `Please use the commit hash instead of the commit full URL.`
-                            + errMessageSuffix
-                    ];
+                    let rawStr = Helpers.convertAnyToString(raw, "raw");
+                    return Plugins.commitHashAlone(rawStr);
                 },
 
                 'empty-wip': ({header}: {header:any}) => {
-                    let headerStr = convertAnyToString(header, "header");
+                    let headerStr = Helpers.convertAnyToString(header, "header");
                     let offence = headerStr.toLowerCase() === "wip";
                     return [
                         !offence,
                         `Please add a number or description after the WIP prefix.`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
 
                 'header-max-length-with-suggestions': ({header}: {header:any}, _: any, maxLineLength:number) => {
-                    let headerStr = convertAnyToString(header, "header");
+                    let headerStr = Helpers.convertAnyToString(header, "header");
                     let offence = false;
 
                     let headerLength = headerStr.length;
@@ -333,14 +276,14 @@ module.exports = {
                     return [
                         !offence,
                         message
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
 
                 'footer-notes-misplacement': ({raw}: {raw:any}) => {
                     let offence = false;
 
-                    let rawStr = convertAnyToString(raw, "raw").trim();
+                    let rawStr = Helpers.convertAnyToString(raw, "raw").trim();
                     let lineBreakIndex = rawStr.indexOf('\n');
 
                     if (lineBreakIndex >= 0){
@@ -369,14 +312,14 @@ module.exports = {
                     return [
                         !offence,
                         `Footer messages must be placed after body paragraphs, please move any message that starts with "Fixes", "Closes" or "[i]" to the end of the commmit message.`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ]
                 },
 
                 'footer-references-existence': ({raw}: {raw:any}) => {
                     let offence = false;
 
-                    let rawStr = convertAnyToString(raw, "raw").trim();
+                    let rawStr = Helpers.convertAnyToString(raw, "raw").trim();
                     let lineBreakIndex = rawStr.indexOf('\n');
 
                     if (lineBreakIndex >= 0){
@@ -419,12 +362,12 @@ module.exports = {
                     return [
                         !offence,
                         "All references in the body must be mentioned in the footer, and vice versa."
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ]
                 },
 
                 'prefer-slash-over-backslash': ({header}: {header:any}) => {
-                    let headerStr = convertAnyToString(header, "header");
+                    let headerStr = Helpers.convertAnyToString(header, "header");
 
                     let offence = false;
 
@@ -439,14 +382,14 @@ module.exports = {
                     return [
                         !offence,
                         `Please use slash instead of backslash in the area/scope/sub-area section of the title.`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
 
                 'proper-issue-refs': ({raw}: {raw:any}) => {
                     let offence = false;
 
-                    let rawStr = convertAnyToString(raw, "raw").trim();
+                    let rawStr = Helpers.convertAnyToString(raw, "raw").trim();
                     let lineBreakIndex = rawStr.indexOf('\n');
                     
                     if (lineBreakIndex >= 0){
@@ -460,12 +403,12 @@ module.exports = {
                     return [
                         !offence,
                         `Please use full URLs instead of #XYZ refs.`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
 
                 'title-uppercase': ({header}: {header:any}) => {
-                    let headerStr = convertAnyToString(header, "header");
+                    let headerStr = Helpers.convertAnyToString(header, "header");
                     let firstWord = headerStr.split(' ')[0];
                     let offence = headerStr.indexOf(':') < 0 && 
                                     !wordIsStartOfSentence(firstWord) &&
@@ -473,24 +416,24 @@ module.exports = {
                     return [
                         !offence,
                         `Please start the title with an upper-case letter if there is no area in the title.`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
 
                 'too-many-spaces': ({raw}: {raw:any}) => {
-                    let rawStr = convertAnyToString(raw, "raw");
+                    let rawStr = Helpers.convertAnyToString(raw, "raw");
                     rawStr = removeAllCodeBlocks(rawStr);
                     let offence = (rawStr.match(`[^.]  `) !== null);
 
                     return [
                         !offence,
                         `Please watch out for too many whitespaces in the text.`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
 
                 'type-space-after-colon': ({header}: {header:any}) => {
-                    let headerStr = convertAnyToString(header, "header");
+                    let headerStr = Helpers.convertAnyToString(header, "header");
 
                     let colonFirstIndex = headerStr.indexOf(":");
 
@@ -504,25 +447,25 @@ module.exports = {
                     return [
                         !offence,
                         `Please place a space after the first colon character in your commit message title`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
 
                 'type-with-square-brackets': ({header}: {header:any}) => {
-                    let headerStr = convertAnyToString(header, "header");
+                    let headerStr = Helpers.convertAnyToString(header, "header");
 
                     let offence = headerStr.match(`^\\[.*\\]`) !== null
 
                     return [
                         !offence,
                         `Please use "area/scope: subject" or "area(scope): subject" style instead of wrapping area/scope under square brackets in your commit message title`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
 
                 // NOTE: we use 'header' instead of 'subject' as a workaround to this bug: https://github.com/conventional-changelog/commitlint/issues/3404
                 'subject-lowercase': ({header}: {header:any}) => {
-                    let headerStr = convertAnyToString(header, "header");
+                    let headerStr = Helpers.convertAnyToString(header, "header");
 
                     let offence = false;
                     let colonFirstIndex = headerStr.indexOf(":");
@@ -537,12 +480,12 @@ module.exports = {
                     return [
                         !offence,
                         `Please use lowercase as the first letter for your subject, i.e. the text after your area/scope.`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
 
                 'type-space-after-comma': ({header}: {header:any}) => {
-                    let headerStr = convertAnyToString(header, "header");
+                    let headerStr = Helpers.convertAnyToString(header, "header");
 
                     let offence = false;
                     let colonIndex = headerStr.indexOf(":");
@@ -561,14 +504,14 @@ module.exports = {
                     return [
                         !offence,
                         `No need to use space after comma in the area/scope (so that commit title can be shorter).`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
 
                 'body-soft-max-line-length': ({raw}: {raw:any}) => {
                     let offence = false;
 
-                    let rawStr = convertAnyToString(raw, "raw").trim();
+                    let rawStr = Helpers.convertAnyToString(raw, "raw").trim();
                     let lineBreakIndex = rawStr.indexOf('\n');
 
                     if (lineBreakIndex >= 0){
@@ -591,7 +534,7 @@ module.exports = {
                                 }
                                 if (line.length > bodyMaxLineLength) {
 
-                                    let isUrl = isValidUrl(line);
+                                    let isUrl = Helpers.isValidUrl(line);
 
                                     let lineIsFooterNote = isFooterNote(line);
 
@@ -614,12 +557,12 @@ module.exports = {
                         `Please do not exceed ${bodyMaxLineLength} characters in the lines of the commit message's body; we recommend this unix command (for editing the last commit message): \n` +
                         `For Linux users: ${getUnixCommand('-u')}\n` +
                         `For macOS users: ${getUnixCommand('')}`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
 
                 'trailing-whitespace': ({raw}: {raw:any}) => {
-                    let rawStr = convertAnyToString(raw, "raw");
+                    let rawStr = Helpers.convertAnyToString(raw, "raw");
 
                     let offence = false;
                     let lines = rawStr.split(/\r?\n/);
@@ -650,12 +593,12 @@ module.exports = {
                     return [
                         !offence,
                         `Please watch out for leading or ending trailing whitespace.`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
 
                 'type-space-before-paren': ({header}: {header:any}) => {
-                    let headerStr = convertAnyToString(header, "header");
+                    let headerStr = Helpers.convertAnyToString(header, "header");
 
                     let offence = false;
 
@@ -673,7 +616,7 @@ module.exports = {
                     return [
                         !offence,
                         `No need to use space before parentheses in the area/scope/sub-area section of the title.`
-                            + errMessageSuffix
+                            + Helpers.errMessageSuffix
                     ];
                 },
             }
