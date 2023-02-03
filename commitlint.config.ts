@@ -158,7 +158,7 @@ module.exports = {
         'empty-wip': [RuleStatus.Error, 'always'],
         'footer-leading-blank': [RuleStatus.Warning, 'always'],
         'footer-max-line-length': [RuleStatus.Error, 'always', 150],
-        'footer-notes-misplacement': [RuleStatus.Error],
+        'footer-notes-misplacement': [RuleStatus.Error, null],
         'footer-references-existence': [RuleStatus.Error, 'always'],
         'header-max-length-with-suggestions': [RuleStatus.Error, 'always', headerMaxLineLength],
         'subject-full-stop': [RuleStatus.Error, 'never', '.'],
