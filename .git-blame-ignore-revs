@@ -1,0 +1,14 @@
+# commitlint: prettify TS files coding style
+03c4025be2a453d309049347de069a6a6a86c132
+
+# commitlint: rename plugins test file
+262f868ad7b74a2fbddca7fa5e0d86ad5dbdca1c
+
+# GitHubCI: rename again, better to have acronym
+c4028c67e3c1170586e1c10cb931b815889c7631
+
+# commitlint: move tests inside commitlint subdir
+cfbd22a3a7c2dee5faee8e1bbaa5a2aaa9161aa0
+
+# GitHubCI: rename YML file
+b622833f5e59a10c0aca271c7b25a93ad927e0c3
