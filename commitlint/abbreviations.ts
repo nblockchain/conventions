@@ -252,7 +252,7 @@ export let abbr = {
     "timers": "tmrs",
     "transaction": "tx",
     "transactions": "txs",
-    "two": 2,
+    "two": "2",
     "unix to dos": "unix2dos",
     "unnecessary": "unneeded",
     "unsigned integer": "uint",
@@ -266,4 +266,4 @@ export let abbr = {
     "yes/no": "y/n",
     "zero": "0",
     "zeroes": "0s",
-}
+};

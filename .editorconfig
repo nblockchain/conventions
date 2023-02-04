@@ -1,4 +1,4 @@
-[*.{fs,fsx}]
+[*.{fs,fsx,ts}]
 end_of_line=lf
 indent_size=4
 max_line_length=80
