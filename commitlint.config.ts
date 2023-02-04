@@ -1,11 +1,6 @@
 import { Helpers } from "./commitlint/helpers";
 import { Plugins } from "./commitlint/plugins";
-
-enum RuleStatus {
-    Disabled = 0,
-    Warning = 1,
-    Error = 2,
-}
+import { RuleConfigSeverity } from "@commitlint/types";
 
 let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
@@ -13,36 +8,36 @@ let headerMaxLineLength = 50;
 module.exports = {
     parserPreset: "conventional-changelog-conventionalcommits",
     rules: {
-        "body-leading-blank": [RuleStatus.Warning, "always"],
+        "body-leading-blank": [RuleConfigSeverity.Warning, "always"],
         "body-soft-max-line-length": [
-            RuleStatus.Error,
+            RuleConfigSeverity.Error,
             "always",
             bodyMaxLineLength,
         ],
-        "empty-wip": [RuleStatus.Error, "always"],
-        "footer-leading-blank": [RuleStatus.Warning, "always"],
-        "footer-max-line-length": [RuleStatus.Error, "always", 150],
-        "footer-notes-misplacement": [RuleStatus.Error, "always"],
-        "footer-references-existence": [RuleStatus.Error, "always"],
+        "empty-wip": [RuleConfigSeverity.Error, "always"],
+        "footer-leading-blank": [RuleConfigSeverity.Warning, "always"],
+        "footer-max-line-length": [RuleConfigSeverity.Error, "always", 150],
+        "footer-notes-misplacement": [RuleConfigSeverity.Error, "always"],
+        "footer-references-existence": [RuleConfigSeverity.Error, "always"],
         "header-max-length-with-suggestions": [
-            RuleStatus.Error,
+            RuleConfigSeverity.Error,
             "always",
             headerMaxLineLength,
         ],
-        "subject-full-stop": [RuleStatus.Error, "never", "."],
-        "type-empty": [RuleStatus.Warning, "never"],
-        "type-space-after-colon": [RuleStatus.Error, "always"],
-        "subject-lowercase": [RuleStatus.Error, "always"],
-        "body-prose": [RuleStatus.Error, "always"],
-        "type-space-after-comma": [RuleStatus.Error, "always"],
-        "trailing-whitespace": [RuleStatus.Error, "always"],
-        "prefer-slash-over-backslash": [RuleStatus.Error, "always"],
-        "type-space-before-paren": [RuleStatus.Error, "always"],
-        "type-with-square-brackets": [RuleStatus.Error, "always"],
-        "proper-issue-refs": [RuleStatus.Error, "always"],
-        "too-many-spaces": [RuleStatus.Error, "always"],
-        "commit-hash-alone": [RuleStatus.Error, "always"],
-        "title-uppercase": [RuleStatus.Error, "always"],
+        "subject-full-stop": [RuleConfigSeverity.Error, "never", "."],
+        "type-empty": [RuleConfigSeverity.Warning, "never"],
+        "type-space-after-colon": [RuleConfigSeverity.Error, "always"],
+        "subject-lowercase": [RuleConfigSeverity.Error, "always"],
+        "body-prose": [RuleConfigSeverity.Error, "always"],
+        "type-space-after-comma": [RuleConfigSeverity.Error, "always"],
+        "trailing-whitespace": [RuleConfigSeverity.Error, "always"],
+        "prefer-slash-over-backslash": [RuleConfigSeverity.Error, "always"],
+        "type-space-before-paren": [RuleConfigSeverity.Error, "always"],
+        "type-with-square-brackets": [RuleConfigSeverity.Error, "always"],
+        "proper-issue-refs": [RuleConfigSeverity.Error, "always"],
+        "too-many-spaces": [RuleConfigSeverity.Error, "always"],
+        "commit-hash-alone": [RuleConfigSeverity.Error, "always"],
+        "title-uppercase": [RuleConfigSeverity.Error, "always"],
     },
     plugins: [
         // TODO (ideas for more rules):
