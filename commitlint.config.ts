@@ -4,6 +4,7 @@ import { RuleConfigSeverity } from "@commitlint/types";
 
 let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
+let footerMaxLineLength = 150;
 
 module.exports = {
     parserPreset: "conventional-changelog-conventionalcommits",
@@ -16,7 +17,11 @@ module.exports = {
         ],
         "empty-wip": [RuleConfigSeverity.Error, "always"],
         "footer-leading-blank": [RuleConfigSeverity.Warning, "always"],
-        "footer-max-line-length": [RuleConfigSeverity.Error, "always", 150],
+        "footer-max-line-length": [
+            RuleConfigSeverity.Error,
+            "always",
+            footerMaxLineLength,
+        ],
         "footer-notes-misplacement": [RuleConfigSeverity.Error, "always"],
         "footer-references-existence": [RuleConfigSeverity.Error, "always"],
         "header-max-length-with-suggestions": [
