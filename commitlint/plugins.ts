@@ -78,7 +78,7 @@ export abstract class Plugins {
 
         return [
             !offence,
-            `Please begin a paragraph with uppercase letter and end it with a dot.` +
+            `The body of the commit message (as opposed to the commit message title) is composed of paragraphs. Please begin each paragraph with an uppercase letter and end it with a dot (or other valid character to finish a paragraph).` +
                 Helpers.errMessageSuffix,
         ];
     }
