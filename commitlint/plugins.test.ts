@@ -4,6 +4,13 @@ function runCommitLintOnMsg(inputMsg: string) {
     return spawnSync("npx", ["commitlint", "--verbose"], { input: inputMsg });
 }
 
+test("body-leading-blank1", () => {
+    let commitMsgWithoutEmptySecondLine =
+        "foo: this is only a title" + "\n" + "Bar baz.";
+    let bodyLeadingBlank1 = runCommitLintOnMsg(commitMsgWithoutEmptySecondLine);
+    expect(bodyLeadingBlank1.status).not.toBe(0);
+});
+
 test("body-prose1", () => {
     let commitMsgWithLowercaseBodyStart =
         "foo: this is only a title" + "\n\n" + "bla blah bla.";
