@@ -280,7 +280,7 @@ export abstract class Plugins {
             !Helpers.isProperNoun(firstWord);
         return [
             !offence,
-            `Please start the title with an upper-case letter if there is no area in the title.` +
+            `Please start the title with an uppercase letter if you haven't specified any area/scope.` +
                 Helpers.errMessageSuffix,
         ];
     }
@@ -328,17 +328,18 @@ export abstract class Plugins {
 
         let colonFirstIndex = headerStr.indexOf(":");
 
+        let firstWord = "";
         if (colonFirstIndex > 0 && headerStr.length > colonFirstIndex) {
             let subject = headerStr.substring(colonFirstIndex + 1).trim();
             if (subject != null && subject.length > 1) {
-                let firstWord = subject.trim().split(" ")[0];
+                firstWord = subject.trim().split(" ")[0];
                 offence = Helpers.wordIsStartOfSentence(firstWord);
             }
         }
 
         return [
             !offence,
-            `Please use lowercase as the first letter for your subject, i.e. the text after your area/scope.` +
+            `Please use lowercase as the first letter for your subject, i.e. the text after your area/scope (note: there is a chance that this rule is yielding a false positive in case the word '${firstWord}' is a name and must be capitalized; in which case please just reword the subject to make this word not be the first, sorry).` +
                 Helpers.errMessageSuffix,
         ];
     }
