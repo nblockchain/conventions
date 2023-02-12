@@ -128,16 +128,16 @@ export abstract class Plugins {
 
             let colonIndex = headerStr.indexOf(":");
 
-            let titleWithoutArea = headerStr;
+            let titleWithoutScope = headerStr;
             if (colonIndex > 0) {
-                titleWithoutArea = headerStr.substring(colonIndex);
+                titleWithoutScope = headerStr.substring(colonIndex);
             }
 
             let numRecomendations = 0;
-            let lowerCaseTitleWithoutArea = titleWithoutArea.toLowerCase();
+            let lowerCaseTitleWithoutScope = titleWithoutScope.toLowerCase();
             Object.entries(abbr).forEach(([key, value]) => {
                 let pattern = new RegExp("\\b(" + key.toString() + ")\\b");
-                if (pattern.test(lowerCaseTitleWithoutArea)) {
+                if (pattern.test(lowerCaseTitleWithoutScope)) {
                     if (numRecomendations === 0) {
                         message =
                             message +
@@ -239,15 +239,15 @@ export abstract class Plugins {
 
         let colonIndex = headerStr.indexOf(":");
         if (colonIndex >= 0) {
-            let areaOrScope = headerStr.substring(0, colonIndex);
-            if (areaOrScope.includes("\\")) {
+            let scope = headerStr.substring(0, colonIndex);
+            if (scope.includes("\\")) {
                 offence = true;
             }
         }
 
         return [
             !offence,
-            `Please use slash instead of backslash in the area/scope/sub-area section of the title.` +
+            `Please use slash instead of backslash in the scope/sub-scope section of the title.` +
                 Helpers.errMessageSuffix,
         ];
     }
@@ -280,7 +280,7 @@ export abstract class Plugins {
             !Helpers.isProperNoun(firstWord);
         return [
             !offence,
-            `Please start the title with an uppercase letter if you haven't specified any area/scope.` +
+            `Please start the title with an uppercase letter if you haven't specified any scope.` +
                 Helpers.errMessageSuffix,
         ];
     }
@@ -318,7 +318,7 @@ export abstract class Plugins {
 
         return [
             !offence,
-            `Please use "area/scope: subject" or "area(scope): subject" style instead of wrapping area/scope under square brackets in your commit message title` +
+            `Please use "scope/sub-scope: subject" or "scope(scope): subject" style instead of wrapping the scope details under square brackets in your commit message title` +
                 Helpers.errMessageSuffix,
         ];
     }
@@ -339,7 +339,7 @@ export abstract class Plugins {
 
         return [
             !offence,
-            `Please use lowercase as the first letter for your subject, i.e. the text after your area/scope (note: there is a chance that this rule is yielding a false positive in case the word '${firstWord}' is a name and must be capitalized; in which case please just reword the subject to make this word not be the first, sorry).` +
+            `Please use lowercase as the first letter for your subject, i.e. the text after your scope (note: there is a chance that this rule is yielding a false positive in case the word '${firstWord}' is a name and must be capitalized; in which case please just reword the subject to make this word not be the first, sorry).` +
                 Helpers.errMessageSuffix,
         ];
     }
@@ -350,20 +350,20 @@ export abstract class Plugins {
         let colonIndex = headerStr.indexOf(":");
 
         if (colonIndex >= 0) {
-            let areaOrScope = headerStr.substring(0, colonIndex);
-            let commaIndex = areaOrScope.indexOf(",");
+            let scope = headerStr.substring(0, colonIndex);
+            let commaIndex = scope.indexOf(",");
             while (commaIndex >= 0) {
-                if (areaOrScope[commaIndex + 1] === " ") {
+                if (scope[commaIndex + 1] === " ") {
                     offence = true;
                 }
-                areaOrScope = areaOrScope.substring(commaIndex + 1);
-                commaIndex = areaOrScope.indexOf(",");
+                scope = scope.substring(commaIndex + 1);
+                commaIndex = scope.indexOf(",");
             }
         }
 
         return [
             !offence,
-            `No need to use space after comma in the area/scope (so that commit title can be shorter).` +
+            `No need to use space after comma in the scope (so that commit title can be shorter).` +
                 Helpers.errMessageSuffix,
         ];
     }
@@ -462,8 +462,8 @@ export abstract class Plugins {
 
         let colonIndex = headerStr.indexOf(":");
         if (colonIndex >= 0) {
-            let areaOrScope = headerStr.substring(0, colonIndex);
-            let parenIndex = areaOrScope.indexOf("(");
+            let scope = headerStr.substring(0, colonIndex);
+            let parenIndex = scope.indexOf("(");
             if (parenIndex >= 1) {
                 if (headerStr[parenIndex - 1] === " ") {
                     offence = true;
@@ -473,7 +473,7 @@ export abstract class Plugins {
 
         return [
             !offence,
-            `No need to use space before parentheses in the area/scope/sub-area section of the title.` +
+            `No need to use space before parentheses in the scope/sub-scope section of the title.` +
                 Helpers.errMessageSuffix,
         ];
     }

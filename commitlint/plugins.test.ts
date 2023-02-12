@@ -613,7 +613,7 @@ test("header-max-length-with-suggestions10", () => {
 
 test("header-max-length-with-suggestions11", () => {
     let commitMsgThatExceedsHeaderMaxLength =
-        "area: 20 characters more because blah blah very very very very long title";
+        "scope: 20 characters more because blah blah very very very very long title";
     let headerMaxLength11 = runCommitLintOnMsg(
         commitMsgThatExceedsHeaderMaxLength
     );
@@ -690,20 +690,20 @@ test("subject-lowercase4", () => {
 });
 
 test("subject-lowercase5", () => {
-    let commitMsgWithRareCharInArea1 = "foo.bar: Baz";
-    let subjectLowerCase5 = runCommitLintOnMsg(commitMsgWithRareCharInArea1);
+    let commitMsgWithRareCharInScope1 = "foo.bar: Baz";
+    let subjectLowerCase5 = runCommitLintOnMsg(commitMsgWithRareCharInScope1);
     expect(subjectLowerCase5.status).not.toBe(0);
 });
 
 test("subject-lowercase6", () => {
-    let commitMsgWithRareCharInArea2 = "foo-bar: Baz";
-    let subjectLowerCase6 = runCommitLintOnMsg(commitMsgWithRareCharInArea2);
+    let commitMsgWithRareCharInScope2 = "foo-bar: Baz";
+    let subjectLowerCase6 = runCommitLintOnMsg(commitMsgWithRareCharInScope2);
     expect(subjectLowerCase6.status).not.toBe(0);
 });
 
 test("subject-lowercase7", () => {
-    let commitMsgWithRareCharInArea3 = "foo,bar: Baz";
-    let subjectLowerCase7 = runCommitLintOnMsg(commitMsgWithRareCharInArea3);
+    let commitMsgWithRareCharInScope3 = "foo,bar: Baz";
+    let subjectLowerCase7 = runCommitLintOnMsg(commitMsgWithRareCharInScope3);
     expect(subjectLowerCase7.status).not.toBe(0);
 });
 
@@ -731,26 +731,26 @@ test("subject-lowercase10", () => {
 });
 
 test("title-uppercase1", () => {
-    let commitMsgWithoutArea = "remove logs";
-    let titleUpperCase1 = runCommitLintOnMsg(commitMsgWithoutArea);
+    let commitMsgWithoutScope = "remove logs";
+    let titleUpperCase1 = runCommitLintOnMsg(commitMsgWithoutScope);
     expect(titleUpperCase1.status).not.toBe(0);
 });
 
 test("title-uppercase2", () => {
-    let commitMsgWithoutArea = "Remove logs";
-    let titleUpperCase2 = runCommitLintOnMsg(commitMsgWithoutArea);
+    let commitMsgWithoutScope = "Remove logs";
+    let titleUpperCase2 = runCommitLintOnMsg(commitMsgWithoutScope);
     expect(titleUpperCase2.status).toBe(0);
 });
 
 test("title-uppercase3", () => {
-    let commitMsgWithoutArea = "testFixtureSetup refactor";
-    let titleUpperCase3 = runCommitLintOnMsg(commitMsgWithoutArea);
+    let commitMsgWithoutScope = "testFixtureSetup refactor";
+    let titleUpperCase3 = runCommitLintOnMsg(commitMsgWithoutScope);
     expect(titleUpperCase3.status).toBe(0);
 });
 
 test("title-uppercase4", () => {
-    let commitMsgWithLowerCaseArea = "lowercase: area is lowercase";
-    let titleUpperCase4 = runCommitLintOnMsg(commitMsgWithLowerCaseArea);
+    let commitMsgWithLowerCaseScope = "lowercase: scope is lowercase";
+    let titleUpperCase4 = runCommitLintOnMsg(commitMsgWithLowerCaseScope);
     expect(titleUpperCase4.status).toBe(0);
 });
 
