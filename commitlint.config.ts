@@ -9,6 +9,7 @@ let footerMaxLineLength = 150;
 module.exports = {
     parserPreset: "conventional-changelog-conventionalcommits",
     rules: {
+        "type-enum": [RuleConfigSeverity.Error, "always", ["foo", "bar"]],
         "body-leading-blank": [RuleConfigSeverity.Error, "always"],
         "body-soft-max-line-length": [
             RuleConfigSeverity.Error,
