@@ -12,7 +12,7 @@ module.exports = {
         "type-enum": [
             RuleConfigSeverity.Error,
             "always",
-            ["foo", "bar", "baz.baz"]
+            ["foo", "bar", "baz.baz"],
         ],
         "body-leading-blank": [RuleConfigSeverity.Error, "always"],
         "body-soft-max-line-length": [
