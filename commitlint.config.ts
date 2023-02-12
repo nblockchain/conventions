@@ -53,7 +53,7 @@ module.exports = {
         // * Title should not have dot at the end.
         // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
         // * Detect if commit hash mention in commit msg actually exists in repo.
-        // * Detect area(sub-area) in the title that doesn't include area part (e.g., writing (bar) instead of foo(bar))
+        // * Detect scope(sub-scope) in the title that doesn't include scope part (e.g., writing (bar) instead of foo(bar))
 
         {
             rules: {

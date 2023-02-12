@@ -41,7 +41,7 @@ script, or this technique manually: https://stackoverflow.com/a/3230241/544947
 * Git commit messages should follow this style:
 
 ```
-Area/Sub-area: short title of what is changed (50 chars max)
+Scope/Sub-scope: short title of what is changed (50 chars max)
 
 Explanation of **why** (and maybe **how** as well, in case there's a part of
 the change that is not self-explanatory). Don't hesitate to be very verbose
@@ -58,11 +58,11 @@ has a title at the top which is normally a short sentence (but not ended with a
 dot, like most titles), and a body that starts in the 3rd line and which contains
 one or many paragraphs (each ending with a dot, as it's text in prose). In
 particular, the example above would be for a commit message that fixes the
-issue #45. **Area** usually refers to the project name, but without the need
+issue #45. **Scope** usually refers to the project name, but without the need
 to include the name of the project (e.g. in geewallet, all project names start
 with the `GWallet.` prefix, then there's no need to specify it; so use `Backend`
-as area instead of `GWallet.Backend`). The **Sub-area** may refer to a folder
-or module inside the area, but it's not a strict mapping.
+as scope instead of `GWallet.Backend`). The **Sub-scope** may refer to a folder
+or module inside what's represented as the scope, but it's not a strict mapping.
 
 When referencing a bug/issue, as you can see above you can add a sentence at the
 end of the commit message which starts with `Fixes `, followed by the **full URL**
