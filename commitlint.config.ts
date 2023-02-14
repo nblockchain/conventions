@@ -6,6 +6,10 @@ let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
 let footerMaxLineLength = 150;
 
+function notNullStringErrorMessage(stringType: string): string {
+    return `This is unexpected because ${stringType} should never be null`;
+}
+
 module.exports = {
     parserPreset: "conventional-changelog-conventionalcommits",
     rules: {
@@ -58,20 +62,35 @@ module.exports = {
         {
             rules: {
                 "body-prose": ({ raw }: { raw: any }) => {
-                    let rawStr = Helpers.convertAnyToString(raw, "raw").trim();
+                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
+                    let rawStr = Helpers.assertNotNull(
+                        rawUncastedStr,
+                        notNullStringErrorMessage("raw")
+                    ).trim();
+
                     return Plugins.bodyProse(rawStr);
                 },
 
                 "commit-hash-alone": ({ raw }: { raw: any }) => {
-                    let rawStr = Helpers.convertAnyToString(raw, "raw");
+                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
+                    let rawStr = Helpers.assertNotNull(
+                        rawUncastedStr,
+                        notNullStringErrorMessage("raw")
+                    );
+
                     return Plugins.commitHashAlone(rawStr);
                 },
 
                 "empty-wip": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.convertAnyToString(
+                    let headerUncastedStr = Helpers.convertAnyToString(
                         header,
                         "header"
                     );
+                    let headerStr = Helpers.assertNotNull(
+                        headerUncastedStr,
+                        notNullStringErrorMessage("header")
+                    );
+
                     return Plugins.emptyWip(headerStr);
                 },
 
@@ -80,24 +99,30 @@ module.exports = {
                     _: any,
                     maxLineLength: number
                 ) => {
-                    let headerStr = Helpers.convertAnyToString(
+                    let headerUncastedStr = Helpers.convertAnyToString(
                         header,
                         "header"
                     );
+                    let headerStr = Helpers.assertNotNull(
+                        headerUncastedStr,
+                        notNullStringErrorMessage("header")
+                    );
+
                     return Plugins.headerMaxLengthWithSuggestions(
                         headerStr,
                         maxLineLength
                     );
                 },
 
-                "footer-notes-misplacement": ({ raw }: { raw: any }) => {
-                    let rawStr = Helpers.convertAnyToString(raw, "raw").trim();
-                    return Plugins.footerNotesMisplacement(rawStr);
+                "footer-notes-misplacement": ({ body }: { body: any }) => {
+                    let bodyStr = Helpers.convertAnyToString(body, "body");
+                    return Plugins.footerNotesMisplacement(bodyStr);
                 },
 
-                "footer-references-existence": ({ raw }: { raw: any }) => {
-                    let rawStr = Helpers.convertAnyToString(raw, "raw").trim();
-                    return Plugins.footerReferencesExistence(rawStr);
+                "footer-references-existence": ({ body }: { body: any }) => {
+                    let bodyStr = Helpers.convertAnyToString(body, "body");
+
+                    return Plugins.footerReferencesExistence(bodyStr);
                 },
 
                 "prefer-slash-over-backslash": ({
@@ -105,83 +130,135 @@ module.exports = {
                 }: {
                     header: any;
                 }) => {
-                    let headerStr = Helpers.convertAnyToString(
+                    let headerUncastedStr = Helpers.convertAnyToString(
                         header,
                         "header"
                     );
+                    let headerStr = Helpers.assertNotNull(
+                        headerUncastedStr,
+                        notNullStringErrorMessage("header")
+                    );
+
                     return Plugins.preferSlashOverBackslash(headerStr);
                 },
 
                 "proper-issue-refs": ({ raw }: { raw: any }) => {
-                    let rawStr = Helpers.convertAnyToString(raw, "raw").trim();
+                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
+                    let rawStr = Helpers.assertNotNull(
+                        rawUncastedStr,
+                        notNullStringErrorMessage("raw")
+                    ).trim();
+
                     return Plugins.properIssueRefs(rawStr);
                 },
 
                 "title-uppercase": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.convertAnyToString(
+                    let headerUncastedStr = Helpers.convertAnyToString(
                         header,
                         "header"
                     );
+                    let headerStr = Helpers.assertNotNull(
+                        headerUncastedStr,
+                        notNullStringErrorMessage("header")
+                    );
+
                     return Plugins.titleUppercase(headerStr);
                 },
 
                 "too-many-spaces": ({ raw }: { raw: any }) => {
-                    let rawStr = Helpers.convertAnyToString(raw, "raw");
+                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
+                    let rawStr = Helpers.assertNotNull(
+                        rawUncastedStr,
+                        notNullStringErrorMessage("raw")
+                    );
+
                     return Plugins.tooManySpaces(rawStr);
                 },
 
                 "type-space-after-colon": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.convertAnyToString(
+                    let headerUncastedStr = Helpers.convertAnyToString(
                         header,
                         "header"
                     );
+                    let headerStr = Helpers.assertNotNull(
+                        headerUncastedStr,
+                        notNullStringErrorMessage("header")
+                    );
+
                     return Plugins.typeSpaceAfterColon(headerStr);
                 },
 
                 "type-with-square-brackets": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.convertAnyToString(
+                    let headerUncastedStr = Helpers.convertAnyToString(
                         header,
                         "header"
                     );
+                    let headerStr = Helpers.assertNotNull(
+                        headerUncastedStr,
+                        notNullStringErrorMessage("header")
+                    );
+
                     return Plugins.typeWithSquareBrackets(headerStr);
                 },
 
                 // NOTE: we use 'header' instead of 'subject' as a workaround to this bug: https://github.com/conventional-changelog/commitlint/issues/3404
                 "subject-lowercase": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.convertAnyToString(
+                    let headerUncastedStr = Helpers.convertAnyToString(
                         header,
                         "header"
+                    );
+                    let headerStr = Helpers.assertNotNull(
+                        headerUncastedStr,
+                        notNullStringErrorMessage("header")
                     );
                     return Plugins.subjectLowercase(headerStr);
                 },
 
                 "type-space-after-comma": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.convertAnyToString(
+                    let headerUncastedStr = Helpers.convertAnyToString(
                         header,
                         "header"
                     );
+                    let headerStr = Helpers.assertNotNull(
+                        headerUncastedStr,
+                        notNullStringErrorMessage("header")
+                    );
+
                     return Plugins.typeSpaceAfterComma(headerStr);
                 },
 
                 "body-soft-max-line-length": (
-                    { raw }: { raw: any },
+                    { body }: { body: any },
                     _: any,
                     maxLineLength: number
                 ) => {
-                    let rawStr = Helpers.convertAnyToString(raw, "raw").trim();
-                    return Plugins.bodySoftMaxLineLength(rawStr, maxLineLength);
+                    let bodyStr = Helpers.convertAnyToString(body, "body");
+                    return Plugins.bodySoftMaxLineLength(
+                        bodyStr,
+                        maxLineLength
+                    );
                 },
 
                 "trailing-whitespace": ({ raw }: { raw: any }) => {
-                    let rawStr = Helpers.convertAnyToString(raw, "raw");
+                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
+                    let rawStr = Helpers.assertNotNull(
+                        rawUncastedStr,
+                        notNullStringErrorMessage("raw")
+                    );
+
                     return Plugins.trailingWhitespace(rawStr);
                 },
 
                 "type-space-before-paren": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.convertAnyToString(
+                    let headerUncastedStr = Helpers.convertAnyToString(
                         header,
                         "header"
                     );
+                    let headerStr = Helpers.assertNotNull(
+                        headerUncastedStr,
+                        notNullStringErrorMessage("header")
+                    );
+
                     return Plugins.typeSpaceBeforeParen(headerStr);
                 },
             },
