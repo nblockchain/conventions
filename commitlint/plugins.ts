@@ -5,6 +5,7 @@ export abstract class Plugins {
     public static bodyProse(rawStr: string) {
         let offence = false;
 
+        rawStr = rawStr.trim();
         let lineBreakIndex = rawStr.indexOf("\n");
 
         if (lineBreakIndex >= 0) {
@@ -243,6 +244,7 @@ export abstract class Plugins {
     public static properIssueRefs(rawStr: string) {
         let offence = false;
 
+        rawStr = rawStr.trim();
         let lineBreakIndex = rawStr.indexOf("\n");
 
         if (lineBreakIndex >= 0) {

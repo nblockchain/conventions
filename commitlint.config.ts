@@ -65,7 +65,7 @@ module.exports = {
                     let rawStr = Helpers.assertNotNull(
                         Helpers.convertAnyToString(raw, "raw"),
                         notNullStringErrorMessage("raw")
-                    ).trim();
+                    );
 
                     return Plugins.bodyProse(rawStr);
                 },
@@ -132,7 +132,7 @@ module.exports = {
                     let rawStr = Helpers.assertNotNull(
                         Helpers.convertAnyToString(raw, "raw"),
                         notNullStringErrorMessage("raw")
-                    ).trim();
+                    );
 
                     return Plugins.properIssueRefs(rawStr);
                 },
