@@ -152,33 +152,27 @@ export abstract class Plugins {
         return [!offence, message + Helpers.errMessageSuffix];
     }
 
-    public static footerNotesMisplacement(rawStr: string) {
+    public static footerNotesMisplacement(bodyStr: string | null) {
         let offence = false;
 
-        let lineBreakIndex = rawStr.indexOf("\n");
-
-        if (lineBreakIndex >= 0) {
-            // Extracting bodyStr from rawStr rather than using body directly is a
-            // workaround for https://github.com/conventional-changelog/commitlint/issues/3428
-            let bodyStr = rawStr.substring(lineBreakIndex).trim();
-
-            if (bodyStr !== "") {
-                let seenBody = false;
-                let seenFooter = false;
-                let lines = bodyStr.split(/\r?\n/);
-                for (let line of lines) {
-                    if (line.length === 0) {
-                        continue;
-                    }
-                    seenBody = seenBody || !Helpers.isFooterNote(line);
-                    seenFooter = seenFooter || Helpers.isFooterNote(line);
-                    if (seenFooter && !Helpers.isFooterNote(line)) {
-                        offence = true;
-                        break;
-                    }
+        if (bodyStr !== null) {
+            bodyStr = bodyStr.trim();
+            let seenBody = false;
+            let seenFooter = false;
+            let lines = bodyStr.split(/\r?\n/);
+            for (let line of lines) {
+                if (line.length === 0) {
+                    continue;
+                }
+                seenBody = seenBody || !Helpers.isFooterNote(line);
+                seenFooter = seenFooter || Helpers.isFooterNote(line);
+                if (seenFooter && !Helpers.isFooterNote(line)) {
+                    offence = true;
+                    break;
                 }
             }
         }
+
         return [
             !offence,
             `Footer messages must be placed after body paragraphs, please move any message that starts with "Fixes", "Closes" or "[i]" to the end of the commmit message.` +
@@ -186,47 +180,41 @@ export abstract class Plugins {
         ];
     }
 
-    public static footerReferencesExistence(rawStr: string) {
+    public static footerReferencesExistence(bodyStr: string | null) {
         let offence = false;
 
-        let lineBreakIndex = rawStr.indexOf("\n");
-
-        if (lineBreakIndex >= 0) {
-            // Extracting bodyStr from rawStr rather than using body directly is a
-            // workaround for https://github.com/conventional-changelog/commitlint/issues/3428
-            let bodyStr = rawStr.substring(lineBreakIndex).trim();
-
-            if (bodyStr !== "") {
-                let lines = bodyStr.split(/\r?\n/);
-                let bodyReferences = new Set();
-                let references = new Set();
-                for (let line of lines) {
-                    let matches = line.match(/(?<=\[)([0-9]+)(?=\])/g);
-                    if (matches === null) {
-                        continue;
-                    }
-                    for (let match of matches) {
-                        if (Helpers.isFooterReference(line)) {
-                            references.add(match);
-                        } else {
-                            bodyReferences.add(match);
-                        }
-                    }
+        if (bodyStr !== null) {
+            bodyStr = bodyStr.trim();
+            let lines = bodyStr.split(/\r?\n/);
+            let bodyReferences = new Set();
+            let references = new Set();
+            for (let line of lines) {
+                let matches = line.match(/(?<=\[)([0-9]+)(?=\])/g);
+                if (matches === null) {
+                    continue;
                 }
-                for (let ref of bodyReferences) {
-                    if (!references.has(ref)) {
-                        offence = true;
-                        break;
-                    }
-                }
-                for (let ref of references) {
-                    if (!bodyReferences.has(ref)) {
-                        offence = true;
-                        break;
+                for (let match of matches) {
+                    if (Helpers.isFooterReference(line)) {
+                        references.add(match);
+                    } else {
+                        bodyReferences.add(match);
                     }
                 }
             }
+            for (let ref of bodyReferences) {
+                if (!references.has(ref)) {
+                    offence = true;
+                    break;
+                }
+            }
+            for (let ref of references) {
+                if (!bodyReferences.has(ref)) {
+                    offence = true;
+                    break;
+                }
+            }
         }
+
         return [
             !offence,
             "All references in the body must be mentioned in the footer, and vice versa." +
@@ -368,18 +356,13 @@ export abstract class Plugins {
     }
 
     public static bodySoftMaxLineLength(
-        rawStr: string,
+        bodyStr: string | null,
         bodyMaxLineLength: number
     ) {
         let offence = false;
 
-        let lineBreakIndex = rawStr.indexOf("\n");
-
-        if (lineBreakIndex >= 0) {
-            // Extracting bodyStr from rawStr rather than using body directly is a
-            // workaround for https://github.com/conventional-changelog/commitlint/issues/3428
-            let bodyStr = rawStr.substring(lineBreakIndex);
-
+        if (bodyStr !== null) {
+            bodyStr = bodyStr.trim();
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
 
             if (bodyStr !== "") {

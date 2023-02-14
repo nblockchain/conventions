@@ -19,18 +19,22 @@ export abstract class Helpers {
     public static convertAnyToString(
         potentialString: any,
         paramName: string
-    ): string {
+    ): string | null {
         if (potentialString === null || potentialString === undefined) {
             // otherwise, String(null) might give us the stupid string "null"
-            throw new Error(
-                "Unexpected " +
-                    paramName +
-                    "===null or " +
-                    paramName +
-                    "===undefined happened"
-            );
+            return null;
         }
         return String(potentialString);
+    }
+
+    public static assertNotNull(
+        text: string | null,
+        errorMessage: string
+    ): string {
+        if (text === null) {
+            throw new Error(errorMessage);
+        }
+        return text as string;
     }
 
     public static assertCharacter(letter: string) {
