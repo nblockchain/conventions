@@ -54,7 +54,6 @@ module.exports = {
         // * Detect reverts which have not been elaborated.
         // * Reject some stupid obvious words: change, update, modify (if first word after colon, error; otherwise warning).
         // * Think of how to reject this shitty commit message: https://github.com/nblockchain/NOnion/pull/34/commits/9ffcb373a1147ed1c729e8aca4ffd30467255594
-        // * Title should not have dot at the end.
         // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
         // * Detect if commit hash mention in commit msg actually exists in repo.
         // * Detect scope(sub-scope) in the title that doesn't include scope part (e.g., writing (bar) instead of foo(bar))
@@ -62,19 +61,17 @@ module.exports = {
         {
             rules: {
                 "body-prose": ({ raw }: { raw: any }) => {
-                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
                     let rawStr = Helpers.assertNotNull(
-                        rawUncastedStr,
+                        Helpers.convertAnyToString(raw, "raw"),
                         notNullStringErrorMessage("raw")
-                    ).trim();
+                    );
 
                     return Plugins.bodyProse(rawStr);
                 },
 
                 "commit-hash-alone": ({ raw }: { raw: any }) => {
-                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
                     let rawStr = Helpers.assertNotNull(
-                        rawUncastedStr,
+                        Helpers.convertAnyToString(raw, "raw"),
                         notNullStringErrorMessage("raw")
                     );
 
@@ -82,12 +79,8 @@ module.exports = {
                 },
 
                 "empty-wip": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -99,12 +92,8 @@ module.exports = {
                     _: any,
                     maxLineLength: number
                 ) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -130,12 +119,8 @@ module.exports = {
                 }: {
                     header: any;
                 }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -143,22 +128,17 @@ module.exports = {
                 },
 
                 "proper-issue-refs": ({ raw }: { raw: any }) => {
-                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
                     let rawStr = Helpers.assertNotNull(
-                        rawUncastedStr,
+                        Helpers.convertAnyToString(raw, "raw"),
                         notNullStringErrorMessage("raw")
-                    ).trim();
+                    );
 
                     return Plugins.properIssueRefs(rawStr);
                 },
 
                 "title-uppercase": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -166,9 +146,8 @@ module.exports = {
                 },
 
                 "too-many-spaces": ({ raw }: { raw: any }) => {
-                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
                     let rawStr = Helpers.assertNotNull(
-                        rawUncastedStr,
+                        Helpers.convertAnyToString(raw, "raw"),
                         notNullStringErrorMessage("raw")
                     );
 
@@ -176,12 +155,8 @@ module.exports = {
                 },
 
                 "type-space-after-colon": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -189,12 +164,8 @@ module.exports = {
                 },
 
                 "type-with-square-brackets": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -203,24 +174,16 @@ module.exports = {
 
                 // NOTE: we use 'header' instead of 'subject' as a workaround to this bug: https://github.com/conventional-changelog/commitlint/issues/3404
                 "subject-lowercase": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
                     return Plugins.subjectLowercase(headerStr);
                 },
 
                 "type-space-after-comma": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -240,9 +203,8 @@ module.exports = {
                 },
 
                 "trailing-whitespace": ({ raw }: { raw: any }) => {
-                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
                     let rawStr = Helpers.assertNotNull(
-                        rawUncastedStr,
+                        Helpers.convertAnyToString(raw, "raw"),
                         notNullStringErrorMessage("raw")
                     );
 
@@ -250,12 +212,8 @@ module.exports = {
                 },
 
                 "type-space-before-paren": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
