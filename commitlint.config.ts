@@ -54,7 +54,6 @@ module.exports = {
         // * Detect reverts which have not been elaborated.
         // * Reject some stupid obvious words: change, update, modify (if first word after colon, error; otherwise warning).
         // * Think of how to reject this shitty commit message: https://github.com/nblockchain/NOnion/pull/34/commits/9ffcb373a1147ed1c729e8aca4ffd30467255594
-        // * Title should not have dot at the end.
         // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
         // * Detect if commit hash mention in commit msg actually exists in repo.
         // * Detect scope(sub-scope) in the title that doesn't include scope part (e.g., writing (bar) instead of foo(bar))
