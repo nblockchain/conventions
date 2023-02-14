@@ -34,7 +34,6 @@ module.exports = {
             headerMaxLineLength,
         ],
         "subject-full-stop": [RuleConfigSeverity.Error, "never", "."],
-        "type-empty": [RuleConfigSeverity.Warning, "never"],
         "type-space-after-colon": [RuleConfigSeverity.Error, "always"],
         "subject-lowercase": [RuleConfigSeverity.Error, "always"],
         "body-prose": [RuleConfigSeverity.Error, "always"],
@@ -47,6 +46,10 @@ module.exports = {
         "too-many-spaces": [RuleConfigSeverity.Error, "always"],
         "commit-hash-alone": [RuleConfigSeverity.Error, "always"],
         "title-uppercase": [RuleConfigSeverity.Error, "always"],
+
+        // disabled because most of the time it doesn't work, due to https://github.com/conventional-changelog/commitlint/issues/3404
+        // and anyway we were using this rule only as a warning, not an error (because a scope is not required, e.g. when too broad)
+        "type-empty": [RuleConfigSeverity.Disabled, "never"],
     },
     plugins: [
         // TODO (ideas for more rules):
