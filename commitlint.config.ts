@@ -62,9 +62,8 @@ module.exports = {
         {
             rules: {
                 "body-prose": ({ raw }: { raw: any }) => {
-                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
                     let rawStr = Helpers.assertNotNull(
-                        rawUncastedStr,
+                        Helpers.convertAnyToString(raw, "raw"),
                         notNullStringErrorMessage("raw")
                     ).trim();
 
@@ -72,9 +71,8 @@ module.exports = {
                 },
 
                 "commit-hash-alone": ({ raw }: { raw: any }) => {
-                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
                     let rawStr = Helpers.assertNotNull(
-                        rawUncastedStr,
+                        Helpers.convertAnyToString(raw, "raw"),
                         notNullStringErrorMessage("raw")
                     );
 
@@ -82,12 +80,8 @@ module.exports = {
                 },
 
                 "empty-wip": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -99,12 +93,8 @@ module.exports = {
                     _: any,
                     maxLineLength: number
                 ) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -130,12 +120,8 @@ module.exports = {
                 }: {
                     header: any;
                 }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -143,9 +129,8 @@ module.exports = {
                 },
 
                 "proper-issue-refs": ({ raw }: { raw: any }) => {
-                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
                     let rawStr = Helpers.assertNotNull(
-                        rawUncastedStr,
+                        Helpers.convertAnyToString(raw, "raw"),
                         notNullStringErrorMessage("raw")
                     ).trim();
 
@@ -153,12 +138,8 @@ module.exports = {
                 },
 
                 "title-uppercase": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -166,9 +147,8 @@ module.exports = {
                 },
 
                 "too-many-spaces": ({ raw }: { raw: any }) => {
-                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
                     let rawStr = Helpers.assertNotNull(
-                        rawUncastedStr,
+                        Helpers.convertAnyToString(raw, "raw"),
                         notNullStringErrorMessage("raw")
                     );
 
@@ -176,12 +156,8 @@ module.exports = {
                 },
 
                 "type-space-after-colon": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -189,12 +165,8 @@ module.exports = {
                 },
 
                 "type-with-square-brackets": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -203,24 +175,16 @@ module.exports = {
 
                 // NOTE: we use 'header' instead of 'subject' as a workaround to this bug: https://github.com/conventional-changelog/commitlint/issues/3404
                 "subject-lowercase": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
                     return Plugins.subjectLowercase(headerStr);
                 },
 
                 "type-space-after-comma": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
@@ -240,9 +204,8 @@ module.exports = {
                 },
 
                 "trailing-whitespace": ({ raw }: { raw: any }) => {
-                    let rawUncastedStr = Helpers.convertAnyToString(raw, "raw");
                     let rawStr = Helpers.assertNotNull(
-                        rawUncastedStr,
+                        Helpers.convertAnyToString(raw, "raw"),
                         notNullStringErrorMessage("raw")
                     );
 
@@ -250,12 +213,8 @@ module.exports = {
                 },
 
                 "type-space-before-paren": ({ header }: { header: any }) => {
-                    let headerUncastedStr = Helpers.convertAnyToString(
-                        header,
-                        "header"
-                    );
                     let headerStr = Helpers.assertNotNull(
-                        headerUncastedStr,
+                        Helpers.convertAnyToString(header, "header"),
                         notNullStringErrorMessage("header")
                     );
 
