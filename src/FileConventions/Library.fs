@@ -5,6 +5,9 @@ open System.IO
 open System.Linq
 open System.Text.RegularExpressions
 
+open Mono
+open Mono.Unix.Native
+
 let HasCorrectShebang(fileInfo: FileInfo) =
     let fileText = File.ReadLines fileInfo.FullName
 
@@ -385,5 +388,5 @@ let NonVerboseFlags(fileInfo: FileInfo) =
     numInvalidFlags > 0
 
 let IsExecutable(fileInfo: FileInfo) =
-    printfn "File path: %s" fileInfo.FullName
-    false
+    let hasExecuteAccess = Syscall.access(fileInfo.FullName, AccessModes.X_OK)
+    hasExecuteAccess = 0

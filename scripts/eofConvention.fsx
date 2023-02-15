@@ -3,6 +3,8 @@
 open System.IO
 open System
 
+#r "nuget: Mono.Unix, Version=7.1.0-final.1.21458.1"
+
 #load "../src/FileConventions/Helpers.fs"
 #load "../src/FileConventions/Library.fs"
 

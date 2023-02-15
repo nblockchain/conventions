@@ -4,6 +4,8 @@ open System.IO
 open System
 open System.Text.RegularExpressions
 
+#r "nuget: Mono.Unix, Version=7.1.0-final.1.21458.1"
+
 #load "../src/FileConventions/Library.fs"
 
 #r "nuget: Fsdk, Version=0.6.0--date20230214-0422.git-1ea6f62"
