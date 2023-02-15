@@ -1,9 +1,10 @@
-name: Run unit tests & check conventions
+name: CI
 
 on: [push, pull_request]
 
 jobs:
   tests:
+    name: Run commitlint-related tests
     runs-on: ubuntu-22.04
     container:
       image: "ubuntu:22.04"
@@ -44,6 +45,7 @@ jobs:
         run: yarn jest
 
   sanitycheck:
+    name: Sanity check
     runs-on: ubuntu-22.04
     container:
       image: "ubuntu:22.04"
