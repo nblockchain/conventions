@@ -4,12 +4,14 @@ This is a repository that contains several useful things that other `nblockchain
 - [A reference .editorconfig file](.editorconfig).
 - [An F# style guide](FSharpStyleGuide.md).
 - [Workflow guidelines](WorkflowGuidelines.md).
+- Useful scripts to detect bad practices, such as:
+    * [EOF at EOL](scripts/eofConvention.fsx).
+    * [Mixed-line endings](scripts/mixedLineEndings.fsx).
 
 All in all, this is mainly documentation, and some tooling to detect bad practices.
 
 More things to come:
 - Detect .fsx files without shebang or +x attrib.
-- Detect files with mixed line endings.
 - Detect old versions of FSharpLint and fantomas/fantomless being used.
 - Detect unpinned versions, such as:
     * Use of -latest in `runs-on:` GitHubCI tags.
