@@ -5,6 +5,9 @@ open System.IO
 open System.Linq
 open System.Text.RegularExpressions
 
+open Mono
+open Mono.Unix.Native
+
 let HasCorrectShebang(fileInfo: FileInfo) =
     let fileText = File.ReadLines fileInfo.FullName
 
@@ -106,4 +109,5 @@ let EolAtEof(fileInfo: FileInfo) =
             True
 
 let IsExecutable(fileInfo: FileInfo) =
-    false
+    let hasExecuteAccess = Syscall.access(fileInfo.FullName, AccessModes.X_OK)
+    hasExecuteAccess = 0
