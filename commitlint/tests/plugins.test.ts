@@ -1083,6 +1083,16 @@ test("default-revert-message6", () => {
     expect(defaultRevertMessage6.status).toBe(0);
 });
 
+test("default-revert-message7", () => {
+    let commitMsgWithoutDefaultRevertMessage =
+        "This is a revert commit\n\nBla bla.";
+
+    let defaultRevertMessage7 = runCommitLintOnMsg(
+        commitMsgWithoutDefaultRevertMessage
+    );
+    expect(defaultRevertMessage7.status).toBe(0);
+});
+
 test("subject-lowercase1", () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(
