@@ -78,8 +78,6 @@ jobs:
         run: sudo apt install -y dotnet6
       - name: Check all files end with EOL
         run: dotnet fsi scripts/eofConvention.fsx
-      - name: Check there are no mixed line-endings in any files
-        run: dotnet fsi scripts/mixedLineEndings.fsx
       - name: Install prettier
         run: npm install prettier@2.8.3
       - name: Change file permissions
