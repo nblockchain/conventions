@@ -114,3 +114,5 @@ jobs:
           # make git ignore mode changes in files and doesn't include them in the git diff command.
           git config core.fileMode false
           git diff --exit-code
+      - name: Run script to find files without shebang
+        run: dotnet fsi scripts/shebangConvention.fsx
