@@ -18,6 +18,7 @@ let invalidFiles =
     |> Seq.map (fun pathStr -> FileInfo pathStr)
     |> Seq.filter (NotInDir "node_modules")
     |> Seq.filter (NotInDir ".git")
+    |> Seq.filter (NotInDir "DummyFiles")
     |> Seq.filter (fun fileInfo -> not (EolAtEof fileInfo))
 
 if Seq.length invalidFiles > 0 then
