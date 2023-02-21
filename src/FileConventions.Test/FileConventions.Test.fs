@@ -48,3 +48,8 @@ let MixedLineEndingsTest1 () =
 let MixedLineEndingsTest2 () =
     let fileInfo = (FileInfo (Path.Combine(dummyFilesDirectory.FullName, "DummyWithLFLineEndings")))
     Assert.That(MixedLineEndings fileInfo, Is.EqualTo false)
+
+[<Test>]
+let MixedLineEndingsTest3 () =
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "DummyWithCRLFLineEndings")))
+    Assert.That(MixedLineEndings fileInfo, Is.EqualTo false)
