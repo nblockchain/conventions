@@ -101,6 +101,8 @@ jobs:
         run: sudo apt install -y dotnet6
       - name: Check all files end with EOL
         run: dotnet fsi scripts/eofConvention.fsx
+      - name: Check all .fsx scripts have shebang
+        run: dotnet fsi scripts/shebangConvention.fsx
       - name: Install prettier
         run: npm install prettier@2.8.3
       - name: Change file permissions
@@ -114,5 +116,3 @@ jobs:
           # make git ignore mode changes in files and doesn't include them in the git diff command.
           git config core.fileMode false
           git diff --exit-code
-      - name: Run script to find files without shebang
-        run: dotnet fsi scripts/shebangConvention.fsx
