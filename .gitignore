@@ -1,3 +1,30 @@
 .DS_Store
 node_modules/
 yarn.lock
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Bb]uild/
+_[Bb]uild/
+[Dd]eploy/
+_[Dd]eploy/
+
+# NUNIT
+*.VisualState.xml
+TestResult.xml
+TestResults.xml
+
+# Visual Studio cache files
+# files ending in .cache can be ignored
+*.[Cc]ache
+# but keep track of directories ending in .cache
+!*.[Cc]ache/
