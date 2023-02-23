@@ -14,3 +14,6 @@ let HasCorrectShebang (fileInfo: FileInfo) =
         
     else
         false
+
+let MixedLineEndings(fileInfo: FileInfo) =
+    false
