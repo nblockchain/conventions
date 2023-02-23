@@ -16,4 +16,11 @@ let HasCorrectShebang (fileInfo: FileInfo) =
         false
 
 let MixedLineEndings(fileInfo: FileInfo) =
-    false
+    use streamReader = new StreamReader (fileInfo.FullName)
+    let fileText = streamReader.ReadToEnd()
+
+    let numberOfLineEndings = ([| "\n"; "\r\n"; "\r" |]
+        |> Seq.filter(function ending -> fileText.IndexOf(ending) > 0)
+        |> Seq.length)
+
+    numberOfLineEndings > 1
