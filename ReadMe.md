@@ -6,7 +6,7 @@ This is a repository that contains several useful things that other `nblockchain
 - [Workflow guidelines](WorkflowGuidelines.md).
 - Useful scripts to detect bad practices, such as:
     * [EOF without EOL](scripts/eofConvention.fsx).
-    * [Mixed-line endings](scripts/mixedLineEndings.fsx).
+    * [Mixed line-endings](scripts/mixedLineEndings.fsx).
     * [.fsx scripts without shebang](scripts/shebangConvention.fsx).
 
 All in all, this is mainly documentation, and some tooling to detect bad practices.
