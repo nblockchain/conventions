@@ -7,7 +7,7 @@ This is a repository that contains several useful things that other `nblockchain
 - Useful scripts to detect bad practices, such as:
     * [EOF at EOL](scripts/eofConvention.fsx).
     * [Mixed-line endings](scripts/mixedLineEndings.fsx).
-    * [Detect .fsx files without shebang](scripts/shebangConvention.fsx).
+    * [.fsx scripts without shebang](scripts/shebangConvention.fsx).
 
 All in all, this is mainly documentation, and some tooling to detect bad practices.
 
