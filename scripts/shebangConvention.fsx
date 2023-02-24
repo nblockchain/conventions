@@ -3,7 +3,6 @@
 open System
 open System.IO
 
-#r "nuget: Mono.Unix, 7.1.0-final.1.21458.1"
 #load "../src/FileConventions/Library.fs"
 
 let NotInDir (dirName: string) (fileInfo: FileInfo) =
