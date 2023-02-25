@@ -49,4 +49,14 @@ let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
     latestTagInRunsOnRegex.IsMatch fileText
 
 let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
-    false
+    assert (fileInfo.FullName.EndsWith(".fsproj"))
+    use streamReader = new StreamReader(fileInfo.FullName)
+    let fileText = streamReader.ReadToEnd()
+
+    let asteriskInPackageReference =
+        Regex(
+            "<PackageReference.*Version=\".*\*.*\".*/>",
+            RegexOptions.Compiled
+        )
+
+    asteriskInPackageReference.IsMatch fileText
