@@ -105,6 +105,8 @@ jobs:
         run: dotnet fsi scripts/shebangConvention.fsx
       - name: Check there are no mixed line-endings in any files
         run: dotnet fsi scripts/mixedLineEndings.fsx
+      - name: Check there are no unpinned versions
+        run: dotnet fsi scripts/detectUnpinnedVersions.fsx
       - name: Install prettier
         run: npm install prettier@2.8.3
       - name: Change file permissions
