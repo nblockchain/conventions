@@ -1,6 +1,6 @@
 import { Option, Some, None, OptionStatic } from "./fpHelpers.js";
 import { abbr } from "./abbreviations.js";
-import { Helpers } from "./helpers.js";
+import { Helpers, When } from "./helpers.js";
 
 export abstract class Plugins {
     public static bodyProse(rawStr: string) {
@@ -289,7 +289,7 @@ export abstract class Plugins {
     public static defaultRevertMessage(
         headerStr: string,
         bodyStr: string | null,
-        when: string
+        when: When
     ) {
         let offence = false;
         let isRevertCommitMessage = headerStr.toLowerCase().includes("revert");
