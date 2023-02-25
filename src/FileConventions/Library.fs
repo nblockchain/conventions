@@ -47,3 +47,6 @@ let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
         Regex("runs-on: .*-latest", RegexOptions.Compiled)
 
     latestTagInRunsOnRegex.IsMatch fileText
+
+let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
+    false
