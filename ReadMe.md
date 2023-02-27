@@ -8,8 +8,9 @@ This is a repository that contains several useful things that other `nblockchain
     * [EOF without EOL](scripts/eofConvention.fsx).
     * [Mixed line-endings](scripts/mixedLineEndings.fsx).
     * [.fsx scripts without shebang](scripts/shebangConvention.fsx).
-    * [Use of `-latest` suffix in `runs-on:` GitHubCI tags](scripts/detectUnpinnedVersions.fsx).
-    * [Use of asterisk (*) in PackageReference items of .NET projects](scripts/detectUnpinnedVersions.fsx).
+    * Use of unpinned versions:
+        * [Use of `-latest` suffix in `runs-on:` GitHubCI tags](scripts/unpinnedGitHubActionsImageVersions.fsx).
+        * [Use of asterisk (*) in `PackageReference` items of .NET projects](scripts/unpinnedDotnetPackageVersions.fsx).
 
 All in all, this is mainly documentation, and some tooling to detect bad practices.
 
