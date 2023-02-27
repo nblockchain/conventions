@@ -60,3 +60,6 @@ let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
         )
 
     asteriskInPackageReference.IsMatch fileText
+
+let DetectMissingVersionsInNugetPackageReferences(fileInfo: FileInfo) =
+    false
