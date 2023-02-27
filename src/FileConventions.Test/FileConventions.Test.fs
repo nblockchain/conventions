@@ -49,7 +49,20 @@ let MixedLineEndingsTest2 () =
     let fileInfo = (FileInfo (Path.Combine(dummyFilesDirectory.FullName, "DummyWithLFLineEndings")))
     Assert.That(MixedLineEndings fileInfo, Is.EqualTo false)
 
+
 [<Test>]
 let MixedLineEndingsTest3 () =
     let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "DummyWithCRLFLineEndings")))
     Assert.That(MixedLineEndings fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let DetectUnpinnedVersionsInGitHubCI1 () =
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "DummyCIWithLatestTag.yml")))
+    Assert.That(DetectUnpinnedVersionsInGitHubCI fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let DetectUnpinnedVersionsInGitHubCI2 () =
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "DummyCIWithoutLatestTag.yml")))
+    Assert.That(DetectUnpinnedVersionsInGitHubCI fileInfo, Is.EqualTo false)

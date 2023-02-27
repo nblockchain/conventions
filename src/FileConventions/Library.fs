@@ -37,3 +37,13 @@ let MixedLineEndings(fileInfo: FileInfo) =
         |> Seq.length
 
     numberOfLineEndings > 1
+
+let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
+    assert (fileInfo.FullName.EndsWith(".yml"))
+    use streamReader = new StreamReader(fileInfo.FullName)
+    let fileText = streamReader.ReadToEnd()
+
+    let latestTagInRunsOnRegex =
+        Regex("runs-on: .*-latest", RegexOptions.Compiled)
+
+    latestTagInRunsOnRegex.IsMatch fileText
