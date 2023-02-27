@@ -117,4 +117,7 @@ jobs:
           # Since we changed file modes in the previous step we need the following command to
           # make git ignore mode changes in files and doesn't include them in the git diff command.
           git config core.fileMode false
+          # Since after installing commitlint dependencies package.json file changes, we need to 
+          # run the following command to ignore package.json file
+          git restore package.json
           git diff --exit-code
