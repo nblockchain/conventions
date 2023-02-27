@@ -5,6 +5,10 @@ open System
 
 #load "../src/FileConventions/Helpers.fs"
 
+let rootDir =
+    Path.Combine(__SOURCE_DIRECTORY__, "..")
+    |> DirectoryInfo
+
 let EolAtEof(fileInfo: FileInfo) = 
     use streamReader = new StreamReader (fileInfo.FullName)
     let filetext = streamReader.ReadToEnd()
@@ -15,7 +19,7 @@ let EolAtEof(fileInfo: FileInfo) =
         true
 
 let invalidFiles =
-    Helpers.GetInvalidFiles "." "*.*" (fun fileInfo -> not(EolAtEof fileInfo))
+    Helpers.GetInvalidFiles rootDir "*.*" (fun fileInfo -> not(EolAtEof fileInfo))
 
 Helpers.AssertNoInvalidFiles
     invalidFiles

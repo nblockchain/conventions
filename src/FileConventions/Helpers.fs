@@ -10,12 +10,12 @@ let NotInDir (dirName: string) (fileInfo: FileInfo) =
     )
 
 let GetInvalidFiles
-    (rootDirectory: string)
+    (rootDirectory: DirectoryInfo)
     (searchPattern: string)
     filterFunction
     =
     Directory.GetFiles(
-        rootDirectory,
+        rootDirectory.FullName,
         searchPattern,
         SearchOption.AllDirectories
     )
