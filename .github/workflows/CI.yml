@@ -3,7 +3,8 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  file-conventions:
+  file-conventions-tests:
+    name: Run FileConventions-lib unit tests
     runs-on: ubuntu-22.04
     container:
       image: "ubuntu:22.04"
