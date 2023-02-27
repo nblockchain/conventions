@@ -5,8 +5,6 @@ on: [push, pull_request]
 jobs:
   file-conventions:
     runs-on: ubuntu-latest
-    container:
-      image: "ubuntu:22.04"
     steps:
       - uses: actions/checkout@v2
       - name: Print "Hello World!"
