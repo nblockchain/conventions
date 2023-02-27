@@ -116,6 +116,8 @@ export let abbr = {
     "execute": "exec",
     "expression": "expr",
     "expressions": "exprs",
+    "feature": "feat",
+    "features": "feats",
     "figure": "fig",
     "figures": "figs",
     "first": "1st",
