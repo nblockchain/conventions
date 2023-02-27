@@ -8,7 +8,7 @@ This is a repository that contains several useful things that other `nblockchain
     * [EOF without EOL](scripts/eofConvention.fsx).
     * [Mixed line-endings](scripts/mixedLineEndings.fsx).
     * [.fsx scripts without shebang](scripts/shebangConvention.fsx).
-    * [Detect the use of -latest in `runs-on:` GitHubCI tags](scripts/detectUnpinnedVersions.fsx).
+    * [Use of `-latest` in `runs-on:` GitHubCI tags](scripts/detectUnpinnedVersions.fsx).
 
 All in all, this is mainly documentation, and some tooling to detect bad practices.
 

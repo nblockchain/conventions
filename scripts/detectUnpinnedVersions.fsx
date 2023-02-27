@@ -25,7 +25,7 @@ let invalidFiles =
 
 if Seq.length invalidFiles > 0 then
     let message =
-        "The following files shouldn't contain -latest in runs-on: GitHubCI tags:"
+        "The following files shouldn't contain `-latest` in `runs-on:` GitHubCI tags:"
         + Environment.NewLine
         + (invalidFiles
            |> Seq.map(fun fileInfo -> fileInfo.FullName)
