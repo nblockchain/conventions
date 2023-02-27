@@ -66,3 +66,15 @@ let DetectUnpinnedVersionsInGitHubCI1 () =
 let DetectUnpinnedVersionsInGitHubCI2 () =
     let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "DummyCIWithoutLatestTag.yml")))
     Assert.That(DetectUnpinnedVersionsInGitHubCI fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let DetectAsteriskInPackageReferenceItems1 () =
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "DummyFsprojWithAsterisk.fsproj")))
+    Assert.That(DetectAsteriskInPackageReferenceItems fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let DetectAsteriskInPackageReferenceItems2 () =
+    let fileInfo = (FileInfo (Path.Combine(__SOURCE_DIRECTORY__, "DummyFiles", "DummyFsprojWithoutAsterisk.fsproj")))
+    Assert.That(DetectAsteriskInPackageReferenceItems fileInfo, Is.EqualTo false)

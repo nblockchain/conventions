@@ -3,7 +3,8 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  file-conventions:
+  file-conventions-tests:
+    name: Run FileConventions-lib unit tests
     runs-on: ubuntu-22.04
     container:
       image: "ubuntu:22.04"
@@ -107,6 +108,8 @@ jobs:
         run: dotnet fsi scripts/mixedLineEndings.fsx
       - name: Check there are no unpinned GitHubActions image versions
         run: dotnet fsi scripts/unpinnedGitHubActionsImageVersions.fsx
+      - name: Check there are no unpinned dotnet package versions
+        run: dotnet fsi scripts/unpinnedDotnetPackageVersions.fsx
       - name: Install prettier
         run: npm install prettier@2.8.3
       - name: Change file permissions
