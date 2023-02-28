@@ -13,7 +13,7 @@ let rootDir =
 let invalidFiles =
     Helpers.GetInvalidFiles
         rootDir
-        "*.yml"
+        "*.*proj"
         FileConventions.DetectAsteriskInPackageReferenceItems
 
 let message =
