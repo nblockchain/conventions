@@ -63,13 +63,16 @@ let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
 
 let DetectMissingVersionsInNugetPackageReferences(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith ".fsx")
-    use streamReader = new StreamReader(fileInfo.FullName)
-    let fileText = streamReader.ReadToEnd()
 
-    let versionsInNugetPackageReferences =
-        Regex(
-            "#r \"nuget: [a-zA-Z_]*, \d*.\d*.\d*.*\"",
-            RegexOptions.Compiled
+    let fileLines = File.ReadLines fileInfo.FullName
+
+    not(
+        fileLines
+        |> Seq.filter(
+            fun line -> line.StartsWith "#r \"nuget:"
         )
-
-    not(versionsInNugetPackageReferences.IsMatch fileText)
+        |> Seq.filter(
+            fun line -> not(line.Contains ",")
+        )
+        |> Seq.isEmpty
+    )
