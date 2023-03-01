@@ -90,3 +90,9 @@ let MissingVersionsInNugetPackageReferencesTest1 () =
 let MissingVersionsInNugetPackageReferencesTest2 () =
     let fileInfo = (FileInfo (Path.Combine(dummyFilesDirectory.FullName, "DummyWithoutMissingVersionsInNugetPackageReferences.fsx")))
     Assert.That(DetectMissingVersionsInNugetPackageReferences fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let MissingVersionsInNugetPackageReferencesTest3 () =
+    let fileInfo = (FileInfo (Path.Combine(dummyFilesDirectory.FullName, "DummyWithoutNugetPackageReferences.fsx")))
+    Assert.That(DetectMissingVersionsInNugetPackageReferences fileInfo, Is.EqualTo false)
