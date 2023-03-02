@@ -224,6 +224,14 @@ let EolAtEofTest2() =
 
 
 [<Test>]
+let EolAtEofTest3() =
+    let fileInfo =
+        (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "someLib.dll")))
+
+    Assert.That(EolAtEof fileInfo, Is.EqualTo NotApplicable)
+
+
+[<Test>]
 let HasBinaryContentTest1() =
     let fileInfo =
         (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "someLib.dll")))
