@@ -9,11 +9,7 @@ let NotInDir (dirName: string) (fileInfo: FileInfo) =
             $"%c{Path.DirectorySeparatorChar}%s{dirName}%c{Path.DirectorySeparatorChar}"
     )
 
-let GetInvalidFiles
-    (rootDirectory: DirectoryInfo)
-    (searchPattern: string)
-    filterFunction
-    =
+let GetFiles (rootDirectory: DirectoryInfo) (searchPattern: string) =
     Directory.GetFiles(
         rootDirectory.FullName,
         searchPattern,
@@ -25,7 +21,13 @@ let GetInvalidFiles
     |> Seq.filter(NotInDir "bin")
     |> Seq.filter(NotInDir "obj")
     |> Seq.filter(NotInDir "DummyFiles")
-    |> Seq.filter filterFunction
+
+let GetInvalidFiles
+    (rootDirectory: DirectoryInfo)
+    (searchPattern: string)
+    filterFunction
+    =
+    GetFiles rootDirectory searchPattern |> Seq.filter filterFunction
 
 let AssertNoInvalidFiles (invalidFiles: seq<FileInfo>) (message: string) =
     if Seq.length invalidFiles > 0 then
