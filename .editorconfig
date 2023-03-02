@@ -1,3 +1,6 @@
+[*]
+insert_final_newline = false
+
 [*.{fs,fsx,ts}]
 end_of_line=lf
 indent_size=4
@@ -25,3 +28,18 @@ fsharp_keep_if_then_in_same_line=true
 fsharp_strict_mode=false
 fsharp_multi_line_lambda_closing_newline=true
 fsharp_disable_elmish_syntax=true
+
+# Xml project files
+[*.{csproj,fsproj,vcxproj,vcxproj.filters,proj,nativeproj,locproj}]
+indent_size = 2
+
+# Xml config files
+[*.{props,targets,config,nuspec}]
+indent_size = 2
+
+# Shell scripts
+[*.sh]
+end_of_line = lf
+
+[*.{cmd, bat}]
+end_of_line = crlf
