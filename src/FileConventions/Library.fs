@@ -91,13 +91,16 @@ type EolAtEof =
     | NotApplicable
 
 let EolAtEof(fileInfo: FileInfo) =
-    use streamReader = new StreamReader(fileInfo.FullName)
-    let filetext = streamReader.ReadToEnd()
-
-    if filetext <> String.Empty then
-        if Seq.last filetext = '\n' then
-            True
-        else
-            False
+    if HasBinaryContent fileInfo then
+        NotApplicable
     else
-        True
+        use streamReader = new StreamReader(fileInfo.FullName)
+        let filetext = streamReader.ReadToEnd()
+
+        if filetext <> String.Empty then
+            if Seq.last filetext = '\n' then
+                True
+            else
+                False
+        else
+            True
