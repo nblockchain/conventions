@@ -60,3 +60,19 @@ let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
         )
 
     asteriskInPackageReference.IsMatch fileText
+
+let DetectMissingVersionsInNugetPackageReferences(fileInfo: FileInfo) =
+    assert (fileInfo.FullName.EndsWith ".fsx")
+
+    let fileLines = File.ReadLines fileInfo.FullName
+
+    not(
+        fileLines
+        |> Seq.filter(
+            fun line -> line.StartsWith "#r \"nuget:"
+        )
+        |> Seq.filter(
+            fun line -> not(line.Contains ",")
+        )
+        |> Seq.isEmpty
+    )
