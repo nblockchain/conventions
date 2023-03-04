@@ -1,5 +1,5 @@
 [*]
-insert_final_newline = false
+insert_final_newline=true
 
 [*.{fs,fsx,ts}]
 end_of_line=lf
