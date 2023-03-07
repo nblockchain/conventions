@@ -21,6 +21,6 @@ let message =
     + Environment.NewLine
     + "Here is a list of available runner image versions that you can use:"
     + Environment.NewLine
-    + "https://github.com/actions/runner-images#available-images"
+    + "https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners"
 
 Helpers.AssertNoInvalidFiles invalidFiles message
