@@ -5,14 +5,15 @@ open System.IO
 open System.Linq
 open System.Text.RegularExpressions
 
-let HasCorrectShebang (fileInfo: FileInfo) =
+let HasCorrectShebang(fileInfo: FileInfo) =
     let fileText = File.ReadLines fileInfo.FullName
+
     if fileText.Any() then
         let firstLine = fileText.First()
-        
-        firstLine.StartsWith "#!/usr/bin/env fsx" || 
-        firstLine.StartsWith "#!/usr/bin/env -S dotnet fsi"
-        
+
+        firstLine.StartsWith "#!/usr/bin/env fsx"
+        || firstLine.StartsWith "#!/usr/bin/env -S dotnet fsi"
+
     else
         false
 
@@ -68,11 +69,7 @@ let DetectMissingVersionsInNugetPackageReferences(fileInfo: FileInfo) =
 
     not(
         fileLines
-        |> Seq.filter(
-            fun line -> line.StartsWith "#r \"nuget:"
-        )
-        |> Seq.filter(
-            fun line -> not(line.Contains ",")
-        )
+        |> Seq.filter(fun line -> line.StartsWith "#r \"nuget:")
+        |> Seq.filter(fun line -> not(line.Contains ","))
         |> Seq.isEmpty
     )
