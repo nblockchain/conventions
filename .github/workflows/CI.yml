@@ -128,3 +128,9 @@ jobs:
           # run the following command to ignore package.json file
           git restore package.json
           git diff --exit-code
+      - name: fantomless
+        run: |
+          dotnet new tool-manifest
+          dotnet tool install fantomless-tool --version 4.7.997-prerelease
+          dotnet fantomless --recurse .
+          git diff --exit-code
