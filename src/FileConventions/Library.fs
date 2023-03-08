@@ -75,4 +75,10 @@ let DetectMissingVersionsInNugetPackageReferences(fileInfo: FileInfo) =
     )
 
 let EolAtEof(fileInfo: FileInfo) =
-    false
+    use streamReader = new StreamReader(fileInfo.FullName)
+    let filetext = streamReader.ReadToEnd()
+
+    if filetext <> String.Empty then
+        Seq.last filetext = '\n'
+    else
+        true
