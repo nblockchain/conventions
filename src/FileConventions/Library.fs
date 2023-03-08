@@ -74,6 +74,12 @@ let DetectMissingVersionsInNugetPackageReferences(fileInfo: FileInfo) =
         |> Seq.isEmpty
     )
 
+let HasBinaryContent(fileInfo: FileInfo) =
+    raise
+    <| System.NotImplementedException(
+        "You haven't written an implementation yet!"
+    )
+
 let EolAtEof(fileInfo: FileInfo) =
     use streamReader = new StreamReader(fileInfo.FullName)
     let filetext = streamReader.ReadToEnd()

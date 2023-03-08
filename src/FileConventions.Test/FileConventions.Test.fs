@@ -219,3 +219,29 @@ let EolAtEofTest2() =
         ))
 
     Assert.That(EolAtEof fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let HasBinaryContentTest1() =
+    let fileInfo =
+        (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "someLib.dll")))
+
+    Assert.That(HasBinaryContent fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let HasBinaryContentTest2() =
+    let fileInfo =
+        (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "white.png")))
+
+    Assert.That(HasBinaryContent fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let HasBinaryContentTest3() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(dummyFilesDirectory.FullName, "DummyNonBinaryFile.txt")
+        ))
+
+    Assert.That(HasBinaryContent fileInfo, Is.EqualTo false)
