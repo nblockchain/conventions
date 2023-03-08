@@ -73,3 +73,6 @@ let DetectMissingVersionsInNugetPackageReferences(fileInfo: FileInfo) =
         |> Seq.filter(fun line -> not(line.Contains ","))
         |> Seq.isEmpty
     )
+
+let EolAtEof(fileInfo: FileInfo) =
+    false

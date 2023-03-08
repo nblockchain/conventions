@@ -196,3 +196,26 @@ let MissingVersionsInNugetPackageReferencesTest3() =
         DetectMissingVersionsInNugetPackageReferences fileInfo,
         Is.EqualTo false
     )
+
+
+[<Test>]
+let EolAtEofTest1() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(dummyFilesDirectory.FullName, "DummyWithEolAtEof.txt")
+        ))
+
+    Assert.That(EolAtEof fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let EolAtEofTest2() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyWithoutEolAtEof.txt"
+            )
+        ))
+
+    Assert.That(EolAtEof fileInfo, Is.EqualTo false)
