@@ -85,11 +85,19 @@ let HasBinaryContent(fileInfo: FileInfo) =
     )
     |> Seq.contains true
 
+type EolAtEof =
+    | True
+    | False
+    | NotApplicable
+
 let EolAtEof(fileInfo: FileInfo) =
     use streamReader = new StreamReader(fileInfo.FullName)
     let filetext = streamReader.ReadToEnd()
 
     if filetext <> String.Empty then
-        Seq.last filetext = '\n'
+        if Seq.last filetext = '\n' then
+            True
+        else
+            False
     else
-        true
+        True

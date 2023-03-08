@@ -8,6 +8,8 @@ open NUnit.Framework.Constraints
 
 open FileConventions
 
+open type FileConventions.EolAtEof
+
 [<SetUp>]
 let Setup() =
     ()
@@ -205,7 +207,7 @@ let EolAtEofTest1() =
             Path.Combine(dummyFilesDirectory.FullName, "DummyWithEolAtEof.txt")
         ))
 
-    Assert.That(EolAtEof fileInfo, Is.EqualTo true)
+    Assert.That(EolAtEof fileInfo, Is.EqualTo True)
 
 
 [<Test>]
@@ -218,7 +220,7 @@ let EolAtEofTest2() =
             )
         ))
 
-    Assert.That(EolAtEof fileInfo, Is.EqualTo false)
+    Assert.That(EolAtEof fileInfo, Is.EqualTo False)
 
 
 [<Test>]
