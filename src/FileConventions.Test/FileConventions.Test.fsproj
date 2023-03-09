@@ -40,5 +40,7 @@
     <None Include="DummyFiles\DummyCIWithoutLatestTag.yml" />
     <None Include="DummyFiles\DummyWithMissingVersionsInNugetPackageReferences.fsx" />
     <None Include="DummyFiles\DummyWithCRLFLineEndings" />
+    <None Include="DummyFiles\DummyCIWithoutSamePulumiVersion.yml" />
+    <None Include="DummyFiles\DummyCIWithSamePulumiVersion.yml" />
   </ItemGroup>
 </Project>

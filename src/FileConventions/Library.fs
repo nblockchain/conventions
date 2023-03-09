@@ -103,3 +103,7 @@ let EolAtEof(fileInfo: FileInfo) =
                 False
         else
             True
+
+let DetectInconsistentVersionsInGitHubCI(fileInfo: FileInfo) =
+    assert (fileInfo.FullName.EndsWith ".yml")
+    false

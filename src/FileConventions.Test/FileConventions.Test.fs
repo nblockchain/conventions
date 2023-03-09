@@ -255,3 +255,28 @@ let HasBinaryContentTest3() =
         ))
 
     Assert.That(HasBinaryContent fileInfo, Is.EqualTo false)
+
+[<Test>]
+let DetectInconsistentVersionsInGitHubCI1() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithSamePulumiVersion.yml"
+            )
+        ))
+
+    Assert.That(DetectInconsistentVersionsInGitHubCI fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let DetectInconsistentVersionsInGitHubCI2() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithoutSamePulumiVersion.yml"
+            )
+        ))
+
+    Assert.That(DetectInconsistentVersionsInGitHubCI fileInfo, Is.EqualTo true)
