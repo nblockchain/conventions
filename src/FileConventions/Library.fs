@@ -26,11 +26,7 @@ let MixedLineEndings(fileInfo: FileInfo) =
     let crlf = Regex("\r\n", RegexOptions.Compiled)
 
     let numberOfLineEndings =
-        [
-            lf.IsMatch fileText
-            cr.IsMatch fileText
-            crlf.IsMatch fileText
-        ]
+        [ lf.IsMatch fileText; cr.IsMatch fileText; crlf.IsMatch fileText ]
         |> Seq.filter(
             function
             | isMatch -> isMatch = true
