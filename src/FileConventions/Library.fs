@@ -104,3 +104,6 @@ let EolAtEof(fileInfo: FileInfo) =
                 False
         else
             True
+
+let IsExecutable(fileInfo: FileInfo) =
+    false
