@@ -18,8 +18,7 @@ let HasCorrectShebang(fileInfo: FileInfo) =
         false
 
 let MixedLineEndings(fileInfo: FileInfo) =
-    use streamReader = new StreamReader(fileInfo.FullName)
-    let fileText = streamReader.ReadToEnd()
+    let fileText = File.ReadAllText fileInfo.FullName
 
     let lf = Regex("[^\r]\n", RegexOptions.Compiled)
     let cr = Regex("\r[^\n]", RegexOptions.Compiled)
@@ -41,8 +40,8 @@ let MixedLineEndings(fileInfo: FileInfo) =
 
 let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith(".yml"))
-    use streamReader = new StreamReader(fileInfo.FullName)
-    let fileText = streamReader.ReadToEnd()
+
+    let fileText = File.ReadAllText fileInfo.FullName
 
     let latestTagInRunsOnRegex =
         Regex("runs-on: .*-latest", RegexOptions.Compiled)
@@ -51,8 +50,8 @@ let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
 
 let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith "proj")
-    use streamReader = new StreamReader(fileInfo.FullName)
-    let fileText = streamReader.ReadToEnd()
+
+    let fileText = File.ReadAllText fileInfo.FullName
 
     let asteriskInPackageReference =
         Regex(
