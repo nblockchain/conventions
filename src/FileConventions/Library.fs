@@ -383,3 +383,7 @@ let NonVerboseFlags(fileInfo: FileInfo) =
         |> Seq.length
 
     numInvalidFlags > 0
+
+let IsExecutable(fileInfo: FileInfo) =
+    printfn "File path: %s" fileInfo.FullName
+    false
