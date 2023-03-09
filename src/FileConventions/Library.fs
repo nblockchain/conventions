@@ -245,3 +245,7 @@ let WrapText (text: string) (maxCharsPerLine: int) : string =
         $"{Environment.NewLine}{Environment.NewLine}",
         wrappedParagraphs
     )
+
+let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfo: FileInfo) =
+    assert (fileInfo.FullName.EndsWith ".yml")
+    false

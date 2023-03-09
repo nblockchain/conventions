@@ -348,3 +348,35 @@ let WrapTextTest4() =
         + "characters."
 
     Assert.That(WrapText text characterCount, Is.EqualTo expectedResult)
+
+[<Test>]
+
+let DetectInconsistentVersionsInGitHubCIWorkflow1() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithSamePulumiVersion.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo false
+    )
+
+
+[<Test>]
+let DetectInconsistentVersionsInGitHubCIWorkflow2() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithoutSamePulumiVersion.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo true
+    )
