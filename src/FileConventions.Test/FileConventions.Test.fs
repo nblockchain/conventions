@@ -8,6 +8,8 @@ open NUnit.Framework.Constraints
 
 open FileConventions
 
+open type FileConventions.EolAtEof
+
 [<SetUp>]
 let Setup() =
     ()
@@ -196,3 +198,60 @@ let MissingVersionsInNugetPackageReferencesTest3() =
         DetectMissingVersionsInNugetPackageReferences fileInfo,
         Is.EqualTo false
     )
+
+
+[<Test>]
+let EolAtEofTest1() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(dummyFilesDirectory.FullName, "DummyWithEolAtEof.txt")
+        ))
+
+    Assert.That(EolAtEof fileInfo, Is.EqualTo True)
+
+
+[<Test>]
+let EolAtEofTest2() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyWithoutEolAtEof.txt"
+            )
+        ))
+
+    Assert.That(EolAtEof fileInfo, Is.EqualTo False)
+
+
+[<Test>]
+let EolAtEofTest3() =
+    let fileInfo =
+        (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "someLib.dll")))
+
+    Assert.That(EolAtEof fileInfo, Is.EqualTo NotApplicable)
+
+
+[<Test>]
+let HasBinaryContentTest1() =
+    let fileInfo =
+        (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "someLib.dll")))
+
+    Assert.That(HasBinaryContent fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let HasBinaryContentTest2() =
+    let fileInfo =
+        (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "white.png")))
+
+    Assert.That(HasBinaryContent fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let HasBinaryContentTest3() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(dummyFilesDirectory.FullName, "DummyNonBinaryFile.txt")
+        ))
+
+    Assert.That(HasBinaryContent fileInfo, Is.EqualTo false)
