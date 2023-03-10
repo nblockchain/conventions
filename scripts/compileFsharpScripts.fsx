@@ -6,7 +6,8 @@ open System.IO
 #r "nuget: Fsdk, Version=0.6.0--date20230214-0422.git-1ea6f62"
 #load "../src/FileConventions/Helpers.fs"
 
-Fsdk.Process
+Fsdk
+    .Process
     .Execute(
         {
             Command = "dotnet"
@@ -18,7 +19,8 @@ Fsdk.Process
 |> ignore<string>
 
 // we need to install specific version because of this bug: https://github.com/dotnet/sdk/issues/24037
-Fsdk.Process
+Fsdk
+    .Process
     .Execute(
         {
             Command = "dotnet"
@@ -33,7 +35,8 @@ let rootDir = Path.Combine(__SOURCE_DIRECTORY__, "..") |> DirectoryInfo
 
 Helpers.GetFiles rootDir "*.fsx"
 |> Seq.iter(fun fileInfo ->
-    Fsdk.Process
+    Fsdk
+        .Process
         .Execute(
             {
                 Command = "dotnet"
