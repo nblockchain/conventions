@@ -11,7 +11,7 @@ Fsdk
     .Execute(
         {
             Command = "dotnet"
-            Arguments = sprintf "new tool-manifest"
+            Arguments = sprintf "new tool-manifest --force"
         },
         Fsdk.Process.Echo.All
     )
