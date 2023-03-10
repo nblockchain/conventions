@@ -248,4 +248,13 @@ let WrapText (text: string) (maxCharsPerLine: int) : string =
 
 let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith ".yml")
-    false
+    let fileLines = File.ReadLines fileInfo.FullName
+
+    let pulumiVersions =
+        fileLines
+        |> Seq.filter(fun line -> line.Contains "pulumi-version:")
+        |> Seq.map(fun line -> line.Substring(line.IndexOf(":") + 1))
+        |> Seq.map(fun line -> line.Trim())
+        |> Set.ofSeq
+
+    Seq.length pulumiVersions > 1
