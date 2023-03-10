@@ -135,4 +135,4 @@ jobs:
           dotnet fantomless --recurse .
           git diff --exit-code
       - name: Compile F# scripts
-        run: dotnet fsi scripts/compileFsharpScripts.fsx
+        run: dotnet fsi scripts/compileFSharpScripts.fsx

@@ -6,7 +6,7 @@ This is a repository that contains several useful things that other `nblockchain
 - [Workflow guidelines](WorkflowGuidelines.md).
 - Scripts that aid maintainability:
     * [Detection of .fsx scripts without shebang](scripts/shebangConvention.fsx).
-    * [F# scripts compilation](scripts/compileFsharpScripts.fsx).
+    * [F# scripts compilation](scripts/compileFSharpScripts.fsx).
     * [EOF without EOL detection](scripts/eofConvention.fsx).
     * [Mixed line-endings detection](scripts/mixedLineEndings.fsx).
     * Use of unpinned versions:
