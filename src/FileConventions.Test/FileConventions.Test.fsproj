@@ -42,5 +42,7 @@
     <None Include="DummyFiles\DummyWithCRLFLineEndings" />
     <None Include="DummyFiles\DummyCIWithoutSamePulumiVersion.yml" />
     <None Include="DummyFiles\DummyCIWithSamePulumiVersion.yml" />
+    <None Include="DummyFiles\DummyCIWithoutSameSetupPulumiVersion.yml" />
+    <None Include="DummyFiles\DummyCIWithSameSetupPulumiVersion.yml" />
   </ItemGroup>
 </Project>
