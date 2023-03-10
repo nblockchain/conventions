@@ -3,8 +3,31 @@ name: CI
 on: [push, pull_request]
 
 jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    container:
+      image: "ubuntu:22.04"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install required dependencies
+        run: |
+          apt update
+          apt install -y sudo
+          sudo apt install -y git
+      # workaround for https://github.com/actions/runner/issues/2033
+      - name: ownership workaround
+        run: git config --global --add safe.directory '*'
+      - name: Install dotnet sdk
+        run: sudo apt install -y dotnet6
+      - name: Compile F# scripts
+        run: dotnet fsi scripts/compileFSharpScripts.fsx
+      - name: Compile the conventions solution
+        run: dotnet build conventions.sln
+
   file-conventions-tests:
     name: Run FileConventions-lib unit tests
+    needs: build
     runs-on: ubuntu-22.04
     container:
       image: "ubuntu:22.04"
@@ -22,13 +45,12 @@ jobs:
 
       - name: Setup .NET
         run: apt install -y dotnet6
-      - name: compile the FileConventions project
-        run: dotnet build src/FileConventions.Test/FileConventions.Test.fsproj
       - name: Run tests to validate F# scripts
         run: dotnet test src/FileConventions.Test/FileConventions.Test.fsproj
 
   commitlint-plugins-tests:
     name: Run commitlint-related tests
+    needs: build
     runs-on: ubuntu-22.04
     container:
       image: "ubuntu:22.04"
@@ -68,8 +90,11 @@ jobs:
       - name: Run tests to validate our plugins
         run: yarn jest
 
-  sanitycheck:
+  sanity-check:
     name: Sanity check
+    needs:
+    - file-conventions-tests
+    - commitlint-plugins-tests
     runs-on: ubuntu-22.04
     container:
       image: "ubuntu:22.04"
@@ -134,5 +159,4 @@ jobs:
           dotnet tool install fantomless-tool --version 4.7.997-prerelease
           dotnet fantomless --recurse .
           git diff --exit-code
-      - name: Compile F# scripts
-        run: dotnet fsi scripts/compileFSharpScripts.fsx
+
