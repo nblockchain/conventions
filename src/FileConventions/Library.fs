@@ -115,4 +115,11 @@ let DetectInconsistentVersionsInGitHubCI(fileInfo: FileInfo) =
         |> Seq.map(fun line -> line.Trim())
         |> Set.ofSeq
 
-    Seq.length pulumiVersions > 1
+    let setupPulumiVersions =
+        fileLines
+        |> Seq.filter(fun line -> line.Contains "setup-pulumi@")
+        |> Seq.map(fun line -> line.Substring(line.IndexOf("@") + 1))
+        |> Seq.map(fun line -> line.Trim())
+        |> Set.ofSeq
+
+    Seq.length pulumiVersions > 1 || Seq.length setupPulumiVersions > 1
