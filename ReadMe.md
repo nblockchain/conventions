@@ -4,15 +4,15 @@ This is a repository that contains several useful things that other `nblockchain
 - [A reference .editorconfig file](.editorconfig).
 - [An F# style guide](FSharpStyleGuide.md).
 - [Workflow guidelines](WorkflowGuidelines.md).
-- Useful scripts to detect bad practices, such as:
-    * [EOF without EOL](scripts/eofConvention.fsx).
-    * [Mixed line-endings](scripts/mixedLineEndings.fsx).
-    * [.fsx scripts without shebang](scripts/shebangConvention.fsx).
+- Scripts that aid maintainability:
+    * [Detection of .fsx scripts without shebang](scripts/shebangConvention.fsx).
+    * [F# scripts compilation](scripts/compileFsharpScripts.fsx).
+    * [EOF without EOL detection](scripts/eofConvention.fsx).
+    * [Mixed line-endings detection](scripts/mixedLineEndings.fsx).
     * Use of unpinned versions:
         * [Use of `-latest` suffix in `runs-on:` GitHubCI tags](scripts/unpinnedGitHubActionsImageVersions.fsx).
         * [Use of asterisk (*) in `PackageReference` items of .NET projects](scripts/unpinnedDotnetPackageVersions.fsx).
         * [Missing the version number in `#r "nuget: ` refs of F# scripts](scripts/unpinnedNugetPackageReferenceVersions.fsx).
-    * [Compile F# scripts](scripts/compileFsharpScripts.fsx).
 
 All in all, this is mainly documentation, and some tooling to detect bad practices.
 
