@@ -134,3 +134,5 @@ jobs:
           dotnet tool install fantomless-tool --version 4.7.997-prerelease
           dotnet fantomless --recurse .
           git diff --exit-code
+      - name: Compile F# scripts
+        run: dotnet fsi scripts/compileFsharpScripts.fsx

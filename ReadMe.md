@@ -12,6 +12,7 @@ This is a repository that contains several useful things that other `nblockchain
         * [Use of `-latest` suffix in `runs-on:` GitHubCI tags](scripts/unpinnedGitHubActionsImageVersions.fsx).
         * [Use of asterisk (*) in `PackageReference` items of .NET projects](scripts/unpinnedDotnetPackageVersions.fsx).
         * [Missing the version number in `#r "nuget: ` refs of F# scripts](scripts/unpinnedNugetPackageReferenceVersions.fsx).
+    * [Compile F# scripts](scripts/compileFsharpScripts.fsx).
 
 All in all, this is mainly documentation, and some tooling to detect bad practices.
 
