@@ -132,7 +132,6 @@ jobs:
           git diff --exit-code
       - name: fantomless
         run: |
-          export PATH="$PATH:/github/home/.dotnet/tools"
-          dotnet tool install -g fantomas
-          fantomas --recurse .
+          dotnet tool install fantomless-tool --version 4.7.997-prerelease
+          dotnet fantomless --recurse .
           git diff --exit-code
