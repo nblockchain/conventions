@@ -23,7 +23,7 @@ jobs:
       - name: Compile F# scripts
         run: dotnet fsi scripts/compileFSharpScripts.fsx
       - name: Compile the conventions solution
-        run: dotnet build conventions.sln
+        run: dotnet build --configuration Release conventions.sln
 
   file-conventions-tests:
     name: Run FileConventions-lib unit tests
