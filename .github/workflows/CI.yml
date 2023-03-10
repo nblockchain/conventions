@@ -112,8 +112,6 @@ jobs:
         run: dotnet fsi scripts/unpinnedDotnetPackageVersions.fsx
       - name: Check there are no unpinned nuget package reference versions in F# scripts
         run: dotnet fsi scripts/unpinnedNugetPackageReferenceVersions.fsx
-      - name: Compile F# scripts
-        run: dotnet fsi scripts/compileFsharpScripts.fsx
       - name: Install prettier
         run: npm install prettier@2.8.3
       - name: Change file permissions
@@ -132,6 +130,9 @@ jobs:
           git diff --exit-code
       - name: fantomless
         run: |
+          dotnet new tool-manifest
           dotnet tool install fantomless-tool --version 4.7.997-prerelease
           dotnet fantomless --recurse .
           git diff --exit-code
+      - name: Compile F# scripts
+        run: dotnet fsi scripts/compileFsharpScripts.fsx
