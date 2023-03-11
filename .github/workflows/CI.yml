@@ -36,12 +36,13 @@ jobs:
       - name: Install required dependencies
         run: |
           apt update
-          apt install -y sudo
+          apt install --yes sudo
+
           # We need to install curl otherwise we get these errors in the CI:
           # Unable to load the service index for source https://api.nuget.org/v3/index.json.
           # The SSL connection could not be established, see inner exception. 
           # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot 
-          sudo apt install -y curl
+          sudo apt install --yes curl
 
       - name: Setup .NET
         run: apt install -y dotnet6
@@ -59,14 +60,14 @@ jobs:
       - name: Install required dependencies
         run: |
           apt update
-          apt install -y sudo
-          sudo apt install -y git
+          apt install --yes sudo
+          sudo apt install --yes git
 
-          sudo apt install -y curl
+          sudo apt install --yes curl
           # can't install ubuntu's default nodejs version because we would get this error:
           # error @jest/core@29.4.1: The engine "node" is incompatible with this module. Expected version "^14.15.0 || ^16.10.0 || >=18.0.0". Got "12.22.9"
-          curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-          sudo DEBIAN_FRONTEND=noninteractive apt install -y nodejs
+          curl --show-error --location https://deb.nodesource.com/setup_14.x | sudo --preserve-env bash -
+          sudo DEBIAN_FRONTEND=noninteractive apt install --yes nodejs
       - name: Print versions
         run: |
           git --version
@@ -75,7 +76,7 @@ jobs:
           npx commitlint --version
       - name: Install yarn
         run: |
-          npm install -g yarn
+          npm install --global yarn
           yarn add --dev jest typescript ts-jest @types/jest
       - name: Install commitlint
         run: |
@@ -101,8 +102,8 @@ jobs:
     steps:
       - name: Install required dependencies
         run: |
-          apt update && apt install -y sudo
-          sudo apt install -y git
+          apt update && apt install --yes sudo
+          sudo apt install --yes git
           sudo DEBIAN_FRONTEND=noninteractive apt install --yes npm
       - uses: actions/checkout@v2
         with:
@@ -124,7 +125,7 @@ jobs:
         if: github.event_name == 'pull_request'
         run: ./commitlint.sh --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
       - name: Install dotnet sdk
-        run: sudo apt install -y dotnet6
+        run: sudo apt install --yes dotnet6
       - name: Check all files end with EOL
         run: dotnet fsi scripts/eofConvention.fsx
       - name: Check all .fsx scripts have shebang

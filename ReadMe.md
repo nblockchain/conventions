@@ -20,5 +20,6 @@ More things to come:
 - Detect .fsx files without +x attrib.
 - Detect old versions of FSharpLint and fantomas/fantomless being used.
 - Detect old versions of .editorconfig or Directory.Build.props being used.
+- Detect non-verbose flags (e.g. `dotnet build -c Debug` instead of `dotnet build --configuration Debug`) being used in scripts or YML CI files (there are exceptions, e.g. `env -S`).
 - Detect unpinned versions, such as:
     * Missing the `--version` flag in `dotnet tool install foo` invocations.
