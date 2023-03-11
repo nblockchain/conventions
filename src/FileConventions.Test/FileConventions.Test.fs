@@ -259,10 +259,12 @@ let HasBinaryContentTest3() =
 [<Test>]
 let DetectInconsistentVersionsInGitHubCI1() =
     let fileInfo =
-        (FileInfo(
-            Path.Combine(
-                dummyFilesDirectory.FullName,
-                "DummyCIWithSamePulumiVersion.yml"
+        (Seq.singleton(
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithSamePulumiVersion.yml"
+                )
             )
         ))
 
@@ -272,10 +274,12 @@ let DetectInconsistentVersionsInGitHubCI1() =
 [<Test>]
 let DetectInconsistentVersionsInGitHubCI2() =
     let fileInfo =
-        (FileInfo(
-            Path.Combine(
-                dummyFilesDirectory.FullName,
-                "DummyCIWithoutSamePulumiVersion.yml"
+        (Seq.singleton(
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithoutSamePulumiVersion.yml"
+                )
             )
         ))
 
@@ -285,10 +289,12 @@ let DetectInconsistentVersionsInGitHubCI2() =
 [<Test>]
 let DetectInconsistentVersionsInGitHubCI3() =
     let fileInfo =
-        (FileInfo(
-            Path.Combine(
-                dummyFilesDirectory.FullName,
-                "DummyCIWithoutSameSetupPulumiVersion.yml"
+        (Seq.singleton(
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithoutSameSetupPulumiVersion.yml"
+                )
             )
         ))
 
@@ -298,11 +304,37 @@ let DetectInconsistentVersionsInGitHubCI3() =
 [<Test>]
 let DetectInconsistentVersionsInGitHubCI4() =
     let fileInfo =
-        (FileInfo(
-            Path.Combine(
-                dummyFilesDirectory.FullName,
-                "DummyCIWithSameSetupPulumiVersion.yml"
+        (Seq.singleton(
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithSameSetupPulumiVersion.yml"
+                )
             )
         ))
 
     Assert.That(DetectInconsistentVersionsInGitHubCI fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let DetectInconsistentVersionsInGitHubCI5() =
+    let fileInfo =
+        (seq {
+
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithSameSetupPulumiVersion.yml"
+                )
+            )
+
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithoutSameSetupPulumiVersion.yml"
+                )
+            )
+
+        })
+
+    Assert.That(DetectInconsistentVersionsInGitHubCI fileInfo, Is.EqualTo true)
