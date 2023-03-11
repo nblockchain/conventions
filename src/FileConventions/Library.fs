@@ -247,22 +247,35 @@ let WrapText (text: string) (maxCharsPerLine: int) : string =
     )
 
 let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
-    let fileInfo = Seq.nth 0 fileInfos
-    assert (fileInfo.FullName.EndsWith ".yml")
-    let fileLines = File.ReadLines fileInfo.FullName
+    fileInfos
+    |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".yml"))
 
-    let pulumiVersions =
-        fileLines
-        |> Seq.filter(fun line -> line.Contains "pulumi-version:")
-        |> Seq.map(fun line -> line.Substring(line.IndexOf(":") + 1))
-        |> Seq.map(fun line -> line.Trim())
+    let inconsistentPulumiVersions =
+        fileInfos
+        |> Seq.map(fun fileInfo -> File.ReadLines fileInfo.FullName)
+        |> Seq.map(fun fileLines ->
+            fileLines
+            |> Seq.filter(fun line -> line.Contains "pulumi-version:")
+            |> Seq.map(fun line -> line.Substring(line.IndexOf(":") + 1))
+            |> Seq.map(fun line -> line.Trim())
+        )
+        |> Seq.concat
         |> Set.ofSeq
+        |> Seq.length
+        |> (fun length -> length > 1)
 
-    let setupPulumiVersions =
-        fileLines
-        |> Seq.filter(fun line -> line.Contains "setup-pulumi@")
-        |> Seq.map(fun line -> line.Substring(line.IndexOf("@") + 1))
-        |> Seq.map(fun line -> line.Trim())
+    let inconsistentSetupPulumiVersions =
+        fileInfos
+        |> Seq.map(fun fileInfo -> File.ReadLines fileInfo.FullName)
+        |> Seq.map(fun fileLines ->
+            fileLines
+            |> Seq.filter(fun line -> line.Contains "setup-pulumi@")
+            |> Seq.map(fun line -> line.Substring(line.IndexOf(":") + 1))
+            |> Seq.map(fun line -> line.Trim())
+        )
+        |> Seq.concat
         |> Set.ofSeq
+        |> Seq.length
+        |> (fun length -> length > 1)
 
-    Seq.length pulumiVersions > 1 || Seq.length setupPulumiVersions > 1
+    inconsistentPulumiVersions || inconsistentSetupPulumiVersions
