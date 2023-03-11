@@ -1,0 +1,18 @@
+name: GitHubContext
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    container:
+      image: "ubuntu:22.04"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test
+        run: |
+          echo github.ref ${{ github.ref }}
+          echo github.sha ${{ github.sha }}
+          echo github.head_ref ${{ github.head_ref }}
+          echo ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }}
