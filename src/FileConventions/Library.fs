@@ -246,7 +246,8 @@ let WrapText (text: string) (maxCharsPerLine: int) : string =
         wrappedParagraphs
     )
 
-let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfo: FileInfo) =
+let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
+    let fileInfo = Seq.nth 0 fileInfos
     assert (fileInfo.FullName.EndsWith ".yml")
     let fileLines = File.ReadLines fileInfo.FullName
 
