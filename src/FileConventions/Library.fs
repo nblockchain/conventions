@@ -137,3 +137,8 @@ let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
         |> (fun length -> length > 1)
 
     inconsistentPulumiVersions || inconsistentSetupPulumiVersions
+
+
+let DetectInconsistentVersionsInGitHubCI(directoryInfo: DirectoryInfo) =
+    printfn "Path: %A" directoryInfo.FullName
+    false
