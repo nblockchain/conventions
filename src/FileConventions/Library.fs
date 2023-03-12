@@ -104,7 +104,7 @@ let EolAtEof(fileInfo: FileInfo) =
         else
             True
 
-let DetectInconsistentVersionsInGitHubCI(fileInfos: seq<FileInfo>) =
+let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
     fileInfos
     |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".yml"))
 

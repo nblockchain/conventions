@@ -257,7 +257,7 @@ let HasBinaryContentTest3() =
     Assert.That(HasBinaryContent fileInfo, Is.EqualTo false)
 
 [<Test>]
-let DetectInconsistentVersionsInGitHubCI1() =
+let DetectInconsistentVersionsInGitHubCIWorkflow1() =
     let fileInfo =
         (Seq.singleton(
             FileInfo(
@@ -268,11 +268,14 @@ let DetectInconsistentVersionsInGitHubCI1() =
             )
         ))
 
-    Assert.That(DetectInconsistentVersionsInGitHubCI fileInfo, Is.EqualTo false)
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo false
+    )
 
 
 [<Test>]
-let DetectInconsistentVersionsInGitHubCI2() =
+let DetectInconsistentVersionsInGitHubCIWorkflow2() =
     let fileInfo =
         (Seq.singleton(
             FileInfo(
@@ -283,11 +286,14 @@ let DetectInconsistentVersionsInGitHubCI2() =
             )
         ))
 
-    Assert.That(DetectInconsistentVersionsInGitHubCI fileInfo, Is.EqualTo true)
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo true
+    )
 
 
 [<Test>]
-let DetectInconsistentVersionsInGitHubCI3() =
+let DetectInconsistentVersionsInGitHubCIWorkflow3() =
     let fileInfo =
         (Seq.singleton(
             FileInfo(
@@ -298,11 +304,14 @@ let DetectInconsistentVersionsInGitHubCI3() =
             )
         ))
 
-    Assert.That(DetectInconsistentVersionsInGitHubCI fileInfo, Is.EqualTo true)
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo true
+    )
 
 
 [<Test>]
-let DetectInconsistentVersionsInGitHubCI4() =
+let DetectInconsistentVersionsInGitHubCIWorkflow4() =
     let fileInfo =
         (Seq.singleton(
             FileInfo(
@@ -313,11 +322,14 @@ let DetectInconsistentVersionsInGitHubCI4() =
             )
         ))
 
-    Assert.That(DetectInconsistentVersionsInGitHubCI fileInfo, Is.EqualTo false)
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo false
+    )
 
 
 [<Test>]
-let DetectInconsistentVersionsInGitHubCI5() =
+let DetectInconsistentVersionsInGitHubCIWorkflow5() =
     let fileInfo =
         (seq {
 
@@ -337,4 +349,7 @@ let DetectInconsistentVersionsInGitHubCI5() =
 
         })
 
-    Assert.That(DetectInconsistentVersionsInGitHubCI fileInfo, Is.EqualTo true)
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo true
+    )
