@@ -20,10 +20,10 @@ jobs:
         run: git config --global --add safe.directory '*'
       - name: Install dotnet sdk
         run: sudo apt install -y dotnet6
-      - name: Compile F# scripts
-        run: dotnet fsi scripts/compileFSharpScripts.fsx
       - name: Compile the conventions solution
         run: dotnet build --configuration Release conventions.sln
+      - name: Compile F# scripts
+        run: dotnet fsi scripts/compileFSharpScripts.fsx
 
   file-conventions-tests:
     name: Run FileConventions-lib unit tests
