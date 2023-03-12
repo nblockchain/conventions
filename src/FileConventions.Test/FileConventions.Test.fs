@@ -331,7 +331,7 @@ let DetectInconsistentVersionsInGitHubCI5() =
             FileInfo(
                 Path.Combine(
                     dummyFilesDirectory.FullName,
-                    "DummyCIWithoutSameSetupPulumiVersion.yml"
+                    "DummyCIWithSameSetupPulumiVersion2.yml"
                 )
             )
 
