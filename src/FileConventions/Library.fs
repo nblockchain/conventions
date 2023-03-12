@@ -280,7 +280,10 @@ let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
 
     inconsistentPulumiVersions || inconsistentSetupPulumiVersions
 
-
 let DetectInconsistentVersionsInGitHubCI(dir: DirectoryInfo) =
-    printfn "Path: %A" dir.FullName
-    false
+    let ymlFiles = dir.GetFiles("*.yml", SearchOption.AllDirectories)
+
+    if Seq.length ymlFiles = 0 then
+        false
+    else
+        DetectInconsistentVersionsInGitHubCIWorkflow ymlFiles
