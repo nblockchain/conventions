@@ -116,11 +116,11 @@ let DetectInconsistentVersionsInGitHubCI(fileInfos: seq<FileInfo>) =
             |> Seq.filter(fun line -> line.Contains "pulumi-version:")
             |> Seq.map(fun line -> line.Substring(line.IndexOf(":") + 1))
             |> Seq.map(fun line -> line.Trim())
-            |> Set.ofSeq
-            |> Seq.length
-            |> (fun length -> length > 1)
         )
-        |> Seq.contains true
+        |> Seq.concat
+        |> Set.ofSeq
+        |> Seq.length
+        |> (fun length -> length > 1)
 
     let inconsistentSetupPulumiVersions =
         fileInfos
@@ -130,10 +130,10 @@ let DetectInconsistentVersionsInGitHubCI(fileInfos: seq<FileInfo>) =
             |> Seq.filter(fun line -> line.Contains "setup-pulumi@")
             |> Seq.map(fun line -> line.Substring(line.IndexOf(":") + 1))
             |> Seq.map(fun line -> line.Trim())
-            |> Set.ofSeq
-            |> Seq.length
-            |> (fun length -> length > 1)
         )
-        |> Seq.contains true
+        |> Seq.concat
+        |> Set.ofSeq
+        |> Seq.length
+        |> (fun length -> length > 1)
 
     inconsistentPulumiVersions || inconsistentSetupPulumiVersions
