@@ -6,6 +6,7 @@ This is a repository that contains several useful things that other `nblockchain
 - [Workflow guidelines](docs/WorkflowGuidelines.md).
 - Scripts that aid maintainability:
     * [Detection of .fsx scripts without shebang](scripts/shebangConvention.fsx).
+    * [Detection of .fsx files without +x attrib](scripts/executableConvention.fsx).
     * [F# scripts compilation](scripts/compileFSharpScripts.fsx).
     * [EOF without EOL detection](scripts/eofConvention.fsx).
     * [Mixed line-endings detection](scripts/mixedLineEndings.fsx).
@@ -23,6 +24,5 @@ This is a repository that contains several useful things that other `nblockchain
 All in all, this is mainly documentation, and some tooling to detect bad practices.
 
 More things to come:
-- Detect .fsx files without +x attrib.
 - Detect old versions of FSharpLint and fantomas/fantomless being used.
 - Detect old versions of .editorconfig or Directory.Build.props being used.
