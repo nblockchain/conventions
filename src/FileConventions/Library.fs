@@ -264,21 +264,39 @@ let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
         |> Seq.length
         |> (fun length -> length > 1)
 
-    let inconsistentSetupPulumiVersions =
-        fileInfos
-        |> Seq.map(fun fileInfo -> File.ReadLines fileInfo.FullName)
-        |> Seq.map(fun fileLines ->
-            fileLines
-            |> Seq.filter(fun line -> line.Contains "setup-pulumi@")
-            |> Seq.map(fun line -> line.Substring(line.IndexOf(":") + 1))
-            |> Seq.map(fun line -> line.Trim())
-        )
-        |> Seq.concat
-        |> Set.ofSeq
-        |> Seq.length
-        |> (fun length -> length > 1)
+    let versionRegex =
+        Regex("\\suses:\\s*([^\\s]*)@v([^\\s]*)\\s", RegexOptions.Compiled)
 
-    inconsistentPulumiVersions || inconsistentSetupPulumiVersions
+    let mutable versionMap: Map<string, Set<string>> = Map.empty
+
+
+    fileInfos
+    |> Seq.iter(fun fileInfo ->
+        let fileText = File.ReadAllText fileInfo.FullName
+
+        versionRegex.Matches fileText
+        |> Seq.iter(fun regexMatch ->
+            let key = regexMatch.Groups.[1].ToString()
+            let value = regexMatch.Groups.[2].ToString()
+
+            let addSet (value: string) (maybePrevSet: Option<Set<string>>) =
+                match maybePrevSet with
+                | Some prevSet -> Some(Set.add value prevSet)
+                | None -> None
+
+            if versionMap.ContainsKey key then
+                versionMap <- versionMap.Change(key, addSet value)
+            else
+                versionMap <- versionMap.Add(key, Set.singleton value)
+        )
+    )
+
+    let inconsistentVersions =
+        versionMap
+        |> Seq.map(fun item -> Seq.length item.Value > 1)
+        |> Seq.contains true
+
+    inconsistentPulumiVersions || inconsistentVersions
 
 let DetectInconsistentVersionsInGitHubCI(dir: DirectoryInfo) =
     let ymlFiles = dir.GetFiles("*.yml", SearchOption.AllDirectories)
