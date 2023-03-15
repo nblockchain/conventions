@@ -468,6 +468,24 @@ let DetectInconsistentVersionsInGitHubCIWorkflow6() =
 
 
 [<Test>]
+let DetectInconsistentVersionsInGitHubCIWorkflow7() =
+    let fileInfo =
+        (Seq.singleton(
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithoutSameNodeVersion.yml"
+                )
+            )
+        ))
+
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo true
+    )
+
+
+[<Test>]
 let DetectInconsistentVersionsInGitHubCI1() =
     let fileInfo =
         DirectoryInfo(
