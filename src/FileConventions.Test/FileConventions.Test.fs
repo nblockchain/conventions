@@ -520,3 +520,15 @@ let DetectInconsistentVersionsInNugetRefsInFSharpScripts1() =
         DetectInconsistentVersionsInNugetRefsInFSharpScripts fileInfos,
         Is.EqualTo true
     )
+
+[<Test>]
+let DetectInconsistentVersionsInFSharpScripts1() =
+    let fileInfo =
+        DirectoryInfo(
+            Path.Combine(dummyFilesDirectory.FullName, "DummyScripts")
+        )
+
+    Assert.That(
+        DetectInconsistentVersionsInFSharpScripts fileInfo,
+        Is.EqualTo true
+    )
