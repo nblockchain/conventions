@@ -303,3 +303,11 @@ let DetectInconsistentVersionsInGitHubCI(dir: DirectoryInfo) =
         false
     else
         DetectInconsistentVersionsInGitHubCIWorkflow ymlFiles
+
+let DetectInconsistentVersionsInNugetRefsInFSharpScripts
+    (fileInfos: seq<FileInfo>)
+    =
+    fileInfos
+    |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".fsx"))
+
+    false
