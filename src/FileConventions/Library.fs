@@ -246,26 +246,11 @@ let WrapText (text: string) (maxCharsPerLine: int) : string =
         wrappedParagraphs
     )
 
-let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
-    fileInfos
-    |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".yml"))
-
-    let inconsistentPulumiVersions =
-        fileInfos
-        |> Seq.map(fun fileInfo -> File.ReadLines fileInfo.FullName)
-        |> Seq.map(fun fileLines ->
-            fileLines
-            |> Seq.filter(fun line -> line.Contains "pulumi-version:")
-            |> Seq.map(fun line -> line.Substring(line.IndexOf(":") + 1))
-            |> Seq.map(fun line -> line.Trim())
-        )
-        |> Seq.concat
-        |> Set.ofSeq
-        |> Seq.length
-        |> (fun length -> length > 1)
-
-    let versionRegex =
-        Regex("\\suses:\\s*([^\\s]*)@v([^\\s]*)\\s", RegexOptions.Compiled)
+let DetectInconsistentVersion
+    (fileInfos: seq<FileInfo>)
+    (versionRegexPattern: string)
+    =
+    let versionRegex = Regex(versionRegexPattern, RegexOptions.Compiled)
 
     let mutable versionMap: Map<string, Set<string>> = Map.empty
 
@@ -291,12 +276,25 @@ let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
         )
     )
 
-    let inconsistentVersions =
-        versionMap
-        |> Seq.map(fun item -> Seq.length item.Value > 1)
-        |> Seq.contains true
+    versionMap
+    |> Seq.map(fun item -> Seq.length item.Value > 1)
+    |> Seq.contains true
 
-    inconsistentPulumiVersions || inconsistentVersions
+let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
+    fileInfos
+    |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".yml"))
+
+    let inconsistentVersionsType1 =
+        DetectInconsistentVersion
+            fileInfos
+            "\\swith:\\s*([^\\s]*)-version:\\s*([^\\s]*)\\s"
+
+    let inconsistentVersionsType2 =
+        DetectInconsistentVersion
+            fileInfos
+            "\\suses:\\s*([^\\s]*)@v([^\\s]*)\\s"
+
+    inconsistentVersionsType1 || inconsistentVersionsType2
 
 let DetectInconsistentVersionsInGitHubCI(dir: DirectoryInfo) =
     let ymlFiles = dir.GetFiles("*.yml", SearchOption.AllDirectories)
