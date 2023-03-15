@@ -49,6 +49,10 @@ let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
 
     latestTagInRunsOnRegex.IsMatch fileText
 
+let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
+    assert (fileInfo.FullName.EndsWith(".yml"))
+    false
+
 let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith "proj")
     use streamReader = new StreamReader(fileInfo.FullName)
