@@ -8,8 +8,11 @@ open System.Net.Http.Headers
 
 let gitRepo = Environment.GetEnvironmentVariable "GITHUB_REPOSITORY"
 
-if gitRepo = null then
-    failwith "You shouldn't use this script outside CI."
+if String.IsNullOrEmpty gitRepo then
+    Console.Error.WriteLine
+        "This script is meant to be used only within a GitHubCI pipeline"
+
+    Environment.Exit 2
 
 let currentBranch =
     Fsdk
@@ -66,8 +69,11 @@ let notUsingGitPush1by1 =
     |> Seq.contains true
 
 if notUsingGitPush1by1 then
-    failwith(
-        "Please push the commits one by one.\n"
-        + "You may use this script:\n"
-        + "https://github.com/nblockchain/fsx/blob/master/Tools/gitPush1by1.fsx"
-    )
+    let errMsg =
+        sprintf
+            "Please push the commits one by one; using this script is recommended:%s%s"
+            Environment.NewLine
+            "https://github.com/nblockchain/fsx/blob/master/Tools/gitPush1by1.fsx"
+
+    Console.Error.WriteLine errMsg
+    Environment.Exit 1
