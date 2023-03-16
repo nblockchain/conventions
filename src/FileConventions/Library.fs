@@ -314,8 +314,12 @@ let DetectInconsistentVersionsInNugetRefsInFSharpScripts
         fileInfos
         "#r \"nuget:\\s*([^\\s]*)\\s*,\\s*Version\\s*=\\s*([^\\s]*)\\s*\""
 
-let DetectInconsistentVersionsInFSharpScripts(dir: DirectoryInfo) =
+let DetectInconsistentVersionsInFSharpScripts
+    (dir: DirectoryInfo)
+    (ignoreDirs: Option<seq<string>>)
+    =
     let fsxFiles = dir.GetFiles("*.fsx", SearchOption.AllDirectories)
+    printfn "%A" ignoreDirs
 
     if Seq.length fsxFiles = 0 then
         false

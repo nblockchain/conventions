@@ -529,6 +529,21 @@ let DetectInconsistentVersionsInFSharpScripts1() =
         )
 
     Assert.That(
-        DetectInconsistentVersionsInFSharpScripts fileInfo,
+        DetectInconsistentVersionsInFSharpScripts fileInfo None,
         Is.EqualTo true
+    )
+
+
+[<Test>]
+let DetectInconsistentVersionsInFSharpScripts2() =
+    let dir =
+        DirectoryInfo(
+            Path.Combine(dummyFilesDirectory.FullName, "DummyScripts")
+        )
+
+    Assert.That(
+        DetectInconsistentVersionsInFSharpScripts
+            dir
+            (Some(Seq.singleton "DummyScripts")),
+        Is.EqualTo false
     )
