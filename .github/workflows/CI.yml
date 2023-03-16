@@ -141,6 +141,8 @@ jobs:
         run: dotnet fsi scripts/unpinnedDotnetPackageVersions.fsx
       - name: Check there are no unpinned nuget package reference versions in F# scripts
         run: dotnet fsi scripts/unpinnedNugetPackageReferenceVersions.fsx
+      - name: Check there are no unpinned versions in `dotnet tool install` commands
+        run: dotnet fsi scripts/unpinnedDotnetToolInstallVersions.fsx
       - name: Check if gitPush1by1 was used
         if: github.event_name == 'pull_request'
         run: dotnet fsi scripts/detectNotUsingGitPush1by1.fsx
