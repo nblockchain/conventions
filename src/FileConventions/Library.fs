@@ -318,8 +318,18 @@ let DetectInconsistentVersionsInFSharpScripts
     (dir: DirectoryInfo)
     (ignoreDirs: Option<seq<string>>)
     =
-    let fsxFiles = dir.GetFiles("*.fsx", SearchOption.AllDirectories)
-    printfn "%A" ignoreDirs
+    let fsxFiles =
+        match ignoreDirs with
+        | Some ignoreDirs ->
+            dir.GetFiles("*.fsx", SearchOption.AllDirectories)
+            |> Seq.filter(fun fileInfo ->
+                ignoreDirs
+                |> Seq.filter(fun ignoreDir ->
+                    fileInfo.FullName.Contains ignoreDir
+                )
+                |> (fun toBeIgnored -> Seq.length toBeIgnored = 0)
+            )
+        | None -> dir.GetFiles("*.fsx", SearchOption.AllDirectories)
 
     if Seq.length fsxFiles = 0 then
         false
