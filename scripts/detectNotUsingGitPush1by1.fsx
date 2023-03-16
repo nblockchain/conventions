@@ -5,6 +5,8 @@ open System.Net.Http
 open System.Net.Http.Headers
 
 #r "nuget: Fsdk, Version=0.6.0--date20230214-0422.git-1ea6f62"
+open Fsdk
+
 
 let gitRepo = Environment.GetEnvironmentVariable "GITHUB_REPOSITORY"
 
@@ -15,28 +17,26 @@ if String.IsNullOrEmpty gitRepo then
     Environment.Exit 2
 
 let currentBranch =
-    Fsdk
-        .Process
+    Process
         .Execute(
             {
                 Command = "git"
                 Arguments = "rev-parse --abbrev-ref HEAD"
             },
-            Fsdk.Process.Echo.Off
+            Process.Echo.Off
         )
         .UnwrapDefault()
         .Trim()
 
 let prCommits =
-    Fsdk
-        .Process
+    Process
         .Execute(
             {
                 Command = "git"
                 Arguments =
                     sprintf "rev-list %s~..%s" currentBranch currentBranch
             },
-            Fsdk.Process.Echo.Off
+            Process.Echo.Off
         )
         .UnwrapDefault()
         .Trim()
@@ -46,7 +46,7 @@ let prCommits =
 let notUsingGitPush1by1 =
     prCommits
     |> Seq.map(fun commit ->
-        use client: HttpClient = new HttpClient()
+        use client = new HttpClient()
         client.DefaultRequestHeaders.Accept.Clear()
 
         client.DefaultRequestHeaders.Accept.Add(
@@ -62,7 +62,7 @@ let notUsingGitPush1by1 =
                 gitRepo
                 commit
 
-        let json = client.GetStringAsync(url).Result
+        let json = (client.GetStringAsync url).Result
 
         json.Contains "\"check_suites\":[]"
     )
