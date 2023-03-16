@@ -51,7 +51,21 @@ let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
 
 let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith(".yml"))
-    false
+
+    let fileLines = File.ReadLines fileInfo.FullName
+
+    let dotnetToolInstallRegex =
+        Regex("dotnet\\s+tool\\s+install\\s+", RegexOptions.Compiled)
+
+    let unpinnedDotnetToolInstallVersions =
+        fileLines
+        |> Seq.filter(fun line -> dotnetToolInstallRegex.IsMatch line)
+        |> Seq.filter(fun line ->
+            not(line.Contains("--version")) && not(line.Contains("-v"))
+        )
+        |> (fun unpinnedVersions -> Seq.length unpinnedVersions > 0)
+
+    unpinnedDotnetToolInstallVersions
 
 let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith "proj")
