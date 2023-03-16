@@ -73,7 +73,7 @@ if notUsingGitPush1by1 then
         sprintf
             "Please push the commits one by one; using this script is recommended:%s%s"
             Environment.NewLine
-            "https://github.com/nblockchain/fsx/blob/master/Tools/gitPush1by1.fsx"
+            "https://github.com/nblockchain/conventions/blob/master/scripts/gitPush1by1.fsx"
 
     Console.Error.WriteLine errMsg
     Environment.Exit 1
