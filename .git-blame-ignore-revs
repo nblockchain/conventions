@@ -1,3 +1,6 @@
+# *.fsx,*.fs: formatting F# files using fantomless
+df5cfb143c4efe73806ead91e5cddf4e133be0a8
+
 # commitlint.config: split helper funcs and plugins
 3008d6578aa484ae776b29c9246dca4eeae3418a
 
