@@ -330,11 +330,26 @@ let DetectInconsistentVersionsInFSharpScripts
     else
         DetectInconsistentVersionsInNugetRefsInFSharpScripts fsxFiles
 
+let allowedNonVerboseFlags = seq { "env -S" }
 
 let NonVerboseFlagsInGitHubCI(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith(".yml"))
-    let fileText = File.ReadAllText(fileInfo.FullName)
+    let fileLines = File.ReadLines(fileInfo.FullName)
 
-    let nonVerboseFlagsRegex = Regex("\\s-[a-zA-Z]\\s", RegexOptions.Compiled)
+    let nonVerboseFlagsRegex = Regex("\\s-[a-zA-Z]\\b", RegexOptions.Compiled)
 
-    nonVerboseFlagsRegex.IsMatch fileText
+    let numInvalidFlags =
+        fileLines
+        |> Seq.filter(fun line ->
+            let nonVerboseFlag = nonVerboseFlagsRegex.IsMatch line
+
+            let allowedNonVerboseFlag =
+                allowedNonVerboseFlags
+                |> Seq.map(fun allowedFlag -> line.Contains allowedFlag)
+                |> Seq.contains true
+
+            nonVerboseFlag && not(allowedNonVerboseFlag)
+        )
+        |> Seq.length
+
+    numInvalidFlags > 0
