@@ -573,3 +573,16 @@ let NonVerboseFlagsInGitHubCI2() =
         ))
 
     Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let NonVerboseFlagsInGitHubCI3() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithAcceptedNonVerboseFlag.yml"
+            )
+        ))
+
+    Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo false)
