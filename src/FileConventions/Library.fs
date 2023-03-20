@@ -329,3 +329,8 @@ let DetectInconsistentVersionsInFSharpScripts
         false
     else
         DetectInconsistentVersionsInNugetRefsInFSharpScripts fsxFiles
+
+
+let NonVerboseFlagsInGitHubCI(fileInfo: FileInfo) =
+    assert (fileInfo.FullName.EndsWith(".yml"))
+    false

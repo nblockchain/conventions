@@ -547,3 +547,29 @@ let DetectInconsistentVersionsInFSharpScripts2() =
             (Some(Seq.singleton "DummyScripts")),
         Is.EqualTo false
     )
+
+
+[<Test>]
+let NonVerboseFlagsInGitHubCI1() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithNonVerboseFlag.yml"
+            )
+        ))
+
+    Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let NonVerboseFlagsInGitHubCI2() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithoutNonVerboseFlags.yml"
+            )
+        ))
+
+    Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo false)
