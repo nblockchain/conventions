@@ -333,4 +333,8 @@ let DetectInconsistentVersionsInFSharpScripts
 
 let NonVerboseFlagsInGitHubCI(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith(".yml"))
-    false
+    let fileText = File.ReadAllText(fileInfo.FullName)
+
+    let nonVerboseFlagsRegex = Regex("\\s-[a-zA-Z]\\s", RegexOptions.Compiled)
+
+    nonVerboseFlagsRegex.IsMatch fileText
