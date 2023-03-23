@@ -333,9 +333,18 @@ let DetectInconsistentVersionsInFSharpScripts
 let allowedNonVerboseFlags = seq { "env -S" }
 
 let NonVerboseFlagsInGitHubCI(fileInfo: FileInfo) =
+    let validExtensions =
+        seq {
+            ".yml"
+            ".fsx"
+            ".fs"
+            ".sh"
+        }
+
     assert
-        (fileInfo.FullName.EndsWith(".yml")
-         || fileInfo.FullName.EndsWith(".fsx"))
+        validExtensions
+        |> Seq.map(fun ext -> fileInfo.FullName.EndsWith(ext))
+        |> Seq.contains true
 
     let fileLines = File.ReadLines(fileInfo.FullName)
 
