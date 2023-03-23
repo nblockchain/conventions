@@ -333,7 +333,10 @@ let DetectInconsistentVersionsInFSharpScripts
 let allowedNonVerboseFlags = seq { "env -S" }
 
 let NonVerboseFlagsInGitHubCI(fileInfo: FileInfo) =
-    assert (fileInfo.FullName.EndsWith(".yml"))
+    assert
+        (fileInfo.FullName.EndsWith(".yml")
+         || fileInfo.FullName.EndsWith(".fsx"))
+
     let fileLines = File.ReadLines(fileInfo.FullName)
 
     let nonVerboseFlagsRegex = Regex("\\s-[a-zA-Z]\\b", RegexOptions.Compiled)

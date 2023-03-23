@@ -586,3 +586,29 @@ let NonVerboseFlagsInGitHubCI3() =
         ))
 
     Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let NonVerboseFlagsInGitHubCI4() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyScriptWithNonVerboseFlag.fsx"
+            )
+        ))
+
+    Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let NonVerboseFlagsInGitHubCI5() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyScriptWithoutNonVerboseFlag.fsx"
+            )
+        ))
+
+    Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo false)
