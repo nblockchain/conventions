@@ -75,3 +75,80 @@ closed after the commit lands, then you would use the word `Closes` instead of
 Do not use long lines (manually crop them with EOLs because git doesn't do this
 automatically).
 
+* Avoid typical bad practices like:
+   * Magic numbers:
+
+      Avoid using unnamed numerical constants in software code, this practice makes code hard to understand and maintain.
+
+      Example:
+      ```
+      var distance = GpsUtil.GetDistance()
+      if (distance < 100)
+         throw new NotImplementedException();
+      ```
+      ```
+      private const int MinimumSupportedDistanceToNotifyKillerDrones = 100;
+
+      ...
+
+      var distance = GpsUtil.GetDistance()
+      if (distance < MinimumSupportedDistanceToNotifyKillerDrones)
+         throw new NotImplementedException();
+      ```
+   * DRY (Don't Repeat Yourself):
+
+      The DRY principle suggests that a piece of information should only be stored once in a project and should be referenced as needed, rather than being copied and pasted multiple times throughout the codebase.
+
+      It has several benefits, including reducing the amount of code that needs to be written and maintained, improving the consistency and quality of the code, and reducing the risk of introducing errors and bugs when the information changes.
+
+      Example:
+      ```
+      let preAuthInputMac =
+         CalculateMacWithSHA3256
+             preAuthInput
+             ":hs_mac"
+
+      ...
+
+      let authInputMac =
+         CalculateMacWithSHA3256
+             authInput
+             ":hs_mac"
+      ```
+      ```
+      let AuthenticationDigestCalculationKey = ":hs_mac"
+
+      ...
+
+      let preAuthInputMac =
+         CalculateMacWithSHA3256
+             preAuthInput
+             AuthenticationDigestCalculationKey
+
+      ...
+
+      let authInputMac =
+         CalculateMacWithSHA3256
+             authInput
+             AuthenticationDigestCalculationKey
+      ```
+   * Primitive Obsession:
+
+      Primitive Obsession is a situation where simple data types such as strings, integers, or arrays are overused in place of more appropriate objects.
+      
+      Example:
+      ```
+      let saveFilePath = System.Console.ReadLine()
+      
+      let savedData = System.IO.File.ReadAllText saveFilePath
+      ```
+      ```
+      let saveFilePath =
+         let saveFilePathInString =
+             System.Console.ReadLine()
+         System.IO.FileInfo saveFilePathInString
+
+      let savedData = System.IO.File.ReadAllText saveFilePath.FullName
+      ```
+
+
