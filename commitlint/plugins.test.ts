@@ -908,6 +908,15 @@ test("reject-obvious-words7", () => {
     expect(rejectObviousWords7.status).toBe(0);
 });
 
+test("reject-obvious-words8", () => {
+    let commitMsgWithoutObviousWordAfterColon =
+        "scripts/detectNotUsingGitPush1by1.fsx: fix";
+    let rejectObviousWords8 = runCommitLintOnMsg(
+        commitMsgWithoutObviousWordAfterColon
+    );
+    expect(rejectObviousWords8.status).not.toBe(0);
+});
+
 test("subject-lowercase1", () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(
