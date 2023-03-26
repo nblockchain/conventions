@@ -77,7 +77,6 @@ automatically).
 
 * Avoid typical bad practices like:
    * Magic numbers:
-
       Avoid using unnamed numerical constants in software code, this practice makes code hard to understand and maintain.
 
       Example:
@@ -95,6 +94,7 @@ automatically).
       if (distance < MinimumSupportedDistanceToNotifyKillerDrones)
          throw new NotImplementedException();
       ```
+
    * DRY (Don't Repeat Yourself):
 
       The DRY principle suggests that a piece of information should only be stored once in a project and should be referenced as needed, rather than being copied and pasted multiple times throughout the codebase.
@@ -132,6 +132,7 @@ automatically).
              authInput
              AuthenticationDigestCalculationKey
       ```
+
    * Primitive Obsession:
 
       Primitive Obsession is a situation where simple data types such as strings, integers, or arrays are overused in place of more appropriate objects.
