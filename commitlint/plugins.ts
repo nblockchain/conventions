@@ -297,6 +297,8 @@ export abstract class Plugins {
 
             if (firstWordInTitle === "update") {
                 offence = titleWords.length > 1 && bodyStr === null;
+            } else if (firstWordInTitle === "fix") {
+                offence = bodyStr === null;
             } else {
                 offence = obviousWords.includes(firstWordInTitle);
             }
