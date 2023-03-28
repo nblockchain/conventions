@@ -393,4 +393,5 @@ let IsExecutable(fileInfo: FileInfo) =
 
 let DetectNotUsingSnakeCaseInScriptName(fileInfo: FileInfo) =
     let fileName = fileInfo.Name
-    not(fileName.ToLower() = fileName)
+    let snakeCase = fileName.ToLower() = fileName && not(fileName.Contains "-")
+    not(snakeCase)
