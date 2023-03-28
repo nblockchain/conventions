@@ -392,5 +392,5 @@ let IsExecutable(fileInfo: FileInfo) =
     hasExecuteAccess = 0
 
 let DetectNotUsingSnakeCaseInScriptName(fileInfo: FileInfo) =
-    printfn "%A" fileInfo.FullName
-    true
+    let fileName = fileInfo.Name
+    not(fileName.ToLower() = fileName)
