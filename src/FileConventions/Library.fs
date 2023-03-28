@@ -495,3 +495,7 @@ let NonVerboseFlags(fileInfo: FileInfo) =
 let IsExecutable(fileInfo: FileInfo) =
     let hasExecuteAccess = Syscall.access(fileInfo.FullName, AccessModes.X_OK)
     hasExecuteAccess = 0
+
+let DetectNotUsingSnakeCaseInScriptName(fileInfo: FileInfo) =
+    printfn "%A" fileInfo.FullName
+    true
