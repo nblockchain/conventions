@@ -659,3 +659,11 @@ let DetectNotUsingSnakeCaseInScriptName2() =
         ))
 
     Assert.That(DetectNotUsingSnakeCaseInScriptName fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let DetectNotUsingSnakeCaseInScriptName3() =
+    let fileInfo =
+        (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "kebab-case.fsx")))
+
+    Assert.That(DetectNotUsingSnakeCaseInScriptName fileInfo, Is.EqualTo true)
