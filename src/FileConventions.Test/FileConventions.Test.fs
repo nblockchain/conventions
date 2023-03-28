@@ -596,3 +596,13 @@ let DetectNotUsingSnakeCaseInScriptName1() =
         ))
 
     Assert.That(DetectNotUsingSnakeCaseInScriptName fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let DetectNotUsingSnakeCaseInScriptName2() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(dummyFilesDirectory.FullName, "DummyPascalCase.fsx")
+        ))
+
+    Assert.That(DetectNotUsingSnakeCaseInScriptName fileInfo, Is.EqualTo true)
