@@ -667,3 +667,16 @@ let DetectNotUsingSnakeCaseInScriptName3() =
         (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "kebab-case.fsx")))
 
     Assert.That(DetectNotUsingSnakeCaseInScriptName fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let DetectNotUsingKebabCaseInGitHubCIJobs1() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithPascalCaseJobName.yml"
+            )
+        ))
+
+    Assert.That(DetectNotUsingKebabCaseInGitHubCIJobs fileInfo, Is.EqualTo true)

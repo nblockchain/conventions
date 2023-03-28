@@ -500,3 +500,7 @@ let DetectNotUsingSnakeCaseInScriptName(fileInfo: FileInfo) =
     let fileName = fileInfo.Name
     let snakeCase = fileName.ToLower() = fileName && not(fileName.Contains "-")
     not(snakeCase)
+
+let DetectNotUsingKebabCaseInGitHubCIJobs(fileInfo: FileInfo) =
+    assert (fileInfo.FullName.EndsWith ".yml")
+    false
