@@ -79,6 +79,32 @@
       let savedData = System.IO.File.ReadAllText saveFilePath.FullName
       ```
 
+    * Discarding generic exceptions:
+
+        Discarding generic exceptions is a bad practice because it can lead to unexpected behavior and bugs. It's better to handle the exception using a non-generic catch, or at least log them to help with debugging if something unexpected happens.
+    
+        Example:
+        ```fsharp
+        let Func (zipFile: FileInfo) =
+            try
+                ZipFile.Open(zipFile.FullName, ZipArchiveMode.Read) |> ignore<ZipArchive>
+            with
+            | _ -> 
+                ()
+        ```
+        ```fsharp
+        let Func (zipFile: FileInfo) =
+            try
+                ZipFile.Open(zipFile.FullName, ZipArchiveMode.Read) |> ignore<ZipArchive>
+            with
+            | :? InvalidDataException -> 
+                Console.Error.WriteLine $"Not a zip file %s{zipFile.FullName}"
+            | :? FileNotFoundException -> 
+                Console.Error.WriteLine $"File not found %s{zipFile.FullName}"
+            | _ -> 
+                reraise()
+        ```
+
 * When contributing a PullRequest, separate your commits in units of work
 (don't mix changes that have different concerns in the same commit). Don't
 forget to include all explanations and reasonings in the commit messages,
