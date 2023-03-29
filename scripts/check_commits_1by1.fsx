@@ -920,7 +920,7 @@ if notUsedGitPush1by1 then
         sprintf
             "Please push the commits one by one to make sure every commit has a CI status; using this script is recommended:%s%s"
             Environment.NewLine
-            "https://github.com/nblockchain/conventions/blob/master/scripts/gitPush1by1.fsx"
+            "https://github.com/nblockchain/conventions/blob/master/scripts/git_push_1by1.fsx"
 
     Console.Error.WriteLine errMsg
     Environment.Exit 2
