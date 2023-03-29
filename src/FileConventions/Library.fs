@@ -7,6 +7,7 @@ open System.Text.RegularExpressions
 
 open Mono
 open Mono.Unix.Native
+open YamlDotNet
 open YamlDotNet.RepresentationModel
 
 let SplitByEOLs (text: string) (numberOfEOLs: uint) =
@@ -503,4 +504,49 @@ let DetectNotUsingSnakeCaseInScriptName(fileInfo: FileInfo) =
 
 let DetectNotUsingKebabCaseInGitHubCIJobs(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith ".yml")
-    false
+
+    let read yaml =
+        use reader = new StringReader(yaml)
+        let stream = YamlStream()
+        stream.Load(reader)
+        stream.Documents
+
+    let doc = read(File.ReadAllText fileInfo.FullName)
+
+    let ymlNode = doc.[0].RootNode
+
+    // Borrowed from https://stackoverflow.com/questions/46697298/whats-the-best-way-to-parse-yaml-in-f-on-net-core
+    let getMapping(ymlNode: YamlNode) =
+        let node = ymlNode :?> YamlMappingNode
+
+        let mapping =
+            node.Children
+            |> Seq.map(fun kvp ->
+                let keyNode = kvp.Key :?> YamlScalarNode
+                keyNode.Value, kvp.Value
+            )
+            |> Map.ofSeq
+
+        mapping
+
+    let jobNames =
+        match ymlNode.NodeType with
+        | YamlNodeType.Mapping ->
+            let mapping = getMapping ymlNode
+            let maybeJobs = mapping.TryFind "jobs"
+
+            match maybeJobs with
+            | Some jobs ->
+                let mapping = getMapping jobs
+                (mapping |> Map.toSeq |> Seq.map fst)
+            | None -> Seq.empty
+        | _ -> Seq.empty
+
+    jobNames
+    |> Seq.map(fun jobName ->
+        let isKebabCase =
+            jobName.ToLower() = jobName && not(jobName.Contains("_"))
+
+        isKebabCase
+    )
+    |> Seq.contains false
