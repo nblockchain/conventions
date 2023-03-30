@@ -627,3 +627,48 @@ let DetectNotUsingKebabCaseInGitHubCIJobs1() =
         ))
 
     Assert.That(DetectNotUsingKebabCaseInGitHubCIJobs fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let DetectNotUsingKebabCaseInGitHubCIJobs2() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithKebabCaseJobName.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectNotUsingKebabCaseInGitHubCIJobs fileInfo,
+        Is.EqualTo false
+    )
+
+
+[<Test>]
+let DetectNotUsingKebabCaseInGitHubCIJobs3() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithMultipleJobsAndKebabCaseJobNames.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectNotUsingKebabCaseInGitHubCIJobs fileInfo,
+        Is.EqualTo false
+    )
+
+
+[<Test>]
+let DetectNotUsingKebabCaseInGitHubCIJobs4() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithMultipleJobsAndOnePascalCaseJobName.yml"
+            )
+        ))
+
+    Assert.That(DetectNotUsingKebabCaseInGitHubCIJobs fileInfo, Is.EqualTo true)
