@@ -536,45 +536,275 @@ let gitForkUser = parsedJsonObj.PullRequest.Head.User.Login
 let gitForkRepo = parsedJsonObj.PullRequest.Head.Repo.Name
 let gitRepo = $"{gitForkUser}/{gitForkRepo}"
 
-let currentBranch =
-    Process
-        .Execute(
-            {
-                Command = "git"
-                Arguments = "rev-parse --abbrev-ref HEAD"
-            },
-            Process.Echo.Off
-        )
-        .UnwrapDefault()
-        .Trim()
+type PRCommitsType =
+    JsonProvider<"""
+[
+    {
+      "sha": "cdbc7882c26b1c58bb175f25cccef4c083f1f70b",
+      "node_id": "C_kwDOIEdkNdoAKGNkYmM3ODgyYzI2YjFjNThiYjE3NWYyNWNjY2VmNGMwODNmMWY3MGI",
+      "commit": {
+        "author": {
+          "name": "Andres G. Aragoneses",
+          "email": "knocte@gmail.com",
+          "date": "2022-10-10T06:15:25Z"
+        },
+        "committer": {
+          "name": "Andres G. Aragoneses",
+          "email": "knocte@gmail.com",
+          "date": "2022-10-10T06:42:29Z"
+        },
+        "message": "plugins.tests: trailing space in code block test",
+        "tree": {
+          "sha": "0985ccb9302fc6623847f913d76a5ce12e58185b",
+          "url": "https://api.github.com/repos/nblockchain/conventions/git/trees/0985ccb9302fc6623847f913d76a5ce12e58185b"
+        },
+        "url": "https://api.github.com/repos/nblockchain/conventions/git/commits/cdbc7882c26b1c58bb175f25cccef4c083f1f70b",
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null
+        }
+      },
+      "url": "https://api.github.com/repos/nblockchain/conventions/commits/cdbc7882c26b1c58bb175f25cccef4c083f1f70b",
+      "html_url": "https://github.com/nblockchain/conventions/commit/cdbc7882c26b1c58bb175f25cccef4c083f1f70b",
+      "comments_url": "https://api.github.com/repos/nblockchain/conventions/commits/cdbc7882c26b1c58bb175f25cccef4c083f1f70b/comments",
+      "author": {
+        "login": "knocte",
+        "id": 331303,
+        "node_id": "MDQ6VXNlcjMzMTMwMw==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/331303?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/knocte",
+        "html_url": "https://github.com/knocte",
+        "followers_url": "https://api.github.com/users/knocte/followers",
+        "following_url": "https://api.github.com/users/knocte/following{/other_user}",
+        "gists_url": "https://api.github.com/users/knocte/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/knocte/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/knocte/subscriptions",
+        "organizations_url": "https://api.github.com/users/knocte/orgs",
+        "repos_url": "https://api.github.com/users/knocte/repos",
+        "events_url": "https://api.github.com/users/knocte/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/knocte/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "knocte",
+        "id": 331303,
+        "node_id": "MDQ6VXNlcjMzMTMwMw==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/331303?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/knocte",
+        "html_url": "https://github.com/knocte",
+        "followers_url": "https://api.github.com/users/knocte/followers",
+        "following_url": "https://api.github.com/users/knocte/following{/other_user}",
+        "gists_url": "https://api.github.com/users/knocte/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/knocte/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/knocte/subscriptions",
+        "organizations_url": "https://api.github.com/users/knocte/orgs",
+        "repos_url": "https://api.github.com/users/knocte/repos",
+        "events_url": "https://api.github.com/users/knocte/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/knocte/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "4aebfb80985d2ee15425390bb6e2b531cfd7e756",
+          "url": "https://api.github.com/repos/nblockchain/conventions/commits/4aebfb80985d2ee15425390bb6e2b531cfd7e756",
+          "html_url": "https://github.com/nblockchain/conventions/commit/4aebfb80985d2ee15425390bb6e2b531cfd7e756"
+        }
+      ]
+    },
+    {
+      "sha": "e05e5a9e4730738ea9a29cd3cfbcafaf7d5a8c18",
+      "node_id": "C_kwDOIEdkNdoAKGUwNWU1YTllNDczMDczOGVhOWEyOWNkM2NmYmNhZmFmN2Q1YThjMTg",
+      "commit": {
+        "author": {
+          "name": "Andres G. Aragoneses",
+          "email": "knocte@gmail.com",
+          "date": "2022-10-10T06:29:15Z"
+        },
+        "committer": {
+          "name": "Andres G. Aragoneses",
+          "email": "knocte@gmail.com",
+          "date": "2022-10-10T06:42:29Z"
+        },
+        "message": "commitlint.cfg: trailing space in big block (pass)",
+        "tree": {
+          "sha": "034862986f5d081d689ac1fb3cb2924d760b8511",
+          "url": "https://api.github.com/repos/nblockchain/conventions/git/trees/034862986f5d081d689ac1fb3cb2924d760b8511"
+        },
+        "url": "https://api.github.com/repos/nblockchain/conventions/git/commits/e05e5a9e4730738ea9a29cd3cfbcafaf7d5a8c18",
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null
+        }
+      },
+      "url": "https://api.github.com/repos/nblockchain/conventions/commits/e05e5a9e4730738ea9a29cd3cfbcafaf7d5a8c18",
+      "html_url": "https://github.com/nblockchain/conventions/commit/e05e5a9e4730738ea9a29cd3cfbcafaf7d5a8c18",
+      "comments_url": "https://api.github.com/repos/nblockchain/conventions/commits/e05e5a9e4730738ea9a29cd3cfbcafaf7d5a8c18/comments",
+      "author": {
+        "login": "knocte",
+        "id": 331303,
+        "node_id": "MDQ6VXNlcjMzMTMwMw==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/331303?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/knocte",
+        "html_url": "https://github.com/knocte",
+        "followers_url": "https://api.github.com/users/knocte/followers",
+        "following_url": "https://api.github.com/users/knocte/following{/other_user}",
+        "gists_url": "https://api.github.com/users/knocte/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/knocte/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/knocte/subscriptions",
+        "organizations_url": "https://api.github.com/users/knocte/orgs",
+        "repos_url": "https://api.github.com/users/knocte/repos",
+        "events_url": "https://api.github.com/users/knocte/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/knocte/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "knocte",
+        "id": 331303,
+        "node_id": "MDQ6VXNlcjMzMTMwMw==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/331303?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/knocte",
+        "html_url": "https://github.com/knocte",
+        "followers_url": "https://api.github.com/users/knocte/followers",
+        "following_url": "https://api.github.com/users/knocte/following{/other_user}",
+        "gists_url": "https://api.github.com/users/knocte/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/knocte/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/knocte/subscriptions",
+        "organizations_url": "https://api.github.com/users/knocte/orgs",
+        "repos_url": "https://api.github.com/users/knocte/repos",
+        "events_url": "https://api.github.com/users/knocte/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/knocte/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "cdbc7882c26b1c58bb175f25cccef4c083f1f70b",
+          "url": "https://api.github.com/repos/nblockchain/conventions/commits/cdbc7882c26b1c58bb175f25cccef4c083f1f70b",
+          "html_url": "https://github.com/nblockchain/conventions/commit/cdbc7882c26b1c58bb175f25cccef4c083f1f70b"
+        }
+      ]
+    },
+    {
+      "sha": "e53f17ca737909aa1646079ce0c07ad3d36bdf58",
+      "node_id": "C_kwDOIEdkNdoAKGU1M2YxN2NhNzM3OTA5YWExNjQ2MDc5Y2UwYzA3YWQzZDM2YmRmNTg",
+      "commit": {
+        "author": {
+          "name": "Andres G. Aragoneses",
+          "email": "knocte@gmail.com",
+          "date": "2022-10-10T06:47:34Z"
+        },
+        "committer": {
+          "name": "Andres G. Aragoneses",
+          "email": "knocte@gmail.com",
+          "date": "2022-10-10T06:55:06Z"
+        },
+        "message": "commitlint.cfg: recommend a wrap text tool",
+        "tree": {
+          "sha": "d362f09e066c1c413a102d3704dc4791ac25882a",
+          "url": "https://api.github.com/repos/nblockchain/conventions/git/trees/d362f09e066c1c413a102d3704dc4791ac25882a"
+        },
+        "url": "https://api.github.com/repos/nblockchain/conventions/git/commits/e53f17ca737909aa1646079ce0c07ad3d36bdf58",
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null
+        }
+      },
+      "url": "https://api.github.com/repos/nblockchain/conventions/commits/e53f17ca737909aa1646079ce0c07ad3d36bdf58",
+      "html_url": "https://github.com/nblockchain/conventions/commit/e53f17ca737909aa1646079ce0c07ad3d36bdf58",
+      "comments_url": "https://api.github.com/repos/nblockchain/conventions/commits/e53f17ca737909aa1646079ce0c07ad3d36bdf58/comments",
+      "author": {
+        "login": "knocte",
+        "id": 331303,
+        "node_id": "MDQ6VXNlcjMzMTMwMw==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/331303?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/knocte",
+        "html_url": "https://github.com/knocte",
+        "followers_url": "https://api.github.com/users/knocte/followers",
+        "following_url": "https://api.github.com/users/knocte/following{/other_user}",
+        "gists_url": "https://api.github.com/users/knocte/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/knocte/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/knocte/subscriptions",
+        "organizations_url": "https://api.github.com/users/knocte/orgs",
+        "repos_url": "https://api.github.com/users/knocte/repos",
+        "events_url": "https://api.github.com/users/knocte/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/knocte/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "knocte",
+        "id": 331303,
+        "node_id": "MDQ6VXNlcjMzMTMwMw==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/331303?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/knocte",
+        "html_url": "https://github.com/knocte",
+        "followers_url": "https://api.github.com/users/knocte/followers",
+        "following_url": "https://api.github.com/users/knocte/following{/other_user}",
+        "gists_url": "https://api.github.com/users/knocte/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/knocte/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/knocte/subscriptions",
+        "organizations_url": "https://api.github.com/users/knocte/orgs",
+        "repos_url": "https://api.github.com/users/knocte/repos",
+        "events_url": "https://api.github.com/users/knocte/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/knocte/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "e05e5a9e4730738ea9a29cd3cfbcafaf7d5a8c18",
+          "url": "https://api.github.com/repos/nblockchain/conventions/commits/e05e5a9e4730738ea9a29cd3cfbcafaf7d5a8c18",
+          "html_url": "https://github.com/nblockchain/conventions/commit/e05e5a9e4730738ea9a29cd3cfbcafaf7d5a8c18"
+        }
+      ]
+    }
+  ]
+""">
+
+let GitHubApiCall(url: string) =
+    let userAgent = ".NET App"
+    let xGitHubApiVersion = "2022-11-28"
+
+    let mediaTypeWithQuality =
+        MediaTypeWithQualityHeaderValue "application/vnd.github+json"
+
+    use client = new HttpClient()
+    client.DefaultRequestHeaders.Accept.Clear()
+
+    client.DefaultRequestHeaders.Accept.Add(mediaTypeWithQuality)
+
+    client.DefaultRequestHeaders.Add("User-Agent", userAgent)
+    client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", xGitHubApiVersion)
+
+    (client.GetStringAsync url).Result
 
 let prCommits =
-    Process
-        .Execute(
-            {
-                Command = "git"
-                Arguments =
-                    sprintf "rev-list %s~..%s" currentBranch currentBranch
-            },
-            Process.Echo.Off
-        )
-        .UnwrapDefault()
-        .Trim()
-        .Split "\n"
-    |> Seq.tail
+    let url = parsedJsonObj.PullRequest.Links.Commits.Href
+    let prCommitsJsonString = GitHubApiCall url
+    let parsedPrCommitsJsonObj = PRCommitsType.Parse prCommitsJsonString
+    parsedPrCommitsJsonObj |> Seq.map(fun commit -> commit.Sha)
 
 let notUsingGitPush1by1 =
     prCommits
     |> Seq.map(fun commit ->
-        use client = new HttpClient()
-        client.DefaultRequestHeaders.Accept.Clear()
-
-        client.DefaultRequestHeaders.Accept.Add(
-            MediaTypeWithQualityHeaderValue "application/vnd.github+json"
-        )
-
-        client.DefaultRequestHeaders.Add("User-Agent", ".NET App")
-        client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", "2022-11-28")
 
         let url =
             sprintf
@@ -582,7 +812,7 @@ let notUsingGitPush1by1 =
                 gitRepo
                 commit
 
-        let json = (client.GetStringAsync url).Result
+        let json = GitHubApiCall url
 
         json.Contains "\"check_suites\":[]"
     )
