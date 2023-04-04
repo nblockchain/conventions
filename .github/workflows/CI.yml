@@ -139,7 +139,7 @@ jobs:
           fetch-depth: 0
       # workaround for https://github.com/actions/runner/issues/2033
       - name: ownership workaround
-        run: git config --global --add safe.directory '*'
+        run: git config --system --add safe.directory '*'
       - name: Print versions
         run: |
           git --version
@@ -213,3 +213,5 @@ jobs:
           dotnet tool install fantomless-tool --version 4.7.997-prerelease
           dotnet fantomless --recurse .
           git diff --exit-code
+      - name: Check style of our F#, TypeScript and YML code
+        run: sudo dotnet fsi scripts/styleChecker.fsx
