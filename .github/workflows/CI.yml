@@ -256,5 +256,5 @@ jobs:
           dotnet tool install fantomless-tool --version 4.7.997-prerelease
           dotnet fantomless --recurse .
           git diff --exit-code
-      - name: Check style of our F#, TypeScript and YML code
+      - name: Check style of our F#, C#, TypeScript, YML and XAML code
         run: sudo dotnet fsi scripts/styleChecker.fsx

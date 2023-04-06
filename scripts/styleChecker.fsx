@@ -14,6 +14,7 @@ open Helpers
 
 let fantomlessToolVersion = "4.7.997-prerelease"
 let prettierVersion = "2.8.3"
+let pluginXmlVersion = "v2.2.0"
 
 let InstallFantomlessTool(version: string) =
     let isFantomlessInstalled =
@@ -143,6 +144,69 @@ let StyleFSharpFiles(rootDir: DirectoryInfo) =
             {
                 Command = "dotnet"
                 Arguments = $"fantomless --recurse {rootDir.FullName}"
+            },
+            Echo.Off
+        )
+        .UnwrapDefault()
+    |> ignore
+
+let StyleCSharpFiles(rootDir: DirectoryInfo) =
+    Process
+        .Execute(
+            {
+                Command = "dotnet"
+                Arguments = $"format whitespace {rootDir.FullName} --folder"
+            },
+            Echo.Off
+        )
+        .UnwrapDefault()
+    |> ignore
+
+let InstallPrettierPluginXml(version: string) =
+    let isPrettierPluginXmlInstalled =
+        Process.Execute(
+            {
+                Command = "npm"
+                Arguments = $"list @prettier/plugin-xml@{version}"
+            },
+            Echo.Off
+        )
+        |> IsProcessSuccessful
+
+    if not(isPrettierPluginXmlInstalled) then
+        Process
+            .Execute(
+                {
+                    Command = "npm"
+                    Arguments = $"install @prettier/plugin-xml@{version}"
+                },
+                Echo.Off
+            )
+            .UnwrapDefault()
+        |> ignore
+
+let StyleXamlFiles() =
+    InstallPrettier(prettierVersion)
+    InstallPrettierPluginXml(pluginXmlVersion)
+
+    Process
+        .Execute(
+            {
+                Command = "npm"
+                Arguments =
+                    $"install --save-dev prettier@{prettierVersion} @prettier/plugin-xml@{pluginXmlVersion}"
+            },
+            Echo.Off
+        )
+        .UnwrapDefault()
+    |> ignore
+
+    Process
+        .Execute(
+            {
+                Command = "./node_modules/.bin/prettier"
+                Arguments =
+                    "--xml-whitespace-sensitivity ignore --tab-width 4 --prose-wrap preserve --write '**/*.xaml'"
             },
             Echo.Off
         )
@@ -290,14 +354,51 @@ let CheckStyleOfYmlFiles(rootDir: DirectoryInfo) : bool =
 
     success
 
+let CheckStyleOfCSharpFiles(rootDir: DirectoryInfo) : bool =
+    let suggestion =
+        "Please style your C# code using: `dotnet format whitespace . --folder"
+
+    GitRestore()
+
+    let success =
+        if ContainsFiles rootDir "*.cs" then
+            StyleCSharpFiles rootDir
+            let processResult = GitDiff()
+            UnwrapProcessResult suggestion false processResult |> ignore
+            IsProcessSuccessful processResult
+        else
+            true
+
+    success
+
+let CheckStyleOfXamlFiles(rootDir: DirectoryInfo) : bool =
+    let suggestion =
+        "Please style your XAML code using:"
+        + Environment.NewLine
+        + "`./node_modules/.bin/prettier --xml-whitespace-sensitivity ignore --tab-width 4 --prose-wrap preserve --write '**/*.xaml`"
+
+    GitRestore()
+
+    let success =
+        if ContainsFiles rootDir "*.xaml" then
+            StyleXamlFiles()
+            let processResult = GitDiff()
+            UnwrapProcessResult suggestion false processResult |> ignore
+            IsProcessSuccessful processResult
+        else
+            true
+
+    success
 
 let rootDir = Path.Combine(__SOURCE_DIRECTORY__, "..") |> DirectoryInfo
 
 let processSuccessStates =
     [|
         CheckStyleOfFSharpFiles rootDir
+        CheckStyleOfCSharpFiles rootDir
         CheckStyleOfTypeScriptFiles rootDir
         CheckStyleOfYmlFiles rootDir
+        CheckStyleOfXamlFiles rootDir
     |]
 
 if processSuccessStates |> Seq.contains false then
