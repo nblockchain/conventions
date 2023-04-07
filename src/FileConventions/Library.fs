@@ -105,62 +105,101 @@ let EolAtEof(fileInfo: FileInfo) =
         else
             True
 
-let WrapText (text: string) (maxCharsPerLine: int) : string =
+let IsFooterReference(line: string) : bool =
+    line.[0] = '[' && line.IndexOf "] " > 0
 
+let IsFixesOrClosesSentence(line: string) : bool =
+    line.IndexOf "Fixes " = 0 || line.IndexOf "Closes " = 0
+
+let IsCoAuthoredByTag(line: string) : bool =
+    line.IndexOf "Co-authored-by: " = 0
+
+let IsFooterNote(line: string) : bool =
+    IsFooterReference line
+    || IsCoAuthoredByTag line
+    || IsFixesOrClosesSentence line
+
+type Word =
+    | CodeBlock
+    | FooterNote
+    | PlainText
+
+type Text =
+    {
+        Type: Word
+        Text: string
+    }
+
+let SplitIntoWords(text: string) =
     let codeBlockRegex = "\s*(```[\s\S]*```)\s*"
-
-    let rec splitIntoLines
-        (acc: list<string>)
-        (currLine: string)
-        (words: list<string>)
-        =
-        match words with
-        | [] -> currLine :: acc
-        | word :: rest ->
-            let wordIsCodeBlock = Regex.IsMatch(word, codeBlockRegex)
-
-            if wordIsCodeBlock then
-                let newAcc = word :: currLine.Trim() :: acc
-
-                if rest.IsEmpty then
-                    splitIntoLines newAcc "" rest
-                else
-                    let newLine = rest.Head
-                    let newRest = rest.Tail
-                    splitIntoLines newAcc newLine newRest
-
-            else
-                let newLineCharacterCount = currLine.Length + word.Length + 1
-
-                let newAcc =
-                    if newLineCharacterCount > maxCharsPerLine then
-                        currLine.Trim() :: acc
-                    else
-                        acc
-
-                let newLine =
-                    if newLineCharacterCount > maxCharsPerLine then
-                        word
-                    else
-                        currLine + " " + word
-
-                splitIntoLines newAcc newLine rest
 
     let words =
         Regex.Split(text, codeBlockRegex)
-        |> Array.map(fun word ->
-            if Regex.IsMatch(word, codeBlockRegex) then
-                [| word |]
+        |> Seq.filter(fun item -> not(String.IsNullOrEmpty item))
+        |> Seq.map(fun item ->
+            if Regex.IsMatch(item, codeBlockRegex) then
+                {
+                    Text = item
+                    Type = CodeBlock
+                }
             else
-                word.Split([| ' ' |])
-
+                {
+                    Text = item
+                    Type = PlainText
+                }
         )
-        |> Array.concat
-        |> Array.toList
+        |> Seq.map(fun paragraph ->
+            if paragraph.Type = CodeBlock then
+                Seq.singleton paragraph
+            else
+                let lines = paragraph.Text.Split Environment.NewLine
 
+                lines
+                |> Seq.map(fun line ->
+                    if IsFooterNote line then
+                        Seq.singleton(
+                            {
+                                Text = line
+                                Type = FooterNote
+                            }
+                        )
+                    else
+                        line.Split " "
+                        |> Seq.map(fun word ->
+                            {
+                                Text = word
+                                Type = PlainText
+                            }
+                        )
+                )
+                |> Seq.concat
+        )
+        |> Seq.concat
 
-    words.Tail
-    |> splitIntoLines [] words.Head
-    |> List.rev
-    |> String.concat Environment.NewLine
-    |> (fun wrappedText -> wrappedText.Trim())
+    words |> Seq.toList
+
+let WrapText (text: string) (maxCharsPerLine: int) : string =
+    let words = SplitIntoWords text
+
+    let mutable currentLine = ""
+    let mutable wrappedText = ""
+
+    for word in words do
+        if String.IsNullOrEmpty currentLine then
+            currentLine <- word.Text
+        elif word.Type <> PlainText then
+            wrappedText <-
+                wrappedText
+                + currentLine
+                + Environment.NewLine
+                + word.Text
+                + Environment.NewLine
+
+            currentLine <- ""
+        elif String.length currentLine + word.Text.Length + 1 <= maxCharsPerLine then
+            currentLine <- currentLine + " " + word.Text
+        else
+            wrappedText <- wrappedText + currentLine + Environment.NewLine
+            currentLine <- word.Text
+
+    (wrappedText + currentLine).Trim()
