@@ -106,6 +106,9 @@ let EolAtEof(fileInfo: FileInfo) =
             True
 
 let WrapText (text: string) (maxCharsPerLine: int) : string =
+
+    let codeBlockRegex = "\s*(```[\s\S]*```)\s*"
+
     let rec splitIntoLines
         (acc: list<string>)
         (currLine: string)
@@ -114,25 +117,50 @@ let WrapText (text: string) (maxCharsPerLine: int) : string =
         match words with
         | [] -> currLine :: acc
         | word :: rest ->
-            let newLineCharacterCount = currLine.Length + word.Length + 1
+            let wordIsCodeBlock = Regex.IsMatch(word, codeBlockRegex)
 
-            let newAcc =
-                if newLineCharacterCount > maxCharsPerLine then
-                    currLine.Trim() :: acc
+            if wordIsCodeBlock then
+                let newAcc = word :: currLine.Trim() :: acc
+
+                if rest.IsEmpty then
+                    splitIntoLines newAcc "" rest
                 else
-                    acc
+                    let newLine = rest.Head
+                    let newRest = rest.Tail
+                    splitIntoLines newAcc newLine newRest
 
-            let newLine =
-                if newLineCharacterCount > maxCharsPerLine then
-                    word
-                else
-                    currLine + " " + word
+            else
+                let newLineCharacterCount = currLine.Length + word.Length + 1
 
-            splitIntoLines newAcc newLine rest
+                let newAcc =
+                    if newLineCharacterCount > maxCharsPerLine then
+                        currLine.Trim() :: acc
+                    else
+                        acc
 
-    let words = text.Split([| ' ' |]) |> Array.toList
+                let newLine =
+                    if newLineCharacterCount > maxCharsPerLine then
+                        word
+                    else
+                        currLine + " " + word
+
+                splitIntoLines newAcc newLine rest
+
+    let words =
+        Regex.Split(text, codeBlockRegex)
+        |> Array.map(fun word ->
+            if Regex.IsMatch(word, codeBlockRegex) then
+                [| word |]
+            else
+                word.Split([| ' ' |])
+
+        )
+        |> Array.concat
+        |> Array.toList
+
 
     words.Tail
     |> splitIntoLines [] words.Head
     |> List.rev
     |> String.concat Environment.NewLine
+    |> (fun wrappedText -> wrappedText.Trim())
