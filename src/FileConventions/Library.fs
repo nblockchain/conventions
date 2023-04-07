@@ -106,7 +106,33 @@ let EolAtEof(fileInfo: FileInfo) =
             True
 
 let WrapText (text: string) (maxCharsPerLine: int) : string =
-    printfn
-        $"This function wraps \"{text}\" into a certain character count ({maxCharsPerLine}) per line."
+    let rec splitIntoLines
+        (acc: list<string>)
+        (currLine: string)
+        (words: list<string>)
+        =
+        match words with
+        | [] -> currLine :: acc
+        | word :: rest ->
+            let newLineCharacterCount = currLine.Length + word.Length + 1
 
-    ""
+            let newAcc =
+                if newLineCharacterCount > maxCharsPerLine then
+                    currLine.Trim() :: acc
+                else
+                    acc
+
+            let newLine =
+                if newLineCharacterCount > maxCharsPerLine then
+                    word
+                else
+                    currLine + " " + word
+
+            splitIntoLines newAcc newLine rest
+
+    let words = text.Split([| ' ' |]) |> Array.toList
+
+    words.Tail
+    |> splitIntoLines [] words.Head
+    |> List.rev
+    |> String.concat Environment.NewLine
