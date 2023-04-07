@@ -255,3 +255,18 @@ let HasBinaryContentTest3() =
         ))
 
     Assert.That(HasBinaryContent fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let WrapTextTest1() =
+    let characterCount = 64
+
+    let paragraph =
+        "This is a very very very very long line with more than 64 characters."
+
+    let expectedResult =
+        "This is a very very very very long line with more than 64"
+        + Environment.NewLine
+        + "characters."
+
+    Assert.That(WrapText paragraph characterCount, Is.EqualTo expectedResult)

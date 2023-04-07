@@ -104,3 +104,9 @@ let EolAtEof(fileInfo: FileInfo) =
                 False
         else
             True
+
+let WrapText (text: string) (maxCharsPerLine: int) : string =
+    printfn
+        $"This function wraps \"{text}\" into a certain character count ({maxCharsPerLine}) per line."
+
+    ""
