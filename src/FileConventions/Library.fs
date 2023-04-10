@@ -178,7 +178,7 @@ let SplitIntoWords(text: string) =
 
     words |> Seq.toList
 
-let WrapText (text: string) (maxCharsPerLine: int) : string =
+let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
     let words = SplitIntoWords text
 
     let mutable currentLine = ""
@@ -203,3 +203,13 @@ let WrapText (text: string) (maxCharsPerLine: int) : string =
             currentLine <- word.Text
 
     (wrappedText + currentLine).Trim()
+
+let WrapText (text: string) (maxCharsPerLine: int) : string =
+    let wrappedParagraphs =
+        text.Split $"{Environment.NewLine}{Environment.NewLine}"
+        |> Seq.map(fun paragraph -> WrapParagraph paragraph maxCharsPerLine)
+
+    String.Join(
+        $"{Environment.NewLine}{Environment.NewLine}",
+        wrappedParagraphs
+    )
