@@ -393,16 +393,10 @@ export abstract class Plugins {
             }
         }
 
-        // taken from https://stackoverflow.com/a/66433444/544947 and https://unix.stackexchange.com/a/25208/56844
-        function getUnixCommand(fmtOption: string) {
-            return `git log --format=%B -n 1 $(git log -1 --pretty=format:"%h") | cat - > log.txt ; fmt -w 1111 -s log.txt > ulog.txt && fmt -w 64 -s ${fmtOption} ulog.txt > wlog.txt && git commit --amend -F wlog.txt`;
-        }
-
         return [
             !offence,
-            `Please do not exceed ${bodyMaxLineLength} characters in the lines of the commit message's body; we recommend this unix command (for editing the last commit message): \n` +
-                `For Linux users: ${getUnixCommand("-u")}\n` +
-                `For macOS users: ${getUnixCommand("")}` +
+            `Please do not exceed ${bodyMaxLineLength} characters in the lines of the commit message's body; we recommend this script (for editing the last commit message): \n` +
+                "https://github.com/nblockchain/conventions/blob/master/scripts/wrapLatestCommitMsg.fsx" +
                 Helpers.errMessageSuffix,
         ];
     }
