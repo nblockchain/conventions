@@ -181,28 +181,43 @@ let SplitIntoWords(text: string) =
 let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
     let words = SplitIntoWords text
 
-    let mutable currentLine = ""
-    let mutable wrappedText = ""
+    let rec processWords
+        (currentLine: string)
+        (wrappedText: string)
+        (remainingWords: List<Text>)
+        : string =
+        match remainingWords with
+        | [] -> (wrappedText + currentLine).Trim()
+        | word :: rest ->
+            match currentLine, word with
+            | "", _ -> processWords word.Text wrappedText rest
+            | _,
+              {
+                  Type = PlainText
+              } when
+                String.length currentLine + word.Text.Length + 1
+                <= maxCharsPerLine
+                ->
+                processWords (currentLine + " " + word.Text) wrappedText rest
+            | _,
+              {
+                  Type = PlainText
+              } ->
+                processWords
+                    word.Text
+                    (wrappedText + currentLine + Environment.NewLine)
+                    rest
+            | _, _ ->
+                processWords
+                    String.Empty
+                    (wrappedText
+                     + currentLine
+                     + Environment.NewLine
+                     + word.Text
+                     + Environment.NewLine)
+                    rest
 
-    for word in words do
-        if String.IsNullOrEmpty currentLine then
-            currentLine <- word.Text
-        elif word.Type <> PlainText then
-            wrappedText <-
-                wrappedText
-                + currentLine
-                + Environment.NewLine
-                + word.Text
-                + Environment.NewLine
-
-            currentLine <- ""
-        elif String.length currentLine + word.Text.Length + 1 <= maxCharsPerLine then
-            currentLine <- currentLine + " " + word.Text
-        else
-            wrappedText <- wrappedText + currentLine + Environment.NewLine
-            currentLine <- word.Text
-
-    (wrappedText + currentLine).Trim()
+    processWords String.Empty String.Empty words
 
 let WrapText (text: string) (maxCharsPerLine: int) : string =
     let wrappedParagraphs =
