@@ -401,6 +401,60 @@ export abstract class Plugins {
         ];
     }
 
+    public static bodyParagraphLineMinLength(
+        bodyStr: string | null,
+        paragraphLineMinLength: number
+    ) {
+        let offence = false;
+
+        if (bodyStr !== null) {
+            bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
+
+            let paragraphs = bodyStr.split(/\r?\n\r?\n/);
+            for (let paragraph of paragraphs) {
+                let lines = paragraph.split(/\r?\n/);
+                let inBigBlock = false;
+                for (let i = 0; i < lines.length; i++) {
+                    let line = lines[i];
+
+                    if (Helpers.isBigBlock(line)) {
+                        inBigBlock = !inBigBlock;
+                        continue;
+                    }
+                    if (inBigBlock || i === lines.length - 1) {
+                        continue;
+                    }
+
+                    let nextLine = lines[i + 1];
+
+                    if (line.length < paragraphLineMinLength) {
+                        let isUrl =
+                            Helpers.isValidUrl(line) ||
+                            Helpers.isValidUrl(nextLine);
+
+                        let lineIsFooterNote = Helpers.isFooterNote(line);
+
+                        if (
+                            !isUrl &&
+                            !lineIsFooterNote &&
+                            line !== lines[lines.length - 1]
+                        ) {
+                            offence = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return [
+            !offence,
+            `Please do not subceed ${paragraphLineMinLength} characters in the lines of the commit message's body paragraphs (except the last line of each paragraph); we recommend this script (for editing the last commit message): \n` +
+                "https://github.com/nblockchain/conventions/blob/master/scripts/wrapLatestCommitMsg.fsx" +
+                Helpers.errMessageSuffix,
+        ];
+    }
+
     public static trailingWhitespace(rawStr: string) {
         let offence = false;
 
