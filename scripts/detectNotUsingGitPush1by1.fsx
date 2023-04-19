@@ -2,6 +2,7 @@
 
 open System
 open System.IO
+open System.Net
 open System.Net.Http
 open System.Net.Http.Headers
 
@@ -9,7 +10,10 @@ open System.Net.Http.Headers
 open FSharp.Data
 
 #r "nuget: Fsdk, Version=0.6.0--date20230214-0422.git-1ea6f62"
+
 open Fsdk
+open Fsdk.Process
+open Fsdk.FSharpUtil
 
 let githubEventPath = Environment.GetEnvironmentVariable "GITHUB_EVENT_PATH"
 
@@ -18,6 +22,16 @@ if String.IsNullOrEmpty githubEventPath then
         "This script is meant to be used only within a GitHubCI pipeline"
 
     Environment.Exit 2
+
+(*
+Please define GITHUB_TOKEN environment variable in your GitHubCI workflow:
+
+```
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+*)
+let accessToken = Environment.GetEnvironmentVariable "GITHUB_TOKEN"
 
 type githubEventType =
     JsonProvider<"""
@@ -779,7 +793,24 @@ type PRCommitsType =
   ]
 """>
 
-let GitHubApiCall(url: string) =
+let githubApiCallForbiddenErrorMsg =
+    """GITHUB_TOKEN passed doesn't seem to have enough permissions.
+To modify the permissions of your token, navigate to the Settings section of your 
+repository or organization and click on Actions button, then select General. From 
+'Workflow permissions' section on that page, choose 'Read and write permissions' 
+(which grants access to content and the ability to make changes).
+"""
+
+let githubApiCallNotFoundErrorMsg =
+    """Please define GITHUB_TOKEN environment variable in your GitHubCI workflow:
+
+```
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+"""
+
+let GitHubApiCall (url: string) (accessToken: string) =
     let userAgent = ".NET App"
     let xGitHubApiVersion = "2022-11-28"
 
@@ -794,11 +825,40 @@ let GitHubApiCall(url: string) =
     client.DefaultRequestHeaders.Add("User-Agent", userAgent)
     client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", xGitHubApiVersion)
 
-    (client.GetStringAsync url).Result
+    if not(String.IsNullOrEmpty accessToken) then
+        client.DefaultRequestHeaders.Add(
+            "Authorization",
+            $"token {accessToken}"
+        )
+
+    let result =
+        try
+            Async.AwaitTask(client.GetStringAsync url) |> Async.RunSynchronously
+
+        with
+        | ex ->
+            match FindException<HttpRequestException> ex with
+            | Some httpRequestException ->
+                match httpRequestException.StatusCode |> Option.ofNullable with
+                | Some statusCode when statusCode = HttpStatusCode.NotFound ->
+
+                    failwith githubApiCallNotFoundErrorMsg
+
+                | Some statusCode when statusCode = HttpStatusCode.Forbidden ->
+
+                    failwith githubApiCallForbiddenErrorMsg
+
+                | _ -> reraise()
+
+            | _ -> reraise()
+
+    result
 
 let prCommits =
     let url = parsedJsonObj.PullRequest.Links.Commits.Href
-    let prCommitsJsonString = GitHubApiCall url
+
+    let prCommitsJsonString = GitHubApiCall url accessToken
+
     let parsedPrCommitsJsonObj = PRCommitsType.Parse prCommitsJsonString
     parsedPrCommitsJsonObj |> Seq.map(fun commit -> commit.Sha)
 
@@ -812,7 +872,7 @@ let hasCiStatus =
                 gitRepo
                 commit
 
-        let json = GitHubApiCall url
+        let json = GitHubApiCall url accessToken
 
         not(json.Contains "\"check_suites\":[]")
     )
