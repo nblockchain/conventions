@@ -78,6 +78,46 @@
 
       let savedData = System.IO.File.ReadAllText saveFilePath.FullName
       ```
+    * Avoid applying logic based on exception's message:
+      
+      Exception messages (even in stable libraries/softwares) are subject to change, applying logic based on the `Message` or `StackTrace` can cause hard-to-debug problems when updating your dependencies or in case of .NET even your framework version.
+      
+      Example:
+      ```
+      try
+         let userObj = ctx.Public.Users.Create()
+         userObj.Id <- 1
+         userObj.Name <- "Alice"
+         ctx.SubmitUpdates()
+         ()
+      with
+      | :? PostgresException as ex when
+         ex.MessageText.Contains "duplicate key value" ->
+         Console.WriteLine "Primary key violation was detected when adding a new user:"
+         Console.WriteLine (ex.ToString())
+         ()
+      ```
+      ```
+      // Returns true if exception indicates uniqueness problem
+      let isDuplicatePrimaryKeyError(ex: PostgresException) =
+         let uniqueViolationErrorCode = "23505"
+         ex.SqlState = uniqueViolationErrorCode
+
+      try
+         let userObj = ctx.Public.Users.Create()
+         userObj.Id <- 1
+         userObj.Name <- "Alice"
+         ctx.SubmitUpdates()
+         ()
+      with
+      | :? PostgresException as ex when
+         isDuplicatePrimaryKeyError ex ->
+         Console.WriteLine "Primary key violation was detected when adding a new user:"
+         Console.WriteLine (ex.ToString())
+         ()
+      ```
+      
+      
 
 * When contributing a PullRequest, separate your commits in units of work
 (don't mix changes that have different concerns in the same commit). Don't
