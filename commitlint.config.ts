@@ -26,7 +26,9 @@ module.exports = {
             "always",
             footerMaxLineLength,
         ],
+        /* disabled for now because of https://github.com/nblockchain/conventions/issues/107
         "footer-notes-misplacement": [RuleConfigSeverity.Error, "always"],
+*/
         "footer-references-existence": [RuleConfigSeverity.Error, "always"],
         "header-max-length-with-suggestions": [
             RuleConfigSeverity.Error,
@@ -106,11 +108,12 @@ module.exports = {
                     );
                 },
 
+                /* disabled for now because of https://github.com/nblockchain/conventions/issues/107
                 "footer-notes-misplacement": ({ body }: { body: any }) => {
                     let bodyStr = Helpers.convertAnyToString(body, "body");
                     return Plugins.footerNotesMisplacement(bodyStr);
                 },
-
+*/
                 "footer-references-existence": ({ body }: { body: any }) => {
                     let bodyStr = Helpers.convertAnyToString(body, "body");
 
