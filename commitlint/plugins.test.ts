@@ -395,6 +395,21 @@ test("body-paragraph-line-min-length5", () => {
     expect(bodyParagraphLineMinLength5.status).toBe(0);
 });
 
+test("body-paragraph-line-min-length6", () => {
+    let commitMsgThatSubceedsBodyMinLineLength =
+        "Some title of less than 50 chars" +
+        "\n\n" +
+        "This is a paragraph whose 2nd line is less than 50 chars\n" +
+        "but should not make commitlint complain because\n" +
+        "TheNextWordInThe3rdLineIsTooLongToBePlacedIn2ndLine.";
+
+    let bodyParagraphLineMinLength6 = runCommitLintOnMsg(
+        commitMsgThatSubceedsBodyMinLineLength
+    );
+
+    expect(bodyParagraphLineMinLength6.status).toBe(0);
+});
+
 test("commit-hash-alone1", () => {
     let commitMsgWithCommitUrl =
         "foo: this is only a title" +
