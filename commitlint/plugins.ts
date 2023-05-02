@@ -403,7 +403,8 @@ export abstract class Plugins {
 
     public static bodyParagraphLineMinLength(
         bodyStr: string | null,
-        paragraphLineMinLength: number
+        paragraphLineMinLength: number,
+        paragraphLineMaxLength: number
     ) {
         let offence = false;
 
@@ -414,14 +415,14 @@ export abstract class Plugins {
             for (let paragraph of paragraphs) {
                 let lines = paragraph.split(/\r?\n/);
                 let inBigBlock = false;
-                for (let i = 0; i < lines.length; i++) {
+                for (let i = 0; i < lines.length - 1; i++) {
                     let line = lines[i];
 
                     if (Helpers.isBigBlock(line)) {
                         inBigBlock = !inBigBlock;
                         continue;
                     }
-                    if (inBigBlock || i === lines.length - 1) {
+                    if (inBigBlock) {
                         continue;
                     }
 
@@ -434,11 +435,12 @@ export abstract class Plugins {
 
                         let lineIsFooterNote = Helpers.isFooterNote(line);
 
-                        if (
-                            !isUrl &&
-                            !lineIsFooterNote &&
-                            line !== lines[lines.length - 1]
-                        ) {
+                        let nextWordLength = lines[i + 1].split(" ")[0].length;
+                        let isNextWordTooLong =
+                            nextWordLength + line.length + 1 >
+                            paragraphLineMaxLength;
+
+                        if (!isUrl && !lineIsFooterNote && !isNextWordTooLong) {
                             offence = true;
                             break;
                         }

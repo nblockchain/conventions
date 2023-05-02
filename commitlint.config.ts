@@ -19,11 +19,7 @@ module.exports = {
             "always",
             bodyMaxLineLength,
         ],
-        "body-paragraph-line-min-length": [
-            RuleConfigSeverity.Error,
-            "always",
-            headerMaxLineLength,
-        ],
+        "body-paragraph-line-min-length": [RuleConfigSeverity.Error, "always"],
         "empty-wip": [RuleConfigSeverity.Error, "always"],
         "footer-leading-blank": [RuleConfigSeverity.Warning, "always"],
         "footer-max-line-length": [
@@ -210,15 +206,12 @@ module.exports = {
                     );
                 },
 
-                "body-paragraph-line-min-length": (
-                    { body }: { body: any },
-                    _: any,
-                    minLineLength: number
-                ) => {
+                "body-paragraph-line-min-length": ({ body }: { body: any }) => {
                     let bodyStr = Helpers.convertAnyToString(body, "body");
                     return Plugins.bodyParagraphLineMinLength(
                         bodyStr,
-                        minLineLength
+                        headerMaxLineLength,
+                        bodyMaxLineLength
                     );
                 },
 
