@@ -802,7 +802,7 @@ let prCommits =
     let parsedPrCommitsJsonObj = PRCommitsType.Parse prCommitsJsonString
     parsedPrCommitsJsonObj |> Seq.map(fun commit -> commit.Sha)
 
-let notUsingGitPush1by1 =
+let hasCiStatus =
     prCommits
     |> Seq.map(fun commit ->
 
@@ -814,11 +814,26 @@ let notUsingGitPush1by1 =
 
         let json = GitHubApiCall url
 
-        json.Contains "\"check_suites\":[]"
+        not(json.Contains "\"check_suites\":[]")
     )
-    |> Seq.contains true
 
-if notUsingGitPush1by1 then
+let gitHubActionsEnabled = Seq.contains true hasCiStatus
+
+if not gitHubActionsEnabled then
+    let errMsg =
+        sprintf
+            """
+Please activate GitHub Actions in your repository. Click on the 
+"Actions" tab at the top of the repository page and click on the 
+"I understand my workflows, go ahead and enable them" button. 
+"""
+
+    Console.Error.WriteLine errMsg
+    Environment.Exit 1
+
+let notUsedGitPush1by1 = gitHubActionsEnabled && Seq.contains false hasCiStatus
+
+if notUsedGitPush1by1 then
     let errMsg =
         sprintf
             "Please push the commits one by one; using this script is recommended:%s%s"
@@ -826,4 +841,4 @@ if notUsingGitPush1by1 then
             "https://github.com/nblockchain/conventions/blob/master/scripts/gitPush1by1.fsx"
 
     Console.Error.WriteLine errMsg
-    Environment.Exit 1
+    Environment.Exit 2
