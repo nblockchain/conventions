@@ -836,7 +836,7 @@ let notUsedGitPush1by1 = gitHubActionsEnabled && Seq.contains false hasCiStatus
 if notUsedGitPush1by1 then
     let errMsg =
         sprintf
-            "Please push the commits one by one; using this script is recommended:%s%s"
+            "Please push the commits one by one to make sure every commit has a CI status; using this script is recommended:%s%s"
             Environment.NewLine
             "https://github.com/nblockchain/conventions/blob/master/scripts/gitPush1by1.fsx"
 
