@@ -19,7 +19,7 @@ jobs:
       - name: ownership workaround
         run: git config --global --add safe.directory '*'
       - name: Install dotnet sdk
-        run: sudo apt install -y dotnet6
+        run: sudo apt install --yes --no-install-recommends dotnet6
       - name: Compile the conventions solution
         run: dotnet build --configuration Release conventions.sln
       - name: Compile F# scripts
@@ -45,7 +45,7 @@ jobs:
           sudo apt install --yes curl
 
       - name: Setup .NET
-        run: apt install -y dotnet6
+        run: apt install --yes --no-install-recommends dotnet6
       - name: Run tests to validate F# scripts
         run: dotnet test src/FileConventions.Test/FileConventions.Test.fsproj
 
@@ -67,7 +67,7 @@ jobs:
           # can't install ubuntu's default nodejs version because we would get this error:
           # error @jest/core@29.4.1: The engine "node" is incompatible with this module. Expected version "^14.15.0 || ^16.10.0 || >=18.0.0". Got "12.22.9"
           curl --show-error --location https://deb.nodesource.com/setup_14.x | sudo --preserve-env bash -
-          sudo DEBIAN_FRONTEND=noninteractive apt install --yes nodejs
+          sudo DEBIAN_FRONTEND=noninteractive apt install --yes --no-install-recommends nodejs
       - name: Print versions
         run: |
           git --version
@@ -104,7 +104,7 @@ jobs:
         run: |
           apt update && apt install --yes sudo
           sudo apt install --yes git
-          sudo DEBIAN_FRONTEND=noninteractive apt install --yes npm
+          sudo DEBIAN_FRONTEND=noninteractive apt install --yes --no-install-recommends npm
       - uses: actions/checkout@v2
         with:
           submodules: recursive
@@ -128,7 +128,7 @@ jobs:
             --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} \
             --to ${{ github.event.pull_request.head.sha }}
       - name: Install dotnet sdk
-        run: sudo apt install --yes dotnet6
+        run: sudo apt install --yes --no-install-recommends dotnet6
       - name: Check all files end with EOL
         run: dotnet fsi scripts/eofConvention.fsx
       - name: Check all .fsx scripts have shebang
