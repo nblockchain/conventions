@@ -72,9 +72,9 @@ jobs:
         run: |
           apt update
           apt install --yes sudo
-          sudo apt install --yes git
+          sudo apt install --yes --no-install-recommends git ca-certificates
 
-          sudo apt install --yes curl
+          sudo apt install --yes --no-install-recommends curl
           # can't install ubuntu's default nodejs version because we would get this error:
           # error @jest/core@29.4.1: The engine "node" is incompatible with this module. Expected version "^14.15.0 || ^16.10.0 || >=18.0.0". Got "12.22.9"
           curl --show-error --location https://deb.nodesource.com/setup_14.x | sudo --preserve-env bash -
