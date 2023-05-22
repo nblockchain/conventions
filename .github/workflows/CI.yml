@@ -14,12 +14,21 @@ jobs:
         run: |
           apt update
           apt install -y sudo
-          sudo apt install -y git
+          sudo apt install --yes --no-install-recommends git
       # workaround for https://github.com/actions/runner/issues/2033
       - name: ownership workaround
         run: git config --global --add safe.directory '*'
-      - name: Install dotnet sdk
-        run: sudo apt install --yes --no-install-recommends dotnet6
+
+      - name: Setup .NET
+        run: |
+          # We need to install `ca-certificates`, otherwise we get these errors in the CI:
+          # Unable to load the service index for source https://api.nuget.org/v3/index.json.
+          # The SSL connection could not be established, see inner exception.
+          # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot
+          apt install --yes --no-install-recommends ca-certificates
+
+          apt install --yes --no-install-recommends dotnet6
+
       - name: Compile the conventions solution
         run: dotnet build --configuration Release conventions.sln
       - name: Compile F# scripts
@@ -38,14 +47,16 @@ jobs:
           apt update
           apt install --yes sudo
 
-          # We need to install curl otherwise we get these errors in the CI:
-          # Unable to load the service index for source https://api.nuget.org/v3/index.json.
-          # The SSL connection could not be established, see inner exception. 
-          # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot 
-          sudo apt install --yes curl
-
       - name: Setup .NET
-        run: apt install --yes --no-install-recommends dotnet6
+        run: |
+          # We need to install `ca-certificates`, otherwise we get these errors in the CI:
+          # Unable to load the service index for source https://api.nuget.org/v3/index.json.
+          # The SSL connection could not be established, see inner exception.
+          # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot
+          apt install --yes --no-install-recommends ca-certificates
+
+          apt install --yes --no-install-recommends dotnet6
+
       - name: Run tests to validate F# scripts
         run: dotnet test src/FileConventions.Test/FileConventions.Test.fsproj
 
@@ -103,7 +114,7 @@ jobs:
       - name: Install required dependencies
         run: |
           apt update && apt install --yes sudo
-          sudo apt install --yes git
+          sudo apt install --yes --no-install-recommends git
           sudo DEBIAN_FRONTEND=noninteractive apt install --yes --no-install-recommends npm
       - uses: actions/checkout@v2
         with:
@@ -127,8 +138,17 @@ jobs:
           ./commitlint.sh --verbose \
             --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} \
             --to ${{ github.event.pull_request.head.sha }}
-      - name: Install dotnet sdk
-        run: sudo apt install --yes --no-install-recommends dotnet6
+
+      - name: Setup .NET
+        run: |
+          # We need to install `ca-certificates`, otherwise we get these errors in the CI:
+          # Unable to load the service index for source https://api.nuget.org/v3/index.json.
+          # The SSL connection could not be established, see inner exception.
+          # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot
+          apt install --yes --no-install-recommends ca-certificates
+
+          apt install --yes --no-install-recommends dotnet6
+
       - name: Check all files end with EOL
         run: dotnet fsi scripts/eofConvention.fsx
       - name: Check all .fsx scripts have shebang
