@@ -49,7 +49,7 @@ let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
     latestTagInRunsOnRegex.IsMatch fileText
 
 let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
-    assert (fileInfo.FullName.EndsWith(".yml"))
+    assert fileInfo.FullName.EndsWith ".yml"
 
     let fileLines = File.ReadLines fileInfo.FullName
 
@@ -60,7 +60,7 @@ let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
         fileLines
         |> Seq.filter(fun line -> dotnetToolInstallRegex.IsMatch line)
         |> Seq.filter(fun line ->
-            not(line.Contains("--version")) && not(line.Contains("-v"))
+            not(line.Contains "--version") && not(line.Contains "-v")
         )
         |> (fun unpinnedVersions -> Seq.length unpinnedVersions > 0)
 
