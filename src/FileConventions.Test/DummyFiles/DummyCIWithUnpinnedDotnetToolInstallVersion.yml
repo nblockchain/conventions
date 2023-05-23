@@ -14,4 +14,3 @@ jobs:
           dotnet tool install fantomless-tool
       - name: Print "Hello World!"
         run: echo "Hello World"
-
