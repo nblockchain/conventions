@@ -1,5 +1,10 @@
 # Workflow guidelines
 
+* Group import declarations (e.g. `open` in F# and `using` in C#) in three buckets:
+    * The first group for the namespaces that come from the base class libraries.
+    * Second group for external libraries (e.g. nuget packages).
+    * Last for the namespaces that belong to the source code that lives in same repository.
+
 * Avoid typical bad practices like:
 
     * Magic numbers:
