@@ -6,12 +6,14 @@
 
       Avoid using unnamed numerical constants in software code, this practice makes code hard to understand and maintain.
 
-      Example:
+      Example (with bad practice):
       ```
       var distance = GpsUtil.GetDistance()
       if (distance < 100)
          throw new NotImplementedException();
       ```
+
+      Improved code:
       ```
       private const int MinimumSupportedDistanceToNotifyKillerDrones = 100;
 
@@ -28,7 +30,7 @@
 
       It has several benefits, including reducing the amount of code that needs to be written and maintained, improving the consistency and quality of the code, and reducing the risk of introducing errors and bugs when the information changes.
 
-      Example:
+      Example (with bad practice):
       ```
       let preAuthInputMac =
          CalculateMacWithSHA3256
@@ -42,6 +44,8 @@
              authInput
              ":hs_mac"
       ```
+
+      Improved code:
       ```
       let AuthenticationDigestCalculationKey = ":hs_mac"
 
@@ -64,12 +68,14 @@
 
       Primitive Obsession is a situation where simple data types such as strings, integers, or arrays are overused in place of more appropriate objects.
       
-      Example:
+      Example (with bad practice):
       ```
       let saveFilePath = System.Console.ReadLine()
       
       let savedData = System.IO.File.ReadAllText saveFilePath
       ```
+
+      Improved code:
       ```
       let saveFilePath =
          let saveFilePathInString =
@@ -83,7 +89,7 @@
 
         Discarding generic exceptions is a bad practice because it can lead to unexpected behavior and bugs. It's better to handle the exception using a non-generic catch, or at least log them to help with debugging if something unexpected happens.
     
-        Example:
+        Example (with bad practice):
         ```fsharp
         let Func (zipFile: FileInfo) =
             try
@@ -92,6 +98,8 @@
             | _ -> 
                 ()
         ```
+
+        Improved code:
         ```fsharp
         let Func (zipFile: FileInfo) =
             try
