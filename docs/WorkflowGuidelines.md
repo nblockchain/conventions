@@ -7,14 +7,14 @@
       Avoid using unnamed numerical constants in software code, this practice makes code hard to understand and maintain.
 
       Example (with bad practice):
-      ```
-      var distance = GpsUtil.GetDistance()
+      ```csharp
+      var distance = GpsUtil.GetDistance();
       if (distance < 100)
          throw new NotImplementedException();
       ```
 
       Improved code:
-      ```
+      ```csharp
       private const int MinimumSupportedDistanceToNotifyKillerDrones = 100;
 
       ...
@@ -31,7 +31,7 @@
       It has several benefits, including reducing the amount of code that needs to be written and maintained, improving the consistency and quality of the code, and reducing the risk of introducing errors and bugs when the information changes.
 
       Example (with bad practice):
-      ```
+      ```fsharp
       let preAuthInputMac =
          CalculateMacWithSHA3256
              preAuthInput
@@ -46,7 +46,7 @@
       ```
 
       Improved code:
-      ```
+      ```fsharp
       let AuthenticationDigestCalculationKey = ":hs_mac"
 
       ...
@@ -76,7 +76,7 @@
       ```
 
       Improved code:
-      ```
+      ```fsharp
       let saveFilePath =
          let saveFilePathInString =
              System.Console.ReadLine()

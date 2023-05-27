@@ -43,7 +43,7 @@ of using the less safe approaches  `x.IsSome && x.Value = ...` or
 `if`, but use a newline afterwards; and the `else` or `elif` keywords indented
 to be aligned with the `if`. Example:
 
-```
+```fsharp
 if foo.SomeBoolProperty then
     DoSomething()
 elif foo.SomeFuncReturingBool() then
@@ -54,7 +54,7 @@ else
 
 Another example:
 
-```
+```fsharp
 let someVariableToBeAssigned =
     if foo.SomeBoolProperty then
         "someValue"
@@ -67,11 +67,11 @@ let someVariableToBeAssigned =
 * A space should be added after the colon (and not before) when denoting a type,
 so: `(foo: Foo)`
 * When using property initializers, we prefer to use the immutable syntax sugar:
-```
+```fsharp
 let foo = Foo(Bar = bar, Baz = baz)
 ```
 instead of the more verbose (and scary)
-```
+```fsharp
 let foo = Foo()
 foo.Bar <- bar
 foo.Baz <- baz
