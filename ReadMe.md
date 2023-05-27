@@ -2,8 +2,8 @@ This is a repository that contains several useful things that other `nblockchain
 
 - [Config file](commitlint.config.ts) and [plugins](commitlint/plugins.ts) for commitlint.
 - [A reference .editorconfig file](.editorconfig).
-- [An F# style guide](FSharpStyleGuide.md).
-- [Workflow guidelines](WorkflowGuidelines.md).
+- [An F# style guide](docs/FSharpStyleGuide.md).
+- [Workflow guidelines](docs/WorkflowGuidelines.md).
 - Scripts that aid maintainability:
     * [Detection of .fsx scripts without shebang](scripts/shebangConvention.fsx).
     * [F# scripts compilation](scripts/compileFSharpScripts.fsx).
