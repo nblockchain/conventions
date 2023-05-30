@@ -4,6 +4,8 @@
 
 * The most common mistake when mixing multiple concerns in the same commit is to join both refactorings and change of behaviour in the same change. As a convention, we will consider the word "refactoring" to refer to changes in the code that should not have any impact on the general behaviour of the program (especially talking about behaviour noticed by the end-user).
 
+* Push each commit separately (instead of sending more than 1 commit in a single push), so that we can have a CI status for each commit in the PullRequest. This is a best practice because it will make sure that the build is not broken in between commits (otherwise, future developers may have a hard time when trying to bisect bugs). If you have already pushed your commits to the remote in one push, this can be re-done by using our [gitPush1by1.fsx](https://github.com/nblockchain/conventions/blob/master/scripts/gitPush1by1.fsx) script, or this technique manually: https://stackoverflow.com/a/3230241/544947
+
 * Group import declarations (e.g. `open` in F# and `using` in C#) in three buckets:
     * The first group for the namespaces that come from the base class libraries.
     * Second group for external libraries (e.g. nuget packages).
@@ -176,13 +178,6 @@ you) to find code that is commented/disabled.
 ends up being compiled and packaged in NuGet as a dotnet tool, for example: https://github.com/nblockchain/fsx/tree/master/fsxc
     * .NET APIs: PascalCase (see our [F# Style Guide](FSharpStyleGuide.md) for more info).
     * .NET parameters, local variables & nested functions: camelCase (again, see our [F# Style Guide](FSharpStyleGuide.md) for more info).
-* Push each commit separately (instead of sending more than 1 commit in a
-single push), so that we can have a CI status for each commit in the MR. This
-is a best practice because it will make sure that the build is not broken in
-between commits (otherwise, future developers may have a hard time when
-trying to bisect bugs). If you have already pushed your commits to the remote
-in one push, this can be re-done by using our [gitpush1by1.fsx](https://github.com/nblockchain/fsx/blob/master/Tools/gitPush1by1.fsx)
-script, or this technique manually: https://stackoverflow.com/a/3230241/544947
 * Git commit messages should follow this style:
 
 ```
