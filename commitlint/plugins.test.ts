@@ -476,6 +476,19 @@ test("footer-references-existence4", () => {
     expect(footerReferenceExistence4.status).toBe(0);
 });
 
+test("footer-references-with-EOL", () => {
+    let commmitMsgwithEOLFooter =
+        "foo: this is only a title" +
+        "\n\n" +
+        "Bla bla blah[1]." +
+        "\n\n" +
+        "[1]\nhttp://foo.bar/baz";
+    let footerReferenceWithEOL = runCommitLintOnMsg(commmitMsgwithEOLFooter);
+    expect(footerReferenceWithEOL.output[1].toString().includes("EOL")).toBe(
+        true
+    );
+});
+
 test("prefer-slash-over-backslash1", () => {
     let commitMsgWithBackslash = "foo\\bar: bla bla bla";
     let preferSlashOverBackslash1 = runCommitLintOnMsg(commitMsgWithBackslash);
