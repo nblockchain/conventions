@@ -181,8 +181,9 @@ export abstract class Plugins {
         ];
     }
 
-    public static footerReferencesExistence(bodyStr: string | null) {
+    public static footerReferencesValidity(bodyStr: string | null) {
         let offence = false;
+        let hasEmptyFooter = false;
 
         if (bodyStr !== null) {
             bodyStr = bodyStr.trim();
@@ -195,7 +196,10 @@ export abstract class Plugins {
                     continue;
                 }
                 for (let match of matches) {
-                    if (Helpers.isFooterReference(line)) {
+                    if (Helpers.isEmptyFooterReference(line)) {
+                        offence = true;
+                        hasEmptyFooter = true;
+                    } else if (Helpers.isFooterReference(line)) {
                         references.add(match);
                     } else {
                         bodyReferences.add(match);
@@ -216,11 +220,15 @@ export abstract class Plugins {
             }
         }
 
-        return [
-            !offence,
-            "All references in the body must be mentioned in the footer, and vice versa." +
-                Helpers.errMessageSuffix,
-        ];
+        let errorMessage =
+            "All references in the body must be mentioned in the footer, and vice versa.";
+
+        if (hasEmptyFooter) {
+            errorMessage =
+                "A footer reference can not be empty, please make sure that you've provided the reference and there is no EOL between the reference number and the reference.";
+        }
+
+        return [!offence, errorMessage + Helpers.errMessageSuffix];
     }
 
     public static preferSlashOverBackslash(headerStr: string) {
