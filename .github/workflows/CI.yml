@@ -74,11 +74,11 @@ jobs:
           apt install --yes sudo
           sudo apt install --yes --no-install-recommends git ca-certificates
 
-          sudo apt install --yes --no-install-recommends curl
-          # can't install ubuntu's default nodejs version because we would get this error:
+          sudo apt install --yes --no-install-recommends npm curl
+          # need to update nodejs because with ubuntu's default nodejs version we would get this error:
           # error @jest/core@29.4.1: The engine "node" is incompatible with this module. Expected version "^14.15.0 || ^16.10.0 || >=18.0.0". Got "12.22.9"
-          curl --show-error --location https://deb.nodesource.com/setup_14.x | sudo --preserve-env bash -
-          sudo DEBIAN_FRONTEND=noninteractive apt install --yes --no-install-recommends nodejs
+          sudo npm install --global n
+          sudo n lts
       - name: Print versions
         run: |
           git --version
@@ -115,7 +115,21 @@ jobs:
         run: |
           apt update && apt install --yes sudo
           sudo apt install --yes --no-install-recommends git
-          sudo DEBIAN_FRONTEND=noninteractive apt install --yes --no-install-recommends npm
+
+          sudo apt install --yes --no-install-recommends npm curl
+          # need to update nodejs because with ubuntu's default nodejs version we would get this error:
+          # ```
+          # + npx commitlint --from HEAD~1 --to HEAD --verbose
+          # /__w/conventions/conventions/node_modules/typescript/lib/typescript.js:139
+          #    for (let i = startIndex ?? 0; i < array.length; i++) {
+          #                            ^
+          #
+          # SyntaxError: Unexpected token '?'
+          #    at wrapSafe (internal/modules/cjs/loader.js:915:16)
+          # ...
+          # ```
+          sudo npm install --global n
+          sudo n lts
       - uses: actions/checkout@v2
         with:
           submodules: recursive
