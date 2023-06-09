@@ -825,7 +825,11 @@ let GitHubApiCall (url: string) (accessToken: string) =
     client.DefaultRequestHeaders.Add("User-Agent", userAgent)
     client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", xGitHubApiVersion)
 
-    if not(String.IsNullOrEmpty accessToken) then
+    if String.IsNullOrEmpty accessToken then
+        Console.WriteLine "GitHubToken is not provided."
+    else
+        Console.WriteLine "GitHubToken is provided."
+
         client.DefaultRequestHeaders.Add(
             "Authorization",
             $"token {accessToken}"
