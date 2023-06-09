@@ -122,3 +122,127 @@ let EolAtEof(fileInfo: FileInfo) =
                 False
         else
             True
+
+let IsFooterReference(line: string) : bool =
+    line.[0] = '[' && line.IndexOf "] " > 0
+
+let IsFixesOrClosesSentence(line: string) : bool =
+    line.IndexOf "Fixes " = 0 || line.IndexOf "Closes " = 0
+
+let IsCoAuthoredByTag(line: string) : bool =
+    line.IndexOf "Co-authored-by: " = 0
+
+let IsFooterNote(line: string) : bool =
+    IsFooterReference line
+    || IsCoAuthoredByTag line
+    || IsFixesOrClosesSentence line
+
+type Word =
+    | CodeBlock
+    | FooterNote
+    | PlainText
+
+type Text =
+    {
+        Type: Word
+        Text: string
+    }
+
+let SplitIntoWords(text: string) =
+    let codeBlockRegex = "\s*(```[\s\S]*```)\s*"
+
+    let words =
+        Regex.Split(text, codeBlockRegex)
+        |> Seq.filter(fun item -> not(String.IsNullOrEmpty item))
+        |> Seq.map(fun item ->
+            if Regex.IsMatch(item, codeBlockRegex) then
+                {
+                    Text = item
+                    Type = CodeBlock
+                }
+            else
+                {
+                    Text = item
+                    Type = PlainText
+                }
+        )
+        |> Seq.map(fun paragraph ->
+            if paragraph.Type = CodeBlock then
+                Seq.singleton paragraph
+            else
+                let lines = paragraph.Text.Split Environment.NewLine
+
+                lines
+                |> Seq.map(fun line ->
+                    if IsFooterNote line then
+                        Seq.singleton(
+                            {
+                                Text = line
+                                Type = FooterNote
+                            }
+                        )
+                    else
+                        line.Split " "
+                        |> Seq.map(fun word ->
+                            {
+                                Text = word
+                                Type = PlainText
+                            }
+                        )
+                )
+                |> Seq.concat
+        )
+        |> Seq.concat
+
+    words |> Seq.toList
+
+let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
+    let words = SplitIntoWords text
+
+    let rec processWords
+        (currentLine: string)
+        (wrappedText: string)
+        (remainingWords: List<Text>)
+        : string =
+        match remainingWords with
+        | [] -> (wrappedText + currentLine).Trim()
+        | word :: rest ->
+            match currentLine, word with
+            | "", _ -> processWords word.Text wrappedText rest
+            | _,
+              {
+                  Type = PlainText
+              } when
+                String.length currentLine + word.Text.Length + 1
+                <= maxCharsPerLine
+                ->
+                processWords (currentLine + " " + word.Text) wrappedText rest
+            | _,
+              {
+                  Type = PlainText
+              } ->
+                processWords
+                    word.Text
+                    (wrappedText + currentLine + Environment.NewLine)
+                    rest
+            | _, _ ->
+                processWords
+                    String.Empty
+                    (wrappedText
+                     + currentLine
+                     + Environment.NewLine
+                     + word.Text
+                     + Environment.NewLine)
+                    rest
+
+    processWords String.Empty String.Empty words
+
+let WrapText (text: string) (maxCharsPerLine: int) : string =
+    let wrappedParagraphs =
+        text.Split $"{Environment.NewLine}{Environment.NewLine}"
+        |> Seq.map(fun paragraph -> WrapParagraph paragraph maxCharsPerLine)
+
+    String.Join(
+        $"{Environment.NewLine}{Environment.NewLine}",
+        wrappedParagraphs
+    )

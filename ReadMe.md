@@ -9,6 +9,7 @@ This is a repository that contains several useful things that other `nblockchain
     * [F# scripts compilation](scripts/compileFSharpScripts.fsx).
     * [EOF without EOL detection](scripts/eofConvention.fsx).
     * [Mixed line-endings detection](scripts/mixedLineEndings.fsx).
+    * [Auto-wrap the latest commit message](scripts/wrapLatestCommitMsg.fsx).
     * Use of unpinned versions:
         * [Use of `-latest` suffix in `runs-on:` GitHubCI tags](scripts/unpinnedGitHubActionsImageVersions.fsx).
         * [Use of asterisk (*) in `PackageReference` items of .NET projects](scripts/unpinnedDotnetPackageVersions.fsx).

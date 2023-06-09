@@ -19,6 +19,7 @@ module.exports = {
             "always",
             bodyMaxLineLength,
         ],
+        "body-paragraph-line-min-length": [RuleConfigSeverity.Error, "always"],
         "empty-wip": [RuleConfigSeverity.Error, "always"],
         "footer-leading-blank": [RuleConfigSeverity.Warning, "always"],
         "footer-max-line-length": [
@@ -53,7 +54,6 @@ module.exports = {
     },
     plugins: [
         // TODO (ideas for more rules):
-        // * Detect if paragraphs in body have been cropped too shortly (less than 64 chars), and suggest same auto-wrap command that body-soft-max-line-length suggests, since it unwraps and wraps (both).
         // * Detect reverts which have not been elaborated.
         // * Reject some stupid obvious words: change, update, modify (if first word after colon, error; otherwise warning).
         // * Think of how to reject this shitty commit message: https://github.com/nblockchain/NOnion/pull/34/commits/9ffcb373a1147ed1c729e8aca4ffd30467255594
@@ -202,6 +202,15 @@ module.exports = {
                     return Plugins.bodySoftMaxLineLength(
                         bodyStr,
                         maxLineLength
+                    );
+                },
+
+                "body-paragraph-line-min-length": ({ body }: { body: any }) => {
+                    let bodyStr = Helpers.convertAnyToString(body, "body");
+                    return Plugins.bodyParagraphLineMinLength(
+                        bodyStr,
+                        headerMaxLineLength,
+                        bodyMaxLineLength
                     );
                 },
 

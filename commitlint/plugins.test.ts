@@ -323,6 +323,93 @@ test("body-max-line-length8", () => {
     expect(bodyMaxLineLength8.status).toBe(1);
 });
 
+test("body-paragraph-line-min-length1", () => {
+    let tenChars = "1234 67890";
+    let fortyChars = tenChars + tenChars + tenChars + tenChars;
+    let sixtyChars = fortyChars + tenChars + tenChars;
+    let commitMsgWithFortyCharsInBody =
+        "foo: this is only a title\n\n" + fortyChars + ".\n" + sixtyChars + ".";
+    let bodyParagraphLineMinLength1 = runCommitLintOnMsg(
+        commitMsgWithFortyCharsInBody
+    );
+    expect(bodyParagraphLineMinLength1.status).not.toBe(0);
+});
+
+test("body-paragraph-line-min-length2", () => {
+    let commitMsgWithCommitUrlAtTheEndOfBodyParagraph =
+        "foo: this is only a title\n\n" +
+        "Foo bar:\n" +
+        "https://github.com/username/repo/commit/1234567891234567891234567891234567891234";
+    let bodyParagraphLineMinLength2 = runCommitLintOnMsg(
+        commitMsgWithCommitUrlAtTheEndOfBodyParagraph
+    );
+
+    expect(bodyParagraphLineMinLength2.status).toBe(0);
+});
+
+test("body-paragraph-line-min-length3", () => {
+    let tenChars = "1234 67890";
+    let fortyChars = tenChars + tenChars + tenChars + tenChars;
+    let commitMsgWithFortyCharsInTheLastLineOfParagraph =
+        "foo: this is only a title\n\n" + fortyChars + ".";
+    let bodyParagraphLineMinLength3 = runCommitLintOnMsg(
+        commitMsgWithFortyCharsInTheLastLineOfParagraph
+    );
+    expect(bodyParagraphLineMinLength3.status).toBe(0);
+});
+
+test("body-paragraph-line-min-length4", () => {
+    let tenChars = "1234 67890";
+    let fortyChars = tenChars + tenChars + tenChars + tenChars;
+    let sixtyChars = fortyChars + tenChars + tenChars;
+    let commitMsgWithCodeBlockThatSubceedsBodyMinLineLength =
+        "foo: this is only a title" +
+        "\n\n" +
+        "Bar baz.\n```\n" +
+        fortyChars +
+        ".\n" +
+        sixtyChars +
+        "." +
+        "\n```";
+
+    let bodyParagraphLineMinLength4 = runCommitLintOnMsg(
+        commitMsgWithCodeBlockThatSubceedsBodyMinLineLength
+    );
+
+    // because ```blocks surrounded like this``` can bypass the limit
+    expect(bodyParagraphLineMinLength4.status).toBe(0);
+});
+
+test("body-paragraph-line-min-length5", () => {
+    let commitMsgWithCoAuthoredByTagThatSubceedsBodyMinLineLength =
+        "foo: this is only a title" +
+        "\n\n" +
+        "Co-authored-by: Jon Doe <shortmail@example.com>\n" +
+        "Co-authored-by: Jon Doe <JonDoeEmailAddress@example.com>";
+
+    let bodyParagraphLineMinLength5 = runCommitLintOnMsg(
+        commitMsgWithCoAuthoredByTagThatSubceedsBodyMinLineLength
+    );
+
+    // because Co-authored-by tags can bypass the limit
+    expect(bodyParagraphLineMinLength5.status).toBe(0);
+});
+
+test("body-paragraph-line-min-length6", () => {
+    let commitMsgThatSubceedsBodyMinLineLength =
+        "Some title of less than 50 chars" +
+        "\n\n" +
+        "This is a paragraph whose 2nd line is less than 50 chars\n" +
+        "but should not make commitlint complain because\n" +
+        "TheNextWordInThe3rdLineIsTooLongToBePlacedIn2ndLine.";
+
+    let bodyParagraphLineMinLength6 = runCommitLintOnMsg(
+        commitMsgThatSubceedsBodyMinLineLength
+    );
+
+    expect(bodyParagraphLineMinLength6.status).toBe(0);
+});
+
 test("commit-hash-alone1", () => {
     let commitMsgWithCommitUrl =
         "foo: this is only a title" +
