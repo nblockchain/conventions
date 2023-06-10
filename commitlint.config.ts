@@ -114,7 +114,7 @@ module.exports = {
                 "footer-references-existence": ({ body }: { body: any }) => {
                     let bodyStr = Helpers.convertAnyToString(body, "body");
 
-                    return Plugins.footerReferencesExistence(bodyStr);
+                    return Plugins.footerReferencesValidity(bodyStr);
                 },
 
                 "prefer-slash-over-backslash": ({

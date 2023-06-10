@@ -98,6 +98,15 @@ export abstract class Helpers {
         return isLowerCase && !isUpperCase;
     }
 
+    public static isEmptyFooterReference(line: string) {
+        Helpers.assertLine(line);
+        let trimmedLine = line.trim();
+        return (
+            trimmedLine[0] === "[" &&
+            trimmedLine.indexOf("]") === trimmedLine.length - 1
+        );
+    }
+
     public static isFooterReference(line: string) {
         Helpers.assertLine(line);
         return line[0] === "[" && line.indexOf("] ") > 0;
