@@ -509,33 +509,33 @@ test("footer-notes-misplacement-4", () => {
     expect(footerNotesMisplacement4.status).not.toBe(0);
 });
 
-test("footer-references-existence1", () => {
+test("footer-references-validity1", () => {
     let commmitMsgwithCorrectFooter =
         "foo: this is only a title" +
         "\n\n" +
         "Bla bla blah[1]." +
         "\n\n" +
         "[1] http://foo.bar/baz";
-    let footerReferenceExistence1 = runCommitLintOnMsg(
+    let footerReferenceValidity1 = runCommitLintOnMsg(
         commmitMsgwithCorrectFooter
     );
-    expect(footerReferenceExistence1.status).toBe(0);
+    expect(footerReferenceValidity1.status).toBe(0);
 });
 
-test("footer-references-existence2", () => {
+test("footer-references-validity2", () => {
     let commmitMsgwithWrongFooter =
         "foo: this is only a title" +
         "\n\n" +
         "Bla bla blah." +
         "\n\n" +
         "[1] http://foo.bar/baz";
-    let footerReferenceExistence2 = runCommitLintOnMsg(
+    let footerReferenceValidity2 = runCommitLintOnMsg(
         commmitMsgwithWrongFooter
     );
-    expect(footerReferenceExistence2.status).not.toBe(0);
+    expect(footerReferenceValidity2.status).not.toBe(0);
 });
 
-test("footer-references-existence3", () => {
+test("footer-references-validity3", () => {
     let commmitMsgwithWrongFooter =
         "foo: this is only a title" +
         "\n\n" +
@@ -544,13 +544,13 @@ test("footer-references-existence3", () => {
         "[1] http://foo.bar/baz" +
         "\n\n" +
         "[2] http://foo.bar/baz";
-    let footerReferenceExistence3 = runCommitLintOnMsg(
+    let footerReferenceValidity3 = runCommitLintOnMsg(
         commmitMsgwithWrongFooter
     );
-    expect(footerReferenceExistence3.status).not.toBe(0);
+    expect(footerReferenceValidity3.status).not.toBe(0);
 });
 
-test("footer-references-existence4", () => {
+test("footer-references-validity4", () => {
     let commmitMsgwithFooter =
         "Backend/Ether: catch/retry new -32002 err code\n\n" +
         "CI on master branch caught this[1]:\n" +
@@ -559,19 +559,19 @@ test("footer-references-existence4", () => {
         "The end of the paragraph.\n\n" +
         "[1] https://github.com/nblockchain/geewallet/actions/runs/3507005645/jobs/5874411684";
 
-    let footerReferenceExistence4 = runCommitLintOnMsg(commmitMsgwithFooter);
-    expect(footerReferenceExistence4.status).toBe(0);
+    let footerReferenceValidity4 = runCommitLintOnMsg(commmitMsgwithFooter);
+    expect(footerReferenceValidity4.status).toBe(0);
 });
 
-test("footer-references-with-EOL", () => {
+test("footer-references-validity5", () => {
     let commmitMsgwithEOLFooter =
         "foo: this is only a title" +
         "\n\n" +
         "Bla bla blah[1]." +
         "\n\n" +
         "[1]\nhttp://foo.bar/baz";
-    let footerReferenceWithEOL = runCommitLintOnMsg(commmitMsgwithEOLFooter);
-    expect(footerReferenceWithEOL.output[1].toString().includes("EOL")).toBe(
+    let footerReferenceValidity5 = runCommitLintOnMsg(commmitMsgwithEOLFooter);
+    expect(footerReferenceValidity5.output[1].toString().includes("EOL")).toBe(
         true
     );
 });
