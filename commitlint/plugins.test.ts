@@ -578,7 +578,7 @@ test("footer-references-validity5", () => {
 
 test("footer-refs-validity6", () => {
     let commitMsgWithFullUrl =
-        "foo: blah blah" + "\n\n" + "First ref[1]'s with apostrohphe, 2nd isn't [2].\n\n[1] someUrl://someHost/somePath/someResource\n[2] someUrl://someHost/somePath/someResource#123";
+        "foo: blah blah" + "\n\n" + "First ref[1]'s with apostrohphe, 2nd isn't [2].\n\n[1] someUrl://foo/bar\n[2] someUrl://foo/bar#123";
     let footerReferenceValidity6 = runCommitLintOnMsg(commitMsgWithFullUrl);
     expect(footerReferenceValidity6.status).toBe(0);
 });
