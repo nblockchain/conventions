@@ -166,6 +166,7 @@ export abstract class Helpers {
     }
 
     public static includesHashtagRef(text: string) {
+        console.log(text.match(`\s+#[0-9]+`))
         return text.match(`\s+#[0-9]+`) !== null;
     }
 
