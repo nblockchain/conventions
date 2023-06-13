@@ -754,7 +754,7 @@ test("proper-issue-refs3", () => {
 
 test("proper-issue-refs4", () => {
     let commitMsgWithFullUrl =
-        "foo: blah blah" + "\n\n" + "Some paragraph text with a ref[1].\n\n[1] someUrl://someHostName/someFolder/someResource#666-anchor";
+        "foo: blah blah" + "\n\n" + "Some paragraph text with a ref [1].\n\n[1] someUrl://someHostName/someFolder/someResource#666-anchor";
     let properIssueRefs4 = runCommitLintOnMsg(commitMsgWithFullUrl);
     console.log("==>" + properIssueRefs4.stdout)
     expect(properIssueRefs4.status).toBe(0);
