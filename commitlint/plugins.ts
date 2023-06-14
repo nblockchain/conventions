@@ -259,7 +259,10 @@ export abstract class Plugins {
             // Extracting bodyStr from rawStr rather than using body directly is a
             // workaround for https://github.com/conventional-changelog/commitlint/issues/3412
             let bodyStr = rawStr.substring(lineBreakIndex);
+            console.log("=raw=>" + rawStr + "<=raw=")
+            console.log("=body1=>" + bodyStr + "<=body=")
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr);
+            console.log("=body2=>" + bodyStr + "<=body=")
             offence = Helpers.includesHashtagRef(bodyStr);
         }
 
