@@ -761,6 +761,13 @@ test("proper-issue-refs4", () => {
     expect(properIssueRefs4.status).toBe(0);
 });
 
+test("proper-issue-refs5", () => {
+    let commitMsgWithHashtagRef =
+        "foo: blah blah" + "\n\n" + "#123 bug is fixed.";
+    let properIssueRefs5 = runCommitLintOnMsg(commitMsgWithHashtagRef);
+    expect(properIssueRefs5.status).not.toBe(0);
+});
+
 test("subject-lowercase1", () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(
