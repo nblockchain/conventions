@@ -28,7 +28,9 @@ module.exports = {
             footerMaxLineLength,
         ],
         "footer-notes-misplacement": [RuleConfigSeverity.Error, "always"],
+        /* disabled until a related problem is fixed first in another rule
         "footer-references-validity": [RuleConfigSeverity.Error, "always"],
+        */
         "header-max-length-with-suggestions": [
             RuleConfigSeverity.Error,
             "always",
