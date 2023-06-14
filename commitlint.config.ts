@@ -28,7 +28,7 @@ module.exports = {
             footerMaxLineLength,
         ],
         "footer-notes-misplacement": [RuleConfigSeverity.Error, "always"],
-        "footer-references-existence": [RuleConfigSeverity.Error, "always"],
+        "footer-references-validity": [RuleConfigSeverity.Error, "always"],
         "header-max-length-with-suggestions": [
             RuleConfigSeverity.Error,
             "always",
@@ -111,7 +111,7 @@ module.exports = {
                     return Plugins.footerNotesMisplacement(bodyStr);
                 },
 
-                "footer-references-existence": ({ body }: { body: any }) => {
+                "footer-references-validity": ({ body }: { body: any }) => {
                     let bodyStr = Helpers.convertAnyToString(body, "body");
 
                     return Plugins.footerReferencesValidity(bodyStr);
