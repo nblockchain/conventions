@@ -31,7 +31,15 @@ Please define GITHUB_TOKEN environment variable in your GitHubCI workflow:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 *)
-let accessToken = Environment.GetEnvironmentVariable "GITHUB_TOKEN"
+let accessTokenName, accessToken =
+    let personalAccessToken = Environment.GetEnvironmentVariable "ACCESS_TOKEN"
+
+    if not(String.IsNullOrEmpty personalAccessToken) then
+        "ACCESS_TOKEN", personalAccessToken
+    else
+        "GITHUB_TOKEN", (Environment.GetEnvironmentVariable "GITHUB_TOKEN")
+
+printfn "Using access token %s" accessTokenName
 
 type githubEventType =
     JsonProvider<"""
