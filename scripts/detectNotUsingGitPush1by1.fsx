@@ -23,23 +23,31 @@ if String.IsNullOrEmpty githubEventPath then
 
     Environment.Exit 2
 
-(*
-Please define GITHUB_TOKEN environment variable in your GitHubCI workflow:
+let githubTokenErrorMsg =
+    """Please define GITHUB_TOKEN environment variable in your GitHubCI workflow:
 
 ```
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
-*)
+"""
+
 let accessTokenName, accessToken =
     let personalAccessToken = Environment.GetEnvironmentVariable "ACCESS_TOKEN"
 
     if not(String.IsNullOrEmpty personalAccessToken) then
         "ACCESS_TOKEN", personalAccessToken
     else
-        "GITHUB_TOKEN", (Environment.GetEnvironmentVariable "GITHUB_TOKEN")
+        let githubToken = Environment.GetEnvironmentVariable "GITHUB_TOKEN"
+
+        if not(String.IsNullOrEmpty githubToken) then
+            "GITHUB_TOKEN", (Environment.GetEnvironmentVariable "GITHUB_TOKEN")
+        else
+            Console.Error.WriteLine githubTokenErrorMsg
+            exit 1
 
 printfn "Using access token %s" accessTokenName
+Console.WriteLine()
 
 type githubEventType =
     JsonProvider<"""
@@ -802,7 +810,7 @@ type PRCommitsType =
 """>
 
 let githubApiCallForbiddenErrorMsg =
-    """GITHUB_TOKEN passed doesn't seem to have enough permissions.
+    """GITHUB_TOKEN or ACCESS_TOKEN passed doesn't seem to have enough permissions.
 To modify the permissions of your token, navigate to the Settings section of your 
 repository or organization and click on Actions button, then select General. From 
 'Workflow permissions' section on that page, choose 'Read and write permissions' 
@@ -810,11 +818,12 @@ repository or organization and click on Actions button, then select General. Fro
 """
 
 let githubApiCallNotFoundErrorMsg =
-    """Please define GITHUB_TOKEN environment variable in your GitHubCI workflow:
+    """Please create a PAT from your GitHub account (Settings->Developer Settings->PATs->Tokens(classic) and set it as GitHubActions repo secret ACCESS_TOKEN; then define the environment 
+variable in your GitHubCI workflow:
 
 ```
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 ```
 """
 
