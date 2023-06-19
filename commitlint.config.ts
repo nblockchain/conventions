@@ -45,7 +45,9 @@ module.exports = {
         "prefer-slash-over-backslash": [RuleConfigSeverity.Error, "always"],
         "type-space-before-paren": [RuleConfigSeverity.Error, "always"],
         "type-with-square-brackets": [RuleConfigSeverity.Error, "always"],
+        /* disabled until a related problem is fixed first in another rule
         "proper-issue-refs": [RuleConfigSeverity.Error, "always"],
+        */
         "too-many-spaces": [RuleConfigSeverity.Error, "always"],
         "commit-hash-alone": [RuleConfigSeverity.Error, "always"],
         "title-uppercase": [RuleConfigSeverity.Error, "always"],
