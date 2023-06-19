@@ -577,9 +577,13 @@ test("footer-references-validity5", () => {
 });
 
 test("footer-references-validity6", () => {
-    let commitMsg =
-        "foo: blah blah" + "\n\n" + "It turns out that robocopy might fail when copying timestamp\nattributes because exFat[1]'s spec says times need to be later\nthan 1980 [2].\n\n[1] https://superuser.com/a/1447347/600757\n[2] https://learn.microsoft.com/en-us/windows/win32/fileio/exfat-specification#7486-year-field";
-    let footerReferencesValidity6 = runCommitLintOnMsg(commitMsg);
+    let commitMsgWithUrlContainingAnchor =
+        "foo: blah blah" +
+        "\n\n" +
+        "Blah blah blah[1]." +
+        "\n\n" +
+        "[1] https://somehost/somePath/someRes#7-some-numbered-anchor";
+    let footerReferencesValidity6 = runCommitLintOnMsg(commitMsgWithUrlContainingAnchor);
     expect(footerReferencesValidity6.status).toBe(0);
 });
 
