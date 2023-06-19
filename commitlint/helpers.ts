@@ -166,7 +166,10 @@ export abstract class Helpers {
     }
 
     public static includesHashtagRef(text: string) {
-        return text.match(`\\s+#[0-9]+`) !== null;
+        return (
+            text.match(`\\s+#[0-9]+`) !== null ||
+            text.match(`^#[0-9]+`) !== null
+        );
     }
 
     public static removeAllCodeBlocks(text: string) {
