@@ -508,7 +508,7 @@ test("footer-notes-misplacement-4", () => {
     let footerNotesMisplacement4 = runCommitLintOnMsg(commitMsgWithWrongFooter);
     expect(footerNotesMisplacement4.status).not.toBe(0);
 });
-/*
+
 test("footer-references-validity1", () => {
     let commmitMsgwithCorrectFooter =
         "foo: this is only a title" +
@@ -575,7 +575,7 @@ test("footer-references-validity5", () => {
         true
     );
 });
-*/
+
 test("prefer-slash-over-backslash1", () => {
     let commitMsgWithBackslash = "foo\\bar: bla bla bla";
     let preferSlashOverBackslash1 = runCommitLintOnMsg(commitMsgWithBackslash);
