@@ -734,7 +734,7 @@ test("header-max-length-with-suggestions12", () => {
         (headerMaxLength12.stdout + "").includes(not_expected_message)
     ).toEqual(false);
 });
-/*
+
 test("proper-issue-refs1", () => {
     let commitMsgWithHashtagRef = "foo: blah blah" + "\n\n" + "Blah blah #123.";
     let properIssueRefs1 = runCommitLintOnMsg(commitMsgWithHashtagRef);
@@ -772,7 +772,7 @@ test("proper-issue-refs5", () => {
     let properIssueRefs5 = runCommitLintOnMsg(commitMsgWithHashtagRef);
     expect(properIssueRefs5.status).not.toBe(0);
 });
-*/
+
 test("subject-lowercase1", () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(
