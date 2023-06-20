@@ -181,7 +181,7 @@ export abstract class Plugins {
         ];
     }
 
-    public static footerReferencesValidity(rawStr: string) {
+    public static footerRefsValidity(rawStr: string) {
         let offence = false;
         let hasEmptyFooter = false;
 

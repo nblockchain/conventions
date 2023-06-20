@@ -28,7 +28,7 @@ module.exports = {
             footerMaxLineLength,
         ],
         "footer-notes-misplacement": [RuleConfigSeverity.Error, "always"],
-        "footer-references-validity": [RuleConfigSeverity.Error, "always"],
+        "footer-refs-validity": [RuleConfigSeverity.Error, "always"],
         "header-max-length-with-suggestions": [
             RuleConfigSeverity.Error,
             "always",
@@ -113,13 +113,13 @@ module.exports = {
                     return Plugins.footerNotesMisplacement(bodyStr);
                 },
 
-                "footer-references-validity": ({ raw }: { raw: any }) => {
+                "footer-refs-validity": ({ raw }: { raw: any }) => {
                     let rawStr = Helpers.assertNotNull(
                         Helpers.convertAnyToString(raw, "raw"),
                         notNullStringErrorMessage("raw")
                     );
 
-                    return Plugins.footerReferencesValidity(rawStr);
+                    return Plugins.footerRefsValidity(rawStr);
                 },
 
                 "prefer-slash-over-backslash": ({

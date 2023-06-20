@@ -509,34 +509,30 @@ test("footer-notes-misplacement-4", () => {
     expect(footerNotesMisplacement4.status).not.toBe(0);
 });
 
-test("footer-references-validity1", () => {
-    let commmitMsgwithCorrectFooter =
+test("footer-refs-validity1", () => {
+    let commmitMsgWithCorrectFooter =
         "foo: this is only a title" +
         "\n\n" +
         "Bla bla blah[1]." +
         "\n\n" +
         "[1] http://foo.bar/baz";
-    let footerReferenceValidity1 = runCommitLintOnMsg(
-        commmitMsgwithCorrectFooter
-    );
-    expect(footerReferenceValidity1.status).toBe(0);
+    let footerRefsValidity1 = runCommitLintOnMsg(commmitMsgWithCorrectFooter);
+    expect(footerRefsValidity1.status).toBe(0);
 });
 
-test("footer-references-validity2", () => {
-    let commmitMsgwithWrongFooter =
+test("footer-refs-validity2", () => {
+    let commmitMsgWithWrongFooter =
         "foo: this is only a title" +
         "\n\n" +
         "Bla bla blah." +
         "\n\n" +
         "[1] http://foo.bar/baz";
-    let footerReferenceValidity2 = runCommitLintOnMsg(
-        commmitMsgwithWrongFooter
-    );
-    expect(footerReferenceValidity2.status).not.toBe(0);
+    let footerRefsValidity2 = runCommitLintOnMsg(commmitMsgWithWrongFooter);
+    expect(footerRefsValidity2.status).not.toBe(0);
 });
 
-test("footer-references-validity3", () => {
-    let commmitMsgwithWrongFooter =
+test("footer-refs-validity3", () => {
+    let commmitMsgWithWrongFooter =
         "foo: this is only a title" +
         "\n\n" +
         "Bla bla blah[1], and after that [2], then [3]." +
@@ -544,14 +540,12 @@ test("footer-references-validity3", () => {
         "[1] http://foo.bar/baz" +
         "\n\n" +
         "[2] http://foo.bar/baz";
-    let footerReferenceValidity3 = runCommitLintOnMsg(
-        commmitMsgwithWrongFooter
-    );
-    expect(footerReferenceValidity3.status).not.toBe(0);
+    let footerRefsValidity3 = runCommitLintOnMsg(commmitMsgWithWrongFooter);
+    expect(footerRefsValidity3.status).not.toBe(0);
 });
 
-test("footer-references-validity4", () => {
-    let commmitMsgwithFooter =
+test("footer-refs-validity4", () => {
+    let commmitMsgWithFooter =
         "Backend/Ether: catch/retry new -32002 err code\n\n" +
         "CI on master branch caught this[1]:\n" +
         "```\nUnhandled Exception:\n" +
@@ -559,34 +553,32 @@ test("footer-references-validity4", () => {
         "The end of the paragraph.\n\n" +
         "[1] https://github.com/nblockchain/geewallet/actions/runs/3507005645/jobs/5874411684";
 
-    let footerReferenceValidity4 = runCommitLintOnMsg(commmitMsgwithFooter);
-    expect(footerReferenceValidity4.status).toBe(0);
+    let footerRefsValidity4 = runCommitLintOnMsg(commmitMsgWithFooter);
+    expect(footerRefsValidity4.status).toBe(0);
 });
 
-test("footer-references-validity5", () => {
-    let commmitMsgwithEOLFooter =
+test("footer-refs-validity5", () => {
+    let commmitMsgWithEOLFooter =
         "foo: this is only a title" +
         "\n\n" +
         "Bla bla blah[1]." +
         "\n\n" +
         "[1]\nhttp://foo.bar/baz";
-    let footerReferenceValidity5 = runCommitLintOnMsg(commmitMsgwithEOLFooter);
-    expect(footerReferenceValidity5.output[1].toString().includes("EOL")).toBe(
-        true
-    );
+    let footerRefsValidity5 = runCommitLintOnMsg(commmitMsgWithEOLFooter);
+    expect(footerRefsValidity5.output[1].toString().includes("EOL")).toBe(true);
 });
 
-test("footer-references-validity6", () => {
+test("footer-refs-validity6", () => {
     let commitMsgWithUrlContainingAnchor =
         "foo: blah blah" +
         "\n\n" +
         "Blah blah blah[1]." +
         "\n\n" +
         "[1] https://somehost/somePath/someRes#7-some-numbered-anchor";
-    let footerReferencesValidity6 = runCommitLintOnMsg(
+    let footerRefsValidity6 = runCommitLintOnMsg(
         commitMsgWithUrlContainingAnchor
     );
-    expect(footerReferencesValidity6.status).toBe(0);
+    expect(footerRefsValidity6.status).toBe(0);
 });
 
 test("prefer-slash-over-backslash1", () => {
