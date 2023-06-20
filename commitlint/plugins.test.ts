@@ -583,7 +583,9 @@ test("footer-references-validity6", () => {
         "Blah blah blah[1]." +
         "\n\n" +
         "[1] https://somehost/somePath/someRes#7-some-numbered-anchor";
-    let footerReferencesValidity6 = runCommitLintOnMsg(commitMsgWithUrlContainingAnchor);
+    let footerReferencesValidity6 = runCommitLintOnMsg(
+        commitMsgWithUrlContainingAnchor
+    );
     expect(footerReferencesValidity6.status).toBe(0);
 });
 

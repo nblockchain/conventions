@@ -181,12 +181,18 @@ export abstract class Plugins {
         ];
     }
 
-    public static footerReferencesValidity(bodyStr: string | null) {
+    public static footerReferencesValidity(rawStr: string) {
         let offence = false;
         let hasEmptyFooter = false;
 
-        if (bodyStr !== null) {
-            bodyStr = bodyStr.trim();
+        rawStr = rawStr.trim();
+        let lineBreakIndex = rawStr.indexOf("\n");
+
+        if (lineBreakIndex >= 0) {
+            // Extracting bodyStr from rawStr rather than using body directly is a
+            // workaround for https://github.com/conventional-changelog/conventional-changelog/issues/1016
+            let bodyStr = rawStr.substring(lineBreakIndex).trim();
+
             let lines = bodyStr.split(/\r?\n/);
             let bodyReferences = new Set();
             let references = new Set();
