@@ -25,4 +25,26 @@
     
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="DummyFiles\DummyFsprojWithAsterisk.fsproj" />
+    <None Include="DummyFiles\DummyWithShebang.fsx" />
+    <None Include="DummyFiles\DummyWithWrongShebang.fsx" />
+    <None Include="DummyFiles\DummyWithoutMissingVersionsInNugetPackageReferences.fsx" />
+    <None Include="DummyFiles\DummyEmpty.fsx" />
+    <None Include="DummyFiles\DummyWithLFLineEndings" />
+    <None Include="DummyFiles\DummyWithMixedLineEndings" />
+    <None Include="DummyFiles\DummyFsprojWithoutAsterisk.fsproj" />
+    <None Include="DummyFiles\DummyWithoutShebang.fsx" />
+    <None Include="DummyFiles\DummyCIWithLatestTag.yml" />
+    <None Include="DummyFiles\DummyWithoutNugetPackageReferences.fsx" />
+    <None Include="DummyFiles\DummyCIWithoutLatestTag.yml" />
+    <None Include="DummyFiles\DummyWithMissingVersionsInNugetPackageReferences.fsx" />
+    <None Include="DummyFiles\DummyWithCRLFLineEndings" />
+    <None Include="DummyFiles\DummyCIWithoutSamePulumiVersion.yml" />
+    <None Include="DummyFiles\DummyCIWithSamePulumiVersion.yml" />
+    <None Include="DummyFiles\DummyCIWithoutSameSetupPulumiVersion.yml" />
+    <None Include="DummyFiles\DummyCIWithSameSetupPulumiVersion.yml" />
+    <None Include="DummyFiles\DummyCIWithSetupPulumiVersionV2.0.0.yml" />
+    <None Include="DummyFiles\DummyCIWithSetupPulumiVersionV2.0.1.yml" />
+  </ItemGroup>
 </Project>

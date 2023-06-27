@@ -182,6 +182,10 @@ jobs:
       - name: Check if gitPush1by1 was used
         if: github.event_name == 'pull_request'
         run: dotnet fsi scripts/detectNotUsingGitPush1by1.fsx
+      - name: Check there are no inconsistent versions GitHubCI files
+        run: dotnet fsi scripts/inconsistentVersionsInGitHubCI.fsx
+      - name: Check there are no inconsistent versions in nuget package references of F# scripts
+        run: dotnet fsi scripts/inconsistentVersionsInFSharpScripts.fsx
       - name: Install prettier
         run: npm install prettier@2.8.3
       - name: Change file permissions

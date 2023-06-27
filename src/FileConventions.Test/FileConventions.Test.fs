@@ -348,3 +348,202 @@ let WrapTextTest4() =
         + "characters."
 
     Assert.That(WrapText text characterCount, Is.EqualTo expectedResult)
+
+[<Test>]
+
+let DetectInconsistentVersionsInGitHubCIWorkflow1() =
+    let fileInfo =
+        (Seq.singleton(
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithSamePulumiVersion.yml"
+                )
+            )
+        ))
+
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo false
+    )
+
+
+[<Test>]
+let DetectInconsistentVersionsInGitHubCIWorkflow2() =
+    let fileInfo =
+        (Seq.singleton(
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithoutSamePulumiVersion.yml"
+                )
+            )
+        ))
+
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo true
+    )
+
+
+[<Test>]
+let DetectInconsistentVersionsInGitHubCIWorkflow3() =
+    let fileInfo =
+        (Seq.singleton(
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithoutSameSetupPulumiVersion.yml"
+                )
+            )
+        ))
+
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo true
+    )
+
+
+[<Test>]
+let DetectInconsistentVersionsInGitHubCIWorkflow4() =
+    let fileInfo =
+        (Seq.singleton(
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithSameSetupPulumiVersion.yml"
+                )
+            )
+        ))
+
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo false
+    )
+
+
+[<Test>]
+let DetectInconsistentVersionsInGitHubCIWorkflow5() =
+    let fileInfo =
+        (seq {
+
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithSetupPulumiVersionV2.0.0.yml"
+                )
+            )
+
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithSetupPulumiVersionV2.0.1.yml"
+                )
+            )
+
+        })
+
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo true
+    )
+
+
+[<Test>]
+let DetectInconsistentVersionsInGitHubCIWorkflow6() =
+    let fileInfo =
+        (Seq.singleton(
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithoutSameCheckoutVersion.yml"
+                )
+            )
+        ))
+
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo true
+    )
+
+
+[<Test>]
+let DetectInconsistentVersionsInGitHubCIWorkflow7() =
+    let fileInfo =
+        (Seq.singleton(
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithoutSameNodeVersion.yml"
+                )
+            )
+        ))
+
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
+        Is.EqualTo true
+    )
+
+
+[<Test>]
+let DetectInconsistentVersionsInGitHubCI1() =
+    let fileInfo =
+        DirectoryInfo(
+            Path.Combine(dummyFilesDirectory.FullName, "DummyWorkflows")
+        )
+
+    Assert.That(DetectInconsistentVersionsInGitHubCI fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let DetectInconsistentVersionsInNugetRefsInFSharpScripts1() =
+    let fileInfos =
+        (seq {
+
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyFsharpScriptWithFsdkVersion0.6.0.fsx"
+                )
+            )
+
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyFsharpScriptWithFsdkVersion0.6.1.fsx"
+                )
+            )
+
+        })
+
+    Assert.That(
+        DetectInconsistentVersionsInNugetRefsInFSharpScripts fileInfos,
+        Is.EqualTo true
+    )
+
+[<Test>]
+let DetectInconsistentVersionsInFSharpScripts1() =
+    let fileInfo =
+        DirectoryInfo(
+            Path.Combine(dummyFilesDirectory.FullName, "DummyScripts")
+        )
+
+    Assert.That(
+        DetectInconsistentVersionsInFSharpScripts fileInfo None,
+        Is.EqualTo true
+    )
+
+
+[<Test>]
+let DetectInconsistentVersionsInFSharpScripts2() =
+    let dir =
+        DirectoryInfo(
+            Path.Combine(dummyFilesDirectory.FullName, "DummyScripts")
+        )
+
+    Assert.That(
+        DetectInconsistentVersionsInFSharpScripts
+            dir
+            (Some(Seq.singleton "DummyScripts")),
+        Is.EqualTo false
+    )

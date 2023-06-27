@@ -18,8 +18,7 @@ let HasCorrectShebang(fileInfo: FileInfo) =
         false
 
 let MixedLineEndings(fileInfo: FileInfo) =
-    use streamReader = new StreamReader(fileInfo.FullName)
-    let fileText = streamReader.ReadToEnd()
+    let fileText = File.ReadAllText fileInfo.FullName
 
     let lf = Regex("[^\r]\n", RegexOptions.Compiled)
     let cr = Regex("\r[^\n]", RegexOptions.Compiled)
@@ -41,8 +40,8 @@ let MixedLineEndings(fileInfo: FileInfo) =
 
 let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith(".yml"))
-    use streamReader = new StreamReader(fileInfo.FullName)
-    let fileText = streamReader.ReadToEnd()
+
+    let fileText = File.ReadAllText fileInfo.FullName
 
     let latestTagInRunsOnRegex =
         Regex("runs-on: .*-latest", RegexOptions.Compiled)
@@ -69,8 +68,8 @@ let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
 
 let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith "proj")
-    use streamReader = new StreamReader(fileInfo.FullName)
-    let fileText = streamReader.ReadToEnd()
+
+    let fileText = File.ReadAllText fileInfo.FullName
 
     let asteriskInPackageReference =
         Regex(
@@ -246,3 +245,87 @@ let WrapText (text: string) (maxCharsPerLine: int) : string =
         $"{Environment.NewLine}{Environment.NewLine}",
         wrappedParagraphs
     )
+
+let private DetectInconsistentVersions
+    (fileInfos: seq<FileInfo>)
+    (versionRegexPattern: string)
+    =
+    let versionRegex = Regex(versionRegexPattern, RegexOptions.Compiled)
+
+    let allFilesTexts =
+        fileInfos
+        |> Seq.map(fun fileInfo -> File.ReadAllText fileInfo.FullName)
+        |> String.concat Environment.NewLine
+
+    let versionMap =
+        versionRegex.Matches allFilesTexts
+        |> Seq.fold
+            (fun acc regexMatch ->
+                let key = regexMatch.Groups.[1].ToString()
+                let value = regexMatch.Groups.[2].ToString()
+
+                match Map.tryFind key acc with
+                | Some prevSet -> Map.add key (Set.add value prevSet) acc
+                | None -> Map.add key (Set.singleton value) acc
+            )
+            Map.empty
+
+    versionMap
+    |> Seq.map(fun item -> Seq.length item.Value > 1)
+    |> Seq.contains true
+
+let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
+    fileInfos
+    |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".yml"))
+
+    let inconsistentVersionsType1 =
+        DetectInconsistentVersions
+            fileInfos
+            "\\swith:\\s*([^\\s]*)-version:\\s*([^\\s]*)\\s"
+
+    let inconsistentVersionsType2 =
+        DetectInconsistentVersions
+            fileInfos
+            "\\suses:\\s*([^\\s]*)@v([^\\s]*)\\s"
+
+    inconsistentVersionsType1 || inconsistentVersionsType2
+
+let DetectInconsistentVersionsInGitHubCI(dir: DirectoryInfo) =
+    let ymlFiles = dir.GetFiles("*.yml", SearchOption.AllDirectories)
+
+    if Seq.length ymlFiles = 0 then
+        false
+    else
+        DetectInconsistentVersionsInGitHubCIWorkflow ymlFiles
+
+let DetectInconsistentVersionsInNugetRefsInFSharpScripts
+    (fileInfos: seq<FileInfo>)
+    =
+    fileInfos
+    |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".fsx"))
+
+    DetectInconsistentVersions
+        fileInfos
+        "#r \"nuget:\\s*([^\\s]*)\\s*,\\s*Version\\s*=\\s*([^\\s]*)\\s*\""
+
+let DetectInconsistentVersionsInFSharpScripts
+    (dir: DirectoryInfo)
+    (ignoreDirs: Option<seq<string>>)
+    =
+    let fsxFiles =
+        match ignoreDirs with
+        | Some ignoreDirs ->
+            dir.GetFiles("*.fsx", SearchOption.AllDirectories)
+            |> Seq.filter(fun fileInfo ->
+                ignoreDirs
+                |> Seq.filter(fun ignoreDir ->
+                    fileInfo.FullName.Contains ignoreDir
+                )
+                |> (fun toBeIgnored -> Seq.length toBeIgnored = 0)
+            )
+        | None -> dir.GetFiles("*.fsx", SearchOption.AllDirectories)
+
+    if Seq.length fsxFiles = 0 then
+        false
+    else
+        DetectInconsistentVersionsInNugetRefsInFSharpScripts fsxFiles
