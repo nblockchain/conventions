@@ -246,35 +246,29 @@ let WrapText (text: string) (maxCharsPerLine: int) : string =
         wrappedParagraphs
     )
 
-let DetectInconsistentVersion
+let private DetectInconsistentVersions
     (fileInfos: seq<FileInfo>)
     (versionRegexPattern: string)
     =
     let versionRegex = Regex(versionRegexPattern, RegexOptions.Compiled)
 
-    let mutable versionMap: Map<string, Set<string>> = Map.empty
+    let allFilesTexts =
+        fileInfos
+        |> Seq.map(fun fileInfo -> File.ReadAllText fileInfo.FullName)
+        |> String.concat Environment.NewLine
 
+    let versionMap =
+        versionRegex.Matches allFilesTexts
+        |> Seq.fold
+            (fun acc regexMatch ->
+                let key = regexMatch.Groups.[1].ToString()
+                let value = regexMatch.Groups.[2].ToString()
 
-    fileInfos
-    |> Seq.iter(fun fileInfo ->
-        let fileText = File.ReadAllText fileInfo.FullName
-
-        versionRegex.Matches fileText
-        |> Seq.iter(fun regexMatch ->
-            let key = regexMatch.Groups.[1].ToString()
-            let value = regexMatch.Groups.[2].ToString()
-
-            let addSet (value: string) (maybePrevSet: Option<Set<string>>) =
-                match maybePrevSet with
-                | Some prevSet -> Some(Set.add value prevSet)
-                | None -> None
-
-            if versionMap.ContainsKey key then
-                versionMap <- versionMap.Change(key, addSet value)
-            else
-                versionMap <- versionMap.Add(key, Set.singleton value)
-        )
-    )
+                match Map.tryFind key acc with
+                | Some prevSet -> Map.add key (Set.add value prevSet) acc
+                | None -> Map.add key (Set.singleton value) acc
+            )
+            Map.empty
 
     versionMap
     |> Seq.map(fun item -> Seq.length item.Value > 1)
@@ -285,12 +279,12 @@ let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
     |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".yml"))
 
     let inconsistentVersionsType1 =
-        DetectInconsistentVersion
+        DetectInconsistentVersions
             fileInfos
             "\\swith:\\s*([^\\s]*)-version:\\s*([^\\s]*)\\s"
 
     let inconsistentVersionsType2 =
-        DetectInconsistentVersion
+        DetectInconsistentVersions
             fileInfos
             "\\suses:\\s*([^\\s]*)@v([^\\s]*)\\s"
 
@@ -310,7 +304,7 @@ let DetectInconsistentVersionsInNugetRefsInFSharpScripts
     fileInfos
     |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".fsx"))
 
-    DetectInconsistentVersion
+    DetectInconsistentVersions
         fileInfos
         "#r \"nuget:\\s*([^\\s]*)\\s*,\\s*Version\\s*=\\s*([^\\s]*)\\s*\""
 
