@@ -2,6 +2,7 @@ module Helpers
 
 open System
 open System.IO
+open System.Linq
 
 let NotInDir (dirName: string) (fileInfo: FileInfo) =
     not(
@@ -9,9 +10,9 @@ let NotInDir (dirName: string) (fileInfo: FileInfo) =
             $"%c{Path.DirectorySeparatorChar}%s{dirName}%c{Path.DirectorySeparatorChar}"
     )
 
-let GetFiles (rootDirectory: DirectoryInfo) (searchPattern: string) =
+let GetFiles (maybeRootDirectory: DirectoryInfo) (searchPattern: string) =
     Directory.GetFiles(
-        rootDirectory.FullName,
+        maybeRootDirectory.FullName,
         searchPattern,
         SearchOption.AllDirectories
     )
@@ -28,6 +29,25 @@ let GetInvalidFiles
     filterFunction
     =
     GetFiles rootDirectory searchPattern |> Seq.filter filterFunction
+
+let PreferLessDeeplyNestedDir
+    (dirAandPreferred: DirectoryInfo)
+    (dirB: DirectoryInfo)
+    =
+    let dirSeparatorsOfDirA =
+        dirAandPreferred.FullName.Count(fun char ->
+            char = Path.DirectorySeparatorChar
+        )
+
+    let dirSeparatorsOfDirB =
+        dirB.FullName.Count(fun char -> char = Path.DirectorySeparatorChar)
+
+    if dirSeparatorsOfDirB > dirSeparatorsOfDirA then
+        dirAandPreferred
+    elif dirSeparatorsOfDirA > dirSeparatorsOfDirB then
+        dirB
+    else
+        dirAandPreferred
 
 let AssertNoInvalidFiles (invalidFiles: seq<FileInfo>) (message: string) =
     if Seq.length invalidFiles > 0 then
