@@ -581,7 +581,7 @@ let NonVerboseFlagsInGitHubCI3() =
         (FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
-                "DummyCIWithAcceptedNonVerboseFlag.yml"
+                "DummyCIWithAcceptedNonVerboseFlag1.yml"
             )
         ))
 
@@ -608,6 +608,19 @@ let NonVerboseFlagsInGitHubCI5() =
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyScriptWithoutNonVerboseFlag.fsx"
+            )
+        ))
+
+    Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let NonVerboseFlagsInGitHubCI6() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithAcceptedNonVerboseFlag2.yml"
             )
         ))
 
