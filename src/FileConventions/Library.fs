@@ -330,7 +330,11 @@ let DetectInconsistentVersionsInFSharpScripts
     else
         DetectInconsistentVersionsInNugetRefsInFSharpScripts fsxFiles
 
-let allowedNonVerboseFlags = seq { "env -S" }
+let allowedNonVerboseFlags =
+    seq {
+        "env -S"
+        "unzip"
+    }
 
 let NonVerboseFlagsInGitHubCI(fileInfo: FileInfo) =
     let validExtensions =
