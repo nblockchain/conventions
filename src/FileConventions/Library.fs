@@ -332,8 +332,11 @@ let DetectInconsistentVersionsInFSharpScripts
 
 let allowedNonVerboseFlags =
     seq {
-        "env -S"
         "unzip"
+
+        // even if env in linux has --split-string=foo as equivalent to env -S, it
+        // doesn't seem to be present in macOS' env man page and doesn't work either
+        "env -S"
     }
 
 let NonVerboseFlagsInGitHubCI(fileInfo: FileInfo) =
