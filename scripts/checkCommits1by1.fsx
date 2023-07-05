@@ -49,7 +49,7 @@ let accessTokenName, accessToken =
 printfn "Using access token %s" accessTokenName
 Console.WriteLine()
 
-type githubEventType =
+type GithubEventType =
     JsonProvider<"""
 {
     "action": "opened",
@@ -560,7 +560,7 @@ type githubEventType =
 """>
 
 let jsonString = File.ReadAllText githubEventPath
-let parsedJsonObj = githubEventType.Parse jsonString
+let parsedJsonObj = GithubEventType.Parse jsonString
 
 let gitForkUser = parsedJsonObj.PullRequest.Head.User.Login
 let gitForkRepo = parsedJsonObj.PullRequest.Head.Repo.Name
@@ -829,7 +829,7 @@ variable in your GitHubCI workflow:
 ```
 """
 
-let GitHubApiCall (url: string) (accessToken: string) =
+let GitHubApiCall(url: string) =
     let userAgent = ".NET App"
     let xGitHubApiVersion = "2022-11-28"
 
@@ -876,7 +876,7 @@ let GitHubApiCall (url: string) (accessToken: string) =
 let prCommits =
     let url = parsedJsonObj.PullRequest.Links.Commits.Href
 
-    let prCommitsJsonString = GitHubApiCall url accessToken
+    let prCommitsJsonString = GitHubApiCall url
 
     let parsedPrCommitsJsonObj = PRCommitsType.Parse prCommitsJsonString
     parsedPrCommitsJsonObj |> Seq.map(fun commit -> commit.Sha)
@@ -894,7 +894,7 @@ let hasCiStatus =
                 gitRepo
                 commit
 
-        let json = GitHubApiCall url accessToken
+        let json = GitHubApiCall url
 
         not(json.Contains "\"check_suites\":[]")
     )
@@ -1313,7 +1313,7 @@ prCommits
             gitRepo
             commit
 
-    let checkSuitesJsonString = GitHubApiCall url accessToken
+    let checkSuitesJsonString = GitHubApiCall url
 
     let checkSuitesParsedJson = CheckSuitesType.Parse checkSuitesJsonString
 
