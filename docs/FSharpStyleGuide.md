@@ -39,6 +39,9 @@ of using the less safe approaches  `x.IsSome && x.Value = ...` or
 `x.IsNone || x.Value = ...`, which might break easily when refactoring them.
 * In case of doubt, we prefer to expliticly add the accessibility keywords
 (`private`, `public`, `internal`...), should the F# language allow it.
+* If you want to assert in the main code (that is, not inside automated tests),
+please don't use `assert` or `failwith`, rather use
+[Fsdk's Misc.BetterAssert](https://github.com/nblockchain/fsx/commit/7acb7a5b8fa374ee2b68c28c2e438cb6c9265e58).
 * With `if` blocks we prefer to put the `then` keyword in the same line as the
 `if`, but use a newline afterwards; and the `else` or `elif` keywords indented
 to be aligned with the `if`. Example:
