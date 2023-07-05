@@ -559,7 +559,7 @@ let NonVerboseFlagsInGitHubCI1() =
             )
         ))
 
-    Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo true)
+    Assert.That(NonVerboseFlags fileInfo, Is.EqualTo true)
 
 
 [<Test>]
@@ -572,7 +572,7 @@ let NonVerboseFlagsInGitHubCI2() =
             )
         ))
 
-    Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo false)
+    Assert.That(NonVerboseFlags fileInfo, Is.EqualTo false)
 
 
 [<Test>]
@@ -585,7 +585,7 @@ let NonVerboseFlagsInGitHubCI3() =
             )
         ))
 
-    Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo false)
+    Assert.That(NonVerboseFlags fileInfo, Is.EqualTo false)
 
 
 [<Test>]
@@ -598,7 +598,7 @@ let NonVerboseFlagsInGitHubCI4() =
             )
         ))
 
-    Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo true)
+    Assert.That(NonVerboseFlags fileInfo, Is.EqualTo true)
 
 
 [<Test>]
@@ -611,7 +611,7 @@ let NonVerboseFlagsInGitHubCI5() =
             )
         ))
 
-    Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo false)
+    Assert.That(NonVerboseFlags fileInfo, Is.EqualTo false)
 
 
 [<Test>]
@@ -624,4 +624,4 @@ let NonVerboseFlagsInGitHubCI6() =
             )
         ))
 
-    Assert.That(NonVerboseFlagsInGitHubCI fileInfo, Is.EqualTo false)
+    Assert.That(NonVerboseFlags fileInfo, Is.EqualTo false)

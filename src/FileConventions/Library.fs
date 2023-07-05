@@ -339,7 +339,7 @@ let allowedNonVerboseFlags =
         "env -S"
     }
 
-let NonVerboseFlagsInGitHubCI(fileInfo: FileInfo) =
+let NonVerboseFlags(fileInfo: FileInfo) =
     let validExtensions =
         seq {
             ".yml"
@@ -348,12 +348,18 @@ let NonVerboseFlagsInGitHubCI(fileInfo: FileInfo) =
             ".sh"
         }
 
-    assert
+    let isFileExtentionValid =
         validExtensions
-        |> Seq.map(fun ext -> fileInfo.FullName.EndsWith(ext))
+        |> Seq.map(fun ext -> fileInfo.FullName.EndsWith ext)
         |> Seq.contains true
 
-    let fileLines = File.ReadLines(fileInfo.FullName)
+    if not isFileExtentionValid then
+        let sep = ","
+
+        failwith
+            $"NonVerboseFlags function only supports {String.concat sep validExtensions} files."
+
+    let fileLines = File.ReadLines fileInfo.FullName
 
     let nonVerboseFlagsRegex = Regex("\\s-[a-zA-Z]\\b", RegexOptions.Compiled)
 
@@ -367,7 +373,7 @@ let NonVerboseFlagsInGitHubCI(fileInfo: FileInfo) =
                 |> Seq.map(fun allowedFlag -> line.Contains allowedFlag)
                 |> Seq.contains true
 
-            nonVerboseFlag && not(allowedNonVerboseFlag)
+            nonVerboseFlag && not allowedNonVerboseFlag
         )
         |> Seq.length
 

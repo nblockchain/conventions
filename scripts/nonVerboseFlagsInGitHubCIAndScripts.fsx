@@ -22,7 +22,7 @@ let invalidFiles =
         Helpers.GetInvalidFiles
             rootDir
             ("*" + ext)
-            FileConventions.NonVerboseFlagsInGitHubCI
+            FileConventions.NonVerboseFlags
     )
     |> Seq.concat
 
