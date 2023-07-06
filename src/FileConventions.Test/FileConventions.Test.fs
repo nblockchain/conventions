@@ -162,7 +162,7 @@ let DetectUnpinnedNpmPackageInstallVersions1() =
         (FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
-                "DummyCIWithUnpinnedNpmPackageInstallVersion.yml"
+                "DummyCIWithUnpinnedNpmPackageInstallVersion1.yml"
             )
         ))
 
@@ -185,6 +185,22 @@ let DetectUnpinnedNpmPackageInstallVersions2() =
     Assert.That(
         DetectUnpinnedNpmPackageInstallVersions fileInfo,
         Is.EqualTo false
+    )
+
+
+[<Test>]
+let DetectUnpinnedNpmPackageInstallVersions3() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithUnpinnedNpmPackageInstallVersion2.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectUnpinnedNpmPackageInstallVersions fileInfo,
+        Is.EqualTo true
     )
 
 
