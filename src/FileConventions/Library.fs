@@ -79,9 +79,22 @@ let DetectUnpinnedNpmPackageInstallVersions(fileInfo: FileInfo) =
 
     let unpinnedNpmPackageInstallVersions =
         fileLines
+        |> Seq.filter(fun line -> npmPackageInstallRegex.IsMatch line)
         |> Seq.filter(fun line ->
-            npmPackageInstallRegex.IsMatch line
-            && npmPackageVersionRegex.IsMatch line |> not
+            let npmPackagesRegex =
+                Regex("(?<=npm install ).*$", RegexOptions.Compiled)
+
+            let npmInstallPackages = npmPackagesRegex.Match line
+
+            let numNpmInstallPackages =
+                npmInstallPackages.Value.Split(" ")
+                |> Seq.filter(fun word -> word.Trim().StartsWith("-") |> not)
+                |> Seq.length
+
+            let numNpmInstallVersions =
+                npmPackageVersionRegex.Matches line |> Seq.length
+
+            numNpmInstallPackages = numNpmInstallVersions |> not
         )
         |> (fun unpinnedVersions -> Seq.length unpinnedVersions > 0)
 
