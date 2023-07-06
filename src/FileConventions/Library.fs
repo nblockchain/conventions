@@ -67,8 +67,20 @@ let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
     unpinnedDotnetToolInstallVersions
 
 let DetectUnpinnedNpmPackageInstallVersions(fileInfo: FileInfo) =
-    printfn "File Path: %s" fileInfo.FullName
-    false
+    assert fileInfo.FullName.EndsWith ".yml"
+
+    let fileLines = File.ReadLines fileInfo.FullName
+
+    let npmPackageInstallRegex =
+        Regex("npm\\s+install\\s+", RegexOptions.Compiled)
+
+    let unpinnedNpmPackageInstallVersions =
+        fileLines
+        |> Seq.filter(fun line -> npmPackageInstallRegex.IsMatch line)
+        |> Seq.filter(fun line -> not(line.Contains "@"))
+        |> (fun unpinnedVersions -> Seq.length unpinnedVersions > 0)
+
+    unpinnedNpmPackageInstallVersions
 
 let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith "proj")
