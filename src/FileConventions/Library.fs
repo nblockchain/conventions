@@ -98,10 +98,15 @@ let DetectUnpinnedNpmPackageInstallVersions(fileInfo: FileInfo) =
     let npmPackageInstallRegex =
         Regex("npm\\s+install\\s+", RegexOptions.Compiled)
 
+    let npmPackageVersionRegex =
+        Regex("@((\\d+\\.\\d+\\.\\d+)|(\\$[A-Z_]+))", RegexOptions.Compiled)
+
     let unpinnedNpmPackageInstallVersions =
         fileLines
-        |> Seq.filter(fun line -> npmPackageInstallRegex.IsMatch line)
-        |> Seq.filter(fun line -> not(line.Contains "@"))
+        |> Seq.filter(fun line ->
+            npmPackageInstallRegex.IsMatch line
+            && npmPackageVersionRegex.IsMatch line |> not
+        )
         |> (fun unpinnedVersions -> Seq.length unpinnedVersions > 0)
 
     unpinnedNpmPackageInstallVersions
