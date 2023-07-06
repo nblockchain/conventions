@@ -203,6 +203,22 @@ let DetectUnpinnedNpmPackageInstallVersions3() =
 
 
 [<Test>]
+let DetectUnpinnedNpmPackageInstallVersions4() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithUnpinnedNpmPackageInstallVersion3.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectUnpinnedNpmPackageInstallVersions fileInfo,
+        Is.EqualTo true
+    )
+
+
+[<Test>]
 let DetectAsteriskInPackageReferenceItems1() =
     let fileInfo =
         (FileInfo(
