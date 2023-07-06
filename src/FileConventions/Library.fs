@@ -66,6 +66,10 @@ let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
 
     unpinnedDotnetToolInstallVersions
 
+let DetectUnpinnedNpmPackageInstallVersions(fileInfo: FileInfo) =
+    printfn "File Path: %s" fileInfo.FullName
+    false
+
 let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith "proj")
 

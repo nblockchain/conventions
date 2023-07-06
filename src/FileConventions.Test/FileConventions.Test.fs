@@ -155,6 +155,22 @@ let DetectUnpinnedDotnetToolInstallVersions2() =
 
 
 [<Test>]
+let DetectUnpinnedNpmPackageInstallVersions1() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithUnpinnedNpmPackageInstallVersion.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectUnpinnedNpmPackageInstallVersions fileInfo,
+        Is.EqualTo true
+    )
+
+
+[<Test>]
 let DetectAsteriskInPackageReferenceItems1() =
     let fileInfo =
         (FileInfo(
