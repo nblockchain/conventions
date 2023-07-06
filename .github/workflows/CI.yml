@@ -13,7 +13,7 @@ jobs:
       - name: Install required dependencies
         run: |
           apt update
-          apt install -y sudo
+          apt install --yes sudo
           sudo apt install --yes --no-install-recommends git
       # workaround for https://github.com/actions/runner/issues/2033
       - name: ownership workaround
@@ -186,12 +186,14 @@ jobs:
         run: dotnet fsi scripts/inconsistentVersionsInGitHubCI.fsx
       - name: Check there are no inconsistent versions in nuget package references of F# scripts
         run: dotnet fsi scripts/inconsistentVersionsInFSharpScripts.fsx
+      - name: Check there are no non-verbose flags in scripts and CI YML files
+        run: dotnet fsi scripts/nonVerboseFlagsInGitHubCIAndScripts.fsx
       - name: Install prettier
         run: npm install prettier@2.8.3
       - name: Change file permissions
         # We need this step so we can change the files using `npx prettier --write` in the next step.
         # Otherwise we get permission denied error in the CI.
-        run: sudo chmod 777 -R .
+        run: sudo chmod 777 --recursive .
       - name: Run "prettier" to check the style of our TypeScript and YML code
         run: |
           sudo npx prettier --quote-props=consistent --write './**/*.ts'

@@ -329,3 +329,52 @@ let DetectInconsistentVersionsInFSharpScripts
         false
     else
         DetectInconsistentVersionsInNugetRefsInFSharpScripts fsxFiles
+
+let allowedNonVerboseFlags =
+    seq {
+        "unzip"
+
+        // even if env in linux has --split-string=foo as equivalent to env -S, it
+        // doesn't seem to be present in macOS' env man page and doesn't work either
+        "env -S"
+    }
+
+let NonVerboseFlags(fileInfo: FileInfo) =
+    let validExtensions =
+        seq {
+            ".yml"
+            ".fsx"
+            ".fs"
+            ".sh"
+        }
+
+    let isFileExtentionValid =
+        validExtensions
+        |> Seq.map(fun ext -> fileInfo.FullName.EndsWith ext)
+        |> Seq.contains true
+
+    if not isFileExtentionValid then
+        let sep = ","
+
+        failwith
+            $"NonVerboseFlags function only supports {String.concat sep validExtensions} files."
+
+    let fileLines = File.ReadLines fileInfo.FullName
+
+    let nonVerboseFlagsRegex = Regex("\\s-[a-zA-Z]\\b", RegexOptions.Compiled)
+
+    let numInvalidFlags =
+        fileLines
+        |> Seq.filter(fun line ->
+            let nonVerboseFlag = nonVerboseFlagsRegex.IsMatch line
+
+            let allowedNonVerboseFlag =
+                allowedNonVerboseFlags
+                |> Seq.map(fun allowedFlag -> line.Contains allowedFlag)
+                |> Seq.contains true
+
+            nonVerboseFlag && not allowedNonVerboseFlag
+        )
+        |> Seq.length
+
+    numInvalidFlags > 0

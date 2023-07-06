@@ -10,6 +10,7 @@ This is a repository that contains several useful things that other `nblockchain
     * [EOF without EOL detection](scripts/eofConvention.fsx).
     * [Mixed line-endings detection](scripts/mixedLineEndings.fsx).
     * [Auto-wrap the latest commit message](scripts/wrapLatestCommitMsg.fsx).
+    * [Detect non-verbose flags (e.g. `dotnet build -c Debug` instead of `dotnet build --configuration Debug`) being used in scripts or YML CI files (there are exceptions, e.g. `env -S`)](scripts/nonVerboseFlagsInGitHubCIAndScripts.fsx).
     * Use of unpinned versions:
         * [Use of `-latest` suffix in `runs-on:` GitHubCI tags](scripts/unpinnedGitHubActionsImageVersions.fsx).
         * [Use of asterisk (*) in `PackageReference` items of .NET projects](scripts/unpinnedDotnetPackageVersions.fsx).
@@ -25,4 +26,3 @@ More things to come:
 - Detect .fsx files without +x attrib.
 - Detect old versions of FSharpLint and fantomas/fantomless being used.
 - Detect old versions of .editorconfig or Directory.Build.props being used.
-- Detect non-verbose flags (e.g. `dotnet build -c Debug` instead of `dotnet build --configuration Debug`) being used in scripts or YML CI files (there are exceptions, e.g. `env -S`).

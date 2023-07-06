@@ -547,3 +547,81 @@ let DetectInconsistentVersionsInFSharpScripts2() =
             (Some(Seq.singleton "DummyScripts")),
         Is.EqualTo false
     )
+
+
+[<Test>]
+let NonVerboseFlagsInGitHubCI1() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithNonVerboseFlag.yml"
+            )
+        ))
+
+    Assert.That(NonVerboseFlags fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let NonVerboseFlagsInGitHubCI2() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithoutNonVerboseFlags.yml"
+            )
+        ))
+
+    Assert.That(NonVerboseFlags fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let NonVerboseFlagsInGitHubCI3() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithAcceptedNonVerboseFlag1.yml"
+            )
+        ))
+
+    Assert.That(NonVerboseFlags fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let NonVerboseFlagsInGitHubCI4() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyScriptWithNonVerboseFlag.fsx"
+            )
+        ))
+
+    Assert.That(NonVerboseFlags fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let NonVerboseFlagsInGitHubCI5() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyScriptWithoutNonVerboseFlag.fsx"
+            )
+        ))
+
+    Assert.That(NonVerboseFlags fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let NonVerboseFlagsInGitHubCI6() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithAcceptedNonVerboseFlag2.yml"
+            )
+        ))
+
+    Assert.That(NonVerboseFlags fileInfo, Is.EqualTo false)
