@@ -121,7 +121,8 @@ discriminated union used for its result is quite unreadable (`Choice1Of2`
 and `Choice2Of2` don't give any clue about which one is the successful case
 and which one is the exceptional one).
 * We prefer `async{}` blocks better than `task{}` ones because the former is
-idiomatic F#.
+idiomatic F# (if you need to return a Task, use async{} first and then call
+Async.StartAsTask on it; this way you still code with F#'s Async semantics).
 * When using the function `ignore`, use always the generic type (`ignore<'T>`).
 * Do not use `System.ParamArray` (for variable number of arguments) as it's
 easy to shoot yourself in the foot, and is not idiomatic F# (it was meant for
