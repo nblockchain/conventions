@@ -14,6 +14,10 @@ instead of `option` and `list`). The only exception to this rule is: primitive
 types (where we prefer `string` and `int` over `String` and `Int32` unless we're
 using a static method of them; and `array` over `Array` because they are actually
 different things).
+NOTE: To be able to comply with the rule above, it is important that you do NOT
+`open System.Collections.Generics`, otherwise the name `List` will be the mutable
+list instead of the F#'s immutable one. If you really really need to access the
+former, use `type ScgList<'T> = System.Collections.Generics.List<'T>` instead.
 * To not confuse array types with lists, we prefer to use `List.Empty` over `[]`
 (where it's possible; e.g. in match cases it's not possible), and `array<Foo>`
 over `Foo []`.
