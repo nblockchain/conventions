@@ -192,6 +192,7 @@ export abstract class Plugins {
             // Extracting bodyStr from rawStr rather than using body directly is a
             // workaround for https://github.com/conventional-changelog/conventional-changelog/issues/1016
             let bodyStr = rawStr.substring(lineBreakIndex).trim();
+            bodyStr = Helpers.removeAllCodeBlocks(bodyStr);
 
             let lines = bodyStr.split(/\r?\n/);
             let bodyReferences = new Set();
