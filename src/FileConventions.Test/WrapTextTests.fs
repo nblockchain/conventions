@@ -81,3 +81,29 @@ let WrapTextTest4() =
         + "characters."
 
     Assert.That(WrapText text characterCount, Is.EqualTo expectedResult)
+
+[<Test>]
+let WrapTextTest5() =
+    let characterCount = 64
+
+    let text =
+        "Fixed bug (a title of less than 50 chars)"
+        + Environment.NewLine
+        + Environment.NewLine
+        + "These were the steps to reproduce:"
+        + Environment.NewLine
+        + "Do foo."
+        + Environment.NewLine
+        + Environment.NewLine
+        + "Current results:"
+        + Environment.NewLine
+        + "Bar happens."
+        + Environment.NewLine
+        + Environment.NewLine
+        + "Expected results:"
+        + Environment.NewLine
+        + "Baz happens."
+
+    let expectedResult = text
+
+    Assert.That(WrapText text characterCount, Is.EqualTo expectedResult)
