@@ -430,6 +430,8 @@ export abstract class Plugins {
             for (let paragraph of paragraphs) {
                 let lines = paragraph.split(/\r?\n/);
                 let inBigBlock = false;
+
+                // NOTE: we don't iterate over the last line, on purpose
                 for (let i = 0; i < lines.length - 1; i++) {
                     let line = lines[i];
 
@@ -441,9 +443,10 @@ export abstract class Plugins {
                         continue;
                     }
 
-                    let nextLine = lines[i + 1];
-
                     if (line.length < paragraphLineMinLength) {
+                        // this ref doesn't go out of bounds because we didn't iter on last line
+                        let nextLine = lines[i + 1];
+
                         let isUrl =
                             Helpers.isValidUrl(line) ||
                             Helpers.isValidUrl(nextLine);
@@ -455,7 +458,16 @@ export abstract class Plugins {
                             nextWordLength + line.length + 1 >
                             paragraphLineMaxLength;
 
-                        if (!isUrl && !lineIsFooterNote && !isNextWordTooLong) {
+                        let isLastCharAColonBreak =
+                            line[line.length - 1] === ":" &&
+                            nextLine[0].toUpperCase() == nextLine[0];
+
+                        if (
+                            !isUrl &&
+                            !lineIsFooterNote &&
+                            !isNextWordTooLong &&
+                            !isLastCharAColonBreak
+                        ) {
                             offence = true;
                             break;
                         }

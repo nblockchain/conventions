@@ -203,6 +203,10 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
         (wrappedText: string)
         (remainingWords: List<Text>)
         : string =
+
+        let isColonBreak (currentLine: string) (textAfter: Text) =
+            currentLine.EndsWith ":" && Char.IsUpper textAfter.Text.[0]
+
         match remainingWords with
         | [] -> (wrappedText + currentLine).Trim()
         | word :: rest ->
@@ -214,6 +218,7 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
               } when
                 String.length currentLine + word.Text.Length + 1
                 <= maxCharsPerLine
+                && not(isColonBreak currentLine word)
                 ->
                 processWords (currentLine + " " + word.Text) wrappedText rest
             | _,

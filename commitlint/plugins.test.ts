@@ -410,6 +410,26 @@ test("body-paragraph-line-min-length6", () => {
     expect(bodyParagraphLineMinLength6.status).toBe(0);
 });
 
+test("body-paragraph-line-min-length7", () => {
+    let commitMsgThatSubceedsBodyMinLineLengthButIsLegit =
+        "Fixed bug (a title of less than 50 chars)" +
+        "\n\n" +
+        "These were the steps to reproduce:\n" +
+        "Do foo.\n" +
+        "\n" +
+        "Current results:\n" +
+        "Bar happens.\n" +
+        "\n" +
+        "Expected results:\n" +
+        "Baz happens.";
+
+    let bodyParagraphLineMinLength7 = runCommitLintOnMsg(
+        commitMsgThatSubceedsBodyMinLineLengthButIsLegit
+    );
+
+    expect(bodyParagraphLineMinLength7.status).toBe(0);
+});
+
 test("commit-hash-alone1", () => {
     let commitMsgWithCommitUrl =
         "foo: this is only a title" +
