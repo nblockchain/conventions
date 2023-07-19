@@ -458,7 +458,16 @@ export abstract class Plugins {
                             nextWordLength + line.length + 1 >
                             paragraphLineMaxLength;
 
-                        if (!isUrl && !lineIsFooterNote && !isNextWordTooLong) {
+                        let isLastCharAColonBreak =
+                            line[line.length - 1] === ":" &&
+                            nextLine[0].toUpperCase() == nextLine[0];
+
+                        if (
+                            !isUrl &&
+                            !lineIsFooterNote &&
+                            !isNextWordTooLong &&
+                            !isLastCharAColonBreak
+                        ) {
                             offence = true;
                             break;
                         }
