@@ -529,6 +529,17 @@ test("footer-notes-misplacement-4", () => {
     expect(footerNotesMisplacement4.status).not.toBe(0);
 });
 
+test("footer-notes-misplacement-5", () => {
+    let commitMsgWithRightFooter =
+        "foo: this is only a title\n\n" +
+        "Bla bla blah[1]:\n\n" +
+        "```\nSome error message with a [] in the first of its line\n[warn] some warning\n```\n\n" +
+        "[1] http://foo.bar/baz";
+    let footerNotesMisplacement5 = runCommitLintOnMsg(commitMsgWithRightFooter);
+    console.log(footerNotesMisplacement5.stdout.toString());
+    expect(footerNotesMisplacement5.status).toBe(0);
+});
+
 /* temporarily disabled rule because of https://github.com/nblockchain/conventions/issues/125
 test("footer-refs-validity1", () => {
     let commmitMsgWithCorrectFooter =
