@@ -27,8 +27,7 @@ module.exports = {
             "always",
             footerMaxLineLength,
         ],
-        // temporarily disabled because of https://github.com/nblockchain/conventions/issues/118
-        "footer-notes-misplacement": [RuleConfigSeverity.Disabled, "always"],
+        "footer-notes-misplacement": [RuleConfigSeverity.Error, "always"],
         // temporarily disabled because of https://github.com/nblockchain/conventions/issues/125
         "footer-refs-validity": [RuleConfigSeverity.Disabled, "always"],
         "header-max-length-with-suggestions": [

@@ -475,7 +475,6 @@ test("empty-wip-3", () => {
     expect(emptyWIP3.status).toBe(0);
 });
 
-/* temporarily disabled rule because of https://github.com/nblockchain/conventions/issues/118
 test("footer-notes-misplacement-1", () => {
     let commitMsgWithRightFooter =
         "foo: this is only a title" +
@@ -529,7 +528,6 @@ test("footer-notes-misplacement-4", () => {
     let footerNotesMisplacement4 = runCommitLintOnMsg(commitMsgWithWrongFooter);
     expect(footerNotesMisplacement4.status).not.toBe(0);
 });
-*/
 
 /* temporarily disabled rule because of https://github.com/nblockchain/conventions/issues/125
 test("footer-refs-validity1", () => {
