@@ -178,6 +178,15 @@ you) to find code that is commented/disabled.
 ends up being compiled and packaged in NuGet as a dotnet tool, for example: https://github.com/nblockchain/fsx/tree/master/fsxc
     * .NET APIs: PascalCase (see our [F# Style Guide](FSharpStyleGuide.md) for more info).
     * .NET parameters, local variables & nested functions: camelCase (again, see our [F# Style Guide](FSharpStyleGuide.md) for more info).
+
+* Be mindful of the way we prefer to use git:
+    * When rebasing a PR, never use the command `git merge` or the GitHubUI to update branches, otherwise you might get some "Merge" commits that make your commit history unreadable.
+    * Merge commits are only acceptable when caused by merging a PR that has more than 1 commit (if PR only has one commit, it's better to merge it with the "Rebase" option that GitHub provides).
+    * Don't confuse the command `git rebase -i HEAD~n` (where `-i` stands for 'interactive') with the non-interactive `git rebase` operation.
+        * The former is for squashing commits or changing their order. By the way, be extremely careful when determining the number of commits `n` (if you put a number that is too high, even off by one, you might destroy previous merge commits).
+        * The latter is for rebasing a branch or PR against, for example, `master` or `main`, but only if there have been no recent force-pushes in the branch you want to rebase against. If there have been force-pushes, then the safest way to rebase is by using the `git cherry-pick` command.
+    * When using the command `git pull`, never ever ever forget the flag `--rebase`, otherwise git will introduce merge commits for you automatically.
+
 * Git commit messages should follow this style:
 
 ```
