@@ -157,7 +157,7 @@ export abstract class Plugins {
         let offence = false;
 
         if (bodyStr !== null) {
-            bodyStr = bodyStr.trim();
+            bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
             let seenBody = false;
             let seenFooter = false;
             let lines = bodyStr.split(/\r?\n/);
