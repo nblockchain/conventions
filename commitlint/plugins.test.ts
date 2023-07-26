@@ -430,6 +430,22 @@ test("body-paragraph-line-min-length7", () => {
     expect(bodyParagraphLineMinLength7.status).toBe(0);
 });
 
+test("body-paragraph-line-min-length8", () => {
+    let commitMsgWithCodeBlockThatSubceedsBodyMinLineLength =
+        "foo: this is only a title\n\n" +
+        "Body with a link [1]:\n" +
+        "```\n" +
+        "some code block\n" +
+        "```\n\n" +
+        "[1] https://foo.com/bar";
+
+    let bodyParagraphLineMinLength8 = runCommitLintOnMsg(
+        commitMsgWithCodeBlockThatSubceedsBodyMinLineLength
+    );
+
+    expect(bodyParagraphLineMinLength8.status).toBe(0);
+});
+
 test("commit-hash-alone1", () => {
     let commitMsgWithCommitUrl =
         "foo: this is only a title" +
