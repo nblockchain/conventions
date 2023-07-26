@@ -1329,8 +1329,10 @@ prCommits
         status = "completed" && conclusion = "failure"
         && not(commitMessage.Contains "failing test")
     then
-        Console.Error.WriteLine
-            "Thanks for pushing commits 1 by 1, however, it has been detected that some of them to not be successful (or not be red when they add a failing test)"
+        Console.Error.WriteLine(
+            "Thanks for pushing commits 1 by 1, however, it has been detected that some of them to not be successful (or not be red when they add a failing test)\n"
+            + "Hint: if you want to state that a commit must be red because of adding a failing test, please make sure that the commit message contains the 'failing test' phrase"
+        )
 
         Environment.Exit 3
 )
