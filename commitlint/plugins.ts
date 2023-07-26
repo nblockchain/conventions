@@ -435,6 +435,10 @@ export abstract class Plugins {
                 for (let i = 0; i < lines.length - 1; i++) {
                     let line = lines[i];
 
+                    if (line.length == 0) {
+                        continue;
+                    }
+
                     if (Helpers.isBigBlock(line)) {
                         inBigBlock = !inBigBlock;
                         continue;
