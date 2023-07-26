@@ -1332,5 +1332,8 @@ prCommits
         Console.Error.WriteLine
             "Thanks for pushing commits 1 by 1, however, it has been detected that some of them to not be successful (or not be red when they add a failing test)"
 
+        Console.Error.WriteLine
+            "Hint: if you want to state that a commit can have red CI because of adding a failing test, please make sure that the commit message contains the 'failing test' term"
+
         Environment.Exit 3
 )
