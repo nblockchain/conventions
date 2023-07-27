@@ -74,12 +74,10 @@ export abstract class Helpers {
         return url.includes("/commit/");
     }
 
-    public static isBigBlock(line: string) {
+    public static isCodeBlockDelimiter(line: string) {
         Helpers.assertLine(line);
-        let bigBlockDelimiter = "```";
-        return (
-            line.length == bigBlockDelimiter.length && line.indexOf("```") == 0
-        );
+        let codeBlockDelimiter = "```";
+        return line == codeBlockDelimiter;
     }
 
     public static isUpperCase(letter: string) {

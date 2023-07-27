@@ -385,13 +385,13 @@ export abstract class Plugins {
 
             if (bodyStr !== "") {
                 let lines = bodyStr.split(/\r?\n/);
-                let inBigBlock = false;
+                let inCodeBlock = false;
                 for (let line of lines) {
-                    if (Helpers.isBigBlock(line)) {
-                        inBigBlock = !inBigBlock;
+                    if (Helpers.isCodeBlockDelimiter(line)) {
+                        inCodeBlock = !inCodeBlock;
                         continue;
                     }
-                    if (inBigBlock) {
+                    if (inCodeBlock) {
                         continue;
                     }
                     if (line.length > bodyMaxLineLength) {
@@ -483,13 +483,13 @@ export abstract class Plugins {
         let offence = false;
 
         let lines = rawStr.split(/\r?\n/);
-        let inBigBlock = false;
+        let inCodeBlock = false;
         for (let line of lines) {
-            if (Helpers.isBigBlock(line)) {
-                inBigBlock = !inBigBlock;
+            if (Helpers.isCodeBlockDelimiter(line)) {
+                inCodeBlock = !inCodeBlock;
                 continue;
             }
-            if (inBigBlock) {
+            if (inCodeBlock) {
                 continue;
             }
 
