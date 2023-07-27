@@ -429,21 +429,12 @@ export abstract class Plugins {
             let paragraphs = bodyStr.split(/\r?\n\r?\n/);
             for (let paragraph of paragraphs) {
                 let lines = paragraph.split(/\r?\n/);
-                let inBigBlock = false;
 
                 // NOTE: we don't iterate over the last line, on purpose
                 for (let i = 0; i < lines.length - 1; i++) {
                     let line = lines[i];
 
                     if (line.length == 0) {
-                        continue;
-                    }
-
-                    if (Helpers.isBigBlock(line)) {
-                        inBigBlock = !inBigBlock;
-                        continue;
-                    }
-                    if (inBigBlock) {
                         continue;
                     }
 
