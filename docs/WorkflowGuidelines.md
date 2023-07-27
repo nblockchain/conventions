@@ -6,6 +6,10 @@
 
 * Push each commit separately (instead of sending more than 1 commit in a single push), so that we can have a CI status for each commit in the PullRequest. This is a best practice because it will make sure that the build is not broken in between commits (otherwise, future developers may have a hard time when trying to bisect bugs). If you have already pushed your commits to the remote in one push, this can be re-done by using our [gitPush1by1.fsx](https://github.com/nblockchain/conventions/blob/master/scripts/gitPush1by1.fsx) script, or this technique manually: https://stackoverflow.com/a/3230241/544947
 
+* In general, we prefer verbose code (even if it's longer) than short & clever code. This means:
+    * We dislike short variable names (if there's some ambiguity on what your variable represents, then choose a longer and more descriptive name).
+    * In languages that have optional braces for `if/else` statements (e.g. C#, TypeScript), we prefer to add them even if the code block will only contain one line. This way, when the next developer adds more lines to it later it's less work for him and doesn't cause unnecessary git-blame noise.
+
 * Group import declarations (e.g. `open` in F# and `using` in C#) in three buckets:
     * The first group for the namespaces that come from the base class libraries.
     * Second group for external libraries (e.g. nuget packages).
