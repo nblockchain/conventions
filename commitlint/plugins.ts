@@ -45,7 +45,7 @@ export abstract class Plugins {
                     return false;
                 }
 
-                for (let paragraph of bodyStr.split("\n\n")) {
+                for (let paragraph of Helpers.splitByEOLs(bodyStr, 2)) {
                     paragraph = paragraph.trim();
 
                     if (paragraph === "") {
@@ -56,7 +56,7 @@ export abstract class Plugins {
 
                     let validParagraphEnd = paragraphHasValidEnding(paragraph);
 
-                    let lines = paragraph.split(/\r?\n/);
+                    let lines = Helpers.splitByEOLs(paragraph, 1);
 
                     if (startWithLowerCase) {
                         if (
@@ -160,7 +160,7 @@ export abstract class Plugins {
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
             let seenBody = false;
             let seenFooter = false;
-            let lines = bodyStr.split(/\r?\n/);
+            let lines = Helpers.splitByEOLs(bodyStr, 1);
             for (let line of lines) {
                 if (line.length === 0) {
                     continue;
@@ -193,7 +193,7 @@ export abstract class Plugins {
             // workaround for https://github.com/conventional-changelog/conventional-changelog/issues/1016
             let bodyStr = rawStr.substring(lineBreakIndex).trim();
 
-            let lines = bodyStr.split(/\r?\n/);
+            let lines = Helpers.splitByEOLs(bodyStr, 1);
             let bodyReferences = new Set();
             let references = new Set();
             for (let line of lines) {
@@ -384,7 +384,7 @@ export abstract class Plugins {
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
 
             if (bodyStr !== "") {
-                let lines = bodyStr.split(/\r?\n/);
+                let lines = Helpers.splitByEOLs(bodyStr, 1);
                 let inCodeBlock = false;
                 for (let line of lines) {
                     if (Helpers.isCodeBlockDelimiter(line)) {
@@ -426,9 +426,9 @@ export abstract class Plugins {
         if (bodyStr !== null) {
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
 
-            let paragraphs = bodyStr.split(/\r?\n\r?\n/);
+            let paragraphs = Helpers.splitByEOLs(bodyStr, 2);
             for (let paragraph of paragraphs) {
-                let lines = paragraph.split(/\r?\n/);
+                let lines = Helpers.splitByEOLs(paragraph, 1);
 
                 // NOTE: we don't iterate over the last line, on purpose
                 for (let i = 0; i < lines.length - 1; i++) {
@@ -482,7 +482,7 @@ export abstract class Plugins {
     public static trailingWhitespace(rawStr: string) {
         let offence = false;
 
-        let lines = rawStr.split(/\r?\n/);
+        let lines = Helpers.splitByEOLs(rawStr, 1);
         let inCodeBlock = false;
         for (let line of lines) {
             if (Helpers.isCodeBlockDelimiter(line)) {
