@@ -540,7 +540,6 @@ test("footer-notes-misplacement-5", () => {
     expect(footerNotesMisplacement5.status).toBe(0);
 });
 
-/* temporarily disabled rule because of https://github.com/nblockchain/conventions/issues/125
 test("footer-refs-validity1", () => {
     let commmitMsgWithCorrectFooter =
         "foo: this is only a title" +
@@ -612,7 +611,6 @@ test("footer-refs-validity6", () => {
     );
     expect(footerRefsValidity6.status).toBe(0);
 });
-*/
 
 test("prefer-slash-over-backslash1", () => {
     let commitMsgWithBackslash = "foo\\bar: bla bla bla";
