@@ -58,6 +58,12 @@ export abstract class Helpers {
         }
     }
 
+    public static assertHigherThanZero(number: number) {
+        if (number < 1) {
+            throw Error("This param cannot be negative or zero: " + number);
+        }
+    }
+
     public static assertUrl(url: string) {
         if (!Helpers.isValidUrl(url)) {
             throw Error("This function expects a url as input");
@@ -74,12 +80,10 @@ export abstract class Helpers {
         return url.includes("/commit/");
     }
 
-    public static isBigBlock(line: string) {
+    public static isCodeBlockDelimiter(line: string) {
         Helpers.assertLine(line);
-        let bigBlockDelimiter = "```";
-        return (
-            line.length == bigBlockDelimiter.length && line.indexOf("```") == 0
-        );
+        let codeBlockDelimiter = "```";
+        return line == codeBlockDelimiter;
     }
 
     public static isUpperCase(letter: string) {
@@ -174,5 +178,25 @@ export abstract class Helpers {
 
     public static removeAllCodeBlocks(text: string) {
         return text.replace(/```[^]*```/g, "");
+    }
+
+    public static splitByEOLs(text: string, numberOfEols: number) {
+        Helpers.assertHigherThanZero(numberOfEols);
+
+        let unixEol = "\n";
+        let windowsEol = "\r\n";
+        let macEol = "\r";
+
+        let preparedText = text
+            .replace(windowsEol, unixEol)
+            .replace(macEol, unixEol);
+
+        let separator = "";
+        do {
+            separator += unixEol;
+            numberOfEols--;
+        } while (numberOfEols != 0);
+
+        return preparedText.split(separator);
     }
 }
