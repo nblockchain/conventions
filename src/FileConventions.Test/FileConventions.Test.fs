@@ -665,3 +665,31 @@ let DefiningEmptyStringsWithDoubleQuotes2() =
         ))
 
     Assert.That(DefiningEmptyStringsWithDoubleQuotes fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let ProjFilesNamingConvention1() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyProjFileWithTheSameNameAsItsParentFolder",
+                "DummyProjFileWithTheSameNameAsItsParentFolder.fsproj"
+            )
+        ))
+
+    Assert.That(ProjFilesNamingConvention fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let ProjFilesNamingConvention2() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyProject",
+                "DummyProjFileWithoutTheSameNameAsItsParentFolder.fsproj"
+            )
+        ))
+
+    Assert.That(ProjFilesNamingConvention fileInfo, Is.EqualTo true)
