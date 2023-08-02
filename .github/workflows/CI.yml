@@ -257,4 +257,4 @@ jobs:
           dotnet fantomless --recurse .
           git diff --exit-code
       - name: Check style of our F#, C#, TypeScript, YML and XAML code
-        run: sudo dotnet fsi scripts/styleChecker.fsx
+        run: sudo dotnet fsi scripts/styleCheck.fsx
