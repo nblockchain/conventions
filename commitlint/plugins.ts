@@ -400,7 +400,21 @@ export abstract class Plugins {
 
                         let lineIsFooterNote = Helpers.isFooterNote(line);
 
-                        if (!isUrl && !lineIsFooterNote) {
+                        let commitHashPattern = `([0-9a-f]{40})`;
+                        let anySinglePunctuationCharOrNothing = `[\.\,\:\;\?\!]?`;
+                        let index = line.search(
+                            commitHashPattern +
+                                anySinglePunctuationCharOrNothing +
+                                `$`
+                        );
+                        let endsWithCommitHashButRestIsNotTooLong =
+                            index != -1 && index < bodyMaxLineLength;
+
+                        if (
+                            !isUrl &&
+                            !lineIsFooterNote &&
+                            !endsWithCommitHashButRestIsNotTooLong
+                        ) {
                             offence = true;
                             break;
                         }

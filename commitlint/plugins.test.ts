@@ -323,6 +323,24 @@ test("body-max-line-length8", () => {
     expect(bodyMaxLineLength8.status).toBe(1);
 });
 
+test("body-max-line-length9", () => {
+    // see https://github.com/nblockchain/conventions/issues/124
+    let commitMsgWithLargeBody =
+        "GrpcService: fix some logging nits\n\n" +
+        "These mistakes were made in 45faeca2f0e7c9c5545f54fb3fcc815f52b8a7cf.";
+    let bodyMaxLineLength9 = runCommitLintOnMsg(commitMsgWithLargeBody);
+    expect(bodyMaxLineLength9.status).toBe(0);
+});
+
+test("body-max-line-length10", () => {
+    // see https://github.com/nblockchain/conventions/issues/124
+    let commitMsgWithLargeBody =
+        "GrpcService: fix some logging nits\n\n" +
+        "These mistakes were made in this GrpcService's RunIntoMeService commit: 45faeca2f0e7c9c5545f54fb3fcc815f52b8a7cf.";
+    let bodyMaxLineLength10 = runCommitLintOnMsg(commitMsgWithLargeBody);
+    expect(bodyMaxLineLength10.status).toBe(1);
+});
+
 test("body-paragraph-line-min-length1", () => {
     let tenChars = "1234 67890";
     let fortyChars = tenChars + tenChars + tenChars + tenChars;
