@@ -25,13 +25,21 @@ let commitMsg =
         .Trim()
 
 let header, maybeBody =
-    let newLineIndex = commitMsg.IndexOf Environment.NewLine
+    // We only want to split the msg into two parts (header and body)
+    let acceptablePartCount = 2
+    let separatorEolCount = 1
 
-    if newLineIndex > 0 then
-        commitMsg.Substring(0, newLineIndex).Trim(),
-        Some(commitMsg.Substring(newLineIndex).Trim())
+    let msgParts =
+        FileConventions.SplitByEOLs
+            commitMsg
+            separatorEolCount
+            StringSplitOptions.RemoveEmptyEntries
+            (Some acceptablePartCount)
+
+    if msgParts.Length > 1 then
+        msgParts.[0].Trim(), Some(msgParts.[1].Trim())
     else
-        commitMsg, None
+        msgParts.[0].Trim(), None
 
 let maxCharsPerLine = 64
 

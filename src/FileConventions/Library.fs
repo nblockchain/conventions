@@ -5,6 +5,35 @@ open System.IO
 open System.Linq
 open System.Text.RegularExpressions
 
+// While putting Environment.NewLine in output doesn't cause any problems
+// expecting Environment.NewLine in input commit msgs causes problem in
+// windows, so while keeping Environment.NewLine for output we change
+// input processing to split by \n (Unix NewLine)
+let UnixEol = "\n"
+let WindowsEol = "\r\n"
+let MacEol = "\r"
+
+let SplitByEOLs
+    (text: string)
+    (numberOfEOLs: int)
+    (splitOptions: StringSplitOptions)
+    (acceptablePartCount: Option<int>)
+    =
+    if numberOfEOLs < 0 then
+        failwith "NumberOfEOLs should be more than zero"
+
+    let acceptablePartCount =
+        Option.defaultValue Int32.MaxValue acceptablePartCount
+
+    let preparedText =
+        text
+            .Replace(WindowsEol, UnixEol)
+            .Replace(MacEol, UnixEol)
+
+    let separator = String.replicate numberOfEOLs UnixEol
+
+    preparedText.Split(separator, acceptablePartCount, splitOptions)
+
 let HasCorrectShebang(fileInfo: FileInfo) =
     let fileText = File.ReadLines fileInfo.FullName
 
@@ -169,7 +198,14 @@ let SplitIntoWords(text: string) =
             if paragraph.Type = CodeBlock then
                 Seq.singleton paragraph
             else
-                let lines = paragraph.Text.Split Environment.NewLine
+                let separatorEolCount = 1
+
+                let lines =
+                    SplitByEOLs
+                        paragraph.Text
+                        separatorEolCount
+                        StringSplitOptions.None
+                        None
 
                 lines
                 |> Seq.map(fun line ->
@@ -237,12 +273,14 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
     processWords String.Empty String.Empty words
 
 let WrapText (text: string) (maxCharsPerLine: int) : string =
+    let paragraphSeparatorEolCount = 2
+
     let wrappedParagraphs =
-        text.Split $"{Environment.NewLine}{Environment.NewLine}"
+        SplitByEOLs text paragraphSeparatorEolCount StringSplitOptions.None None
         |> Seq.map(fun paragraph -> WrapParagraph paragraph maxCharsPerLine)
 
     String.Join(
-        $"{Environment.NewLine}{Environment.NewLine}",
+        String.replicate paragraphSeparatorEolCount Environment.NewLine,
         wrappedParagraphs
     )
 
