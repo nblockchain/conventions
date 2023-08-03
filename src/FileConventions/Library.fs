@@ -244,9 +244,74 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
 
     processWords String.Empty String.Empty words
 
+// This function will extract paragraphs and will ignore the paragraphs inside a
+// code block. Each paragraph is determined by two consecutive new lines.
+let ExtractParagraphs(text: string) =
+    let lines = text.Split Environment.NewLine |> Seq.toList
+    let codeBlockStartOrEndToken = "```"
+
+    let rec processLines
+        (remainingLines: List<string>)
+        (currentParagraph: List<string>)
+        (paragraphs: List<string>)
+        (insideCodeBlock: bool)
+        =
+        // process each line individually and form paragraphs
+        match remainingLines with
+        | [] ->
+            if not currentParagraph.IsEmpty then
+                String.Join(Environment.NewLine, List.rev currentParagraph)
+                :: paragraphs
+            else
+                paragraphs
+        | line :: rest ->
+            if String.IsNullOrWhiteSpace line then
+                // a new paragraph has been detected, if it's inside code block
+                // add to the previous paragraph. Otherwise, join the previous
+                // paragraph to a string and start a new paragraph
+                if insideCodeBlock then
+                    processLines
+                        rest
+                        (line :: currentParagraph)
+                        paragraphs
+                        insideCodeBlock
+                elif not currentParagraph.IsEmpty then
+                    let newParagraph =
+                        String.Join(
+                            Environment.NewLine,
+                            List.rev currentParagraph
+                        )
+
+                    processLines
+                        rest
+                        List.Empty
+                        (newParagraph :: paragraphs)
+                        insideCodeBlock
+                else
+                    processLines rest List.Empty paragraphs insideCodeBlock
+            elif line.Trim().StartsWith codeBlockStartOrEndToken then
+                // start or end of a code block has been detected, the line will
+                // be added to the current paragraph and the state which determines
+                // if we're inside a code block or not is switched.
+                let newInsideCodeBlock = not insideCodeBlock
+
+                processLines
+                    rest
+                    (line :: currentParagraph)
+                    paragraphs
+                    newInsideCodeBlock
+            else
+                processLines
+                    rest
+                    (line :: currentParagraph)
+                    paragraphs
+                    insideCodeBlock
+
+    List.rev <| processLines lines List.Empty List.Empty false
+
 let WrapText (text: string) (maxCharsPerLine: int) : string =
     let wrappedParagraphs =
-        text.Split $"{Environment.NewLine}{Environment.NewLine}"
+        ExtractParagraphs text
         |> Seq.map(fun paragraph -> WrapParagraph paragraph maxCharsPerLine)
 
     String.Join(
