@@ -107,3 +107,25 @@ let WrapTextTest5() =
     let expectedResult = text
 
     Assert.That(WrapText text characterCount, Is.EqualTo expectedResult)
+
+[<Test>]
+let WrapTextTest6() =
+    let characterCount = 64
+
+    let commitMsg =
+        "foo: this is a header"
+        + Environment.NewLine
+        + Environment.NewLine
+        + "This is a body:"
+        + Environment.NewLine
+        + Environment.NewLine
+        + "```"
+        + Environment.NewLine
+        + "A code block that has two conditions, it has a very long line that exceeds the limit."
+        + Environment.NewLine
+        + Environment.NewLine
+        + "It also has multiple paragraphs."
+        + Environment.NewLine
+        + "```"
+
+    Assert.That(WrapText commitMsg characterCount, Is.EqualTo commitMsg)
