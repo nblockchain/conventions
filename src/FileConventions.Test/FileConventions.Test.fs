@@ -723,3 +723,51 @@ let NamespaceConvention2() =
         ))
 
     Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let NamespaceConvention3() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "src",
+                "Foo",
+                "Bar",
+                "DummyFileUnderBarWithRightNamespace.fs"
+            )
+        ))
+
+    Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let NamespaceConvention4() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "src",
+                "Foo",
+                "Bar",
+                "DummyFileUnderBarWithWrongNamespace.fs"
+            )
+        ))
+
+    Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let NamespaceConvention5() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "src",
+                "Foo",
+                "Bar",
+                "DummyFileUnderBarWithWrongNamespace2.fs"
+            )
+        ))
+
+    Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo true)
