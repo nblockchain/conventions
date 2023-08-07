@@ -409,3 +409,7 @@ let ProjFilesNamingConvention(fileInfo: FileInfo) =
         parentDirectoryName
 
     fileName <> parentDirectoryName
+
+let NotFollowingNamespaceConvention(fileInfo: FileInfo) =
+    printfn "%s" fileInfo.FullName
+    false
