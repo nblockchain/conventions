@@ -169,6 +169,8 @@ jobs:
         run: dotnet fsi scripts/eofConvention.fsx
       - name: Check all .fsx scripts have shebang
         run: dotnet fsi scripts/shebangConvention.fsx
+      - name: Check all F# scripts have execute permission
+        run: dotnet fsi scripts/executableConvention.fsx
       - name: Check there are no mixed line-endings in any files
         run: dotnet fsi scripts/mixedLineEndings.fsx
       - name: Check there are no unpinned GitHubActions image versions
