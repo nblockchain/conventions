@@ -1,21 +1,23 @@
 #!/usr/bin/env -S dotnet fsi
 
-open System
 open System.IO
+open System
 
 #r "nuget: Mono.Unix, Version=7.1.0-final.1.21458.1"
-
-#load "../src/FileConventions/Library.fs"
+#r "nuget: YamlDotNet, Version=13.0.2"
 #load "../src/FileConventions/Helpers.fs"
+#load "../src/FileConventions/Library.fs"
+
+open type FileConventions.EolAtEof
 
 let rootDir = Path.Combine(__SOURCE_DIRECTORY__, "..") |> DirectoryInfo
 
 let invalidFiles =
     Helpers.GetInvalidFiles
         rootDir
-        "*.fsx"
-        (fun fileInfo -> not(FileConventions.HasCorrectShebang fileInfo))
+        "*.*"
+        (fun fileInfo -> FileConventions.EolAtEof fileInfo = False)
 
 Helpers.AssertNoInvalidFiles
     invalidFiles
-    "The following files should have the correct shebang:"
+    "The following files should end with EOL:"
