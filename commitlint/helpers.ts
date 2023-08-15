@@ -188,8 +188,8 @@ export abstract class Helpers {
         let macEol = "\r";
 
         let preparedText = text
-            .replace(windowsEol, unixEol)
-            .replace(macEol, unixEol);
+            .replaceAll(windowsEol, unixEol)
+            .replaceAll(macEol, unixEol);
 
         let separator = "";
         do {
