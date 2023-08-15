@@ -1,6 +1,6 @@
 export abstract class Helpers {
     public static errMessageSuffix =
-        "\nFor reference, these are the guidelines that include our commit message conventions: https://github.com/nblockchain/conventions/blob/master/WorkflowGuidelines.md";
+        "\nFor reference, these are the guidelines that include our commit message conventions: https://github.com/nblockchain/conventions/blob/master/docs/WorkflowGuidelines.md";
 
     public static isValidUrl(text: string) {
         if (text.indexOf(" ") >= 0) {
