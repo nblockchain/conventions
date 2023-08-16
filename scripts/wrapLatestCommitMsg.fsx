@@ -48,11 +48,7 @@ let EscapeDoubleQuotes(text: string) =
 let newCommitMsg =
     match maybeWrappedBody with
     | Some wrappedBody ->
-        header
-        + Environment.NewLine
-        + Environment.NewLine
-        + wrappedBody
-        + Environment.NewLine
+        header + Environment.NewLine + Environment.NewLine + wrappedBody
     | _ -> header
 
 Fsdk
