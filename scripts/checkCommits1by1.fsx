@@ -811,24 +811,6 @@ type PRCommitsType =
   ]
 """>
 
-let githubApiCallForbiddenErrorMsg =
-    """GITHUB_TOKEN or ACCESS_TOKEN passed doesn't seem to have enough permissions.
-To modify the permissions of your token, navigate to the Settings section of your 
-repository or organization and click on Actions button, then select General. From 
-'Workflow permissions' section on that page, choose 'Read and write permissions' 
-(which grants access to content and the ability to make changes).
-"""
-
-let githubApiCallNotFoundErrorMsg =
-    """Please create a PAT from your GitHub account (Settings->Developer Settings->PATs->Tokens(classic) and set it as GitHubActions repo secret ACCESS_TOKEN; then define the environment 
-variable in your GitHubCI workflow:
-
-```
-    env:
-      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-```
-"""
-
 let GitHubApiCall(url: string) =
     let userAgent = ".NET App"
     let xGitHubApiVersion = "2022-11-28"
@@ -858,14 +840,45 @@ let GitHubApiCall(url: string) =
         | ex ->
             match FindException<HttpRequestException> ex with
             | Some httpRequestException ->
+                let accessTokenErrorMsg =
+                    """Please create a PAT from your GitHub account (Settings->Developer Settings->PATs->Tokens(classic) and set it as GitHubActions repo secret ACCESS_TOKEN; then define the environment variable in your GitHubCI workflow:
+
+```
+    env:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+```
+"""
+
                 match httpRequestException.StatusCode |> Option.ofNullable with
                 | Some statusCode when statusCode = HttpStatusCode.NotFound ->
-
-                    failwith githubApiCallNotFoundErrorMsg
+                    if accessTokenName <> "ACCESS_TOKEN" then
+                        failwith accessTokenErrorMsg
+                    else
+                        failwith
+                            "Unexpected 404 received from GitHub API, using ACCESS_TOKEN properly"
 
                 | Some statusCode when statusCode = HttpStatusCode.Forbidden ->
+                    let permissionsErrMsg =
+                        sprintf
+                            """%s passed doesn't seem to have enough permissions.
+To modify the permissions of your token, navigate to the Settings section of your
+repository or organization and click on Actions button, then select General. From
+'Workflow permissions' section on that page, choose 'Read and write permissions'
+(which grants access to content and the ability to make changes)."""
+                            accessTokenName
 
-                    failwith githubApiCallForbiddenErrorMsg
+                    if accessTokenName = "ACCESS_TOKEN" then
+                        failwith permissionsErrMsg
+                    else
+                        let msg =
+                            "Or maybe you have to use an ACCESS_TOKEN instead: "
+
+                        failwith(
+                            permissionsErrMsg
+                            + Environment.NewLine
+                            + msg
+                            + accessTokenErrorMsg
+                        )
 
                 | _ -> reraise()
 
