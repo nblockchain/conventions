@@ -520,10 +520,10 @@ let DoesNamespaceInclude (fileInfo: FileInfo) (word: string) =
 
     if fileText.Any() then
         let rightNamespace =
-            fileText
-            |> Seq.tryFind(fun x -> x.Contains "namespace" && x.Contains word)
+            fileText |> Seq.find(fun x -> x.Contains "namespace")
 
-        rightNamespace <> None
+        rightNamespace.Split().[1].Equals(word)
+        || rightNamespace.Split().[1].Equals(word + ";")
     else
         false
 
