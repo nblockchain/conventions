@@ -414,17 +414,17 @@ let DoesNamespaceInclude (fileInfo: FileInfo) (word: string) =
     let fileText = File.ReadLines fileInfo.FullName
 
     if fileText.Any() then
-        let firstLine = fileText.First()
+        let rightNamespace =
+            fileText
+            |> Seq.tryFind(fun x -> x.Contains "namespace" && x.Contains word)
 
-        if firstLine.Contains "namespace" then
-            firstLine.Contains word
-        else
-            false
+        rightNamespace <> None
     else
         false
 
 let NotFollowingNamespaceConvention(fileInfo: FileInfo) =
-    assert (fileInfo.FullName.EndsWith(".fs"))
+    assert
+        (fileInfo.FullName.EndsWith(".fs") || fileInfo.FullName.EndsWith(".cs"))
 
     let fileName = Path.GetFileNameWithoutExtension fileInfo.FullName
     let parentDir = Path.GetDirectoryName fileInfo.FullName |> DirectoryInfo
