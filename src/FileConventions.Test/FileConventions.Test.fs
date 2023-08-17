@@ -718,3 +718,18 @@ let NamespaceConvention5() =
         ))
 
     Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let NamespaceConvention6() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "src",
+                "Foo",
+                "DummyFileUnderFooWithRightNamespace.cs"
+            )
+        ))
+
+    Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo false)
