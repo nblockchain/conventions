@@ -17,6 +17,7 @@
     <PackageReference Include="Mono.Posix" Version="7.1.0-final.1.21458.1" />
     <PackageReference Include="Mono.Unix" Version="7.1.0-final.1.21458.1" />
     <PackageReference Include="YamlDotNet" Version="16.1.3" />
+    <PackageReference Include="Fsdk" Version="0.6.0--date20230821-0702.git-5488853" />
   </ItemGroup>
 
 </Project>

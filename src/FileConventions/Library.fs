@@ -8,6 +8,7 @@ open System.Text.RegularExpressions
 open Mono
 open Mono.Unix.Native
 open YamlDotNet.RepresentationModel
+open Fsdk
 
 let SplitByEOLs (text: string) (numberOfEOLs: uint) =
     if numberOfEOLs = 0u then
@@ -28,6 +29,9 @@ let SplitByEOLs (text: string) (numberOfEOLs: uint) =
 
     preparedText.Split(separator, StringSplitOptions.None)
 
+let ymlAssertionError = "Bug: file should be a .yml file"
+let projAssertionError = "Bug: file should be a proj file"
+let fsxAssertionError = "Bug: file was not a F#/C# source file"
 
 let HasCorrectShebang(fileInfo: FileInfo) =
     let fileText = File.ReadLines fileInfo.FullName
@@ -63,7 +67,7 @@ let MixedLineEndings(fileInfo: FileInfo) =
     numberOfLineEndings > 1
 
 let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
-    assert (fileInfo.FullName.EndsWith(".yml"))
+    Misc.BetterAssert (fileInfo.FullName.EndsWith ".yml") ymlAssertionError
 
     let fileText = File.ReadAllText fileInfo.FullName
 
@@ -73,7 +77,7 @@ let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
     latestTagInRunsOnRegex.IsMatch fileText
 
 let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
-    assert (fileInfo.FullName.EndsWith(".yml"))
+    Misc.BetterAssert (fileInfo.FullName.EndsWith ".yml") ymlAssertionError
 
     let fileLines = File.ReadLines fileInfo.FullName
 
@@ -91,7 +95,7 @@ let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
     unpinnedDotnetToolInstallVersions
 
 let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
-    assert (fileInfo.FullName.EndsWith "proj")
+    Misc.BetterAssert (fileInfo.FullName.EndsWith "proj") projAssertionError
 
     let fileText = File.ReadAllText fileInfo.FullName
 
@@ -104,7 +108,7 @@ let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
     asteriskInPackageReference.IsMatch fileText
 
 let DetectMissingVersionsInNugetPackageReferences(fileInfo: FileInfo) =
-    assert (fileInfo.FullName.EndsWith ".fsx")
+    Misc.BetterAssert (fileInfo.FullName.EndsWith ".fsx") fsxAssertionError
 
     let fileLines = File.ReadLines fileInfo.FullName
 
@@ -366,7 +370,9 @@ let private DetectInconsistentVersionsInYamlFiles
 
 let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
     fileInfos
-    |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".yml"))
+    |> Seq.iter(fun fileInfo ->
+        Misc.BetterAssert (fileInfo.FullName.EndsWith ".yml") ymlAssertionError
+    )
 
     let extractVersions(node: YamlNode) =
         match node with
@@ -412,7 +418,9 @@ let DetectInconsistentVersionsInGitHubCI(dir: DirectoryInfo) =
 
 let GetVersionsMapForNugetRefsInFSharpScripts(fileInfos: seq<FileInfo>) =
     fileInfos
-    |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".fsx"))
+    |> Seq.iter(fun fileInfo ->
+        Misc.BetterAssert (fileInfo.FullName.EndsWith ".fsx") fsxAssertionError
+    )
 
     let versionRegexPattern =
         "#r \"nuget:\\s*([^\\s]*)\\s*,\\s*Version\\s*=\\s*([^\\s]*)\\s*\""
@@ -502,7 +510,7 @@ let DefiningEmptyStringsWithDoubleQuotes(fileInfo: FileInfo) =
 
 let ProjFilesNamingConvention(fileInfo: FileInfo) =
     let regex = new Regex("(.*)\..*proj$")
-    assert (regex.IsMatch fileInfo.FullName)
+    Misc.BetterAssert (regex.IsMatch fileInfo.FullName) projAssertionError
     let fileName = Path.GetFileNameWithoutExtension fileInfo.FullName
 
     let parentDirectoryName =
@@ -528,8 +536,9 @@ let DoesNamespaceInclude (fileInfo: FileInfo) (word: string) =
         false
 
 let NotFollowingNamespaceConvention(fileInfo: FileInfo) =
-    assert
-        (fileInfo.FullName.EndsWith(".fs") || fileInfo.FullName.EndsWith(".cs"))
+    Misc.BetterAssert
+        (fileInfo.FullName.EndsWith ".fs" || fileInfo.FullName.EndsWith ".cs")
+        fsxAssertionError
 
     let fileName = Path.GetFileNameWithoutExtension fileInfo.FullName
     let parentDir = Path.GetDirectoryName fileInfo.FullName |> DirectoryInfo
