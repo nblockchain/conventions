@@ -567,6 +567,44 @@ let NotFollowingNamespaceConvention(fileInfo: FileInfo) =
         false
 
 
+let ContainsConsoleMethods(fileInfo: FileInfo) =
+    let fileText = File.ReadAllText fileInfo.FullName
+    let consoleMethods = [ "printf"; "Console." ]
+    consoleMethods |> List.exists fileText.Contains
+
+
 let NotFollowingConsoleAppConvention(fileInfo: FileInfo) =
-    printf "%A" fileInfo
-    false
+    let fileText = File.ReadAllText fileInfo.FullName
+    let parentDir = Path.GetDirectoryName fileInfo.FullName |> Seq.singleton
+
+    if not(fileText.Contains "<OutputType>Exe</OutputType>") then
+        let rec allFiles dirs =
+            if Seq.isEmpty dirs then
+                Seq.empty
+            else
+                let csFiles =
+                    dirs
+                    |> Seq.collect(fun dir ->
+                        Directory.EnumerateFiles(dir, "*.cs")
+                    )
+
+                let fsFiles =
+                    dirs
+                    |> Seq.collect(fun dir ->
+                        Directory.EnumerateFiles(dir, "*.fs")
+                    )
+
+                let projectDirectories =
+                    dirs
+                    |> Seq.collect Directory.EnumerateDirectories
+                    |> allFiles
+
+                Seq.append csFiles <| Seq.append fsFiles projectDirectories
+
+        let sourceFiles = allFiles parentDir
+
+        sourceFiles
+        |> Seq.exists(fun value -> ContainsConsoleMethods(FileInfo value))
+
+    else
+        false
