@@ -509,7 +509,7 @@ let DefiningEmptyStringsWithDoubleQuotes(fileInfo: FileInfo) =
     fileText.Contains "\"\""
 
 let ProjFilesNamingConvention(fileInfo: FileInfo) =
-    let regex = new Regex("(.*)\..*proj$")
+    let regex = Regex "(.*)\..*proj$"
     Misc.BetterAssert (regex.IsMatch fileInfo.FullName) projAssertionError
     let fileName = Path.GetFileNameWithoutExtension fileInfo.FullName
 
@@ -530,8 +530,17 @@ let DoesNamespaceInclude (fileInfo: FileInfo) (word: string) =
         let rightNamespace =
             fileText |> Seq.find(fun x -> x.Contains "namespace")
 
-        rightNamespace.Split().[1].Equals(word)
-        || rightNamespace.Split().[1].Equals(word + ";")
+        let words =
+            rightNamespace.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+
+        let namespaceCorrentPos = 1
+        let namespaceWordsCount = 2
+
+        if words.Length < namespaceWordsCount then
+            false
+        else
+            let namespaceName = words[namespaceCorrentPos]
+            namespaceName.Equals(word) || namespaceName.Equals($"{word};")
     else
         false
 
