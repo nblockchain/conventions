@@ -461,3 +461,8 @@ let NotFollowingNamespaceConvention(fileInfo: FileInfo) =
 
     else
         false
+
+
+let NotFollowingConsoleAppConvention(fileInfo: FileInfo) =
+    printf "%A" fileInfo
+    false
