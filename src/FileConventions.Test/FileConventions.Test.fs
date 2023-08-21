@@ -22,12 +22,12 @@ let dummyFilesDirectory =
 [<Test>]
 let HasCorrectShebangTest1() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyWithoutShebang.fsx"
             )
-        ))
+        )
 
     Assert.That(HasCorrectShebang fileInfo, Is.EqualTo false)
 
@@ -35,9 +35,9 @@ let HasCorrectShebangTest1() =
 [<Test>]
 let HasCorrectShebangTest2() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(dummyFilesDirectory.FullName, "DummyWithShebang.fsx")
-        ))
+        )
 
     Assert.That(HasCorrectShebang fileInfo, Is.EqualTo true)
 
@@ -45,12 +45,12 @@ let HasCorrectShebangTest2() =
 [<Test>]
 let HasCorrectShebangTest3() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyWithWrongShebang.fsx"
             )
-        ))
+        )
 
     Assert.That(HasCorrectShebang fileInfo, Is.EqualTo false)
 
@@ -58,7 +58,7 @@ let HasCorrectShebangTest3() =
 [<Test>]
 let HasCorrectShebangTest4() =
     let fileInfo =
-        (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "DummyEmpty.fsx")))
+        FileInfo(Path.Combine(dummyFilesDirectory.FullName, "DummyEmpty.fsx"))
 
     Assert.That(HasCorrectShebang fileInfo, Is.EqualTo false)
 
@@ -66,12 +66,12 @@ let HasCorrectShebangTest4() =
 [<Test>]
 let MixedLineEndingsTest1() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyWithMixedLineEndings"
             )
-        ))
+        )
 
     Assert.That(MixedLineEndings fileInfo, Is.EqualTo true)
 
@@ -79,9 +79,9 @@ let MixedLineEndingsTest1() =
 [<Test>]
 let MixedLineEndingsTest2() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(dummyFilesDirectory.FullName, "DummyWithLFLineEndings")
-        ))
+        )
 
     Assert.That(MixedLineEndings fileInfo, Is.EqualTo false)
 
@@ -89,12 +89,12 @@ let MixedLineEndingsTest2() =
 [<Test>]
 let MixedLineEndingsTest3() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyWithCRLFLineEndings"
             )
-        ))
+        )
 
     Assert.That(MixedLineEndings fileInfo, Is.EqualTo false)
 
@@ -102,12 +102,12 @@ let MixedLineEndingsTest3() =
 [<Test>]
 let DetectUnpinnedVersionsInGitHubCI1() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyCIWithLatestTag.yml"
             )
-        ))
+        )
 
     Assert.That(DetectUnpinnedVersionsInGitHubCI fileInfo, Is.EqualTo true)
 
@@ -115,12 +115,12 @@ let DetectUnpinnedVersionsInGitHubCI1() =
 [<Test>]
 let DetectUnpinnedVersionsInGitHubCI2() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyCIWithoutLatestTag.yml"
             )
-        ))
+        )
 
     Assert.That(DetectUnpinnedVersionsInGitHubCI fileInfo, Is.EqualTo false)
 
@@ -128,12 +128,12 @@ let DetectUnpinnedVersionsInGitHubCI2() =
 [<Test>]
 let DetectUnpinnedDotnetToolInstallVersions1() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyCIWithUnpinnedDotnetToolInstallVersion.yml"
             )
-        ))
+        )
 
     Assert.That(
         DetectUnpinnedDotnetToolInstallVersions fileInfo,
@@ -144,12 +144,12 @@ let DetectUnpinnedDotnetToolInstallVersions1() =
 [<Test>]
 let DetectAsteriskInPackageReferenceItems1() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyFsprojWithAsterisk.fsproj"
             )
-        ))
+        )
 
     Assert.That(DetectAsteriskInPackageReferenceItems fileInfo, Is.EqualTo true)
 
@@ -157,12 +157,12 @@ let DetectAsteriskInPackageReferenceItems1() =
 [<Test>]
 let DetectAsteriskInPackageReferenceItems2() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyFsprojWithoutAsterisk.fsproj"
             )
-        ))
+        )
 
     Assert.That(
         DetectAsteriskInPackageReferenceItems fileInfo,
@@ -173,12 +173,12 @@ let DetectAsteriskInPackageReferenceItems2() =
 [<Test>]
 let MissingVersionsInNugetPackageReferencesTest1() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyWithMissingVersionsInNugetPackageReferences.fsx"
             )
-        ))
+        )
 
     Assert.That(
         DetectMissingVersionsInNugetPackageReferences fileInfo,
@@ -189,12 +189,12 @@ let MissingVersionsInNugetPackageReferencesTest1() =
 [<Test>]
 let MissingVersionsInNugetPackageReferencesTest2() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyWithoutMissingVersionsInNugetPackageReferences.fsx"
             )
-        ))
+        )
 
     Assert.That(
         DetectMissingVersionsInNugetPackageReferences fileInfo,
@@ -205,12 +205,12 @@ let MissingVersionsInNugetPackageReferencesTest2() =
 [<Test>]
 let MissingVersionsInNugetPackageReferencesTest3() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyWithoutNugetPackageReferences.fsx"
             )
-        ))
+        )
 
     Assert.That(
         DetectMissingVersionsInNugetPackageReferences fileInfo,
@@ -221,9 +221,9 @@ let MissingVersionsInNugetPackageReferencesTest3() =
 [<Test>]
 let EolAtEofTest1() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(dummyFilesDirectory.FullName, "DummyWithEolAtEof.txt")
-        ))
+        )
 
     Assert.That(EolAtEof fileInfo, Is.EqualTo True)
 
@@ -231,12 +231,12 @@ let EolAtEofTest1() =
 [<Test>]
 let EolAtEofTest2() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyWithoutEolAtEof.txt"
             )
-        ))
+        )
 
     Assert.That(EolAtEof fileInfo, Is.EqualTo False)
 
@@ -244,7 +244,7 @@ let EolAtEofTest2() =
 [<Test>]
 let EolAtEofTest3() =
     let fileInfo =
-        (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "someLib.dll")))
+        FileInfo(Path.Combine(dummyFilesDirectory.FullName, "someLib.dll"))
 
     Assert.That(EolAtEof fileInfo, Is.EqualTo NotApplicable)
 
@@ -252,7 +252,7 @@ let EolAtEofTest3() =
 [<Test>]
 let HasBinaryContentTest1() =
     let fileInfo =
-        (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "someLib.dll")))
+        FileInfo(Path.Combine(dummyFilesDirectory.FullName, "someLib.dll"))
 
     Assert.That(HasBinaryContent fileInfo, Is.EqualTo true)
 
@@ -260,7 +260,7 @@ let HasBinaryContentTest1() =
 [<Test>]
 let HasBinaryContentTest2() =
     let fileInfo =
-        (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "white.png")))
+        FileInfo(Path.Combine(dummyFilesDirectory.FullName, "white.png"))
 
     Assert.That(HasBinaryContent fileInfo, Is.EqualTo true)
 
@@ -268,9 +268,9 @@ let HasBinaryContentTest2() =
 [<Test>]
 let HasBinaryContentTest3() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(dummyFilesDirectory.FullName, "DummyNonBinaryFile.txt")
-        ))
+        )
 
     Assert.That(HasBinaryContent fileInfo, Is.EqualTo false)
 
@@ -279,14 +279,14 @@ let HasBinaryContentTest3() =
 
 let DetectInconsistentVersionsInGitHubCIWorkflow1() =
     let fileInfo =
-        (Seq.singleton(
+        Seq.singleton(
             FileInfo(
                 Path.Combine(
                     dummyFilesDirectory.FullName,
                     "DummyCIWithSamePulumiVersion.yml"
                 )
             )
-        ))
+        )
 
     Assert.That(
         DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
@@ -297,14 +297,14 @@ let DetectInconsistentVersionsInGitHubCIWorkflow1() =
 [<Test>]
 let DetectInconsistentVersionsInGitHubCIWorkflow2() =
     let fileInfo =
-        (Seq.singleton(
+        Seq.singleton(
             FileInfo(
                 Path.Combine(
                     dummyFilesDirectory.FullName,
                     "DummyCIWithoutSamePulumiVersion.yml"
                 )
             )
-        ))
+        )
 
     Assert.That(
         DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
@@ -315,14 +315,14 @@ let DetectInconsistentVersionsInGitHubCIWorkflow2() =
 [<Test>]
 let DetectInconsistentVersionsInGitHubCIWorkflow3() =
     let fileInfo =
-        (Seq.singleton(
+        Seq.singleton(
             FileInfo(
                 Path.Combine(
                     dummyFilesDirectory.FullName,
                     "DummyCIWithoutSameSetupPulumiVersion.yml"
                 )
             )
-        ))
+        )
 
     Assert.That(
         DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
@@ -333,14 +333,14 @@ let DetectInconsistentVersionsInGitHubCIWorkflow3() =
 [<Test>]
 let DetectInconsistentVersionsInGitHubCIWorkflow4() =
     let fileInfo =
-        (Seq.singleton(
+        Seq.singleton(
             FileInfo(
                 Path.Combine(
                     dummyFilesDirectory.FullName,
                     "DummyCIWithSameSetupPulumiVersion.yml"
                 )
             )
-        ))
+        )
 
     Assert.That(
         DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
@@ -351,7 +351,7 @@ let DetectInconsistentVersionsInGitHubCIWorkflow4() =
 [<Test>]
 let DetectInconsistentVersionsInGitHubCIWorkflow5() =
     let fileInfo =
-        (seq {
+        seq {
 
             FileInfo(
                 Path.Combine(
@@ -367,7 +367,7 @@ let DetectInconsistentVersionsInGitHubCIWorkflow5() =
                 )
             )
 
-        })
+        }
 
     Assert.That(
         DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
@@ -378,14 +378,14 @@ let DetectInconsistentVersionsInGitHubCIWorkflow5() =
 [<Test>]
 let DetectInconsistentVersionsInGitHubCIWorkflow6() =
     let fileInfo =
-        (Seq.singleton(
+        Seq.singleton(
             FileInfo(
                 Path.Combine(
                     dummyFilesDirectory.FullName,
                     "DummyCIWithoutSameCheckoutVersion.yml"
                 )
             )
-        ))
+        )
 
     Assert.That(
         DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
@@ -396,14 +396,14 @@ let DetectInconsistentVersionsInGitHubCIWorkflow6() =
 [<Test>]
 let DetectInconsistentVersionsInGitHubCIWorkflow7() =
     let fileInfo =
-        (Seq.singleton(
+        Seq.singleton(
             FileInfo(
                 Path.Combine(
                     dummyFilesDirectory.FullName,
                     "DummyCIWithoutSameNodeVersion.yml"
                 )
             )
-        ))
+        )
 
     Assert.That(
         DetectInconsistentVersionsInGitHubCIWorkflow fileInfo,
@@ -424,7 +424,7 @@ let DetectInconsistentVersionsInGitHubCI1() =
 [<Test>]
 let DetectInconsistentVersionsInNugetRefsInFSharpScripts1() =
     let fileInfos =
-        (seq {
+        seq {
 
             FileInfo(
                 Path.Combine(
@@ -440,7 +440,7 @@ let DetectInconsistentVersionsInNugetRefsInFSharpScripts1() =
                 )
             )
 
-        })
+        }
 
     Assert.That(
         DetectInconsistentVersionsInNugetRefsInFSharpScripts fileInfos,
@@ -478,12 +478,12 @@ let DetectInconsistentVersionsInFSharpScripts2() =
 [<Test>]
 let NonVerboseFlagsInGitHubCI1() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyCIWithNonVerboseFlag.yml"
             )
-        ))
+        )
 
     Assert.That(NonVerboseFlags fileInfo, Is.EqualTo true)
 
@@ -491,12 +491,12 @@ let NonVerboseFlagsInGitHubCI1() =
 [<Test>]
 let NonVerboseFlagsInGitHubCI2() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyCIWithoutNonVerboseFlags.yml"
             )
-        ))
+        )
 
     Assert.That(NonVerboseFlags fileInfo, Is.EqualTo false)
 
@@ -504,12 +504,12 @@ let NonVerboseFlagsInGitHubCI2() =
 [<Test>]
 let NonVerboseFlagsInGitHubCI3() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyCIWithAcceptedNonVerboseFlag1.yml"
             )
-        ))
+        )
 
     Assert.That(NonVerboseFlags fileInfo, Is.EqualTo false)
 
@@ -517,12 +517,12 @@ let NonVerboseFlagsInGitHubCI3() =
 [<Test>]
 let NonVerboseFlagsInGitHubCI4() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyScriptWithNonVerboseFlag.fsx"
             )
-        ))
+        )
 
     Assert.That(NonVerboseFlags fileInfo, Is.EqualTo true)
 
@@ -530,12 +530,12 @@ let NonVerboseFlagsInGitHubCI4() =
 [<Test>]
 let NonVerboseFlagsInGitHubCI5() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyScriptWithoutNonVerboseFlag.fsx"
             )
-        ))
+        )
 
     Assert.That(NonVerboseFlags fileInfo, Is.EqualTo false)
 
@@ -543,12 +543,12 @@ let NonVerboseFlagsInGitHubCI5() =
 [<Test>]
 let NonVerboseFlagsInGitHubCI6() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyCIWithAcceptedNonVerboseFlag2.yml"
             )
-        ))
+        )
 
     Assert.That(NonVerboseFlags fileInfo, Is.EqualTo false)
 
@@ -570,20 +570,20 @@ let IsExecutableTest1() =
         .UnwrapDefault()
     |> ignore<string>
 
-    let fileInfo = (FileInfo filePath)
+    let fileInfo = FileInfo filePath
     Assert.That(IsExecutable fileInfo, Is.EqualTo true)
 
 
 [<Test>]
 let IsExecutableTest2() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 __SOURCE_DIRECTORY__,
                 "DummyFiles",
                 "DummyNotExecutable.fs"
             )
-        ))
+        )
 
     Assert.That(IsExecutable fileInfo, Is.EqualTo false)
 
@@ -591,12 +591,12 @@ let IsExecutableTest2() =
 [<Test>]
 let DefiningEmptyStringsWithDoubleQuotes1() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyScriptWithConventionalEmptyString.fsx"
             )
-        ))
+        )
 
     Assert.That(DefiningEmptyStringsWithDoubleQuotes fileInfo, Is.EqualTo false)
 
@@ -604,12 +604,12 @@ let DefiningEmptyStringsWithDoubleQuotes1() =
 [<Test>]
 let DefiningEmptyStringsWithDoubleQuotes2() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyScriptWithNonConventionalEmptyString.fsx"
             )
-        ))
+        )
 
     Assert.That(DefiningEmptyStringsWithDoubleQuotes fileInfo, Is.EqualTo true)
 
@@ -617,13 +617,13 @@ let DefiningEmptyStringsWithDoubleQuotes2() =
 [<Test>]
 let ProjFilesNamingConvention1() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyProjFileWithTheSameNameAsItsParentFolder",
                 "DummyProjFileWithTheSameNameAsItsParentFolder.fsproj"
             )
-        ))
+        )
 
     Assert.That(ProjFilesNamingConvention fileInfo, Is.EqualTo false)
 
@@ -631,13 +631,13 @@ let ProjFilesNamingConvention1() =
 [<Test>]
 let ProjFilesNamingConvention2() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "DummyProject",
                 "DummyProjFileWithoutTheSameNameAsItsParentFolder.fsproj"
             )
-        ))
+        )
 
     Assert.That(ProjFilesNamingConvention fileInfo, Is.EqualTo true)
 
@@ -645,14 +645,14 @@ let ProjFilesNamingConvention2() =
 [<Test>]
 let NamespaceConvention1() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "src",
                 "Foo",
                 "DummyFileUnderFooWithRightNamespace.fs"
             )
-        ))
+        )
 
     Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo false)
 
@@ -660,14 +660,14 @@ let NamespaceConvention1() =
 [<Test>]
 let NamespaceConvention2() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "src",
                 "Foo",
                 "DummyFileUnderFooWithWrongNamespace.fs"
             )
-        ))
+        )
 
     Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo true)
 
@@ -675,7 +675,7 @@ let NamespaceConvention2() =
 [<Test>]
 let NamespaceConvention3() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "src",
@@ -683,7 +683,7 @@ let NamespaceConvention3() =
                 "Bar",
                 "DummyFileUnderBarWithRightNamespace.fs"
             )
-        ))
+        )
 
     Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo false)
 
@@ -691,7 +691,7 @@ let NamespaceConvention3() =
 [<Test>]
 let NamespaceConvention4() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "src",
@@ -699,7 +699,7 @@ let NamespaceConvention4() =
                 "Bar",
                 "DummyFileUnderBarWithWrongNamespace.fs"
             )
-        ))
+        )
 
     Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo true)
 
@@ -707,7 +707,7 @@ let NamespaceConvention4() =
 [<Test>]
 let NamespaceConvention5() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "src",
@@ -715,7 +715,7 @@ let NamespaceConvention5() =
                 "Bar",
                 "DummyFileUnderBarWithWrongNamespace2.fs"
             )
-        ))
+        )
 
     Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo true)
 
@@ -723,14 +723,14 @@ let NamespaceConvention5() =
 [<Test>]
 let NamespaceConvention6() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "src",
                 "Foo",
                 "DummyFileUnderFooWithRightNamespace.cs"
             )
-        ))
+        )
 
     Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo false)
 
@@ -738,13 +738,13 @@ let NamespaceConvention6() =
 [<Test>]
 let NamespaceConvention7() =
     let fileInfo =
-        (FileInfo(
+        FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
                 "src",
                 "Foo",
                 "DummyFileUnderFooWithWrongNamespace2.fs"
             )
-        ))
+        )
 
     Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo true)
