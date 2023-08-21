@@ -307,6 +307,7 @@ export let abbr = {
     "values": "vals",
     "variable": "var",
     "variables": "vars",
+    "with": "w/",
     "with regards to": "wrt",
     "webassembly": "WebAsm",
     "yes/no": "y/n",
