@@ -48,5 +48,9 @@
     <None Include="DummyFiles\DummyCIWithSameSetupPulumiVersion.yml" />
     <None Include="DummyFiles\DummyCIWithSetupPulumiVersionV2.0.0.yml" />
     <None Include="DummyFiles\DummyCIWithSetupPulumiVersionV2.0.1.yml" />
+    <None Include="DummyFiles\DummyProjectWithRightConsole\Program.fs" />
+    <Content Include="DummyFiles\DummyProjectWithRightConsole\DummyProjectWithRightConsole.fsproj" />
+    <None Include="DummyFiles\DummyProjectWithWrongConsole\Library.fs" />
+    <Content Include="DummyFiles\DummyProjectWithRightConsole\DummyProjectWithwrongConsole.fsproj" />
   </ItemGroup>
 </Project>

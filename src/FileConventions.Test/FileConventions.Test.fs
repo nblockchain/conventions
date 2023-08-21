@@ -801,3 +801,30 @@ let NamespaceConvention7() =
         )
 
     Assert.That(NotFollowingNamespaceConvention fileInfo, Is.EqualTo true)
+
+[<Test>]
+let ConsoleAppConvention1() =
+    let fileInfo =
+        FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyProjectWithWrongConsole",
+                "DummyProjectWithWrongConsole.fsproj"
+            )
+        )
+
+    Assert.That(NotFollowingConsoleAppConvention fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let ConsoleAppConvention2() =
+    let fileInfo =
+        FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyProjectWithRightConsole",
+                "DummyProjectWithRightConsole.fsproj"
+            )
+        )
+
+    Assert.That(NotFollowingConsoleAppConvention fileInfo, Is.EqualTo false)
