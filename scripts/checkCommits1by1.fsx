@@ -9,7 +9,7 @@ open System.Net.Http.Headers
 #r "nuget: FSharp.Data, Version=5.0.2"
 open FSharp.Data
 
-#r "nuget: Fsdk, Version=0.6.0--date20230214-0422.git-1ea6f62"
+#r "nuget: Fsdk, Version=0.6.0--date20230821-0702.git-5488853"
 
 open Fsdk
 open Fsdk.Process
