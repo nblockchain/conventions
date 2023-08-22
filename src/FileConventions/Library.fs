@@ -575,7 +575,7 @@ let ContainsConsoleMethods(fileInfo: FileInfo) =
 
 let NotFollowingConsoleAppConvention(fileInfo: FileInfo) =
     let fileText = File.ReadAllText fileInfo.FullName
-    let parentDir = Path.GetDirectoryName fileInfo.FullName |> Seq.singleton
+    let parentDir = Path.GetDirectoryName fileInfo.FullName
 
     if not(fileText.Contains "<OutputType>Exe</OutputType>") then
         let rec allFiles dirs =
@@ -601,10 +601,13 @@ let NotFollowingConsoleAppConvention(fileInfo: FileInfo) =
 
                 Seq.append csFiles <| Seq.append fsFiles projectDirectories
 
-        let sourceFiles = allFiles parentDir
+        let sourceFiles = allFiles(parentDir |> Seq.singleton)
 
         sourceFiles
         |> Seq.exists(fun value -> ContainsConsoleMethods(FileInfo value))
 
     else
-        false
+        // project name should ends with .Console
+        // we only check parent dir because
+        // we have ProjFilesNamingConvention rule to check project name
+        parentDir.EndsWith ".Console" |> not
