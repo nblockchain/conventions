@@ -465,7 +465,14 @@ let NotFollowingNamespaceConvention(fileInfo: FileInfo) =
 
 let ContainsConsoleMethods(fileInfo: FileInfo) =
     let fileText = File.ReadAllText fileInfo.FullName
-    let consoleMethods = [ "printf"; "Console." ]
+
+    let consoleMethods =
+        [
+            "printf"
+            "Console."
+            "Async.RunSynchronously"
+        ]
+
     consoleMethods |> List.exists fileText.Contains
 
 
