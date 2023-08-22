@@ -769,8 +769,36 @@ let ConsoleAppConvention2() =
         FileInfo(
             Path.Combine(
                 dummyFilesDirectory.FullName,
-                "DummyProjectWithRightConsole",
-                "DummyProjectWithRightConsole.fsproj"
+                "DummyProjectWithRight.Console",
+                "DummyProjectWithRight.Console.fsproj"
+            )
+        )
+
+    Assert.That(NotFollowingConsoleAppConvention fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let ConsoleAppConvention3() =
+    let fileInfo =
+        FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyConsoleProjectWithWrongName",
+                "DummyConsoleProjectWithWrongName.fsproj"
+            )
+        )
+
+    Assert.That(NotFollowingConsoleAppConvention fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let ConsoleAppConvention4() =
+    let fileInfo =
+        FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyConsoleProjectWithRightName.Console",
+                "DummyConsoleProjectWithRightName.Console.fsproj"
             )
         )
 

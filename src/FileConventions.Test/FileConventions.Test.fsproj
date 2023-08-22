@@ -51,6 +51,10 @@
     <None Include="DummyFiles\DummyProjectWithRightConsole\Program.fs" />
     <Content Include="DummyFiles\DummyProjectWithRightConsole\DummyProjectWithRightConsole.fsproj" />
     <None Include="DummyFiles\DummyProjectWithWrongConsole\Library.fs" />
-    <Content Include="DummyFiles\DummyProjectWithRightConsole\DummyProjectWithwrongConsole.fsproj" />
+    <Content Include="DummyFiles\DummyProjectWithWrongConsole\DummyProjectWithWrongConsole.fsproj" />
+    <None Include="DummyFiles\DummyConsoleProjectWithWrongName\Program.fs" />
+    <Content Include="DummyFiles\DummyConsoleProjectWithWrongName\DummyConsoleProjectWithWrongName.fsproj" />
+    <None Include="DummyFiles\DummyConsoleProjectWithRightName.Console\Library.fs" />
+    <Content Include="DummyFiles\DummyConsoleProjectWithRightName.Console\DummyConsoleProjectWithRightName.Console.fsproj" />
   </ItemGroup>
 </Project>
