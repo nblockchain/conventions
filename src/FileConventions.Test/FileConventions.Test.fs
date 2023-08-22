@@ -803,3 +803,31 @@ let ConsoleAppConvention4() =
         )
 
     Assert.That(NotFollowingConsoleAppConvention fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let ConsoleAppConvention5() =
+    let fileInfo =
+        FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyProjectAsync",
+                "DummyProjectAsync.fsproj"
+            )
+        )
+
+    Assert.That(NotFollowingConsoleAppConvention fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let ConsoleAppConvention6() =
+    let fileInfo =
+        FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyProjectAsync.Console",
+                "DummyProjectAsync.Console.fsproj"
+            )
+        )
+
+    Assert.That(NotFollowingConsoleAppConvention fileInfo, Is.EqualTo false)
