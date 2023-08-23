@@ -28,6 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="DummyFiles\DummyScriptWithEmptyString.fsx" />
+    <None Include="DummyFiles\DummyScriptWithMatchEmptyString.fsx" />
     <None Include="DummyFiles\DummyFsprojWithAsterisk.fsproj" />
     <None Include="DummyFiles\DummyWithShebang.fsx" />
     <None Include="DummyFiles\DummyWithWrongShebang.fsx" />
