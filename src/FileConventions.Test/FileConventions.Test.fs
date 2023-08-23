@@ -668,6 +668,32 @@ let DefiningEmptyStringsWithDoubleQuotes2() =
 
 
 [<Test>]
+let DefiningEmptyStringsWithDoubleQuotes3() =
+    let fileInfo =
+        FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyScriptWithEmptyString.fsx"
+            )
+        )
+
+    Assert.That(DefiningEmptyStringsWithDoubleQuotes fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let DefiningEmptyStringsWithDoubleQuotes4() =
+    let fileInfo =
+        FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyScriptWithMatchEmptyString.fsx"
+            )
+        )
+
+    Assert.That(DefiningEmptyStringsWithDoubleQuotes fileInfo, Is.EqualTo false)
+
+
+[<Test>]
 let ProjFilesNamingConvention1() =
     let fileInfo =
         FileInfo(
