@@ -510,7 +510,9 @@ let IsExecutable(fileInfo: FileInfo) =
 
 let DefiningEmptyStringsWithDoubleQuotes(fileInfo: FileInfo) =
     let fileText = File.ReadAllText fileInfo.FullName
-    fileText.Contains "\"\""
+
+    Regex("(?<!\\\\)(?<!\\|\\s*)\"\"", RegexOptions.Compiled)
+        .IsMatch fileText
 
 let ProjFilesNamingConvention(fileInfo: FileInfo) =
     let regex = Regex "(.*)\..*proj$"
