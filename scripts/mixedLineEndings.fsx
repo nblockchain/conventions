@@ -7,8 +7,8 @@ open System.IO
 #r "nuget: YamlDotNet, Version=16.1.3"
 #r "nuget: Fsdk, Version=0.6.0--date20230821-0702.git-5488853"
 
-#load "../src/FileConventions/Library.fs"
 #load "../src/FileConventions/Helpers.fs"
+#load "../src/FileConventions/Library.fs"
 
 let rootDir = Path.Combine(__SOURCE_DIRECTORY__, "..") |> DirectoryInfo
 
