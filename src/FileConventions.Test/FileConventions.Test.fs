@@ -802,7 +802,10 @@ let ConsoleAppConvention1() =
             )
         )
 
-    Assert.That(NotFollowingConsoleAppConvention fileInfo, Is.EqualTo true)
+    Assert.That(
+        NotFollowingConsoleAppConvention fileInfo false,
+        Is.EqualTo true
+    )
 
 
 [<Test>]
@@ -816,7 +819,10 @@ let ConsoleAppConvention2() =
             )
         )
 
-    Assert.That(NotFollowingConsoleAppConvention fileInfo, Is.EqualTo false)
+    Assert.That(
+        NotFollowingConsoleAppConvention fileInfo false,
+        Is.EqualTo false
+    )
 
 
 [<Test>]
@@ -830,7 +836,10 @@ let ConsoleAppConvention3() =
             )
         )
 
-    Assert.That(NotFollowingConsoleAppConvention fileInfo, Is.EqualTo true)
+    Assert.That(
+        NotFollowingConsoleAppConvention fileInfo false,
+        Is.EqualTo true
+    )
 
 
 [<Test>]
@@ -844,7 +853,10 @@ let ConsoleAppConvention4() =
             )
         )
 
-    Assert.That(NotFollowingConsoleAppConvention fileInfo, Is.EqualTo false)
+    Assert.That(
+        NotFollowingConsoleAppConvention fileInfo false,
+        Is.EqualTo false
+    )
 
 
 [<Test>]
@@ -858,7 +870,10 @@ let ConsoleAppConvention5() =
             )
         )
 
-    Assert.That(NotFollowingConsoleAppConvention fileInfo, Is.EqualTo true)
+    Assert.That(
+        NotFollowingConsoleAppConvention fileInfo false,
+        Is.EqualTo true
+    )
 
 
 [<Test>]
@@ -872,4 +887,7 @@ let ConsoleAppConvention6() =
             )
         )
 
-    Assert.That(NotFollowingConsoleAppConvention fileInfo, Is.EqualTo false)
+    Assert.That(
+        NotFollowingConsoleAppConvention fileInfo false,
+        Is.EqualTo false
+    )
