@@ -522,10 +522,6 @@ let ProjFilesNamingConvention(fileInfo: FileInfo) =
     let parentDirectoryName =
         Path.GetDirectoryName fileInfo.FullName |> Path.GetFileName
 
-    printfn
-        "File name: %s, Parent directory name: %s"
-        fileName
-        parentDirectoryName
 
     fileName <> parentDirectoryName
 
@@ -564,10 +560,8 @@ let NotFollowingNamespaceConvention(fileInfo: FileInfo) =
         (fileInfo.FullName.EndsWith ".fs" || fileInfo.FullName.EndsWith ".cs")
         sourceFileAssertionError
 
-    let fileName = Path.GetFileNameWithoutExtension fileInfo.FullName
     let parentDir = Path.GetDirectoryName fileInfo.FullName |> DirectoryInfo
 
-    printfn "File name: %s, Parent directory name: %s" fileName parentDir.Name
 
     if parentDir.Parent.Name = "src" then
         DoesNamespaceInclude fileInfo parentDir.Name |> not
@@ -583,50 +577,60 @@ let NotFollowingNamespaceConvention(fileInfo: FileInfo) =
 
 
 let ContainsConsoleMethods(fileInfo: FileInfo) =
-    let fileText = File.ReadAllText fileInfo.FullName
+    let fileLines = File.ReadAllLines fileInfo.FullName |> Array.toList
 
-    let consoleMethods =
-        [
-            "printf"
-            "Console."
-            "Async.RunSynchronously"
-        ]
+    let rec checkLine(lines: list<string>) =
+        match lines with
+        | [] -> false
+        | line :: tail ->
+            if
+                line.TrimStart().StartsWith("Console.Write")
+                || line.TrimStart().StartsWith("printf")
+                || line.TrimStart().Contains("Async.RunSynchronously")
+            then
+                true
+            else
+                checkLine tail
 
-    consoleMethods |> List.exists fileText.Contains
+    checkLine fileLines
 
 
-let NotFollowingConsoleAppConvention(fileInfo: FileInfo) =
+let ReturnAllProjectSourceFile
+    (parentDir: DirectoryInfo)
+    (patterns: List<string>)
+    (shouldFilter: bool)
+    =
+
+    seq {
+        for pattern in patterns do
+            if shouldFilter then
+                yield Helpers.GetFiles parentDir pattern
+            else
+                yield
+                    Directory.GetFiles(
+                        parentDir.FullName,
+                        pattern,
+                        SearchOption.AllDirectories
+                    )
+                    |> Seq.map(fun pathStr -> FileInfo pathStr)
+
+    }
+    |> Seq.concat
+
+
+let NotFollowingConsoleAppConvention (fileInfo: FileInfo) (shouldFilter: bool) =
+    Misc.BetterAssert (fileInfo.FullName.EndsWith "proj") projAssertionError
     let fileText = File.ReadAllText fileInfo.FullName
     let parentDir = Path.GetDirectoryName fileInfo.FullName
 
     if not(fileText.Contains "<OutputType>Exe</OutputType>") then
-        let rec allFiles dirs =
-            if Seq.isEmpty dirs then
-                Seq.empty
-            else
-                let csFiles =
-                    dirs
-                    |> Seq.collect(fun dir ->
-                        Directory.EnumerateFiles(dir, "*.cs")
-                    )
+        let sourceFiles =
+            ReturnAllProjectSourceFile
+                (DirectoryInfo parentDir)
+                [ "*.cs"; "*.fs" ]
+                shouldFilter
 
-                let fsFiles =
-                    dirs
-                    |> Seq.collect(fun dir ->
-                        Directory.EnumerateFiles(dir, "*.fs")
-                    )
-
-                let projectDirectories =
-                    dirs
-                    |> Seq.collect Directory.EnumerateDirectories
-                    |> allFiles
-
-                Seq.append csFiles <| Seq.append fsFiles projectDirectories
-
-        let sourceFiles = allFiles(parentDir |> Seq.singleton)
-
-        sourceFiles
-        |> Seq.exists(fun value -> ContainsConsoleMethods(FileInfo value))
+        sourceFiles |> Seq.exists(fun value -> ContainsConsoleMethods value)
 
     else
         // project name should ends with .Console
