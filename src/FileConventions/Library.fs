@@ -11,7 +11,7 @@ open Fsdk
 
 let ymlAssertionError = "Bug: file should be a .yml file"
 let projAssertionError = "Bug: file should be a proj file"
-let fsxAssertionError = "Bug: file was not a F#/C# source file"
+let sourceFileAssertionError = "Bug: file was not a F#/C# source file"
 
 let HasCorrectShebang(fileInfo: FileInfo) =
     let fileText = File.ReadLines fileInfo.FullName
@@ -88,7 +88,9 @@ let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
     asteriskInPackageReference.IsMatch fileText
 
 let DetectMissingVersionsInNugetPackageReferences(fileInfo: FileInfo) =
-    Misc.BetterAssert (fileInfo.FullName.EndsWith ".fsx") fsxAssertionError
+    Misc.BetterAssert
+        (fileInfo.FullName.EndsWith ".fsx")
+        sourceFileAssertionError
 
     let fileLines = File.ReadLines fileInfo.FullName
 
@@ -318,7 +320,9 @@ let DetectInconsistentVersionsInNugetRefsInFSharpScripts
     =
     fileInfos
     |> Seq.iter(fun fileInfo ->
-        Misc.BetterAssert (fileInfo.FullName.EndsWith ".fsx") fsxAssertionError
+        Misc.BetterAssert
+            (fileInfo.FullName.EndsWith ".fsx")
+            sourceFileAssertionError
     )
 
     DetectInconsistentVersions
@@ -443,7 +447,7 @@ let DoesNamespaceInclude (fileInfo: FileInfo) (word: string) =
 let NotFollowingNamespaceConvention(fileInfo: FileInfo) =
     Misc.BetterAssert
         (fileInfo.FullName.EndsWith ".fs" || fileInfo.FullName.EndsWith ".cs")
-        fsxAssertionError
+        sourceFileAssertionError
 
     let fileName = Path.GetFileNameWithoutExtension fileInfo.FullName
     let parentDir = Path.GetDirectoryName fileInfo.FullName |> DirectoryInfo
