@@ -532,19 +532,28 @@ let DoesNamespaceInclude (fileInfo: FileInfo) (word: string) =
 
     if fileText.Any() then
         let rightNamespace =
-            fileText |> Seq.find(fun x -> x.Contains "namespace")
+            fileText |> Seq.tryFind(fun x -> x.Contains "namespace")
 
-        let words =
-            rightNamespace.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+        match rightNamespace with
+        | Some fileNamespace ->
+            let words =
+                fileNamespace.Split(' ', StringSplitOptions.RemoveEmptyEntries)
 
-        let namespaceCorrentPos = 1
-        let namespaceWordsCount = 2
+            let namespaceCorrentPos = 1
+            let namespaceWordsCount = 2
 
-        if words.Length < namespaceWordsCount then
-            false
-        else
-            let namespaceName = words[namespaceCorrentPos]
-            namespaceName.Equals(word) || namespaceName.Equals($"{word};")
+            if words.Length < namespaceWordsCount then
+                false
+            else
+                let namespaceName = words[namespaceCorrentPos]
+                namespaceName.Equals(word) || namespaceName.Equals($"{word};")
+        | None ->
+            // It is possible that there is a fsharp file without namespace
+            if fileInfo.FullName.EndsWith ".fs"
+               || fileInfo.FullName.EndsWith ".fsx" then
+                true
+            else
+                false
     else
         false
 
