@@ -32,6 +32,7 @@ let SplitByEOLs (text: string) (numberOfEOLs: uint) =
 let ymlAssertionError = "Bug: file should be a .yml file"
 let projAssertionError = "Bug: file should be a proj file"
 let sourceFileAssertionError = "Bug: file was not a F#/C# source file"
+let fsxAssertionError = "Bug: file was not a F# script source file"
 
 let HasCorrectShebang(fileInfo: FileInfo) =
     let fileText = File.ReadLines fileInfo.FullName
@@ -108,9 +109,7 @@ let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
     asteriskInPackageReference.IsMatch fileText
 
 let DetectMissingVersionsInNugetPackageReferences(fileInfo: FileInfo) =
-    Misc.BetterAssert
-        (fileInfo.FullName.EndsWith ".fsx")
-        sourceFileAssertionError
+    Misc.BetterAssert (fileInfo.FullName.EndsWith ".fsx") fsxAssertionError
 
     let fileLines = File.ReadLines fileInfo.FullName
 
@@ -421,9 +420,7 @@ let DetectInconsistentVersionsInGitHubCI(dir: DirectoryInfo) =
 let GetVersionsMapForNugetRefsInFSharpScripts(fileInfos: seq<FileInfo>) =
     fileInfos
     |> Seq.iter(fun fileInfo ->
-        Misc.BetterAssert
-            (fileInfo.FullName.EndsWith ".fsx")
-            sourceFileAssertionError
+        Misc.BetterAssert (fileInfo.FullName.EndsWith ".fsx") fsxAssertionError
     )
 
     let versionRegexPattern =
@@ -595,7 +592,7 @@ let ContainsConsoleMethods(fileInfo: FileInfo) =
     checkLine fileLines
 
 
-let ReturnAllProjectSourceFile
+let ReturnAllProjectSourceFiles
     (parentDir: DirectoryInfo)
     (patterns: List<string>)
     (shouldFilter: bool)
@@ -625,7 +622,7 @@ let NotFollowingConsoleAppConvention (fileInfo: FileInfo) (shouldFilter: bool) =
 
     if not(fileText.Contains "<OutputType>Exe</OutputType>") then
         let sourceFiles =
-            ReturnAllProjectSourceFile
+            ReturnAllProjectSourceFiles
                 (DirectoryInfo parentDir)
                 [ "*.cs"; "*.fs" ]
                 shouldFilter

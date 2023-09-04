@@ -28,11 +28,11 @@ if args.Length > 1 then
 let rootDir = DirectoryInfo args.[0]
 
 // DefiningEmptyStringsWithDoubleQuotes
-let allSourceFiles = ReturnAllProjectSourceFile rootDir [ "*.cs"; "*.fs" ] true
+let allSourceFiles = ReturnAllProjectSourceFiles rootDir [ "*.cs"; "*.fs" ] true
 printfn "%A" (String.Join("\n", allSourceFiles))
 
 let allProjFiles =
-    ReturnAllProjectSourceFile rootDir [ "*.csproj"; "*.fsproj" ] true
+    ReturnAllProjectSourceFiles rootDir [ "*.csproj"; "*.fsproj" ] true
 
 for sourceFile in allSourceFiles do
     let isStringEmpty = DefiningEmptyStringsWithDoubleQuotes sourceFile
