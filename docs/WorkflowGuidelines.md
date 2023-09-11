@@ -166,7 +166,49 @@
         * Do not use `undefined` which is a pitfall from JavaScript (the fact that it has two kinds of null values is a defect in
         its design). As we're using TypeScript we should be able to avoid the uglyness of JavaScript.
         * Use Option types instead of Nullable ones if your language provides it (e.g. if you're using F# instead of C#).
+     
+    * Abusing obscure operators or the excessive multi-facetedness of basic ones:
+ 
+        * Do not use the `!` operator for non-boolean types. For example, C language (and others inspired by it, such as TypeScript) allows to use ! for null-checks; however, writing the word `null` is much more readable than not writing it (there's a reason why C# didn't bring this feature from C).
 
+        Example (with bad practice):
+        ```typescript
+        void Func(zipFile: SomeFileType)
+        {
+            if (!zipFile)
+                return;
+            ...
+        ```
+
+        Improved code:
+        ```typescript
+        void Func(zipFile: SomeFileType)
+        {
+            if (zipFile === null)
+                return;
+            ...
+        ```
+
+        * Do not use the new operators introduced in the latest versions of C#, which are completely unreadable and always require checking the documentation: `??`, `??=`, etc.
+     
+        Example (with bad practice):
+        ```csharp
+        someField = someValue ?? throw new ArgumentNullException("someValue cannot be null");
+
+        someVar ??= expression;
+        ```
+
+        Improved code:
+        ```csharp
+        if (someValue is null) {
+            throw new ArgumentNullException("someValue cannot be null");
+        }
+        someField = someValue;
+
+        if (someVar is null) {
+            someVar = expression;
+        }
+        ```
 
 * If you want to contribute a script, do not use PowerShell or Bash, but
 an F# script. The reason to not use PowerShell is a personal preference
