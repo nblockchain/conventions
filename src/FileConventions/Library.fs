@@ -7,6 +7,12 @@ open System.Text.RegularExpressions
 
 open Mono
 open Mono.Unix.Native
+open Fsdk
+
+let ymlAssertionError = "Bug: file should be a .yml file"
+let projAssertionError = "Bug: file should be a proj file"
+let sourceFileAssertionError = "Bug: file was not a F#/C# source file"
+let fsxAssertionError = "Bug: file was not a F# script source file"
 
 let HasCorrectShebang(fileInfo: FileInfo) =
     let fileText = File.ReadLines fileInfo.FullName
@@ -42,7 +48,7 @@ let MixedLineEndings(fileInfo: FileInfo) =
     numberOfLineEndings > 1
 
 let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
-    assert (fileInfo.FullName.EndsWith(".yml"))
+    Misc.BetterAssert (fileInfo.FullName.EndsWith ".yml") ymlAssertionError
 
     let fileText = File.ReadAllText fileInfo.FullName
 
@@ -52,7 +58,7 @@ let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
     latestTagInRunsOnRegex.IsMatch fileText
 
 let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
-    assert (fileInfo.FullName.EndsWith(".yml"))
+    Misc.BetterAssert (fileInfo.FullName.EndsWith ".yml") ymlAssertionError
 
     let fileLines = File.ReadLines fileInfo.FullName
 
@@ -70,7 +76,7 @@ let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
     unpinnedDotnetToolInstallVersions
 
 let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
-    assert (fileInfo.FullName.EndsWith "proj")
+    Misc.BetterAssert (fileInfo.FullName.EndsWith "proj") projAssertionError
 
     let fileText = File.ReadAllText fileInfo.FullName
 
@@ -83,7 +89,7 @@ let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
     asteriskInPackageReference.IsMatch fileText
 
 let DetectMissingVersionsInNugetPackageReferences(fileInfo: FileInfo) =
-    assert (fileInfo.FullName.EndsWith ".fsx")
+    Misc.BetterAssert (fileInfo.FullName.EndsWith ".fsx") fsxAssertionError
 
     let fileLines = File.ReadLines fileInfo.FullName
 
@@ -284,7 +290,9 @@ let private DetectInconsistentVersions
 
 let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
     fileInfos
-    |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".yml"))
+    |> Seq.iter(fun fileInfo ->
+        Misc.BetterAssert (fileInfo.FullName.EndsWith ".yml") ymlAssertionError
+    )
 
     let inconsistentVersionsType1 =
         DetectInconsistentVersions
@@ -310,7 +318,9 @@ let DetectInconsistentVersionsInNugetRefsInFSharpScripts
     (fileInfos: seq<FileInfo>)
     =
     fileInfos
-    |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".fsx"))
+    |> Seq.iter(fun fileInfo ->
+        Misc.BetterAssert (fileInfo.FullName.EndsWith ".fsx") fsxAssertionError
+    )
 
     DetectInconsistentVersions
         fileInfos
@@ -390,3 +400,133 @@ let NonVerboseFlags(fileInfo: FileInfo) =
 let IsExecutable(fileInfo: FileInfo) =
     let hasExecuteAccess = Syscall.access(fileInfo.FullName, AccessModes.X_OK)
     hasExecuteAccess = 0
+
+let DefiningEmptyStringsWithDoubleQuotes(fileInfo: FileInfo) =
+    let fileText = File.ReadAllText fileInfo.FullName
+
+    Regex("(?<!\\\\)(?<!\\|\\s*)\"\"", RegexOptions.Compiled)
+        .IsMatch fileText
+
+let ProjFilesNamingConvention(fileInfo: FileInfo) =
+    let regex = Regex "(.*)\..*proj$"
+    Misc.BetterAssert (regex.IsMatch fileInfo.FullName) projAssertionError
+    let fileName = Path.GetFileNameWithoutExtension fileInfo.FullName
+
+    let parentDirectoryName =
+        Path.GetDirectoryName fileInfo.FullName |> Path.GetFileName
+
+
+    fileName <> parentDirectoryName
+
+let DoesNamespaceInclude (fileInfo: FileInfo) (word: string) =
+    let fileText = File.ReadLines fileInfo.FullName
+
+    if fileText.Any() then
+        let rightNamespace =
+            fileText |> Seq.tryFind(fun x -> x.Contains "namespace")
+
+        match rightNamespace with
+        | Some fileNamespace ->
+            let words =
+                fileNamespace.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+
+            let namespaceCorrentPos = 1
+            let namespaceWordsCount = 2
+
+            if words.Length < namespaceWordsCount then
+                false
+            else
+                let namespaceName = words[namespaceCorrentPos]
+                namespaceName.Equals(word) || namespaceName.Equals($"{word};")
+        | None ->
+            // It is possible that there is a fsharp file without namespace
+            if fileInfo.FullName.EndsWith ".fs"
+               || fileInfo.FullName.EndsWith ".fsx" then
+                true
+            else
+                false
+    else
+        false
+
+let NotFollowingNamespaceConvention(fileInfo: FileInfo) =
+    Misc.BetterAssert
+        (fileInfo.FullName.EndsWith ".fs" || fileInfo.FullName.EndsWith ".cs")
+        sourceFileAssertionError
+
+    let parentDir = Path.GetDirectoryName fileInfo.FullName |> DirectoryInfo
+
+
+    if parentDir.Parent.Name = "src" then
+        DoesNamespaceInclude fileInfo parentDir.Name |> not
+
+    elif parentDir.Parent.Parent.Name = "src" then
+        DoesNamespaceInclude
+            fileInfo
+            $"{parentDir.Parent.Name}.{parentDir.Name}"
+        |> not
+
+    else
+        false
+
+
+let ContainsConsoleMethods(fileInfo: FileInfo) =
+    let fileLines = File.ReadAllLines fileInfo.FullName |> Array.toList
+
+    let rec checkLine(lines: list<string>) =
+        match lines with
+        | [] -> false
+        | line :: tail ->
+            if
+                line.TrimStart().StartsWith("Console.Write")
+                || line.TrimStart().StartsWith("printf")
+                || line.TrimStart().Contains("Async.RunSynchronously")
+            then
+                true
+            else
+                checkLine tail
+
+    checkLine fileLines
+
+
+let ReturnAllProjectSourceFiles
+    (parentDir: DirectoryInfo)
+    (patterns: List<string>)
+    (shouldFilter: bool)
+    =
+
+    seq {
+        for pattern in patterns do
+            if shouldFilter then
+                yield Helpers.GetFiles parentDir pattern
+            else
+                yield
+                    Directory.GetFiles(
+                        parentDir.FullName,
+                        pattern,
+                        SearchOption.AllDirectories
+                    )
+                    |> Seq.map(fun pathStr -> FileInfo pathStr)
+
+    }
+    |> Seq.concat
+
+
+let NotFollowingConsoleAppConvention (fileInfo: FileInfo) (shouldFilter: bool) =
+    Misc.BetterAssert (fileInfo.FullName.EndsWith "proj") projAssertionError
+    let fileText = File.ReadAllText fileInfo.FullName
+    let parentDir = Path.GetDirectoryName fileInfo.FullName
+
+    if not(fileText.Contains "<OutputType>Exe</OutputType>") then
+        let sourceFiles =
+            ReturnAllProjectSourceFiles
+                (DirectoryInfo parentDir)
+                [ "*.cs"; "*.fs" ]
+                shouldFilter
+
+        sourceFiles |> Seq.exists(fun value -> ContainsConsoleMethods value)
+
+    else
+        // project name should ends with .Console
+        // we only check parent dir because
+        // we have ProjFilesNamingConvention rule to check project name
+        parentDir.EndsWith ".Console" |> not
