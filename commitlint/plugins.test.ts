@@ -856,6 +856,77 @@ test("proper-issue-refs5", () => {
     expect(properIssueRefs5.status).not.toBe(0);
 });
 
+test("reject-obvious-words1", () => {
+    let commitMsgWithObviousWordAfterColon = "foo: change";
+    let rejectObviousWords1 = runCommitLintOnMsg(
+        commitMsgWithObviousWordAfterColon
+    );
+    expect(rejectObviousWords1.status).not.toBe(0);
+});
+
+test("reject-obvious-words2", () => {
+    let commitMsgWithObviousWordAfterColon = "foo: change bla bla";
+    let rejectObviousWords2 = runCommitLintOnMsg(
+        commitMsgWithObviousWordAfterColon
+    );
+    expect(rejectObviousWords2.status).not.toBe(0);
+});
+
+test("reject-obvious-words3", () => {
+    let commitMsgWithObviousWordAfterColon = "foo: change bla bla\n\nBla blah.";
+    let rejectObviousWords3 = runCommitLintOnMsg(
+        commitMsgWithObviousWordAfterColon
+    );
+    expect(rejectObviousWords3.status).not.toBe(0);
+});
+
+test("reject-obvious-words4", () => {
+    let commitMsgWithoutObviousWordAfterColon = "foo: bla bla bla";
+    let rejectObviousWords4 = runCommitLintOnMsg(
+        commitMsgWithoutObviousWordAfterColon
+    );
+    expect(rejectObviousWords4.status).toBe(0);
+});
+
+test("reject-obvious-words5", () => {
+    // In general using `update` in commit message is a bad practice but there is
+    // exception in cases that the area refers to a file which is only modified when
+    // it needs updating and there's no need for further explanation of why it needs
+    // updating such as:
+    // README: update or Backend/servers.json: update
+
+    let commitMsgWithUpdateWordAfterColon = "foo: update";
+    let rejectObviousWords5 = runCommitLintOnMsg(
+        commitMsgWithUpdateWordAfterColon
+    );
+    expect(rejectObviousWords5.status).toBe(0);
+});
+
+test("reject-obvious-words6", () => {
+    let commitMsgWithUpdateWordAfterColon = "foo: update bla bla";
+    let rejectObviousWords6 = runCommitLintOnMsg(
+        commitMsgWithUpdateWordAfterColon
+    );
+    expect(rejectObviousWords6.status).not.toBe(0);
+});
+
+test("reject-obvious-words7", () => {
+    let commitMsgWithUpdateWordAfterColon = "foo: update bla bla\n\nBla blah.";
+    let rejectObviousWords7 = runCommitLintOnMsg(
+        commitMsgWithUpdateWordAfterColon
+    );
+    expect(rejectObviousWords7.status).toBe(0);
+});
+
+test("reject-obvious-words8", () => {
+    let commitMsgWithoutObviousWordAfterColon =
+        "scripts/detectNotUsingGitPush1by1.fsx: fix";
+    let rejectObviousWords8 = runCommitLintOnMsg(
+        commitMsgWithoutObviousWordAfterColon
+    );
+    expect(rejectObviousWords8.status).not.toBe(0);
+});
+
 test("subject-lowercase1", () => {
     let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
     let subjectLowerCase1 = runCommitLintOnMsg(

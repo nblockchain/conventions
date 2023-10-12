@@ -51,6 +51,7 @@ module.exports = {
         // disabled because most of the time it doesn't work, due to https://github.com/conventional-changelog/commitlint/issues/3404
         // and anyway we were using this rule only as a warning, not an error (because a scope is not required, e.g. when too broad)
         "type-empty": [RuleConfigSeverity.Disabled, "never"],
+        "reject-obvious-words": [RuleConfigSeverity.Error, "always"],
     },
     plugins: [
         // TODO (ideas for more rules):
@@ -79,6 +80,21 @@ module.exports = {
                     );
 
                     return Plugins.commitHashAlone(rawStr);
+                },
+
+                "reject-obvious-words": ({
+                    header,
+                    body,
+                }: {
+                    header: any;
+                    body: any;
+                }) => {
+                    let headerStr = Helpers.convertAnyToString(
+                        header,
+                        "header"
+                    );
+                    let bodyStr = Helpers.convertAnyToString(body, "header");
+                    return Plugins.rejectObviousWords(headerStr, bodyStr);
                 },
 
                 "empty-wip": ({ header }: { header: any }) => {
