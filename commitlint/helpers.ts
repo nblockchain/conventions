@@ -1,3 +1,8 @@
+export enum When {
+    Never = "never",
+    Always = "always",
+}
+
 export abstract class Helpers {
     public static errMessageSuffix =
         "\nFor reference, these are the guidelines that include our commit message conventions: https://github.com/nblockchain/conventions/blob/master/docs/WorkflowGuidelines.md";
@@ -35,6 +40,15 @@ export abstract class Helpers {
             throw new Error(errorMessage);
         }
         return text as string;
+    }
+
+    public static assertWhen(when: string) {
+        if (when !== When.Never && when !== When.Always) {
+            throw new Error(
+                'Variable "when" should be either "never" or "always"'
+            );
+        }
+        return when as When;
     }
 
     public static assertCharacter(letter: string) {

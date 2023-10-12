@@ -1,4 +1,4 @@
-import { Helpers } from "./commitlint/helpers";
+import { Helpers, When } from "./commitlint/helpers";
 import { Plugins } from "./commitlint/plugins";
 import { RuleConfigSeverity } from "@commitlint/types";
 
@@ -13,48 +13,55 @@ function notNullStringErrorMessage(stringType: string): string {
 module.exports = {
     parserPreset: "conventional-changelog-conventionalcommits",
     rules: {
-        "body-leading-blank": [RuleConfigSeverity.Error, "always"],
+        "body-leading-blank": [RuleConfigSeverity.Error, When.Always],
         "body-soft-max-line-length": [
             RuleConfigSeverity.Error,
-            "always",
+            When.Always,
             bodyMaxLineLength,
         ],
-        "body-paragraph-line-min-length": [RuleConfigSeverity.Error, "always"],
-        "empty-wip": [RuleConfigSeverity.Error, "always"],
-        "footer-leading-blank": [RuleConfigSeverity.Warning, "always"],
+        "body-paragraph-line-min-length": [
+            RuleConfigSeverity.Error,
+            When.Always,
+        ],
+        "empty-wip": [RuleConfigSeverity.Error, When.Always],
+        "footer-leading-blank": [RuleConfigSeverity.Warning, When.Always],
         "footer-max-line-length": [
             RuleConfigSeverity.Error,
-            "always",
+            When.Always,
             footerMaxLineLength,
         ],
-        "footer-notes-misplacement": [RuleConfigSeverity.Error, "always"],
-        "footer-refs-validity": [RuleConfigSeverity.Error, "always"],
+        "footer-notes-misplacement": [RuleConfigSeverity.Error, When.Always],
+        "footer-refs-validity": [RuleConfigSeverity.Error, When.Always],
         "header-max-length-with-suggestions": [
             RuleConfigSeverity.Error,
-            "always",
+            When.Always,
             headerMaxLineLength,
         ],
-        "subject-full-stop": [RuleConfigSeverity.Error, "never", "."],
-        "type-space-after-colon": [RuleConfigSeverity.Error, "always"],
-        "subject-lowercase": [RuleConfigSeverity.Error, "always"],
-        "body-prose": [RuleConfigSeverity.Error, "always"],
-        "type-space-after-comma": [RuleConfigSeverity.Error, "always"],
-        "trailing-whitespace": [RuleConfigSeverity.Error, "always"],
-        "prefer-slash-over-backslash": [RuleConfigSeverity.Error, "always"],
-        "type-space-before-paren": [RuleConfigSeverity.Error, "always"],
-        "type-with-square-brackets": [RuleConfigSeverity.Error, "always"],
-        "proper-issue-refs": [RuleConfigSeverity.Error, "always"],
-        "too-many-spaces": [RuleConfigSeverity.Error, "always"],
-        "commit-hash-alone": [RuleConfigSeverity.Error, "always"],
-        "title-uppercase": [RuleConfigSeverity.Error, "always"],
+        "subject-full-stop": [RuleConfigSeverity.Error, When.Never, "."],
+        "type-space-after-colon": [RuleConfigSeverity.Error, When.Always],
+        "subject-lowercase": [RuleConfigSeverity.Error, When.Always],
+        "body-prose": [RuleConfigSeverity.Error, When.Always],
+        "type-space-after-comma": [RuleConfigSeverity.Error, When.Always],
+        "trailing-whitespace": [RuleConfigSeverity.Error, When.Always],
+        "prefer-slash-over-backslash": [RuleConfigSeverity.Error, When.Always],
+        "type-space-before-paren": [RuleConfigSeverity.Error, When.Always],
+        "type-with-square-brackets": [RuleConfigSeverity.Error, When.Always],
+        "proper-issue-refs": [RuleConfigSeverity.Error, When.Always],
+        "too-many-spaces": [RuleConfigSeverity.Error, When.Always],
+        "commit-hash-alone": [RuleConfigSeverity.Error, When.Always],
+        "title-uppercase": [RuleConfigSeverity.Error, When.Always],
 
         // disabled because most of the time it doesn't work, due to https://github.com/conventional-changelog/commitlint/issues/3404
         // and anyway we were using this rule only as a warning, not an error (because a scope is not required, e.g. when too broad)
-        "type-empty": [RuleConfigSeverity.Disabled, "never"],
+        "type-empty": [RuleConfigSeverity.Disabled, When.Never],
+        "default-revert-message": [RuleConfigSeverity.Error, When.Never],
     },
+
+    // Commitlint automatically ignores some kinds of commits like Revert commit messages.
+    // We need to set this value to false to apply our rules on these messages.
+    defaultIgnores: false,
     plugins: [
         // TODO (ideas for more rules):
-        // * Detect reverts which have not been elaborated.
         // * Reject some stupid obvious words: change, update, modify (if first word after colon, error; otherwise warning).
         // * Think of how to reject this shitty commit message: https://github.com/nblockchain/NOnion/pull/34/commits/9ffcb373a1147ed1c729e8aca4ffd30467255594
         // * Workflow: detect if wip commit in a branch not named "wip/*" or whose name contains "squashed".
@@ -140,6 +147,28 @@ module.exports = {
                     );
 
                     return Plugins.properIssueRefs(rawStr);
+                },
+
+                "default-revert-message": (
+                    {
+                        header,
+                        body,
+                    }: {
+                        header: any;
+                        body: any;
+                    },
+                    when: string
+                ) => {
+                    let bodyStr = Helpers.convertAnyToString(body, "body");
+                    let headerStr = Helpers.assertNotNull(
+                        Helpers.convertAnyToString(header, "header"),
+                        notNullStringErrorMessage("header")
+                    );
+                    return Plugins.defaultRevertMessage(
+                        headerStr,
+                        bodyStr,
+                        Helpers.assertWhen(when)
+                    );
                 },
 
                 "title-uppercase": ({ header }: { header: any }) => {
