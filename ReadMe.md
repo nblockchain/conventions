@@ -20,6 +20,7 @@ This is a repository that contains several useful things that other `nblockchain
     * Use of inconsistent versions:
         * [Use of inconsistent version numbers in `uses:` and `with:` GitHubCI tags](scripts/inconsistentVersionsInGitHubCI.fsx).
         * [Use of inconsistent version numbers in `#r "nuget: ` refs of F# scripts](scripts/inconsistentVersionsInFSharpScripts.fsx).
+        * [Use of inconsistent version numbers in nuget packages of .NET projects](scripts/sanityCheckNuget.fsx).
 
 All in all, this is mainly documentation, and some tooling to detect bad practices.
 

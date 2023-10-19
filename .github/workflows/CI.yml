@@ -190,6 +190,10 @@ jobs:
         run: dotnet fsi scripts/inconsistentVersionsInFSharpScripts.fsx
       - name: Check there are no non-verbose flags in scripts and CI YML files
         run: dotnet fsi scripts/nonVerboseFlagsInGitHubCIAndScripts.fsx
+      - name: Sanity check nuget packages of .NET projects
+        run: |
+          dotnet restore
+          dotnet fsi scripts/sanityCheckNuget.fsx
       - name: Install prettier
         run: npm install prettier@2.8.3
       - name: Change file permissions
