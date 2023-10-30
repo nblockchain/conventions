@@ -23,11 +23,48 @@ open Fsdk.Process
 
 #r "nuget: Microsoft.Build, Version=16.11.0"
 open Microsoft.Build.Construction
-let ScriptsDir = __SOURCE_DIRECTORY__ |> DirectoryInfo
-let RootDir = Path.Combine(ScriptsDir.FullName, "..") |> DirectoryInfo
+
+type ScriptTarget =
+    | Solution of FileInfo
+    | Folder of DirectoryInfo
+
+let args = Misc.FsxOnlyArguments()
+let currentDirectory = Directory.GetCurrentDirectory()
+
+if args.Length > 1 then
+    printf "Usage: %s [example.sln(optional)]" __SOURCE_FILE__
+
+    Environment.Exit 1
+
+let target =
+    if args.IsEmpty then
+        currentDirectory |> DirectoryInfo |> ScriptTarget.Folder
+    else
+        let singleArg = args.[0]
+
+        if Directory.Exists singleArg then
+            failwithf "Use an .sln file insted of directory."
+        elif not(File.Exists singleArg) then
+            failwithf "'%s' does not exist." singleArg
+        elif singleArg.EndsWith ".sln" then
+            singleArg |> FileInfo |> ScriptTarget.Solution
+        else
+            failwithf
+                "'%s' argument is invalid. You should enter an .sln file or run this script on current directory"
+                singleArg
+
 
 let nugetSolutionPackagesDir =
-    Path.Combine(RootDir.FullName, "packages") |> DirectoryInfo
+    Path.Combine(currentDirectory, "packages") |> DirectoryInfo
+
+let nugetPackageConfigDir =
+    Path.Combine(currentDirectory, "NuGet.config") |> FileInfo
+
+if not nugetPackageConfigDir.Exists || not nugetSolutionPackagesDir.Exists then
+    failwithf
+        "NuGet.config not found in '%s', please create it with the `globalPackagesFolder` key as `packages`."
+        nugetPackageConfigDir.FullName
+
 
 module MapHelper =
     let GetKeysOfMap(map: Map<'Key, 'Value>) : seq<'Key> =
@@ -102,7 +139,10 @@ type private ComparableFileInfo =
 
 let SanityCheckNugetPackages() =
 
-    let notPackagesFolder(dir: DirectoryInfo) : bool =
+    let notPackagesFolder
+        (solutionDir: DirectoryInfo)
+        (dir: DirectoryInfo)
+        : bool =
         dir.FullName <> nugetSolutionPackagesDir.FullName
 
     let notSubmodule(dir: DirectoryInfo) : bool =
@@ -119,7 +159,7 @@ let SanityCheckNugetPackages() =
                         let submoduleFolder =
                             DirectoryInfo(
                                 Path.Combine(
-                                    Directory.GetCurrentDirectory(),
+                                    currentDirectory,
                                     submoduleFolderRelativePath
                                 )
                             )
@@ -169,7 +209,7 @@ let SanityCheckNugetPackages() =
                     dir
                         .EnumerateDirectories()
                         .Where(notSubmodule)
-                        .Where(notPackagesFolder) do
+                        .Where(notPackagesFolder sol.Directory) do
                     for file in findNuspecFiles subdir do
                         yield file
             }
@@ -568,13 +608,17 @@ let SanityCheckNugetPackages() =
                     yield solution
         }
 
-    let slnFile = Path.Combine(RootDir.FullName, "conventions.sln") |> FileInfo
 
-    if not slnFile.Exists then
-        raise
-        <| FileNotFoundException("Solution file not found", slnFile.FullName)
+    match target with
+    | Solution solution -> sanityCheckNugetPackagesFromSolution solution
+    | Folder folder ->
 
-    sanityCheckNugetPackagesFromSolution slnFile
+        let solutions = findSolutions folder
 
+        if Seq.isEmpty solutions then
+            failwithf "There is no *.sln file located in: '%s'" folder.FullName
+
+        for sol in solutions do
+            sanityCheckNugetPackagesFromSolution sol
 
 SanityCheckNugetPackages()
