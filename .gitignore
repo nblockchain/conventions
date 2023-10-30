@@ -35,3 +35,4 @@ TestResults.xml
 
 # nuget
 packages/
+.nuget/
