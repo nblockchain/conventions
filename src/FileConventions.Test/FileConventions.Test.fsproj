@@ -19,7 +19,7 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
     <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
-    <PackageReference Include="Fsdk" Version="0.6.0--date20230214-0422.git-1ea6f62" />
+    <PackageReference Include="Fsdk" Version="0.6.0--date20231031-0834.git-2737eea" />
   </ItemGroup>
 
   <ItemGroup>
