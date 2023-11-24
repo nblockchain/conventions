@@ -175,10 +175,10 @@ jobs:
         run: dotnet fsi scripts/mixedLineEndings.fsx
       - name: Check there are no unpinned GitHubActions image versions
         run: dotnet fsi scripts/unpinnedGitHubActionsImageVersions.fsx
-      - name: Check there are no unpinned dotnet package versions
-        run: dotnet fsi scripts/unpinnedDotnetPackageVersions.fsx
+      - name: Check there are no unpinned nuget package reference versions in .NET project files
+        run: dotnet fsi scripts/unpinnedNugetPackageReferenceVersionsInProjects.fsx
       - name: Check there are no unpinned nuget package reference versions in F# scripts
-        run: dotnet fsi scripts/unpinnedNugetPackageReferenceVersions.fsx
+        run: dotnet fsi scripts/unpinnedNugetPackageReferenceVersionsInFSharpScripts.fsx
       - name: Check there are no unpinned versions in `dotnet tool install` commands
         run: dotnet fsi scripts/unpinnedDotnetToolInstallVersions.fsx
       - name: Check commits 1 by 1
