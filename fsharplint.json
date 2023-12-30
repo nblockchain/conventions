@@ -38,7 +38,7 @@
     },
     "reimplementsFunction": { "enabled": true },
     "canBeReplacedWithComposition": { "enabled": true },
-    "avoidSinglePipeOperator": { "enabled": false },
+    "avoidSinglePipeOperator": { "enabled": true },
     "usedUnderscorePrefixedElements": { "enabled": true },
     "failwithWithSingleArgument": { "enabled": true },
     "raiseWithSingleArgument": { "enabled": true },
@@ -240,14 +240,14 @@
         }
     },
     "unnestedFunctionNames": {
-        "enabled": false,
+        "enabled": true,
         "config": {
             "naming": "PascalCase",
             "underscores": "None"
         }
     },
     "nestedFunctionNames": {
-        "enabled": false,
+        "enabled": true,
         "config": {
             "naming": "CamelCase",
             "underscores": "None"
@@ -281,17 +281,17 @@
     "wildcardNamedWithAsPattern": { "enabled": true },
     "uselessBinding": { "enabled": true },
     "tupleOfWildcards": { "enabled": true },
-    "favourTypedIgnore": { "enabled": false },
+    "favourTypedIgnore": { "enabled": true },
     "favourReRaise": { "enabled": true },
-    "favourStaticEmptyFields": { "enabled": false },
+    "favourStaticEmptyFields": { "enabled": true },
     "favourConsistentThis": {
-        "enabled": false,
+        "enabled": true,
         "config": {
-            "symbol": "this"
+            "symbol": "self"
         }
     },
-    "suggestUseAutoProperty": { "enabled": false },
-    "avoidTooShortNames": { "enabled": false },
+    "suggestUseAutoProperty": { "enabled": true },
+    "avoidTooShortNames": { "enabled": true },
     "asyncExceptionWithoutReturn": { "enabled": false },
     "indentation": {
         "enabled": false
@@ -319,7 +319,7 @@
     "trailingNewLineInFile": { "enabled": false },
     "noTabCharacters": { "enabled": true },
     "noPartialFunctions": {
-        "enabled": false,
+        "enabled": true,
         "config": {
             "allowedPartials": [],
             "additionalPartials": []
@@ -428,11 +428,13 @@
             "(Array.take x y, Array.skip x y) ===> Array.splitAt x y",
             "(Seq.take x y, Seq.skip x y) ===> Seq.splitAt x y",
 
-            "List.empty ===> []",
-            "Array.empty ===> [||]",
+            "[] ===> List.Empty",
+            "List.empty ===> List.Empty",
+            "list.empty ===> List.Empty",
+            "list.Empty ===> List.Empty",
+            "[||] ===> Array.empty",
 
-            "x::[] ===> [x]",
-            "pattern: x::[] ===> [x]",
+            "pattern: [x] ===> x::[]",
 
             "x @ [] ===> x",
 

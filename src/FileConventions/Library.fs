@@ -115,13 +115,10 @@ let EolAtEof(fileInfo: FileInfo) =
         use streamReader = new StreamReader(fileInfo.FullName)
         let filetext = streamReader.ReadToEnd()
 
-        if filetext <> String.Empty then
-            if Seq.last filetext = '\n' then
-                True
-            else
-                False
-        else
-            True
+        match Seq.tryLast filetext with
+        | None
+        | Some '\n' -> True
+        | Some _ -> False
 
 let IsFooterReference(line: string) : bool =
     line.[0] = '[' && line.IndexOf "] " > 0
