@@ -16,7 +16,7 @@ let GetFiles (maybeRootDirectory: DirectoryInfo) (searchPattern: string) =
         searchPattern,
         SearchOption.AllDirectories
     )
-    |> Seq.map(fun pathStr -> FileInfo pathStr)
+    |> Seq.map FileInfo
     |> Seq.filter(NotInDir "node_modules")
     |> Seq.filter(NotInDir ".git")
     |> Seq.filter(NotInDir "bin")
