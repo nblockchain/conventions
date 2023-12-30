@@ -1,5 +1,5 @@
 module Program =
 
     [<EntryPoint>]
-    let main _ =
+    let Main _ =
         0

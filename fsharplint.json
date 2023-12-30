@@ -188,7 +188,7 @@
         "enabled": true,
         "config": {
             "naming": "PascalCase",
-            "underscores": "AllowPrefix"
+            "underscores": "None"
         }
     },
     "parameterNames": {
@@ -221,21 +221,22 @@
     "publicValuesNames": {
         "enabled": true,
         "config": {
-            "underscores": "AllowPrefix"
+            "naming": "PascalCase",
+            "underscores": "None"
         }
     },
     "privateValuesNames": {
-        "enabled": true,
+        "enabled": false,
         "config": {
             "naming": "CamelCase",
-            "underscores": "AllowPrefix"
+            "underscores": "None"
         }
     },
     "internalValuesNames": {
         "enabled": true,
         "config": {
-            "naming": "CamelCase",
-            "underscores": "AllowPrefix"
+            "naming": "PascalCase",
+            "underscores": "None"
         }
     },
     "unnestedFunctionNames": {
