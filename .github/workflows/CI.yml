@@ -211,9 +211,13 @@ jobs:
           # run the following command to ignore package.json file
           git restore package.json
           git diff --exit-code
-      - name: fantomless
+      - name: FSharpLint
         run: |
           dotnet new tool-manifest
+          dotnet tool install dotnet-fsharplint --version 0.23.1--date20231228-0934.git-e8d2697
+          dotnet dotnet-fsharplint lint conventions.sln
+      - name: fantomless
+        run: |
           dotnet tool install fantomless-tool --version 4.7.997-prerelease
           dotnet fantomless --recurse .
           git diff --exit-code

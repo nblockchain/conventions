@@ -35,7 +35,7 @@ let MixedLineEndings(fileInfo: FileInfo) =
         ]
         |> Seq.filter(
             function
-            | isMatch -> isMatch = true
+            | isMatch -> isMatch
         )
         |> Seq.length
 
@@ -61,7 +61,7 @@ let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
 
     let unpinnedDotnetToolInstallVersions =
         fileLines
-        |> Seq.filter(fun line -> dotnetToolInstallRegex.IsMatch line)
+        |> Seq.filter dotnetToolInstallRegex.IsMatch
         |> Seq.filter(fun line ->
             not(line.Contains("--version")) && not(line.Contains("-v"))
         )
@@ -87,11 +87,9 @@ let DetectMissingVersionsInNugetPackageReferences(fileInfo: FileInfo) =
 
     let fileLines = File.ReadLines fileInfo.FullName
 
-    not(
-        fileLines
-        |> Seq.filter(fun line -> line.StartsWith "#r \"nuget:")
-        |> Seq.filter(fun line -> not(line.Contains ","))
-        |> Seq.isEmpty
+    fileLines
+    |> Seq.exists(fun line ->
+        line.StartsWith "#r \"nuget:" && not(line.Contains ",")
     )
 
 let HasBinaryContent(fileInfo: FileInfo) =
@@ -117,13 +115,10 @@ let EolAtEof(fileInfo: FileInfo) =
         use streamReader = new StreamReader(fileInfo.FullName)
         let filetext = streamReader.ReadToEnd()
 
-        if filetext <> String.Empty then
-            if Seq.last filetext = '\n' then
-                True
-            else
-                False
-        else
-            True
+        match Seq.tryLast filetext with
+        | None
+        | Some '\n' -> True
+        | Some _ -> False
 
 let IsFooterReference(line: string) : bool =
     line.[0] = '[' && line.IndexOf "] " > 0
@@ -155,7 +150,7 @@ let SplitIntoWords(text: string) =
 
     let words =
         Regex.Split(text, codeBlockRegex)
-        |> Seq.filter(fun item -> not(String.IsNullOrEmpty item))
+        |> Seq.filter(String.IsNullOrEmpty >> not)
         |> Seq.map(fun item ->
             if Regex.IsMatch(item, codeBlockRegex) then
                 {
@@ -168,14 +163,14 @@ let SplitIntoWords(text: string) =
                     Type = PlainText
                 }
         )
-        |> Seq.map(fun paragraph ->
+        |> Seq.collect(fun paragraph ->
             if paragraph.Type = CodeBlock then
                 Seq.singleton paragraph
             else
                 let lines = paragraph.Text.Split Environment.NewLine
 
                 lines
-                |> Seq.map(fun line ->
+                |> Seq.collect(fun line ->
                     if IsFooterNote line then
                         Seq.singleton(
                             {
@@ -192,9 +187,7 @@ let SplitIntoWords(text: string) =
                             }
                         )
                 )
-                |> Seq.concat
         )
-        |> Seq.concat
 
     words |> Seq.toList
 
@@ -301,7 +294,7 @@ let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
 let DetectInconsistentVersionsInGitHubCI(dir: DirectoryInfo) =
     let ymlFiles = dir.GetFiles("*.yml", SearchOption.AllDirectories)
 
-    if Seq.length ymlFiles = 0 then
+    if Seq.isEmpty ymlFiles then
         false
     else
         DetectInconsistentVersionsInGitHubCIWorkflow ymlFiles
@@ -325,15 +318,11 @@ let DetectInconsistentVersionsInFSharpScripts
         | Some ignoreDirs ->
             dir.GetFiles("*.fsx", SearchOption.AllDirectories)
             |> Seq.filter(fun fileInfo ->
-                ignoreDirs
-                |> Seq.filter(fun ignoreDir ->
-                    fileInfo.FullName.Contains ignoreDir
-                )
-                |> (fun toBeIgnored -> Seq.length toBeIgnored = 0)
+                ignoreDirs |> Seq.exists fileInfo.FullName.Contains |> not
             )
         | None -> dir.GetFiles("*.fsx", SearchOption.AllDirectories)
 
-    if Seq.length fsxFiles = 0 then
+    if Seq.isEmpty fsxFiles then
         false
     else
         DetectInconsistentVersionsInNugetRefsInFSharpScripts fsxFiles
@@ -358,7 +347,7 @@ let NonVerboseFlags(fileInfo: FileInfo) =
 
     let isFileExtentionValid =
         validExtensions
-        |> Seq.map(fun ext -> fileInfo.FullName.EndsWith ext)
+        |> Seq.map fileInfo.FullName.EndsWith
         |> Seq.contains true
 
     if not isFileExtentionValid then
@@ -378,7 +367,7 @@ let NonVerboseFlags(fileInfo: FileInfo) =
 
             let allowedNonVerboseFlag =
                 allowedNonVerboseFlags
-                |> Seq.map(fun allowedFlag -> line.Contains allowedFlag)
+                |> Seq.map line.Contains
                 |> Seq.contains true
 
             nonVerboseFlag && not allowedNonVerboseFlag
