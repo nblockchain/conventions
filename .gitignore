@@ -32,3 +32,6 @@ TestResults.xml
 
 # Ionide-related
 .fake
+
+# nuget
+packages/
