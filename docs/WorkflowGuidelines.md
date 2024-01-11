@@ -237,6 +237,7 @@ you) to find code that is commented/disabled.
 ends up being compiled and packaged in NuGet as a dotnet tool, for example: https://github.com/nblockchain/fsx/tree/master/fsxc
     * .NET APIs: PascalCase (see our [F# Style Guide](FSharpStyleGuide.md) for more info).
     * .NET parameters, local variables & nested functions: camelCase (again, see our [F# Style Guide](FSharpStyleGuide.md) for more info).
+    * Please use verbs (in infinitive) for method/function names, and nouns for variables/constants/parameters/properties/fields.
 
 * Be mindful of the way we prefer to use git:
     * When rebasing a PR, never use the command `git merge` or the GitHubUI to update branches, otherwise you might get some "Merge" commits that make your commit history unreadable.
