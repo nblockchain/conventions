@@ -102,9 +102,7 @@ jobs:
       - name: Run typescript compiler
         # This step is needed because jest would swallow any compiler error
         # and just declare test as failed without any explanation.
-        run: |
-          echo "{}" > ./tsconfig.json
-          npx tsc
+        run: npx tsc
       - name: Run tests to validate our plugins
         run: yarn jest
 
