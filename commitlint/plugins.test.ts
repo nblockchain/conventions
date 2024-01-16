@@ -664,6 +664,23 @@ test("footer-refs-validity7", () => {
     expect(footerRefsValidity7.status).toBe(0);
 });
 
+// This test reflects this issue: https://github.com/nblockchain/conventions/issues/146
+test("footer-refs-validity8", () => {
+    let commitMsgWithCodeBlockAtFooterRef =
+        "foo: blah blah" +
+        "\n\n" +
+        "Blah blah blah[1]." +
+        "\n\n" +
+        "[1]:\n" +
+        "```\n" +
+        "someCodeBlock\n" +
+        "```";
+    let footerRefsValidity8 = runCommitLintOnMsg(
+        commitMsgWithCodeBlockAtFooterRef
+    );
+    expect(footerRefsValidity8.status).toBe(0);
+});
+
 test("prefer-slash-over-backslash1", () => {
     let commitMsgWithBackslash = "foo\\bar: bla bla bla";
     let preferSlashOverBackslash1 = runCommitLintOnMsg(commitMsgWithBackslash);
