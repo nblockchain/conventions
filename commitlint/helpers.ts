@@ -113,7 +113,7 @@ export abstract class Helpers {
 
     public static isFooterReference(line: string) {
         Helpers.assertLine(line);
-        return line[0] === "[" && line.indexOf("] ") > 0;
+        return line[0] === "[" && line.indexOf("]") > 1;
     }
 
     public static isFixesOrClosesSentence(line: string) {
