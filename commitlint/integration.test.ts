@@ -1,10 +1,4 @@
-let cp = require("child_process");
-
-function runCommitLintOnMsg(inputMsg: string) {
-    return cp.spawnSync("npx", ["commitlint", "--verbose"], {
-        input: inputMsg,
-    });
-}
+import { runCommitLintOnMsg } from "./testHelpers";
 
 test("body-leading-blank1", () => {
     let commitMsgWithoutEmptySecondLine =

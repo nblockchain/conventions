@@ -1,8 +1,4 @@
-const { spawnSync } = require("child_process");
-
-function runCommitLintOnMsg(inputMsg: string) {
-    return spawnSync("npx", ["commitlint", "--verbose"], { input: inputMsg });
-}
+import { runCommitLintOnMsg } from "./testHelpers";
 
 test("body-prose1", () => {
     let commitMsgWithLowercaseBodyStart = `foo: this is only a title
