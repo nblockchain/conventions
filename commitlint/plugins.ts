@@ -16,7 +16,7 @@ export abstract class Plugins {
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
 
             if (bodyStr !== "") {
-                function paragraphHasValidEnding(paragraph: string): boolean {
+                let paragraphHasValidEnding = (paragraph: string): boolean => {
                     let paragraphWords = paragraph.split(" ");
                     let lastWordInParagraph =
                         paragraphWords[paragraphWords.length - 1];
@@ -43,7 +43,7 @@ export abstract class Plugins {
                         return true;
                     }
                     return false;
-                }
+                };
 
                 for (let paragraph of Helpers.splitByEOLs(bodyStr, 2)) {
                     paragraph = paragraph.trim();
