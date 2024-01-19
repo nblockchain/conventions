@@ -446,12 +446,28 @@ export abstract class Plugins {
             for (let paragraph of paragraphs) {
                 let lines = Helpers.splitByEOLs(paragraph, 1);
 
+                let bulletsAllowedNow = false;
+                let alwaysBulletsSoFar = false;
+
                 // NOTE: we don't iterate over the last line, on purpose
                 for (let i = 0; i < lines.length - 1; i++) {
                     let line = lines[i];
 
                     if (line.length == 0) {
                         continue;
+                    }
+
+                    if (
+                        !bulletsAllowedNow &&
+                        ((i == 0 && Helpers.lineStartsWithBullet(line)) ||
+                            line.endsWith(":"))
+                    ) {
+                        bulletsAllowedNow = true;
+                        alwaysBulletsSoFar = true;
+                    } else if (bulletsAllowedNow) {
+                        alwaysBulletsSoFar =
+                            alwaysBulletsSoFar &&
+                            Helpers.lineStartsWithBullet(line);
                     }
 
                     if (line.length < paragraphLineMinLength) {
@@ -474,6 +490,7 @@ export abstract class Plugins {
                             nextLine[0].toUpperCase() == nextLine[0];
 
                         if (
+                            !alwaysBulletsSoFar &&
                             !isUrl &&
                             !lineIsFooterNote &&
                             !isNextWordTooLong &&

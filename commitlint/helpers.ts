@@ -80,6 +80,20 @@ export abstract class Helpers {
         return url.includes("/commit/");
     }
 
+    public static lineStartsWithBullet(line: string) {
+        Helpers.assertLine(line);
+        let allowedBulletChars = ["*", "-"];
+        for (let bulletChar of allowedBulletChars) {
+            let simplePattern = bulletChar + " ";
+            if (
+                line.startsWith(simplePattern) &&
+                line.length > simplePattern.length
+            )
+                return true;
+        }
+        return false;
+    }
+
     public static isCodeBlockDelimiter(line: string) {
         Helpers.assertLine(line);
         let codeBlockDelimiter = "```";
