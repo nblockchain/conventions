@@ -3,6 +3,36 @@ import { Helpers } from "./helpers";
 
 export abstract class Plugins {
     public static bodyProse(rawStr: string) {
+        function paragraphHasValidEnding(paragraph: string): boolean {
+            let paragraphWords = paragraph.split(" ");
+            let lastWordInParagraph = paragraphWords[paragraphWords.length - 1];
+            let isParagraphEndingWithUrl =
+                Helpers.isValidUrl(lastWordInParagraph);
+            if (isParagraphEndingWithUrl) {
+                return true;
+            }
+
+            let endingChar = paragraph[paragraph.length - 1];
+            if (
+                endingChar === "." ||
+                endingChar === ":" ||
+                endingChar === "!" ||
+                endingChar === "?"
+            ) {
+                return true;
+            }
+
+            if (
+                endingChar === ")" &&
+                paragraph.length > 1 &&
+                paragraphHasValidEnding(paragraph[paragraph.length - 2])
+            ) {
+                return true;
+            }
+
+            return false;
+        }
+
         let offence = false;
 
         rawStr = rawStr.trim();
@@ -16,35 +46,6 @@ export abstract class Plugins {
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
 
             if (bodyStr !== "") {
-                let paragraphHasValidEnding = (paragraph: string): boolean => {
-                    let paragraphWords = paragraph.split(" ");
-                    let lastWordInParagraph =
-                        paragraphWords[paragraphWords.length - 1];
-                    let isParagraphEndingWithUrl =
-                        Helpers.isValidUrl(lastWordInParagraph);
-                    if (isParagraphEndingWithUrl) {
-                        return true;
-                    }
-
-                    let endingChar = paragraph[paragraph.length - 1];
-                    if (
-                        endingChar === "." ||
-                        endingChar === ":" ||
-                        endingChar === "!" ||
-                        endingChar === "?"
-                    ) {
-                        return true;
-                    }
-                    if (
-                        endingChar === ")" &&
-                        paragraph.length > 1 &&
-                        paragraphHasValidEnding(paragraph[paragraph.length - 2])
-                    ) {
-                        return true;
-                    }
-                    return false;
-                };
-
                 for (let paragraph of Helpers.splitByEOLs(bodyStr, 2)) {
                     paragraph = paragraph.trim();
 
