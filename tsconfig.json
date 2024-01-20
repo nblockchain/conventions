@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
         "lib": ["ES2021"],
-        // TODO: explore replacing the below setting with just target:ES2015
-        "downlevelIteration": true
+        "target": "ES2021"
     }
 }
