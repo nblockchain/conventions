@@ -544,6 +544,31 @@ This is a bullet list of things:
     expect(bodyParagraphLineMinLength9TriplePrime.status).toBe(0);
 });
 
+test("body-paragraph-line-min-length10", () => {
+    let commitMsgThatHasNumberedBullets = `Fixed bug (a title of less than 50 chars)
+
+This is a bullet list of things:
+1. Foo.
+2. Bar.`;
+
+    let bodyParagraphLineMinLength10 = runCommitLintOnMsg(
+        commitMsgThatHasNumberedBullets
+    );
+
+    expect(bodyParagraphLineMinLength10.status).toBe(0);
+
+    let commitMsgThatOnlyHasNumberedBullets = `Fixed bug (a title of less than 50 chars)
+
+1. Foo.
+2. Bar.`;
+
+    let bodyParagraphLineMinLength10Prime = runCommitLintOnMsg(
+        commitMsgThatOnlyHasNumberedBullets
+    );
+
+    expect(bodyParagraphLineMinLength10Prime.status).toBe(0);
+});
+
 test("commit-hash-alone1", () => {
     let commitMsgWithCommitUrl = `foo: this is only a title
 
