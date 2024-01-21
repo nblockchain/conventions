@@ -70,6 +70,12 @@ export abstract class Helpers {
         }
     }
 
+    public static assertChar(str: string) {
+        if (str.length != 1) {
+            throw Error("This function expects a char as input");
+        }
+    }
+
     public static findUrls(text: string) {
         var urlRegex = /(https?:\/\/[^\s]+)/g;
         return text.match(urlRegex);
@@ -78,6 +84,44 @@ export abstract class Helpers {
     public static isCommitUrl(url: string) {
         Helpers.assertUrl(url);
         return url.includes("/commit/");
+    }
+
+    public static isCharADigit(aChar: string) {
+        Helpers.assertChar(aChar);
+        // https://stackoverflow.com/a/66666216/544947
+        return !isNaN(parseInt(aChar));
+    }
+
+    public static lineStartsWithBullet(line: string) {
+        Helpers.assertLine(line);
+
+        let allowedUnnumberedBulletChars = ["*", "-"];
+        for (let bulletChar of allowedUnnumberedBulletChars) {
+            let unnumberedPattern = bulletChar + " ";
+            if (
+                line.startsWith(unnumberedPattern) &&
+                line.length > unnumberedPattern.length
+            )
+                return true;
+        }
+
+        let allowedNumberedBulletChars = ["."];
+        for (let bulletChar of allowedNumberedBulletChars) {
+            if (line.indexOf(bulletChar) > 0) {
+                for (let i = 0; i < line.length; i++) {
+                    if (Helpers.isCharADigit(line[i])) {
+                        continue;
+                    } else {
+                        if (line[i] == bulletChar) {
+                            return true;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     public static isCodeBlockDelimiter(line: string) {
