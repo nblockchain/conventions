@@ -133,7 +133,7 @@ jobs:
       - name: Install yarn
         run: |
           npm install --global yarn
-          yarn add --dev jest typescript ts-jest @types/jest
+          yarn add --dev jest typescript ts-jest @types/jest ts-node
       - name: Run typescript compiler
         run: npx tsc
       - name: Print versions
@@ -144,7 +144,7 @@ jobs:
           npx commitlint --version
           yarn --version
       - name: Run tests to validate our plugins
-        run: yarn jest
+        run: yarn jest --config jest.config.ts
 
   sanity-check:
     name: Sanity check
