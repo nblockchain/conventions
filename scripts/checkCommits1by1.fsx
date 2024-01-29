@@ -1287,7 +1287,8 @@ for (commitHash, _commitMsg) in prCommits do
 // "no ci" string, causing PR's CI not to trigger. Solution: move the GHA
 // 'if' attrib (`if: github.event_name == 'pull_request'`) from CI.yml to
 // this F# script, and in case it's not PR, check branch of current commit
-// and if it's the last commit of the branch and has "no ci", fail!!
+// and if branch name is different than master/main, and last commit of it
+// has "no ci", fail!!
 let ShouldHaveCiStatus(commitMsg: string) =
     // NOTE: surprisingly enough, this needs to be case-sensitive, which means
     // that if commit has "[no CI]", GitHubActions will still spawn a job
