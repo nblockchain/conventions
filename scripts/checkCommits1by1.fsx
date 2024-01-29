@@ -1274,20 +1274,29 @@ let prCommits =
     let prCommitsJsonString = GitHubApiCall url
 
     let parsedPrCommitsJsonObj = PRCommitsType.Parse prCommitsJsonString
-    parsedPrCommitsJsonObj |> Seq.map(fun commit -> commit.Sha)
 
-Console.WriteLine
-    $"Pull request commits are: {Environment.NewLine}{String.concat Environment.NewLine prCommits}"
+    parsedPrCommitsJsonObj
+    |> Seq.map(fun commit -> (commit.Sha, commit.Commit.Message))
+
+Console.WriteLine "Pull request commits are:"
+
+for (commitHash, _commitMsg) in prCommits do
+    Console.WriteLine commitHash
+
+let ShouldHaveCiStatus(commitMsg: string) =
+    // NOTE: surprisingly enough, this needs to be case-sensitive, which means
+    // that if commit has "[no CI]", GitHubActions will still spawn a job
+    not <| commitMsg.Contains "[no ci]"
 
 let ciStatuses =
     prCommits
-    |> Seq.map(fun commit ->
+    |> Seq.map(fun (commitHash: string, commitMsg: string) ->
 
         let url =
             sprintf
                 "https://api.github.com/repos/%s/commits/%s/check-suites"
                 gitRepo
-                commit
+                commitHash
 
         let json = GitHubApiCall url
 
@@ -1295,13 +1304,7 @@ let ciStatuses =
 
         let checkSuitesParsedJson = CheckSuitesType.Parse json
 
-        let commitMessage =
-            checkSuitesParsedJson.CheckSuites.[0]
-                .HeadCommit
-                .Message
-
-        let shouldHaveCiStatus =
-            not <| commitMessage.ToLower().Contains "[no ci]"
+        let shouldHaveCiStatus = ShouldHaveCiStatus commitMsg
 
         hasCiStatus, shouldHaveCiStatus
     )
@@ -1333,39 +1336,39 @@ if notUsedGitPush1by1 then
             Environment.NewLine
             "https://github.com/nblockchain/conventions/blob/master/scripts/gitPush1by1.fsx"
 
+    Console.WriteLine()
     Console.Error.WriteLine errMsg
     Environment.Exit 2
 
 prCommits
-|> Seq.iter(fun commit ->
+|> Seq.iter(fun (commitHash, commitMessage) ->
 
     let url =
         sprintf
             "https://api.github.com/repos/%s/commits/%s/check-suites"
             gitRepo
-            commit
+            commitHash
 
     let checkSuitesJsonString = GitHubApiCall url
 
     let checkSuitesParsedJson = CheckSuitesType.Parse checkSuitesJsonString
 
-    let commitMessage =
-        checkSuitesParsedJson.CheckSuites.[0]
-            .HeadCommit
-            .Message
+    if not(ShouldHaveCiStatus commitMessage) then
+        ()
+    elif commitMessage.Contains "failing test" then
+        ()
+    else
+        let status = checkSuitesParsedJson.CheckSuites.[0].Status
+        let conclusion = checkSuitesParsedJson.CheckSuites.[0].Conclusion
 
-    let status = checkSuitesParsedJson.CheckSuites.[0].Status
-    let conclusion = checkSuitesParsedJson.CheckSuites.[0].Conclusion
+        if status = "completed" && conclusion = "failure" then
+            Console.WriteLine()
 
-    if
-        status = "completed" && conclusion = "failure"
-        && not(commitMessage.Contains "failing test")
-    then
-        Console.Error.WriteLine
-            "Thanks for pushing commits 1 by 1, however, it has been detected that some of them to not be successful (or not be red when they add a failing test)"
+            Console.Error.WriteLine
+                "Thanks for pushing commits 1 by 1, however, it has been detected that some of them to not be successful (or not be red when they add a failing test)"
 
-        Console.Error.WriteLine
-            "Hint: if you want to state that a commit can have red CI because of adding a failing test, please make sure that the commit message contains the 'failing test' term"
+            Console.Error.WriteLine
+                "Hint: if you want to state that a commit can have red CI because of adding a failing test, please make sure that the commit message contains the 'failing test' term"
 
-        Environment.Exit 3
+            Environment.Exit 3
 )
