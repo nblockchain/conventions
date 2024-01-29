@@ -15,40 +15,6 @@ open Fsdk
 open Fsdk.Process
 open Fsdk.FSharpUtil
 
-let githubEventPath = Environment.GetEnvironmentVariable "GITHUB_EVENT_PATH"
-
-if String.IsNullOrEmpty githubEventPath then
-    Console.Error.WriteLine
-        "This script is meant to be used only within a GitHubCI pipeline"
-
-    Environment.Exit 2
-
-let githubTokenErrorMsg =
-    """Please define GITHUB_TOKEN environment variable in your GitHubCI workflow:
-
-```
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-"""
-
-let accessTokenName, accessToken =
-    let personalAccessToken = Environment.GetEnvironmentVariable "ACCESS_TOKEN"
-
-    if not(String.IsNullOrEmpty personalAccessToken) then
-        "ACCESS_TOKEN", personalAccessToken
-    else
-        let githubToken = Environment.GetEnvironmentVariable "GITHUB_TOKEN"
-
-        if not(String.IsNullOrEmpty githubToken) then
-            "GITHUB_TOKEN", (Environment.GetEnvironmentVariable "GITHUB_TOKEN")
-        else
-            Console.Error.WriteLine githubTokenErrorMsg
-            exit 1
-
-printfn "Using access token %s" accessTokenName
-Console.WriteLine()
-
 type GithubEventType =
     JsonProvider<"""
 {
@@ -559,15 +525,6 @@ type GithubEventType =
   }
 """>
 
-let jsonString = File.ReadAllText githubEventPath
-let parsedJsonObj = GithubEventType.Parse jsonString
-
-let gitForkUser = parsedJsonObj.PullRequest.Head.User.Login
-let gitForkRepo = parsedJsonObj.PullRequest.Head.Repo.Name
-let gitRepo = $"{gitForkUser}/{gitForkRepo}"
-
-Console.WriteLine $"Fork repository is: {gitRepo}"
-
 type PRCommitsType =
     JsonProvider<"""
 [
@@ -810,133 +767,6 @@ type PRCommitsType =
     }
   ]
 """>
-
-let GitHubApiCall(url: string) =
-    let userAgent = ".NET App"
-    let xGitHubApiVersion = "2022-11-28"
-
-    let mediaTypeWithQuality =
-        MediaTypeWithQualityHeaderValue "application/vnd.github+json"
-
-    use client = new HttpClient()
-    client.DefaultRequestHeaders.Accept.Clear()
-
-    client.DefaultRequestHeaders.Accept.Add(mediaTypeWithQuality)
-
-    client.DefaultRequestHeaders.Add("User-Agent", userAgent)
-    client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", xGitHubApiVersion)
-
-    if not(String.IsNullOrEmpty accessToken) then
-        client.DefaultRequestHeaders.Add(
-            "Authorization",
-            $"token {accessToken}"
-        )
-
-    let result =
-        try
-            Async.AwaitTask(client.GetStringAsync url) |> Async.RunSynchronously
-
-        with
-        | ex ->
-            match FindException<HttpRequestException> ex with
-            | Some httpRequestException ->
-                let accessTokenErrorMsg =
-                    """Please create a PAT from your GitHub account (Settings->Developer Settings->PATs->Tokens(classic) and set it as GitHubActions repo secret ACCESS_TOKEN; then define the environment variable in your GitHubCI workflow:
-
-```
-    env:
-      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-```
-"""
-
-                match httpRequestException.StatusCode |> Option.ofNullable with
-                | Some statusCode when statusCode = HttpStatusCode.NotFound ->
-                    if accessTokenName <> "ACCESS_TOKEN" then
-                        failwith accessTokenErrorMsg
-                    else
-                        failwith
-                            "Unexpected 404 received from GitHub API, using ACCESS_TOKEN properly"
-
-                | Some statusCode when statusCode = HttpStatusCode.Forbidden ->
-                    let permissionsErrMsg =
-                        sprintf
-                            """%s passed doesn't seem to have enough permissions.
-To modify the permissions of your token, navigate to the Settings section of your
-repository or organization and click on Actions button, then select General. From
-'Workflow permissions' section on that page, choose 'Read and write permissions'
-(which grants access to content and the ability to make changes)."""
-                            accessTokenName
-
-                    if accessTokenName = "ACCESS_TOKEN" then
-                        failwith permissionsErrMsg
-                    else
-                        let msg =
-                            "Or maybe you have to use an ACCESS_TOKEN instead: "
-
-                        failwith(
-                            permissionsErrMsg
-                            + Environment.NewLine
-                            + msg
-                            + accessTokenErrorMsg
-                        )
-
-                | _ -> reraise()
-
-            | _ -> reraise()
-
-    result
-
-let prCommits =
-    let url = parsedJsonObj.PullRequest.Links.Commits.Href
-
-    let prCommitsJsonString = GitHubApiCall url
-
-    let parsedPrCommitsJsonObj = PRCommitsType.Parse prCommitsJsonString
-    parsedPrCommitsJsonObj |> Seq.map(fun commit -> commit.Sha)
-
-Console.WriteLine
-    $"Pull request commits are: {Environment.NewLine}{String.concat Environment.NewLine prCommits}"
-
-let hasCiStatus =
-    prCommits
-    |> Seq.map(fun commit ->
-
-        let url =
-            sprintf
-                "https://api.github.com/repos/%s/commits/%s/check-suites"
-                gitRepo
-                commit
-
-        let json = GitHubApiCall url
-
-        not(json.Contains "\"check_suites\":[]")
-    )
-
-let gitHubActionsEnabled = Seq.contains true hasCiStatus
-
-if not gitHubActionsEnabled then
-    let errMsg =
-        sprintf
-            """
-Please activate GitHub Actions in your repository. Click on the 
-"Actions" tab at the top of the repository page and click on the 
-"I understand my workflows, go ahead and enable them" button. 
-"""
-
-    Console.Error.WriteLine errMsg
-    Environment.Exit 1
-
-let notUsedGitPush1by1 = gitHubActionsEnabled && Seq.contains false hasCiStatus
-
-if notUsedGitPush1by1 then
-    let errMsg =
-        sprintf
-            "Please push the commits one by one to make sure every commit has a CI status; using this script is recommended:%s%s"
-            Environment.NewLine
-            "https://github.com/nblockchain/conventions/blob/master/scripts/gitPush1by1.fsx"
-
-    Console.Error.WriteLine errMsg
-    Environment.Exit 2
 
 type CheckSuitesType =
     JsonProvider<"""
@@ -1316,6 +1146,176 @@ type CheckSuitesType =
   ]
 }    
 """>
+
+let githubEventPath = Environment.GetEnvironmentVariable "GITHUB_EVENT_PATH"
+
+if String.IsNullOrEmpty githubEventPath then
+    Console.Error.WriteLine
+        "This script is meant to be used only within a GitHubCI pipeline"
+
+    Environment.Exit 2
+
+let githubTokenErrorMsg =
+    """Please define GITHUB_TOKEN environment variable in your GitHubCI workflow:
+
+```
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+"""
+
+let accessTokenName, accessToken =
+    let personalAccessToken = Environment.GetEnvironmentVariable "ACCESS_TOKEN"
+
+    if not(String.IsNullOrEmpty personalAccessToken) then
+        "ACCESS_TOKEN", personalAccessToken
+    else
+        let githubToken = Environment.GetEnvironmentVariable "GITHUB_TOKEN"
+
+        if not(String.IsNullOrEmpty githubToken) then
+            "GITHUB_TOKEN", (Environment.GetEnvironmentVariable "GITHUB_TOKEN")
+        else
+            Console.Error.WriteLine githubTokenErrorMsg
+            exit 1
+
+printfn "Using access token %s" accessTokenName
+Console.WriteLine()
+
+let jsonString = File.ReadAllText githubEventPath
+let parsedJsonObj = GithubEventType.Parse jsonString
+
+let gitForkUser = parsedJsonObj.PullRequest.Head.User.Login
+let gitForkRepo = parsedJsonObj.PullRequest.Head.Repo.Name
+let gitRepo = $"{gitForkUser}/{gitForkRepo}"
+
+Console.WriteLine $"Fork repository is: {gitRepo}"
+
+let GitHubApiCall(url: string) =
+    let userAgent = ".NET App"
+    let xGitHubApiVersion = "2022-11-28"
+
+    let mediaTypeWithQuality =
+        MediaTypeWithQualityHeaderValue "application/vnd.github+json"
+
+    use client = new HttpClient()
+    client.DefaultRequestHeaders.Accept.Clear()
+
+    client.DefaultRequestHeaders.Accept.Add(mediaTypeWithQuality)
+
+    client.DefaultRequestHeaders.Add("User-Agent", userAgent)
+    client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", xGitHubApiVersion)
+
+    if not(String.IsNullOrEmpty accessToken) then
+        client.DefaultRequestHeaders.Add(
+            "Authorization",
+            $"token {accessToken}"
+        )
+
+    let result =
+        try
+            Async.AwaitTask(client.GetStringAsync url) |> Async.RunSynchronously
+
+        with
+        | ex ->
+            match FindException<HttpRequestException> ex with
+            | Some httpRequestException ->
+                let accessTokenErrorMsg =
+                    """Please create a PAT from your GitHub account (Settings->Developer Settings->PATs->Tokens(classic) and set it as GitHubActions repo secret ACCESS_TOKEN; then define the environment variable in your GitHubCI workflow:
+
+```
+    env:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+```
+"""
+
+                match httpRequestException.StatusCode |> Option.ofNullable with
+                | Some statusCode when statusCode = HttpStatusCode.NotFound ->
+                    if accessTokenName <> "ACCESS_TOKEN" then
+                        failwith accessTokenErrorMsg
+                    else
+                        failwith
+                            "Unexpected 404 received from GitHub API, using ACCESS_TOKEN properly"
+
+                | Some statusCode when statusCode = HttpStatusCode.Forbidden ->
+                    let permissionsErrMsg =
+                        sprintf
+                            """%s passed doesn't seem to have enough permissions.
+To modify the permissions of your token, navigate to the Settings section of your
+repository or organization and click on Actions button, then select General. From
+'Workflow permissions' section on that page, choose 'Read and write permissions'
+(which grants access to content and the ability to make changes)."""
+                            accessTokenName
+
+                    if accessTokenName = "ACCESS_TOKEN" then
+                        failwith permissionsErrMsg
+                    else
+                        let msg =
+                            "Or maybe you have to use an ACCESS_TOKEN instead: "
+
+                        failwith(
+                            permissionsErrMsg
+                            + Environment.NewLine
+                            + msg
+                            + accessTokenErrorMsg
+                        )
+
+                | _ -> reraise()
+
+            | _ -> reraise()
+
+    result
+
+let prCommits =
+    let url = parsedJsonObj.PullRequest.Links.Commits.Href
+
+    let prCommitsJsonString = GitHubApiCall url
+
+    let parsedPrCommitsJsonObj = PRCommitsType.Parse prCommitsJsonString
+    parsedPrCommitsJsonObj |> Seq.map(fun commit -> commit.Sha)
+
+Console.WriteLine
+    $"Pull request commits are: {Environment.NewLine}{String.concat Environment.NewLine prCommits}"
+
+let hasCiStatus =
+    prCommits
+    |> Seq.map(fun commit ->
+
+        let url =
+            sprintf
+                "https://api.github.com/repos/%s/commits/%s/check-suites"
+                gitRepo
+                commit
+
+        let json = GitHubApiCall url
+
+        not(json.Contains "\"check_suites\":[]")
+    )
+
+let gitHubActionsEnabled = Seq.contains true hasCiStatus
+
+if not gitHubActionsEnabled then
+    let errMsg =
+        sprintf
+            """
+Please activate GitHub Actions in your repository. Click on the
+"Actions" tab at the top of the repository page and click on the
+"I understand my workflows, go ahead and enable them" button.
+"""
+
+    Console.Error.WriteLine errMsg
+    Environment.Exit 1
+
+let notUsedGitPush1by1 = gitHubActionsEnabled && Seq.contains false hasCiStatus
+
+if notUsedGitPush1by1 then
+    let errMsg =
+        sprintf
+            "Please push the commits one by one to make sure every commit has a CI status; using this script is recommended:%s%s"
+            Environment.NewLine
+            "https://github.com/nblockchain/conventions/blob/master/scripts/gitPush1by1.fsx"
+
+    Console.Error.WriteLine errMsg
+    Environment.Exit 2
 
 prCommits
 |> Seq.iter(fun commit ->
