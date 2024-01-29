@@ -27,3 +27,6 @@ All in all, this is mainly documentation, and some tooling to detect bad practic
 More things to come:
 - Detect old versions of FSharpLint and fantomas/fantomless being used.
 - Detect old versions of .editorconfig or Directory.Build.props being used.
+- Detect GitHubCI bad practices, such as:
+    * Missing important triggers such as push or pull_request, workflow_dispatch, schedule.
+    * Branch filtering on push trigger (only acceptable one is '**', otherwise '*' doesn't match to branch names with slashes in them).
