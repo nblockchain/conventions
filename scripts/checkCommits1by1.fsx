@@ -1213,6 +1213,8 @@ let GitHubApiCall(url: string) =
         )
 
     let result =
+        Console.WriteLine(sprintf "About to query %s ..." url)
+
         try
             Async.AwaitTask(client.GetStringAsync url) |> Async.RunSynchronously
 
