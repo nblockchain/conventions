@@ -1,5 +1,7 @@
 const { spawnSync } = require("child_process");
+const os = require("os");
 
 export function runCommitLintOnMsg(inputMsg: string) {
-    return spawnSync("npx", ["commitlint", "--verbose"], { input: inputMsg });
+    const command = os.platform() === "win32" ? "npx.cmd" : "npx";
+    return spawnSync(command, ["commitlint", "--verbose"], { input: inputMsg });
 }
