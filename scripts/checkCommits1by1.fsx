@@ -2,6 +2,7 @@
 
 open System
 open System.IO
+open System.Linq
 open System.Net
 open System.Net.Http
 open System.Net.Http.Headers
@@ -1276,7 +1277,7 @@ let prCommits =
 Console.WriteLine
     $"Pull request commits are: {Environment.NewLine}{String.concat Environment.NewLine prCommits}"
 
-let hasCiStatus =
+let ciStatuses =
     prCommits
     |> Seq.map(fun commit ->
 
@@ -1288,10 +1289,22 @@ let hasCiStatus =
 
         let json = GitHubApiCall url
 
-        not(json.Contains "\"check_suites\":[]")
+        let hasCiStatus = not(json.Contains "\"check_suites\":[]")
+
+        let checkSuitesParsedJson = CheckSuitesType.Parse json
+
+        let commitMessage =
+            checkSuitesParsedJson.CheckSuites.[0]
+                .HeadCommit
+                .Message
+
+        let shouldHaveCiStatus =
+            not <| commitMessage.ToLower().Contains "[no ci]"
+
+        hasCiStatus, shouldHaveCiStatus
     )
 
-let gitHubActionsEnabled = Seq.contains true hasCiStatus
+let gitHubActionsEnabled = ciStatuses.Any(fun (hasCiStatus, _) -> hasCiStatus)
 
 if not gitHubActionsEnabled then
     let errMsg =
@@ -1305,7 +1318,11 @@ Please activate GitHub Actions in your repository. Click on the
     Console.Error.WriteLine errMsg
     Environment.Exit 1
 
-let notUsedGitPush1by1 = gitHubActionsEnabled && Seq.contains false hasCiStatus
+let notUsedGitPush1by1 =
+    gitHubActionsEnabled
+    && ciStatuses.Any(fun (hasCiStatus, shouldHaveCiStatus) ->
+        hasCiStatus = false && shouldHaveCiStatus = true
+    )
 
 if notUsedGitPush1by1 then
     let errMsg =
