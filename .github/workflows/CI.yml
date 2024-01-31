@@ -94,10 +94,10 @@ jobs:
         run: |
           npm install conventional-changelog-conventionalcommits
           npm install commitlint@latest
-      - name: Install yarn
+      - name: Install yarn & packages
         run: |
           npm install --global yarn
-          yarn add --dev jest typescript ts-jest @types/jest
+          yarn install
       - name: Print versions
         run: |
           git --version
@@ -130,10 +130,10 @@ jobs:
         run: |
           npm install conventional-changelog-conventionalcommits
           npm install commitlint@latest
-      - name: Install yarn
+      - name: Install yarn & packages
         run: |
           npm install --global yarn
-          yarn add --dev jest typescript ts-jest @types/jest ts-node
+          yarn install
       - name: Run typescript compiler
         run: npx tsc
       - name: Print versions
