@@ -489,11 +489,17 @@ export abstract class Plugins {
                             line[line.length - 1] === ":" &&
                             nextLine[0].toUpperCase() == nextLine[0];
 
+                        let isLastLineBeforeNextBullet =
+                            bulletsAllowedNow &&
+                            line[line.length - 1] === "." &&
+                            Helpers.lineStartsWithBullet(nextLine);
+
                         if (
                             !alwaysBulletsSoFar &&
                             !isUrl &&
                             !lineIsFooterNote &&
                             !isNextWordTooLong &&
+                            !isLastLineBeforeNextBullet &&
                             !isLastCharAColonBreak
                         ) {
                             offence = line;
