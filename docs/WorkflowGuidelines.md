@@ -284,4 +284,5 @@ closed after the commit lands, then you would use the word `Closes` instead of
 Do not use long lines (manually crop them with EOLs because git doesn't do this
 automatically).
 
-
+For more info about why well-crafted commit messages are important, PLEASE PLEASE
+read this article: https://web.archive.org/web/20240201135044/https://dhwthompson.com/2019/my-favourite-git-commit
