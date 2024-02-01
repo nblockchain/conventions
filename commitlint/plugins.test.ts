@@ -569,6 +569,33 @@ This is a bullet list of things:
     expect(bodyParagraphLineMinLength10Prime.status).toBe(0);
 });
 
+test("body-paragraph-line-min-length11", () => {
+    let commitMsgThatHasMultiLineBullets = `Fixed bug (a title of less than 50 chars)
+
+This is a bullet list of things:
+* Foo bar baz foo bar baz foo bar baz foo bar baz foo bar baz
+foo bar baz.
+* Baz bar foo.`;
+
+    let bodyParagraphLineMinLength11 = runCommitLintOnMsg(
+        commitMsgThatHasMultiLineBullets
+    );
+
+    expect(bodyParagraphLineMinLength11.status).toBe(0);
+
+    let commitMsgThatOnlyHasMultiLineBullets = `Fixed bug (a title of less than 50 chars)
+
+* Foo bar baz foo bar baz foo bar baz foo bar baz foo bar baz
+foo bar baz.
+* Baz bar foo.`;
+
+    let bodyParagraphLineMinLength11Prime = runCommitLintOnMsg(
+        commitMsgThatOnlyHasMultiLineBullets
+    );
+
+    expect(bodyParagraphLineMinLength11Prime.status).toBe(0);
+});
+
 test("commit-hash-alone1", () => {
     let commitMsgWithCommitUrl = `foo: this is only a title
 
