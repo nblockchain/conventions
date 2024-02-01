@@ -437,7 +437,7 @@ export abstract class Plugins {
         paragraphLineMinLength: number,
         paragraphLineMaxLength: number
     ) {
-        let offence = false;
+        let offence: string | null = null;
 
         if (bodyStr !== null) {
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
@@ -496,7 +496,7 @@ export abstract class Plugins {
                             !isNextWordTooLong &&
                             !isLastCharAColonBreak
                         ) {
-                            offence = true;
+                            offence = line;
                             break;
                         }
                     }
@@ -504,9 +504,11 @@ export abstract class Plugins {
             }
         }
 
+        let isValid = offence === null;
+
         return [
-            !offence,
-            `Please do not subceed ${paragraphLineMinLength} characters in the lines of the commit message's body paragraphs (except the last line of each paragraph); we recommend this script (for editing the last commit message): \n` +
+            isValid,
+            `Please do not subceed ${paragraphLineMinLength} characters in the lines of the commit message's body paragraphs. Offending line has this text: "${offence}"; we recommend this script (for editing the last commit message): \n` +
                 "https://github.com/nblockchain/conventions/blob/master/scripts/wrapLatestCommitMsg.fsx" +
                 Helpers.errMessageSuffix,
         ];
