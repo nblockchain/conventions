@@ -151,7 +151,8 @@ jobs:
       - commitlint-plugins-tests
     runs-on: ubuntu-22.04
     container:
-      image: "ubuntu:22.04"
+      # TODO: upgrade to 24.04 (because LTS) as soon as it's available
+      image: "ubuntu:23.10"
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -164,20 +165,6 @@ jobs:
           sudo apt install --yes --no-install-recommends git
           # workaround for https://github.com/actions/runner/issues/2033
           git config --global --add safe.directory '*'
-
-          # need to update nodejs because with ubuntu's default nodejs version we would get this error:
-          # ```
-          # + npx commitlint --from HEAD~1 --to HEAD --verbose
-          # /__w/conventions/conventions/node_modules/typescript/lib/typescript.js:139
-          #    for (let i = startIndex ?? 0; i < array.length; i++) {
-          #                            ^
-          #
-          # SyntaxError: Unexpected token '?'
-          #    at wrapSafe (internal/modules/cjs/loader.js:915:16)
-          # ...
-          # ```
-          sudo npm install --global n
-          sudo n lts
       - uses: actions/checkout@v4
         with:
           submodules: recursive
