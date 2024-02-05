@@ -17,7 +17,7 @@ env:
 jobs:
   build-fs:
     name: Build F#
-    runs-on: ${{ env.JOB_OS }}
+    runs-on: "$JOB_OS"
     container:
       image: ${{ env.CONTAINER_OS }}
     steps:
