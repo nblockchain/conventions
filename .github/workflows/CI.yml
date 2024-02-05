@@ -12,9 +12,10 @@ on:
 jobs:
   build-fs:
     name: Build F#
+    # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
     runs-on: ubuntu-22.04
     container:
-      image: "ubuntu:22.04"
+      image: "ubuntu:23.10"
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
@@ -41,9 +42,10 @@ jobs:
   file-conventions-tests:
     name: Run FileConventions-lib unit tests
     needs: build-fs
+    # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
     runs-on: ubuntu-22.04
     container:
-      image: "ubuntu:22.04"
+      image: "ubuntu:23.10"
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
@@ -66,9 +68,11 @@ jobs:
 
   build-ts:
     name: Build TypeScript
+
+    # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
     runs-on: ubuntu-22.04
     container:
-      image: "ubuntu:22.04"
+      image: "ubuntu:23.10"
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
@@ -78,10 +82,6 @@ jobs:
           sudo apt install --yes --no-install-recommends git ca-certificates
 
           sudo apt install --yes --no-install-recommends npm curl
-          # need to update nodejs because with ubuntu's default nodejs version we would get this error:
-          # error @jest/core@29.4.1: The engine "node" is incompatible with this module. Expected version "^14.15.0 || ^16.10.0 || >=18.0.0". Got "12.22.9"
-          sudo npm install --global n
-          sudo n lts
       - name: Print versions
         run: |
           git --version
@@ -107,9 +107,10 @@ jobs:
   commitlint-plugins-tests:
     name: Run commitlint-related tests
     needs: build-ts
+    # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
     runs-on: ubuntu-22.04
     container:
-      image: "ubuntu:22.04"
+      image: "ubuntu:23.10"
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
@@ -119,10 +120,6 @@ jobs:
           sudo apt install --yes --no-install-recommends git ca-certificates
 
           sudo apt install --yes --no-install-recommends npm curl
-          # need to update nodejs because with ubuntu's default nodejs version we would get this error:
-          # error @jest/core@29.4.1: The engine "node" is incompatible with this module. Expected version "^14.15.0 || ^16.10.0 || >=18.0.0". Got "12.22.9"
-          sudo npm install --global n
-          sudo n lts
       - name: Install commitlint
         run: |
           npm install conventional-changelog-conventionalcommits
@@ -149,9 +146,10 @@ jobs:
     needs:
       - file-conventions-tests
       - commitlint-plugins-tests
+    # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
     runs-on: ubuntu-22.04
     container:
-      image: "ubuntu:22.04"
+      image: "ubuntu:23.10"
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -164,20 +162,6 @@ jobs:
           sudo apt install --yes --no-install-recommends git
           # workaround for https://github.com/actions/runner/issues/2033
           git config --global --add safe.directory '*'
-
-          # need to update nodejs because with ubuntu's default nodejs version we would get this error:
-          # ```
-          # + npx commitlint --from HEAD~1 --to HEAD --verbose
-          # /__w/conventions/conventions/node_modules/typescript/lib/typescript.js:139
-          #    for (let i = startIndex ?? 0; i < array.length; i++) {
-          #                            ^
-          #
-          # SyntaxError: Unexpected token '?'
-          #    at wrapSafe (internal/modules/cjs/loader.js:915:16)
-          # ...
-          # ```
-          sudo npm install --global n
-          sudo n lts
       - uses: actions/checkout@v4
         with:
           submodules: recursive
