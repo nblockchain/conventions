@@ -19,7 +19,7 @@ jobs:
     name: Build F#
     runs-on: "$JOB_OS"
     container:
-      image: ${{ env.CONTAINER_OS }}
+      image: "$CONTAINER_OS"
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
