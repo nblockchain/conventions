@@ -16,7 +16,7 @@ jobs:
     container:
       image: "ubuntu:22.04"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Install required dependencies
         run: |
           apt update
@@ -48,7 +48,7 @@ jobs:
     container:
       image: "ubuntu:22.04"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Install required dependencies
         run: |
           apt update
@@ -73,7 +73,7 @@ jobs:
     container:
       image: "ubuntu:22.04"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Install required dependencies
         run: |
           apt update
@@ -114,7 +114,7 @@ jobs:
     container:
       image: "ubuntu:22.04"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Install required dependencies
         run: |
           apt update
@@ -177,7 +177,7 @@ jobs:
           # ```
           sudo npm install --global n
           sudo n lts
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
           # needed because of commit-lint, see https://github.com/conventional-changelog/commitlint/issues/3376
