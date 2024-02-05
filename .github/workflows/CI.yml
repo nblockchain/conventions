@@ -46,9 +46,9 @@ jobs:
   file-conventions-tests:
     name: Run FileConventions-lib unit tests
     needs: build-fs
-    runs-on: ${{ env.JOB_OS }}
+    runs-on: "$JOB_OS"
     container:
-      image: ${{ env.CONTAINER_OS }}
+      image: "$CONTAINER_OS"
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
@@ -71,9 +71,9 @@ jobs:
 
   build-ts:
     name: Build TypeScript
-    runs-on: ${{ env.JOB_OS }}
+    runs-on: "$JOB_OS"
     container:
-      image: ${{ env.CONTAINER_OS }}
+      image: "$CONTAINER_OS"
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
@@ -108,9 +108,9 @@ jobs:
   commitlint-plugins-tests:
     name: Run commitlint-related tests
     needs: build-ts
-    runs-on: ${{ env.JOB_OS }}
+    runs-on: "$JOB_OS"
     container:
-      image: ${{ env.CONTAINER_OS }}
+      image: "$CONTAINER_OS"
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
@@ -146,11 +146,9 @@ jobs:
     needs:
       - file-conventions-tests
       - commitlint-plugins-tests
-    runs-on: ${{ env.JOB_OS }}
+    runs-on: "$JOB_OS"
     container:
-      image: ${{ env.CONTAINER_OS }}
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      image: "$CONTAINER_OS"
     steps:
       - name: Install required dependencies
         run: |
