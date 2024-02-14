@@ -70,18 +70,9 @@ jobs:
     name: Build TypeScript
 
     # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
-    runs-on: ubuntu-22.04
-    container:
-      image: "ubuntu:23.10"
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install required dependencies
-        run: |
-          apt update
-          apt install --yes sudo
-          sudo apt install --yes --no-install-recommends git ca-certificates
-
-          sudo apt install --yes --no-install-recommends npm curl
       - name: Print versions
         run: |
           git --version
@@ -107,18 +98,9 @@ jobs:
     name: Run commitlint-related tests
     needs: build-ts
     # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
-    runs-on: ubuntu-22.04
-    container:
-      image: "ubuntu:23.10"
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install required dependencies
-        run: |
-          apt update
-          apt install --yes sudo
-          sudo apt install --yes --no-install-recommends git ca-certificates
-
-          sudo apt install --yes --no-install-recommends npm curl
       - name: Install commitlint
         # NOTE: maintain this line below in sync with commitlint.sh
         run: npm install @commitlint/{config-conventional@v18.6.1,cli@v18.6.1}
