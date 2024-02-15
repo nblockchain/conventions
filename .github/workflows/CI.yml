@@ -89,8 +89,7 @@ jobs:
           npm --version
       - name: Install commitlint
         run: |
-          npm install conventional-changelog-conventionalcommits
-          npm install commitlint@latest
+          npm install conventional-changelog-conventionalcommits commitlint@latest
       - name: Install yarn
         run: |
           npm install --global yarn
@@ -122,8 +121,7 @@ jobs:
           sudo apt install --yes --no-install-recommends npm curl
       - name: Install commitlint
         run: |
-          npm install conventional-changelog-conventionalcommits
-          npm install commitlint@latest
+          npm install conventional-changelog-conventionalcommits commitlint@latest
       - name: Install yarn
         run: |
           npm install --global yarn
