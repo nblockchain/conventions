@@ -5,6 +5,6 @@ set -euxo pipefail
 cd "$(dirname "$0")"
 npm install
 npm install conventional-changelog-conventionalcommits commitlint@latest
-npx commitlint --version
-npx commitlint $@
+./node_modules/commitlint/cli.js --version
+./node_modules/commitlint/cli.js $@
 cd ..
