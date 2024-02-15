@@ -70,13 +70,13 @@ jobs:
     name: Build TypeScript
 
     # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
         run: |
-          apt update
-          apt install --yes sudo
+          sudo apt update
+          sudo apt install --yes sudo
           sudo apt install --yes --no-install-recommends git ca-certificates
 
           sudo apt install --yes --no-install-recommends npm curl
@@ -105,13 +105,13 @@ jobs:
     name: Run commitlint-related tests
     needs: build-ts
     # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
         run: |
-          apt update
-          apt install --yes sudo
+          sudo apt update
+          sudo apt install --yes sudo
           sudo apt install --yes --no-install-recommends git ca-certificates
 
           sudo apt install --yes --no-install-recommends npm curl
