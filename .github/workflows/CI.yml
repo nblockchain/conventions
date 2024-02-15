@@ -132,10 +132,6 @@ jobs:
           npm --version
           yarn --version
           npx tsc --version
-      - name: Install commitlint
-        run: |
-          npm install conventional-changelog-conventionalcommits commitlint@latest
-          ./node_modules/commitlint/cli.js --version
       - name: Run tests to validate our plugins
         run: yarn jest --config jest.config.ts
 
