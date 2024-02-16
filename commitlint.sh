@@ -4,8 +4,6 @@ set -euxo pipefail
 # cd to directory of this script
 cd "$(dirname "$0")"
 npm install
-npm install conventional-changelog-conventionalcommits
-npm install commitlint@latest
+npm install @commitlint/config-conventional
 npx commitlint --version
 npx commitlint $@
-cd ..
