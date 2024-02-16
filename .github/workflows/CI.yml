@@ -87,20 +87,17 @@ jobs:
           git --version
           node --version
           npm --version
-      - name: Install commitlint
-        run: |
-          npm install conventional-changelog-conventionalcommits
-          npm install commitlint@latest
       - name: Install yarn
         run: |
           npm install --global yarn
           yarn add --dev jest typescript ts-jest @types/jest
+      - name: Install commitlint dependencies
+        run: npm install @commitlint/types
       - name: Print versions
         run: |
           git --version
           node --version
           npm --version
-          npx commitlint --version
       - name: Run typescript compiler
         run: npx tsc
 
@@ -120,14 +117,12 @@ jobs:
           sudo apt install --yes --no-install-recommends git ca-certificates
 
           sudo apt install --yes --no-install-recommends npm curl
-      - name: Install commitlint
-        run: |
-          npm install conventional-changelog-conventionalcommits
-          npm install commitlint@latest
       - name: Install yarn
         run: |
           npm install --global yarn
           yarn add --dev jest typescript ts-jest @types/jest ts-node
+      - name: Install commitlint dependencies
+        run: npm install @commitlint/types
       - name: Run typescript compiler
         run: npx tsc
       - name: Print versions
@@ -135,7 +130,6 @@ jobs:
           git --version
           node --version
           npm --version
-          npx commitlint --version
           yarn --version
           npx tsc --version
       - name: Run tests to validate our plugins
