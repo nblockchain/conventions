@@ -8,6 +8,26 @@ open System.Text.RegularExpressions
 open Mono
 open Mono.Unix.Native
 
+let SplitByEOLs (text: string) (numberOfEOLs: uint) =
+    if numberOfEOLs = 0u then
+        invalidArg
+            (nameof numberOfEOLs)
+            "Should be higher than zero to be able to split anything"
+
+    let unixEol = "\n"
+    let windowsEol = "\r\n"
+    let macEol = "\r"
+
+    let preparedText =
+        text
+            .Replace(windowsEol, unixEol)
+            .Replace(macEol, unixEol)
+
+    let separator = String.replicate (int numberOfEOLs) unixEol
+
+    preparedText.Split(separator, StringSplitOptions.RemoveEmptyEntries)
+
+
 let HasCorrectShebang(fileInfo: FileInfo) =
     let fileText = File.ReadLines fileInfo.FullName
 
@@ -167,7 +187,10 @@ let SplitIntoWords(text: string) =
             if paragraph.Type = CodeBlock then
                 Seq.singleton paragraph
             else
-                let lines = paragraph.Text.Split Environment.NewLine
+                let singleEolToJustSeparateLines = 1u
+
+                let lines =
+                    SplitByEOLs paragraph.Text singleEolToJustSeparateLines
 
                 lines
                 |> Seq.collect(fun line ->
@@ -238,8 +261,10 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
     processWords String.Empty String.Empty words
 
 let WrapText (text: string) (maxCharsPerLine: int) : string =
+    let twoEolsToSeparateParagraphs = 2u
+
     let wrappedParagraphs =
-        text.Split $"{Environment.NewLine}{Environment.NewLine}"
+        SplitByEOLs text twoEolsToSeparateParagraphs
         |> Seq.map(fun paragraph -> WrapParagraph paragraph maxCharsPerLine)
 
     String.Join(
