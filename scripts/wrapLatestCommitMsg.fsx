@@ -3,6 +3,7 @@
 open System.IO
 open System
 open System.Text.RegularExpressions
+open System.Linq
 
 #r "nuget: Mono.Unix, Version=7.1.0-final.1.21458.1"
 
@@ -27,13 +28,18 @@ let commitMsg =
         .Trim()
 
 let header, maybeBody =
+    let twoEolsToSeparateParagraphs = 2u
+
+    let paragraphs =
+        FileConventions.SplitByEOLs commitMsg twoEolsToSeparateParagraphs
+
     let newLineIndex = commitMsg.IndexOf Environment.NewLine
 
-    if newLineIndex > 0 then
-        commitMsg.Substring(0, newLineIndex).Trim(),
-        Some(commitMsg.Substring(newLineIndex).Trim())
-    else
+    if paragraphs.Length = 1 then
         commitMsg, None
+    else
+        let body = String.Join(Environment.NewLine, paragraphs.Skip 1)
+        paragraphs.[0], Some body
 
 let maxCharsPerLine = 64
 
