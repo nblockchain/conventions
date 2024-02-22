@@ -28,18 +28,16 @@ let commitMsg =
         .Trim()
 
 let header, maybeBody =
-    let twoEolsToSeparateParagraphs = 2u
+    let singleEolToJustSeparateLines = 1u
 
-    let paragraphs =
-        FileConventions.SplitByEOLs commitMsg twoEolsToSeparateParagraphs
+    let lines =
+        FileConventions.SplitByEOLs commitMsg singleEolToJustSeparateLines
 
-    let newLineIndex = commitMsg.IndexOf Environment.NewLine
-
-    if paragraphs.Length = 1 then
+    if lines.Length = 1 then
         commitMsg, None
     else
-        let body = String.Join(Environment.NewLine, paragraphs.Skip 1)
-        paragraphs.[0], Some body
+        let body = String.Join(Environment.NewLine, lines.Skip 2)
+        lines.[0], Some body
 
 let maxCharsPerLine = 64
 

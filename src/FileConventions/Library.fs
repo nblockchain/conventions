@@ -25,7 +25,7 @@ let SplitByEOLs (text: string) (numberOfEOLs: uint) =
 
     let separator = String.replicate (int numberOfEOLs) unixEol
 
-    preparedText.Split(separator, StringSplitOptions.RemoveEmptyEntries)
+    preparedText.Split(separator, StringSplitOptions.None)
 
 
 let HasCorrectShebang(fileInfo: FileInfo) =
