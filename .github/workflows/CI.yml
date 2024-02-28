@@ -89,10 +89,10 @@ jobs:
           npm --version
       - name: Install yarn
         run: |
-          npm install --global yarn
+          npm install --verboase --global yarn
           yarn add --dev jest typescript ts-jest @types/jest
       - name: Install commitlint dependencies
-        run: npm install @commitlint/types
+        run: npm install --verbose @commitlint/types
       - name: Print versions
         run: |
           git --version
@@ -119,10 +119,10 @@ jobs:
           sudo apt install --yes --no-install-recommends npm curl
       - name: Install yarn
         run: |
-          npm install --global yarn
+          npm install --verbose --global yarn
           yarn add --dev jest typescript ts-jest @types/jest ts-node
       - name: Install commitlint dependencies
-        run: npm install @commitlint/types
+        run: npm install --verbose @commitlint/types
       - name: Run typescript compiler
         run: npx tsc
       - name: Print versions
@@ -218,7 +218,7 @@ jobs:
           dotnet restore
           dotnet fsi scripts/sanityCheckNuget.fsx
       - name: Install prettier
-        run: npm install prettier@2.8.3
+        run: npm install --verbose prettier@2.8.3
       - name: Change file permissions
         # We need this step so we can change the files using `npx prettier --write` in the next step.
         # Otherwise we get permission denied error in the CI.
