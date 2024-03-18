@@ -93,7 +93,7 @@ jobs:
           yarn add --dev jest typescript ts-jest @types/jest
       - name: Install commitlint dependencies
         run: |
-          source commitlint/version.config
+          . commitlint/version.config
           npm install --verbose @commitlint/types@$COMMITLINT_VERSION
       - name: Print versions
         run: |
@@ -125,7 +125,7 @@ jobs:
           yarn add --dev jest typescript ts-jest @types/jest ts-node
       - name: Install commitlint dependencies
         run: |
-          source commitlint/version.config
+          . commitlint/version.config
           npm install --verbose @commitlint/types@$COMMITLINT_VERSION
       - name: Run typescript compiler
         run: npx tsc
