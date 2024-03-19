@@ -174,7 +174,7 @@ jobs:
           npm --version
       - name: Validate current commit (last commit) with commitlint
         if: github.event_name == 'push'
-        run: ./commitlint.sh --from HEAD~1 --to HEAD --verbose
+        run: ./commitlint.sh --last --verbose
       - name: Validate PR commits with commitlint
         if: github.event_name == 'pull_request'
         run: |
