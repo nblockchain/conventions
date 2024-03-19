@@ -6,9 +6,11 @@ export abstract class Plugins {
         function paragraphHasValidEnding(paragraph: string): boolean {
             let paragraphWords = paragraph.split(" ");
             let lastWordInParagraph = paragraphWords[paragraphWords.length - 1];
-            let isParagraphEndingWithUrl =
-                Helpers.isValidUrl(lastWordInParagraph);
-            if (isParagraphEndingWithUrl) {
+
+            let isParagraphEndingWithLink =
+                Helpers.isValidUrl(lastWordInParagraph) ||
+                Helpers.wordIsFooterReference(lastWordInParagraph);
+            if (isParagraphEndingWithLink) {
                 return true;
             }
 
@@ -207,7 +209,7 @@ export abstract class Plugins {
                     if (Helpers.isEmptyFooterReference(line)) {
                         offence = true;
                         hasEmptyFooter = true;
-                    } else if (Helpers.isFooterReference(line)) {
+                    } else if (Helpers.lineStartsWithFooterReference(line)) {
                         references.add(match);
                     } else {
                         bodyReferences.add(match);

@@ -155,9 +155,18 @@ export abstract class Helpers {
         );
     }
 
-    public static isFooterReference(line: string) {
+    public static lineStartsWithFooterReference(line: string) {
         Helpers.assertLine(line);
         return line[0] === "[" && line.indexOf("]") > 1;
+    }
+
+    public static wordIsFooterReference(word: string) {
+        if (word.length == 0) {
+            return false;
+        }
+        Helpers.assertWord(word);
+        // TODO: check intermediate chars are numbers
+        return word[word.length - 1] === "]" && word[0] === "[";
     }
 
     public static isFixesOrClosesSentence(line: string) {
@@ -173,7 +182,7 @@ export abstract class Helpers {
     public static isFooterNote(line: string): boolean {
         Helpers.assertLine(line);
         return (
-            Helpers.isFooterReference(line) ||
+            Helpers.lineStartsWithFooterReference(line) ||
             Helpers.isCoAuthoredByTag(line) ||
             Helpers.isFixesOrClosesSentence(line)
         );
