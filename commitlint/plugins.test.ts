@@ -207,6 +207,21 @@ test("body-prose17", () => {
     expect(bodyProse17.status).toBe(0);
 });
 
+test("body-prose18", () => {
+    let commitMsgWithParagraphEndingWithRef = `title: this is only title
+
+This is the best (or least worse) solution I found so far: [1]
+
+Paragraph 2: lorem ipsum dolor sit amet, consectetur adipiscing
+elit lorem ipsum dolor sit amet, consectetur porttitor jidga
+nam sed porttitor turpis, vitae erat curae.
+
+[1] http://foo.bar/baz`;
+
+    let bodyProse18 = runCommitLintOnMsg(commitMsgWithParagraphEndingWithRef);
+    expect(bodyProse18.status).toBe(0);
+});
+
 test("body-max-line-length1", () => {
     let tenChars = "1234 67890";
     let sixtyChars =
