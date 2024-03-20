@@ -4,7 +4,6 @@
         "lib": ["ES2021"],
         // TODO: explore replacing the below setting with just target:ES2015
         "downlevelIteration": true,
-        "module": "node16"
-    },
-    "exclude": ["jest.config.ts", "commitlint/tests"]
+        "types": ["node", "jest"],
+    }
 }

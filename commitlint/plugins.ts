@@ -1,5 +1,5 @@
-import { abbr } from "./abbreviations";
-import { Helpers } from "./helpers";
+import { abbr } from "./abbreviations.js";
+import { Helpers } from "./helpers.js";
 
 export abstract class Plugins {
     public static bodyProse(rawStr: string) {
