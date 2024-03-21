@@ -146,7 +146,10 @@ jobs:
       - name: Install commitlint
         run: ./commitlint.sh --version
       - name: Run tests to validate our plugins
-        run: yarn jest --config jest.config.ts
+        run: |
+          # remove *.js files so that the same tests don't run twice
+          rm ./commitlint/tests/*.js
+          yarn jest --config jest.config.ts
 
   sanity-check:
     name: Sanity check
