@@ -1,5 +1,5 @@
-import { Helpers } from "./commitlint/helpers";
-import { Plugins } from "./commitlint/plugins";
+import { Helpers } from "./commitlint/helpers.js";
+import { Plugins } from "./commitlint/plugins.js";
 import { RuleConfigSeverity } from "@commitlint/types";
 
 let bodyMaxLineLength = 64;
@@ -10,7 +10,7 @@ function notNullStringErrorMessage(stringType: string): string {
     return `This is unexpected because ${stringType} should never be null`;
 }
 
-module.exports = {
+export default {
     parserPreset: "conventional-changelog-conventionalcommits",
     rules: {
         "body-leading-blank": [RuleConfigSeverity.Error, "always"],
