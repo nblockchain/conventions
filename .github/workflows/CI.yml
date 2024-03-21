@@ -90,7 +90,7 @@ jobs:
       - name: Install yarn
         run: |
           npm install --verbose --global yarn
-          yarn add --dev jest typescript ts-jest @types/jest
+          yarn add --dev typescript
       - name: Install commitlint dependencies
         run: |
           . commitlint/version.config
@@ -102,10 +102,6 @@ jobs:
           npm --version
       - name: Run typescript compiler
         run: npx tsc
-      - name: Run typescript compiler on test files
-        run: |
-          cd commitlint/tests
-          npx tsc
 
   commitlint-plugins-tests:
     name: Run commitlint-related tests
@@ -126,16 +122,13 @@ jobs:
       - name: Install yarn
         run: |
           npm install --verbose --global yarn
-          yarn add --dev jest typescript ts-jest @types/jest ts-node
+          yarn add --dev typescript ts-node
       - name: Install commitlint dependencies
         run: |
           . commitlint/version.config
           npm install --verbose @commitlint/types@$COMMITLINT_VERSION
       - name: Run typescript compiler
-        run: |
-          npx tsc
-          cd commitlint/tests
-          npx tsc
+        run: npx tsc
       - name: Print versions
         run: |
           git --version
@@ -149,7 +142,7 @@ jobs:
         run: |
           # remove *.js files so that the same tests don't run twice
           rm ./commitlint/tests/*.js
-          yarn jest --config jest.config.ts
+          yarn test
 
   sanity-check:
     name: Sanity check
