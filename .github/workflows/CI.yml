@@ -89,7 +89,7 @@ jobs:
           npm --version
       - name: Install yarn
         run: |
-          npm install --verboase --global yarn
+          npm install --verbose --global yarn
           yarn add --dev jest typescript ts-jest @types/jest
       - name: Install commitlint dependencies
         run: |
