@@ -20,11 +20,8 @@ export abstract class Helpers {
         potentialString: any,
         paramName: string
     ): string | null {
-        if (potentialString === null || potentialString === undefined) {
-            // otherwise, String(null) might give us the stupid string "null"
-            return null;
-        }
-        return String(potentialString);
+        // this null/undefined check is required, otherwise, String(null) might give us the stupid string "null"
+        return potentialString ? String(potentialString) : null;
     }
 
     public static assertNotNull(
