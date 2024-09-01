@@ -1,6 +1,7 @@
 {
     "type": "module",
     "dependencies": {
+        "@thames/monads": "^0.7.0",
         "cosmiconfig": "9.0.0"
     },
     "devDependencies": {

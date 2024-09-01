@@ -1,5 +1,6 @@
 import { runCommitLintOnMsg } from "./testHelpers.js";
 import { test, expect } from "vitest";
+import { Option, Some, None } from "@thames/monads";
 
 class A {
     x: string;
@@ -50,16 +51,6 @@ function fn(p: C) {
     }
 }
 
-class None {}
-class Value<T> {
-    value: T;
-
-    constructor(val: T) {
-        this.value = val;
-    }
-}
-type Option<T> = None | Value<T>;
-
 test("testing DUs", () => {
     let foo = new A();
     expect(foo.x).toBe("hello");
@@ -75,17 +66,16 @@ test("testing DUs", () => {
 });
 
 function fnO(option: Option<number>) {
-    if (option instanceof None) {
-        return "NAH";
-    } else {
-        let val = option.value;
-        return (val * val).toString();
-    }
+    const message = option.match({
+        some: (res) => (res * res).toString(),
+        none: "NAH",
+    });
+    return message;
 }
 
 test("testing Options", () => {
-    let foo: Option<number> = new None();
-    let bar: Option<number> = new Value(2);
+    let foo: Option<number> = None;
+    let bar: Option<number> = Some(2);
     expect(fnO(foo)).toBe("NAH");
     expect(fnO(bar)).toBe("4");
 });
