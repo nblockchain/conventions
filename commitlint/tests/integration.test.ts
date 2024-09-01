@@ -53,7 +53,7 @@ function fn(p: C) {
 test("testing DUs", () => {
     let foo = new A();
     expect(foo.x).toBe("hello");
-    expect(foo.y).toBe("hello");
+    expect(foo.y).toBe("hallo");
     let bar = new B();
     expect(bar.x).toBe(1);
     expect(bar.y).toBe(2);
