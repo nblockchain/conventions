@@ -50,6 +50,16 @@ function fn(p: C) {
     }
 }
 
+class None {}
+class Value<T> {
+    value: T;
+
+    constructor(val: T) {
+        this.value = val;
+    }
+}
+type Option<T> = None | Value<T>;
+
 test("testing DUs", () => {
     let foo = new A();
     expect(foo.x).toBe("hello");
@@ -62,4 +72,20 @@ test("testing DUs", () => {
     expect(foo2).toBe("hellohallo");
     let bar2 = fn(bar);
     expect(bar2).toBe("1");
+});
+
+function fnO(option: Option<number>) {
+    if (option instanceof None) {
+        return "NAH";
+    } else {
+        let val = option.value;
+        return (val * val).toString();
+    }
+}
+
+test("testing Options", () => {
+    let foo: Option<number> = new None();
+    let bar: Option<number> = new Value(2);
+    expect(fnO(foo)).toBe("NAH");
+    expect(fnO(bar)).toBe("4");
 });
