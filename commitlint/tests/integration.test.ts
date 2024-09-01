@@ -57,4 +57,9 @@ test("testing DUs", () => {
     let bar = new B();
     expect(bar.x).toBe(1);
     expect(bar.y).toBe(2);
+
+    let foo2 = fn(foo);
+    expect(foo2).toBe("hellohallo");
+    let bar2 = fn(bar);
+    expect(bar2).toBe("1");
 });
