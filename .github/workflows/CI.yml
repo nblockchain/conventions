@@ -12,10 +12,9 @@ on:
 jobs:
   build-fs:
     name: Build F#
-    # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     container:
-      image: "ubuntu:23.10"
+      image: "ubuntu:24.04"
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
@@ -32,7 +31,7 @@ jobs:
           # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot
           apt install --yes --no-install-recommends ca-certificates
 
-          apt install --yes --no-install-recommends dotnet6
+          apt install --yes --no-install-recommends dotnet8
 
       - name: Compile the conventions solution
         run: dotnet build --configuration Release conventions.sln
@@ -42,10 +41,9 @@ jobs:
   file-conventions-tests:
     name: Run FileConventions-lib unit tests
     needs: build-fs
-    # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     container:
-      image: "ubuntu:23.10"
+      image: "ubuntu:24.04"
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
@@ -61,18 +59,16 @@ jobs:
           # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot
           apt install --yes --no-install-recommends ca-certificates
 
-          apt install --yes --no-install-recommends dotnet6
+          apt install --yes --no-install-recommends dotnet8
 
       - name: Run tests to validate F# scripts
         run: dotnet test src/FileConventions.Test/FileConventions.Test.fsproj
 
   build-ts:
     name: Build TypeScript
-
-    # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     container:
-      image: "ubuntu:23.10"
+      image: "ubuntu:24.04"
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
@@ -106,10 +102,9 @@ jobs:
   commitlint-plugins-tests:
     name: Run commitlint-related tests
     needs: build-ts
-    # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     container:
-      image: "ubuntu:23.10"
+      image: "ubuntu:24.04"
     steps:
       - uses: actions/checkout@v4
       - name: Install required dependencies
@@ -149,10 +144,9 @@ jobs:
     needs:
       - file-conventions-tests
       - commitlint-plugins-tests
-    # TODO: upgrade to 24.04->24.04 (because LTS) as soon as it's available, instead of 22.04->23.10
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     container:
-      image: "ubuntu:23.10"
+      image: "ubuntu:24.04"
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -193,7 +187,7 @@ jobs:
           # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot
           apt install --yes --no-install-recommends ca-certificates
 
-          apt install --yes --no-install-recommends dotnet6
+          apt install --yes --no-install-recommends dotnet8
 
       - name: Check all files end with EOL
         run: dotnet fsi scripts/eofConvention.fsx
