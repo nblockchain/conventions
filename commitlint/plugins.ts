@@ -1,3 +1,4 @@
+import { Option, Some, None } from "./fpHelpers.js";
 import { abbr } from "./abbreviations.js";
 import { Helpers } from "./helpers.js";
 
@@ -437,7 +438,7 @@ export abstract class Plugins {
         paragraphLineMinLength: number,
         paragraphLineMaxLength: number
     ) {
-        let offence: string | null = null;
+        let offence: Option<string> = new None();
 
         if (bodyStr !== null) {
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
@@ -502,7 +503,7 @@ export abstract class Plugins {
                             !isLastLineBeforeNextBullet &&
                             !isLastCharAColonBreak
                         ) {
-                            offence = line;
+                            offence = new Some(line);
                             break;
                         }
                     }
@@ -510,11 +511,15 @@ export abstract class Plugins {
             }
         }
 
-        let isValid = offence === null;
-
+        if (offence instanceof None) {
+            return [
+                true,
+                "bodyParagraphLineMinLength's bug, this text should not be shown if offence was false",
+            ];
+        }
         return [
-            isValid,
-            `Please do not subceed ${paragraphLineMinLength} characters in the lines of the commit message's body paragraphs. Offending line has this text: "${offence}"; we recommend this script (for editing the last commit message): \n` +
+            false,
+            `Please do not subceed ${paragraphLineMinLength} characters in the lines of the commit message's body paragraphs. Offending line has this text: "${offence.value}"; we recommend this script (for editing the last commit message): \n` +
                 "https://github.com/nblockchain/conventions/blob/master/scripts/wrapLatestCommitMsg.fsx" +
                 Helpers.errMessageSuffix,
         ];
