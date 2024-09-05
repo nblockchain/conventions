@@ -19,6 +19,15 @@ test("testing Options", () => {
     expect(typeGuard(bar)).toBe("4");
 });
 
+test("testing Is methods", () => {
+    let foo: Option<number> = new None();
+    let bar: Option<number> = new Some(2);
+    expect(foo.IsNone()).toBe(true);
+    expect(bar.IsNone()).toBe(false);
+    expect(foo.IsSome()).toBe(false);
+    expect(bar.IsSome()).toBe(true);
+});
+
 export function runCommitLintOnMsg(inputMsg: string) {
     // FIXME: should we .lowerCase().startsWith("win") in case it starts
     // returning Win64 in the future? thing is, our CI doesn't like this
