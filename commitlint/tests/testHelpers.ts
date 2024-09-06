@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { None, Some, Option, OptionStatic } from "../fpHelpers.js";
+import { None, Some, Option, OptionStatic, TypeHelpers } from "../fpHelpers.js";
 const { spawnSync } = require("child_process");
 const os = require("os");
 
@@ -48,6 +48,45 @@ test("testing OfObj", () => {
     expect(typeGuard(ofObj2(four))).toBe("16");
     four = undefined;
     expect(typeGuard(ofObj2(four))).toBe("NAH");
+});
+
+class Foo {
+    public JustToMakeFooNonEmpty() {
+        return null;
+    }
+}
+class Bar {
+    public JustToMakeBarNonEmpty() {
+        return null;
+    }
+}
+
+test("testing TypeHelpers.IsInstanceOf", () => {
+    let str1 = "foo";
+    expect(TypeHelpers.IsInstanceOf(str1, String)).toBe(true);
+    let str2 = String("foo");
+    expect(TypeHelpers.IsInstanceOf(str2, String)).toBe(true);
+
+    //commented this one because prettier complains about it, but it works:
+    //let str3 = 'foo';
+    //expect(TypeHelpers.IsInstanceOf(str3, String)).toBe(true);
+
+    let nonStr = 3;
+    expect(TypeHelpers.IsInstanceOf(nonStr, String)).toBe(false);
+
+    let int1 = 2;
+    expect(TypeHelpers.IsInstanceOf(int1, Number)).toBe(true);
+    let int2 = Number(2);
+    expect(TypeHelpers.IsInstanceOf(int2, Number)).toBe(true);
+    let nonInt = "2";
+    expect(TypeHelpers.IsInstanceOf(nonInt, Number)).toBe(false);
+
+    let foo = new Foo();
+    let bar = new Bar();
+    expect(TypeHelpers.IsInstanceOf(foo, Foo)).toBe(true);
+    expect(TypeHelpers.IsInstanceOf(bar, Bar)).toBe(true);
+    expect(TypeHelpers.IsInstanceOf(foo, Bar)).toBe(false);
+    expect(TypeHelpers.IsInstanceOf(bar, Foo)).toBe(false);
 });
 
 export function runCommitLintOnMsg(inputMsg: string) {

@@ -49,3 +49,16 @@ export class OptionStatic {
         }
     }
 }
+
+export class TypeHelpers {
+    // because instanceof doesn't work with primitive types (e.g. String), taken from https://stackoverflow.com/a/58184883/544947
+    public static IsInstanceOf(variable: any, type: any) {
+        let res: boolean = false;
+        if (typeof type == "string") {
+            res = typeof variable == type.toLowerCase();
+        } else {
+            res = variable.constructor == type;
+        }
+        return res;
+    }
+}
