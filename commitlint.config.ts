@@ -6,8 +6,19 @@ let bodyMaxLineLength = 64;
 let headerMaxLineLength = 50;
 let footerMaxLineLength = 150;
 
-function notNullStringErrorMessage(stringType: string): string {
-    return `This is unexpected because ${stringType} should never be null`;
+function notStringErrorMessage(variableName: string): string {
+    return `This is unexpected because ${variableName} should have been a string`;
+}
+
+function extractStringFromCommitlintParam(
+    paramName: string,
+    variable: any
+): string {
+    let str = Helpers.assertNotNone(
+        Helpers.convertAnyToString(variable),
+        notStringErrorMessage(paramName)
+    );
+    return str;
 }
 
 export default {
@@ -64,27 +75,21 @@ export default {
         {
             rules: {
                 "body-prose": ({ raw }: { raw: any }) => {
-                    let rawStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(raw),
-                        notNullStringErrorMessage("raw")
-                    );
+                    let rawStr = extractStringFromCommitlintParam("raw", raw);
 
                     return Plugins.bodyProse(rawStr);
                 },
 
                 "commit-hash-alone": ({ raw }: { raw: any }) => {
-                    let rawStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(raw),
-                        notNullStringErrorMessage("raw")
-                    );
+                    let rawStr = extractStringFromCommitlintParam("raw", raw);
 
                     return Plugins.commitHashAlone(rawStr);
                 },
 
                 "empty-wip": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(header),
-                        notNullStringErrorMessage("header")
+                    let headerStr = extractStringFromCommitlintParam(
+                        "header",
+                        header
                     );
 
                     return Plugins.emptyWip(headerStr);
@@ -95,9 +100,9 @@ export default {
                     _: any,
                     maxLineLength: number
                 ) => {
-                    let headerStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(header),
-                        notNullStringErrorMessage("header")
+                    let headerStr = extractStringFromCommitlintParam(
+                        "header",
+                        header
                     );
 
                     return Plugins.headerMaxLengthWithSuggestions(
@@ -107,15 +112,12 @@ export default {
                 },
 
                 "footer-notes-misplacement": ({ body }: { body: any }) => {
-                    let bodyStr = Helpers.convertAnyToString(body);
-                    return Plugins.footerNotesMisplacement(bodyStr);
+                    let maybeBody = Helpers.convertAnyToString(body);
+                    return Plugins.footerNotesMisplacement(maybeBody);
                 },
 
                 "footer-refs-validity": ({ raw }: { raw: any }) => {
-                    let rawStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(raw),
-                        notNullStringErrorMessage("raw")
-                    );
+                    let rawStr = extractStringFromCommitlintParam("raw", raw);
 
                     return Plugins.footerRefsValidity(rawStr);
                 },
@@ -125,54 +127,48 @@ export default {
                 }: {
                     header: any;
                 }) => {
-                    let headerStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(header),
-                        notNullStringErrorMessage("header")
+                    let headerStr = extractStringFromCommitlintParam(
+                        "header",
+                        header
                     );
 
                     return Plugins.preferSlashOverBackslash(headerStr);
                 },
 
                 "proper-issue-refs": ({ raw }: { raw: any }) => {
-                    let rawStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(raw),
-                        notNullStringErrorMessage("raw")
-                    );
+                    let rawStr = extractStringFromCommitlintParam("raw", raw);
 
                     return Plugins.properIssueRefs(rawStr);
                 },
 
                 "title-uppercase": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(header),
-                        notNullStringErrorMessage("header")
+                    let headerStr = extractStringFromCommitlintParam(
+                        "header",
+                        header
                     );
 
                     return Plugins.titleUppercase(headerStr);
                 },
 
                 "too-many-spaces": ({ raw }: { raw: any }) => {
-                    let rawStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(raw),
-                        notNullStringErrorMessage("raw")
-                    );
+                    let rawStr = extractStringFromCommitlintParam("raw", raw);
 
                     return Plugins.tooManySpaces(rawStr);
                 },
 
                 "type-space-after-colon": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(header),
-                        notNullStringErrorMessage("header")
+                    let headerStr = extractStringFromCommitlintParam(
+                        "header",
+                        header
                     );
 
                     return Plugins.typeSpaceAfterColon(headerStr);
                 },
 
                 "type-with-square-brackets": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(header),
-                        notNullStringErrorMessage("header")
+                    let headerStr = extractStringFromCommitlintParam(
+                        "header",
+                        header
                     );
 
                     return Plugins.typeWithSquareBrackets(headerStr);
@@ -180,17 +176,18 @@ export default {
 
                 // NOTE: we use 'header' instead of 'subject' as a workaround to this bug: https://github.com/conventional-changelog/commitlint/issues/3404
                 "subject-lowercase": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(header),
-                        notNullStringErrorMessage("header")
+                    let headerStr = extractStringFromCommitlintParam(
+                        "header",
+                        header
                     );
+
                     return Plugins.subjectLowercase(headerStr);
                 },
 
                 "type-space-after-comma": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.assertNotNull(
+                    let headerStr = Helpers.assertNotNone(
                         Helpers.convertAnyToString(header),
-                        notNullStringErrorMessage("header")
+                        notStringErrorMessage("header")
                     );
 
                     return Plugins.typeSpaceAfterComma(headerStr);
@@ -201,35 +198,32 @@ export default {
                     _: any,
                     maxLineLength: number
                 ) => {
-                    let bodyStr = Helpers.convertAnyToString(body);
+                    let maybeBody = Helpers.convertAnyToString(body);
                     return Plugins.bodySoftMaxLineLength(
-                        bodyStr,
+                        maybeBody,
                         maxLineLength
                     );
                 },
 
                 "body-paragraph-line-min-length": ({ body }: { body: any }) => {
-                    let bodyStr = Helpers.convertAnyToString(body);
+                    let maybeBody = Helpers.convertAnyToString(body);
                     return Plugins.bodyParagraphLineMinLength(
-                        bodyStr,
+                        maybeBody,
                         headerMaxLineLength,
                         bodyMaxLineLength
                     );
                 },
 
                 "trailing-whitespace": ({ raw }: { raw: any }) => {
-                    let rawStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(raw),
-                        notNullStringErrorMessage("raw")
-                    );
+                    let rawStr = extractStringFromCommitlintParam("raw", raw);
 
                     return Plugins.trailingWhitespace(rawStr);
                 },
 
                 "type-space-before-paren": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.assertNotNull(
-                        Helpers.convertAnyToString(header),
-                        notNullStringErrorMessage("header")
+                    let headerStr = extractStringFromCommitlintParam(
+                        "header",
+                        header
                     );
 
                     return Plugins.typeSpaceBeforeParen(headerStr);
