@@ -89,6 +89,50 @@ test("testing TypeHelpers.IsInstanceOf", () => {
     expect(TypeHelpers.IsInstanceOf(bar, Foo)).toBe(false);
 });
 
+test("testing TypeHelpers.IsInstanceOf exceptions", () => {
+    let strNull = null;
+    expect(() => TypeHelpers.IsInstanceOf(strNull, String)).toThrowError(
+        "Invalid"
+    );
+    expect(() => TypeHelpers.IsInstanceOf(strNull, String)).toThrowError(
+        "parameter"
+    );
+    expect(() => TypeHelpers.IsInstanceOf(strNull, String)).toThrowError(
+        "null"
+    );
+    let strUndefined = undefined;
+    expect(() => TypeHelpers.IsInstanceOf(strUndefined, String)).toThrowError(
+        "Invalid"
+    );
+    expect(() => TypeHelpers.IsInstanceOf(strUndefined, String)).toThrowError(
+        "parameter"
+    );
+    expect(() => TypeHelpers.IsInstanceOf(strUndefined, String)).toThrowError(
+        "undefined"
+    );
+
+    let typeNull = null;
+    expect(() => TypeHelpers.IsInstanceOf("foo", typeNull)).toThrowError(
+        "Invalid"
+    );
+    expect(() => TypeHelpers.IsInstanceOf("foo", typeNull)).toThrowError(
+        "parameter"
+    );
+    expect(() => TypeHelpers.IsInstanceOf("foo", typeNull)).toThrowError(
+        "null"
+    );
+    let typeUndefined = undefined;
+    expect(() => TypeHelpers.IsInstanceOf("foo", typeUndefined)).toThrowError(
+        "Invalid"
+    );
+    expect(() => TypeHelpers.IsInstanceOf("foo", typeUndefined)).toThrowError(
+        "parameter"
+    );
+    expect(() => TypeHelpers.IsInstanceOf("foo", typeUndefined)).toThrowError(
+        "undefined"
+    );
+});
+
 export function runCommitLintOnMsg(inputMsg: string) {
     // FIXME: should we .lowerCase().startsWith("win") in case it starts
     // returning Win64 in the future? thing is, our CI doesn't like this

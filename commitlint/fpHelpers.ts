@@ -53,6 +53,17 @@ export class OptionStatic {
 export class TypeHelpers {
     // because instanceof doesn't work with primitive types (e.g. String), taken from https://stackoverflow.com/a/58184883/544947
     public static IsInstanceOf(variable: any, type: any) {
+        if (variable === null || variable === undefined) {
+            throw new Error(
+                "Invalid 'variable' parameter passed in: null or undefined"
+            );
+        }
+        if (type === null || type === undefined) {
+            throw new Error(
+                "Invalid 'type' parameter passed in: null or undefined"
+            );
+        }
+
         let res: boolean = false;
         if (typeof type == "string") {
             res = typeof variable == type.toLowerCase();
