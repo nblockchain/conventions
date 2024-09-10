@@ -163,13 +163,32 @@
         make use of the type system whenever you can, for example:
 
         * Do not use edge-values to denote absence of value. Example: use null (`Nullable<DateTime>`) instead of `DateTime.MinValue`.
-        * Use Option types instead of Nullable ones if your language provides it (e.g. if you're using F# instead of C#).
         * Do not use `undefined` which is a pitfall from JavaScript (the fact that it has two kinds of null values is a defect in
         its design). As we're using TypeScript we should be able to avoid the ugliness of JavaScript.
 
         Example (with bad practice):
         ```typescript
         if (foo === undefined || foo === null)
+        {
+            return 0;
+        }
+        return 1;
+        ```
+
+        Improved code:
+        ```typescript
+        if (TypeHelpers.IsNullOrUndefined(foo))
+        {
+            return 0;
+        }
+        return 1;
+        ```
+
+        * Use Option types instead of Nullable ones if your language provides it (e.g. if you're using F# instead of C#).
+
+        Example (with bad practice):
+        ```typescript
+        if (TypeHelpers.IsNullOrUndefined(foo))
         {
             return 0;
         }
@@ -181,7 +200,11 @@
 
         Improved code:
         ```typescript
-        return foo ? 1 : 0;
+        let bar = OptionStatic.OfObj(option);
+        if (bar instanceof None) {
+            return 0;
+        }
+        return 1;
         ```
      
     * Abusing obscure operators or the excessive multi-facetedness of basic ones:
