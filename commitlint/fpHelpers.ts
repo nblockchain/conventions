@@ -51,14 +51,18 @@ export class OptionStatic {
 }
 
 export class TypeHelpers {
+    public static IsNullOrUndefined(variable: any) {
+        return variable === null || variable === undefined;
+    }
+
     // because instanceof doesn't work with primitive types (e.g. String), taken from https://stackoverflow.com/a/58184883/544947
     public static IsInstanceOf(variable: any, type: any) {
-        if (variable === null || variable === undefined) {
+        if (TypeHelpers.IsNullOrUndefined(variable)) {
             throw new Error(
                 "Invalid 'variable' parameter passed in: null or undefined"
             );
         }
-        if (type === null || type === undefined) {
+        if (TypeHelpers.IsNullOrUndefined(type)) {
             throw new Error(
                 "Invalid 'type' parameter passed in: null or undefined"
             );
