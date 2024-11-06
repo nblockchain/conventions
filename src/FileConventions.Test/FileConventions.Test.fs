@@ -420,6 +420,14 @@ let DetectInconsistentVersionsInGitHubCI1() =
 
     Assert.That(DetectInconsistentVersionsInGitHubCI fileInfo, Is.EqualTo true)
 
+[<Test>]
+let DetectInconsistentVersionsInGitHubCI2() =
+    let fileInfo =
+        DirectoryInfo(
+            Path.Combine(dummyFilesDirectory.FullName, "DummyWorkflowsWithEnv")
+        )
+
+    Assert.That(DetectInconsistentVersionsInGitHubCI fileInfo, Is.EqualTo true)
 
 [<Test>]
 let DetectInconsistentVersionsInNugetRefsInFSharpScripts1() =
