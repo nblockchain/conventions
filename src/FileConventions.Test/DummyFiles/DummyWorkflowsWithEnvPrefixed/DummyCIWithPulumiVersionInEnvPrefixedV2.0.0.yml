@@ -1,0 +1,17 @@
+﻿name: CI
+
+on: [push, pull_request]
+
+env:
+  PULUMI_VERSION: 2.0.0
+
+jobs:
+  jobA:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Pulumi CLI
+        with:
+          pulumi-version: ${{ env.PULUMI_VERSION }}
+      - name: Print "Hello World!"
+        run: echo "Hello World!"
