@@ -337,8 +337,14 @@ let private DetectInconsistentVersionsInYamlFiles
                                     yamlDict.Children.["env"]
                                     :?> YamlMappingNode
 
-                                let envVarName =
+                                let referenceString =
                                     variableRegexMatch.Groups.[1].Value
+
+                                let envVarName =
+                                    if referenceString.StartsWith "env." then
+                                        referenceString.[4..]
+                                    else
+                                        referenceString
 
                                 match envDict.Children.TryGetValue envVarName
                                     with
