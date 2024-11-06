@@ -9,12 +9,18 @@ open System.IO
 #load "../src/FileConventions/Helpers.fs"
 
 let rootDir = Path.Combine(__SOURCE_DIRECTORY__, "..") |> DirectoryInfo
+let currentDir = Directory.GetCurrentDirectory() |> DirectoryInfo
+
+let targetDir = Helpers.PreferLessDeeplyNestedDir currentDir rootDir
 
 let invalidFiles =
-    Helpers.GetInvalidFiles
-        rootDir
-        "*.fsx"
-        (fun fileInfo -> not(FileConventions.IsExecutable fileInfo))
+    let filter fileInfo =
+        not(FileConventions.IsExecutable fileInfo)
+
+    [ "*.fsx"; "*.sh" ]
+    |> Seq.collect(fun pattern ->
+        Helpers.GetInvalidFiles targetDir pattern filter
+    )
 
 Helpers.AssertNoInvalidFiles
     invalidFiles
