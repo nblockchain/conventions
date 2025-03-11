@@ -249,6 +249,18 @@
             someVar = expression;
         }
         ```
+        
+        * Avoid using spread operator (`...`) in JavaScript/TypeScript, because it's not present in other languages and can be confusing. Prefer using `Array.from` methods for creating arrays from other sequences.
+        
+        Example (with bad practice):
+        ```typescript
+        const inputs = [...tableCell.children];
+        ```
+
+        Improved code:
+        ```typescript
+        const inputs = Array.from(tableCell.children);
+        ```
 
 * If you want to contribute a script, do not use PowerShell or Bash, but
 an F# script. The reason to not use PowerShell is a personal preference
