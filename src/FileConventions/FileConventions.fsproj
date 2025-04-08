@@ -9,6 +9,7 @@
     <Compile Include="Helpers.fs" />
     <Compile Include="NugetVersionsCheck.fs" />
     <Compile Include="Library.fs" />
+    <Compile Include="CombinedVersionCheck.fs" />
   </ItemGroup>
 
   <ItemGroup>
