@@ -273,10 +273,10 @@ let WrapText (text: string) (maxCharsPerLine: int) : string =
         wrappedParagraphs
     )
 
-let private DetectInconsistentVersions
+let private GetVersionsMapFromFiles
     (fileInfos: seq<FileInfo>)
     (versionRegexPattern: string)
-    =
+    : Map<string, Set<string>> =
     let versionRegex = Regex(versionRegexPattern, RegexOptions.Compiled)
 
     let allFilesTexts =
@@ -284,22 +284,17 @@ let private DetectInconsistentVersions
         |> Seq.map(fun fileInfo -> File.ReadAllText fileInfo.FullName)
         |> String.concat Environment.NewLine
 
-    let versionMap =
-        versionRegex.Matches allFilesTexts
-        |> Seq.fold
-            (fun acc regexMatch ->
-                let key = regexMatch.Groups.[1].ToString()
-                let value = regexMatch.Groups.[2].ToString()
+    versionRegex.Matches allFilesTexts
+    |> Seq.fold
+        (fun acc regexMatch ->
+            let key = regexMatch.Groups.[1].ToString()
+            let value = regexMatch.Groups.[2].ToString()
 
-                match Map.tryFind key acc with
-                | Some prevSet -> Map.add key (Set.add value prevSet) acc
-                | None -> Map.add key (Set.singleton value) acc
-            )
-            Map.empty
-
-    versionMap
-    |> Seq.map(fun item -> Seq.length item.Value > 1)
-    |> Seq.contains true
+            match Map.tryFind key acc with
+            | Some prevSet -> Map.add key (Set.add value prevSet) acc
+            | None -> Map.add key (Set.singleton value) acc
+        )
+        Map.empty
 
 let private DetectInconsistentVersionsInYamlFiles
     (fileInfos: seq<FileInfo>)
@@ -415,15 +410,20 @@ let DetectInconsistentVersionsInGitHubCI(dir: DirectoryInfo) =
     else
         DetectInconsistentVersionsInGitHubCIWorkflow ymlFiles
 
-let DetectInconsistentVersionsInNugetRefsInFSharpScripts
-    (fileInfos: seq<FileInfo>)
-    =
+let GetVersionsMapForNugetRefsInFSharpScripts(fileInfos: seq<FileInfo>) =
     fileInfos
     |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".fsx"))
 
-    DetectInconsistentVersions
-        fileInfos
+    let versionRegexPattern =
         "#r \"nuget:\\s*([^\\s]*)\\s*,\\s*Version\\s*=\\s*([^\\s]*)\\s*\""
+
+    GetVersionsMapFromFiles fileInfos versionRegexPattern
+
+let DetectInconsistentVersionsInNugetRefsInFSharpScripts
+    (fileInfos: seq<FileInfo>)
+    =
+    GetVersionsMapForNugetRefsInFSharpScripts fileInfos
+    |> Map.exists(fun _ versions -> versions.Count > 1)
 
 let DetectInconsistentVersionsInFSharpScripts
     (dir: DirectoryInfo)
