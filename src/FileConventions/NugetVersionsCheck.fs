@@ -36,6 +36,22 @@ module MapHelper =
 
         keyValuePairs |> Map.ofSeq
 
+    let MergeMaps<'Key, 'Value when 'Key: comparison and 'Value: comparison>
+        (map1: Map<'Key, Set<'Value>>)
+        (map2: Map<'Key, Set<'Value>>)
+        : Map<'Key, Set<'Value>> =
+        map2
+        |> Map.fold
+            (fun acc key value ->
+                let combinedVersions =
+                    Set.union
+                        (acc |> Map.tryFind key |> Option.defaultValue Set.empty)
+                        value
+
+                acc |> Map.add key combinedVersions
+            )
+            map1
+
 [<StructuralEquality; StructuralComparison>]
 type private PackageInfo =
     {
