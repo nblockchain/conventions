@@ -494,6 +494,39 @@ let DetectInconsistentVersionsInFSharpScripts2() =
         Is.EqualTo false
     )
 
+[<Test>]
+let DetectInconsistentVersionsInFSharpScriptsAndProjects() =
+    let dir =
+        DirectoryInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyScriptsAndProjects"
+            )
+        )
+
+    let fsxFiles =
+        Directory.EnumerateFiles(
+            dir.FullName,
+            "*.fsx",
+            SearchOption.AllDirectories
+        )
+        |> Seq.map(fun path -> FileInfo path)
+
+    let fsprojFiles =
+        Directory.EnumerateFiles(
+            dir.FullName,
+            "*.fsproj",
+            SearchOption.AllDirectories
+        )
+        |> Seq.map(fun path -> FileInfo path)
+
+    Assert.That(
+        CombinedVersionCheck.DetectInconsistentVersionsInNugetRefsInFSharpScripts
+            fsxFiles
+            fsprojFiles,
+        Is.EqualTo true
+    )
+
 
 [<Test>]
 let NonVerboseFlagsInGitHubCI1() =
