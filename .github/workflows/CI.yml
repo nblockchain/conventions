@@ -216,7 +216,7 @@ jobs:
       - name: Check there are no inconsistent versions GitHubCI files
         run: dotnet fsi scripts/inconsistentVersionsInGitHubCI.fsx
       - name: Check there are no inconsistent versions in nuget package references of F# scripts
-        run: dotnet fsi scripts/inconsistentVersionsInFSharpScripts.fsx
+        run: dotnet fsi scripts/inconsistentNugetVersionsInFSharpScripts.fsx
       - name: Check there are no non-verbose flags in scripts and CI YML files
         run: dotnet fsi scripts/nonVerboseFlagsInGitHubCIAndScripts.fsx
       - name: Sanity check nuget packages of .NET projects
@@ -224,7 +224,7 @@ jobs:
           dotnet restore
           dotnet fsi scripts/inconsistentNugetVersionsInFSharpProjects.fsx
       - name: Check there are no inconsistent versions in nuget package references of F# scripts and projects
-        run: dotnet fsi scripts/inconsistentVersionsInFSharpScriptsAndProjects.fsx
+        run: dotnet fsi scripts/inconsistentNugetVersionsInFSharpScriptsAndProjects.fsx
       - name: Install prettier
         run: npm install --verbose prettier@2.8.3
       - name: Change file permissions
