@@ -222,7 +222,7 @@ jobs:
       - name: Sanity check nuget packages of .NET projects
         run: |
           dotnet restore
-          dotnet fsi scripts/sanityCheckNuget.fsx
+          dotnet fsi scripts/inconsistentNugetVersionsInFSharpProjects.fsx
       - name: Check there are no inconsistent versions in nuget package references of F# scripts and projects
         run: dotnet fsi scripts/inconsistentVersionsInFSharpScriptsAndProjects.fsx
       - name: Install prettier
