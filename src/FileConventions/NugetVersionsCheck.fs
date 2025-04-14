@@ -118,21 +118,23 @@ let private GetAllPackageInfos
 
     Set pkgInfos
 
-let rec private findProjectFiles(sol: FileInfo) : seq<FileInfo> =
-    let parsedSolution = SolutionFile.Parse sol.FullName
+let FindProjectFiles(solutionOrFolder: ScriptTarget) : seq<FileInfo> =
+    let allFiles =
+        match solutionOrFolder with
+        | Solution sol ->
+            let parsedSolution = SolutionFile.Parse sol.FullName
 
-    seq {
-        for projPath in
-            (parsedSolution
-                .ProjectsInOrder
-                .Select(fun proj ->
-                    normalizeDirSeparatorsPaths proj.AbsolutePath
-                )
-                .ToList()) do
-            if projPath.ToLower().EndsWith ".fsproj"
-               || projPath.ToLower().EndsWith ".csproj" then
-                yield (FileInfo projPath)
-    }
+            parsedSolution.ProjectsInOrder
+            |> Seq.map(fun proj ->
+                proj.AbsolutePath |> normalizeDirSeparatorsPaths |> FileInfo
+            )
+        | Folder dir -> Helpers.GetFiles dir "*.*"
+
+    allFiles
+    |> Seq.filter(fun file ->
+        [| ".fsproj"; ".csproj" |] |> Array.contains(file.Extension.ToLower())
+    )
+
 
 let private notPackagesFolder
     (nugetSolutionPackagesDir: DirectoryInfo)
@@ -236,7 +238,7 @@ let private getPackageTree
     (nugetSolutionPackagesDir: DirectoryInfo)
     (sol: FileInfo)
     : Map<ComparableFileInfo, seq<PackageInfo>> =
-    let projectFiles = findProjectFiles sol
+    let projectFiles = FindProjectFiles(Solution sol)
 
     let projectElements =
         seq {

@@ -12,6 +12,7 @@ open Fsdk
 
 #r "nuget: Microsoft.Build, Version=16.11.0"
 
+#load "../src/FileConventions/Helpers.fs"
 #load "../src/FileConventions/NugetVersionsCheck.fs"
 
 open NugetVersionsCheck
