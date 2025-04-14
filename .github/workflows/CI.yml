@@ -224,7 +224,7 @@ jobs:
           dotnet restore
           dotnet fsi scripts/inconsistentNugetVersionsInFSharpProjects.fsx
       - name: Check there are no inconsistent versions in nuget package references of F# scripts and projects
-        run: dotnet fsi scripts/inconsistentNugetVersionsInFSharpScriptsAndProjects.fsx
+        run: dotnet fsi scripts/inconsistentNugetVersionsInDotNetProjectsAndFSharpScripts.fsx
       - name: Install prettier
         run: npm install --verbose prettier@2.8.3
       - name: Change file permissions

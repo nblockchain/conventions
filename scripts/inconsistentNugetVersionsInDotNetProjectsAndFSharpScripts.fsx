@@ -22,7 +22,9 @@ let targetDir = currentDir |> DirectoryInfo
 let versionsMap =
     CombinedVersionCheck.GetVersionsMapForNugetRefsInFSharpScriptsAndProjects
         (Helpers.GetFiles targetDir "*.fsx")
-        (Helpers.GetFiles targetDir "*.fsproj")
+        (Seq.append
+            (Helpers.GetFiles targetDir "*.fsproj")
+            (Helpers.GetFiles targetDir "*.csproj"))
 
 let packagesWithMultipleVersions =
     versionsMap |> Map.filter(fun _ versions -> versions.Count > 1)

@@ -4,12 +4,12 @@ open System.IO
 
 let GetVersionsMapForNugetRefsInFSharpScriptsAndProjects
     (fsxFileInfos: #seq<FileInfo>)
-    (fsprojFileInfos: #seq<FileInfo>)
+    (projectFileInfos: #seq<FileInfo>)
     : Map<string, Set<string>> =
     let versionsInFsharpScripts =
         FileConventions.GetVersionsMapForNugetRefsInFSharpScripts fsxFileInfos
 
-    let versionsInProjects = NugetVersionsCheck.GetVersionsMap fsprojFileInfos
+    let versionsInProjects = NugetVersionsCheck.GetVersionsMap projectFileInfos
 
     NugetVersionsCheck.MapHelper.MergeMaps
         versionsInFsharpScripts
@@ -17,9 +17,9 @@ let GetVersionsMapForNugetRefsInFSharpScriptsAndProjects
 
 let DetectInconsistentVersionsInNugetRefsInFSharpScripts
     (fsxFileInfos: #seq<FileInfo>)
-    (fsprojFileInfos: #seq<FileInfo>)
+    (projectFileInfos: #seq<FileInfo>)
     : bool =
     GetVersionsMapForNugetRefsInFSharpScriptsAndProjects
         fsxFileInfos
-        fsprojFileInfos
+        projectFileInfos
     |> Map.exists(fun _ versions -> versions.Count > 1)
