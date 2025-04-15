@@ -17,14 +17,29 @@ open System.IO
 
 let currentDir = Directory.GetCurrentDirectory()
 
-let targetDir = currentDir |> DirectoryInfo
+let targetDirs =
+    let args =
+        Fsdk.Misc.FsxOnlyArguments()
+        |> List.filter(fun arg -> not(arg.StartsWith "-"))
+
+    match args with
+    | [] -> List.singleton(DirectoryInfo currentDir)
+    | paths ->
+        let dirs = paths |> List.map DirectoryInfo
+
+        for dir in dirs do
+            if not dir.Exists then
+                failwith $"Not a directory: {dir}"
+
+        dirs
 
 let versionsMap =
+    let fsxFiles, projectFiles =
+        CombinedVersionCheck.GetFsxAndProjectFilesForDirectories targetDirs
+
     CombinedVersionCheck.GetVersionsMapForNugetRefsInFSharpScriptsAndProjects
-        (Helpers.GetFiles targetDir "*.fsx")
-        (NugetVersionsCheck.FindProjectFiles(
-            NugetVersionsCheck.Folder targetDir
-        ))
+        fsxFiles
+        projectFiles
 
 let packagesWithMultipleVersions =
     versionsMap |> Map.filter(fun _ versions -> versions.Count > 1)
