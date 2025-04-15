@@ -23,3 +23,16 @@ let DetectInconsistentVersionsInNugetRefsInFSharpScripts
         fsxFileInfos
         projectFileInfos
     |> Map.exists(fun _ versions -> versions.Count > 1)
+
+let GetFsxAndProjectFilesForDirectories(directories: #seq<DirectoryInfo>) =
+    directories
+    |> Seq.fold
+        (fun (fsxFiles, projectFiles) dir ->
+            (Seq.append fsxFiles (Helpers.GetFiles dir "*.fsx")),
+            (Seq.append
+                projectFiles
+                (NugetVersionsCheck.FindProjectFiles(
+                    NugetVersionsCheck.Folder dir
+                )))
+        )
+        (Seq.empty, Seq.empty)
