@@ -56,7 +56,10 @@ export class TypeHelpers {
     }
 
     // because instanceof doesn't work with primitive types (e.g. String), taken from https://stackoverflow.com/a/58184883/544947
-    public static IsInstanceOf(variable: any, type: any) {
+    public static IsInstanceOf(
+        variable: NonNullable<any>,
+        type: NonNullable<any>
+    ) {
         if (TypeHelpers.IsNullOrUndefined(variable)) {
             throw new Error(
                 "Invalid 'variable' parameter passed in: null or undefined"
