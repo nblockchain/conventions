@@ -269,15 +269,15 @@ let ExtractParagraphs(text: string) =
 
     let rec processLines
         (remainingLines: List<string>)
-        (currentParagraph: List<string>)
+        (currentParagraphLines: List<string>)
         (paragraphs: List<string>)
         (insideCodeBlock: bool)
         =
         // process each line individually and form paragraphs
         match remainingLines with
         | [] ->
-            if not currentParagraph.IsEmpty then
-                String.Join(Environment.NewLine, List.rev currentParagraph)
+            if not currentParagraphLines.IsEmpty then
+                String.Join(Environment.NewLine, List.rev currentParagraphLines)
                 :: paragraphs
             else
                 paragraphs
@@ -289,14 +289,14 @@ let ExtractParagraphs(text: string) =
                 if insideCodeBlock then
                     processLines
                         rest
-                        (line :: currentParagraph)
+                        (line :: currentParagraphLines)
                         paragraphs
                         insideCodeBlock
-                elif not currentParagraph.IsEmpty then
+                elif not currentParagraphLines.IsEmpty then
                     let newParagraph =
                         String.Join(
                             Environment.NewLine,
-                            List.rev currentParagraph
+                            List.rev currentParagraphLines
                         )
 
                     processLines
@@ -314,13 +314,13 @@ let ExtractParagraphs(text: string) =
 
                 processLines
                     rest
-                    (line :: currentParagraph)
+                    (line :: currentParagraphLines)
                     paragraphs
                     newInsideCodeBlock
             else
                 processLines
                     rest
-                    (line :: currentParagraph)
+                    (line :: currentParagraphLines)
                     paragraphs
                     insideCodeBlock
 
