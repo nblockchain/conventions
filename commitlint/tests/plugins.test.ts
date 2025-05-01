@@ -2,86 +2,88 @@ import { runCommitLintOnMsg } from "./testHelpers.js";
 import { test, expect } from "vitest";
 
 test("body-prose1", () => {
-    let commitMsgWithLowercaseBodyStart = `foo: this is only a title
+    const commitMsgWithLowercaseBodyStart = `foo: this is only a title
 
 bla blah bla.`;
 
-    let bodyProse1 = runCommitLintOnMsg(commitMsgWithLowercaseBodyStart);
+    const bodyProse1 = runCommitLintOnMsg(commitMsgWithLowercaseBodyStart);
     expect(bodyProse1.status).not.toBe(0);
 });
 
 test("body-prose2", () => {
-    let commitMsgWithNumbercaseBodyStart = `foo: this is only a title
+    const commitMsgWithNumbercaseBodyStart = `foo: this is only a title
 
 1234 bla blah bla.`;
 
-    let bodyProse2 = runCommitLintOnMsg(commitMsgWithNumbercaseBodyStart);
+    const bodyProse2 = runCommitLintOnMsg(commitMsgWithNumbercaseBodyStart);
     expect(bodyProse2.status).toBe(0);
 });
 
 test("body-prose3", () => {
-    let commitMsgWithUrl = `foo: this is only a title
+    const commitMsgWithUrl = `foo: this is only a title
 
 someUrl://blahblah.com`;
 
-    let bodyProse3 = runCommitLintOnMsg(commitMsgWithUrl);
+    const bodyProse3 = runCommitLintOnMsg(commitMsgWithUrl);
 
     // because URLs can bypass the rule
     expect(bodyProse3.status).toBe(0);
 });
 
 test("body-prose4", () => {
-    let commitMsgWithFootnoteUrl = `foo: this is only a title
+    const commitMsgWithFootnoteUrl = `foo: this is only a title
 
 Bla blah[1] bla.
 
 [1] someUrl://blahblah.com`;
 
-    let bodyProse4 = runCommitLintOnMsg(commitMsgWithFootnoteUrl);
+    const bodyProse4 = runCommitLintOnMsg(commitMsgWithFootnoteUrl);
 
     // because URLs in footer can bypass the rule
     expect(bodyProse4.status).toBe(0);
 });
 
 test("body-prose5", () => {
-    let commitMsgWithBugUrl = `foo: this is only a title
+    const commitMsgWithBugUrl = `foo: this is only a title
 
 Fixes someUrl://blahblah.com`;
 
-    let bodyProse5 = runCommitLintOnMsg(commitMsgWithBugUrl);
+    const bodyProse5 = runCommitLintOnMsg(commitMsgWithBugUrl);
 
     // because URLs in "Fixes <URL>" sentence can bypass the rule
     expect(bodyProse5.status).toBe(0);
 });
 
 test("body-prose6", () => {
-    let commitMsgWithBlock =
+    const commitMsgWithBlock =
         "foo: this is only a title\n\nBar baz.\n\n```\nif (foo) { bar(); }\n```";
-    let bodyProse6 = runCommitLintOnMsg(commitMsgWithBlock);
+    const bodyProse6 = runCommitLintOnMsg(commitMsgWithBlock);
 
     // because ```blocks surrounded like this``` can bypass the rule
     expect(bodyProse6.status).toBe(0);
 });
 
 test("body-prose7", () => {
-    let commitMsgWithParagraphEndingWithColon = `foo: this is only a title
+    const commitMsgWithParagraphEndingWithColon = `foo: this is only a title
 
 Bar baz:
 
 Blah blah.`;
 
-    let bodyProse7 = runCommitLintOnMsg(commitMsgWithParagraphEndingWithColon);
+    const bodyProse7 = runCommitLintOnMsg(
+        commitMsgWithParagraphEndingWithColon
+    );
 
     // because paragraphs can end with a colon
     expect(bodyProse7.status).toBe(0);
 });
 
 test("body-prose8", () => {
-    let commitMsgWithCoAuthoredByTagThatIsObviouslyNotAParagraph = `foo: this is only a title
+    const commitMsgWithCoAuthoredByTagThatIsObviouslyNotAParagraph = `foo: this is only a title
 
 Co-authored-by: Jon Doe <jondoe@example.com>`;
 
-    let bodyProse8 = runCommitLintOnMsg(
+    const bodyProse8 = runCommitLintOnMsg(
         commitMsgWithCoAuthoredByTagThatIsObviouslyNotAParagraph
     );
 
@@ -90,12 +92,12 @@ Co-authored-by: Jon Doe <jondoe@example.com>`;
 });
 
 test("body-prose9", () => {
-    let commitMsgWithCommitUrlAtTheEndOfBodyParagraph = `foo: this is only a title
+    const commitMsgWithCommitUrlAtTheEndOfBodyParagraph = `foo: this is only a title
 
 Foo bar:
 https://github.com/username/repo/commit/1234567891234567891234567891234567891234`;
 
-    let bodyProse9 = runCommitLintOnMsg(
+    const bodyProse9 = runCommitLintOnMsg(
         commitMsgWithCommitUrlAtTheEndOfBodyParagraph
     );
 
@@ -103,45 +105,45 @@ https://github.com/username/repo/commit/1234567891234567891234567891234567891234
 });
 
 test("body-prose10", () => {
-    let commitMsgWithLargeBody =
+    const commitMsgWithLargeBody =
         "Network,TorHandshakes: handle handshake fail\n\n" +
         "```\nThe active test run was aborted. System.Exception: Key handshake failed!\n\n" +
         "at System.Threading.ThreadPoolWorkQueue.Dispatch()\n```";
 
-    let bodyProse10 = runCommitLintOnMsg(commitMsgWithLargeBody);
+    const bodyProse10 = runCommitLintOnMsg(commitMsgWithLargeBody);
     expect(bodyProse10.status).toBe(0);
 });
 
 test("body-prose11", () => {
-    let commitMsgWithLargeBody =
+    const commitMsgWithLargeBody =
         "Backend/Ether: catch/retry new -32002 err code\n\n" +
         "CI on master branch caught this[1]:\n\n" +
         "```\nUnhandled Exception\n```\n\n" +
         "[1] https://github.com/nblockchain/geewallet/actions/runs/3507005645/jobs/5874411684";
 
-    let bodyProse11 = runCommitLintOnMsg(commitMsgWithLargeBody);
+    const bodyProse11 = runCommitLintOnMsg(commitMsgWithLargeBody);
     expect(bodyProse11.status).toBe(0);
 });
 
 test("body-prose12", () => {
-    let commitMsgWithBugUrl = `foo: this is only a title
+    const commitMsgWithBugUrl = `foo: this is only a title
 
 Closes someUrl://blahblah.com`;
 
-    let bodyProse12 = runCommitLintOnMsg(commitMsgWithBugUrl);
+    const bodyProse12 = runCommitLintOnMsg(commitMsgWithBugUrl);
 
     // because URLs in "Closes <URL>" sentence can bypass the rule, similar to body-prose5
     expect(bodyProse12.status).toBe(0);
 });
 
 test("body-prose13", () => {
-    let commitMsgWithParagraphEndingWithQuestionMark = `foo: this is only a title
+    const commitMsgWithParagraphEndingWithQuestionMark = `foo: this is only a title
 
 Increase verbosity, because why not?
 
 Blah blah.`;
 
-    let bodyProse13 = runCommitLintOnMsg(
+    const bodyProse13 = runCommitLintOnMsg(
         commitMsgWithParagraphEndingWithQuestionMark
     );
 
@@ -150,13 +152,13 @@ Blah blah.`;
 });
 
 test("body-prose14", () => {
-    let commitMsgWithParagraphEndingWithExclamationMark = `foo: this is only a title
+    const commitMsgWithParagraphEndingWithExclamationMark = `foo: this is only a title
 
 Increase verbosity, because why not!
 
 Blah blah.`;
 
-    let bodyProse14 = runCommitLintOnMsg(
+    const bodyProse14 = runCommitLintOnMsg(
         commitMsgWithParagraphEndingWithExclamationMark
     );
 
@@ -165,7 +167,7 @@ Blah blah.`;
 });
 
 test("body-prose15", () => {
-    let commitMsgWithParagraphEndingInParentheses = `foo: this is only a title
+    const commitMsgWithParagraphEndingInParentheses = `foo: this is only a title
 
 Paragraph begin. (Some text inside parens.)
 
@@ -177,7 +179,7 @@ Paragraph begin. Now a smiley! :)
 
 Blah blah.`;
 
-    let bodyProse15 = runCommitLintOnMsg(
+    const bodyProse15 = runCommitLintOnMsg(
         commitMsgWithParagraphEndingInParentheses
     );
 
@@ -186,7 +188,7 @@ Blah blah.`;
 });
 
 test("body-prose16", () => {
-    let commitMsgWithUrlAtTheEndOfParagraph = `Frontend.XF.Android: switch to SDK-style
+    const commitMsgWithUrlAtTheEndOfParagraph = `Frontend.XF.Android: switch to SDK-style
 
 Strangely enough when opening the new gwallet.android.sln in
 VS4Mac, it asks the user to install the wasm-tools-net6.0
@@ -194,47 +196,47 @@ workload, even though CI works without it.
 
 Original PR: https://github.com/nblockchain/geewallet/pull/190`;
 
-    let bodyProse16 = runCommitLintOnMsg(commitMsgWithUrlAtTheEndOfParagraph);
+    const bodyProse16 = runCommitLintOnMsg(commitMsgWithUrlAtTheEndOfParagraph);
     expect(bodyProse16.status).toBe(0);
 });
 
 test("body-prose17", () => {
-    let commitMsgWithWindowsEOL =
+    const commitMsgWithWindowsEOL =
         "title: this is only title\r\n\r\n" +
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit\r\n" +
         "lorem ipsum dolor sit amet, consectetur porttitor jidga\r\n" +
         "nam sed porttitor turpis, vitae erat curae.";
-    let bodyProse17 = runCommitLintOnMsg(commitMsgWithWindowsEOL);
+    const bodyProse17 = runCommitLintOnMsg(commitMsgWithWindowsEOL);
     expect(bodyProse17.status).toBe(0);
 });
 
 test("body-max-line-length1", () => {
-    let tenChars = "1234 67890";
-    let sixtyChars =
+    const tenChars = "1234 67890";
+    const sixtyChars =
         tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
-    let commitMsgWithOnlySixtyFourCharsInBody =
+    const commitMsgWithOnlySixtyFourCharsInBody =
         "foo: this is only a title" + "\n\n" + sixtyChars + "123.";
-    let bodyMaxLineLength1 = runCommitLintOnMsg(
+    const bodyMaxLineLength1 = runCommitLintOnMsg(
         commitMsgWithOnlySixtyFourCharsInBody
     );
     expect(bodyMaxLineLength1.status).toBe(0);
 });
 
 test("body-max-line-length2", () => {
-    let tenChars = "1234 67890";
-    let sixtyChars =
+    const tenChars = "1234 67890";
+    const sixtyChars =
         tenChars + tenChars + tenChars + tenChars + tenChars + tenChars;
-    let commitMsgWithOnlySixtyFiveCharsInBody =
+    const commitMsgWithOnlySixtyFiveCharsInBody =
         "foo: this is only a title" + "\n\n" + sixtyChars + "1234.";
-    let bodyMaxLineLength2 = runCommitLintOnMsg(
+    const bodyMaxLineLength2 = runCommitLintOnMsg(
         commitMsgWithOnlySixtyFiveCharsInBody
     );
     expect(bodyMaxLineLength2.status).not.toBe(0);
 });
 
 test("body-max-line-length3", () => {
-    let tenDigits = "1234567890";
-    let seventyChars =
+    const tenDigits = "1234567890";
+    const seventyChars =
         tenDigits +
         tenDigits +
         tenDigits +
@@ -242,9 +244,9 @@ test("body-max-line-length3", () => {
         tenDigits +
         tenDigits +
         tenDigits;
-    let commitMsgWithUrlThatExceedsBodyMaxLineLength =
+    const commitMsgWithUrlThatExceedsBodyMaxLineLength =
         "foo: this is only a title" + "\n\n" + "someUrl://" + seventyChars;
-    let bodyMaxLineLength3 = runCommitLintOnMsg(
+    const bodyMaxLineLength3 = runCommitLintOnMsg(
         commitMsgWithUrlThatExceedsBodyMaxLineLength
     );
 
@@ -253,8 +255,8 @@ test("body-max-line-length3", () => {
 });
 
 test("body-max-line-length4", () => {
-    let tenDigits = "1234567890";
-    let seventyChars =
+    const tenDigits = "1234567890";
+    const seventyChars =
         tenDigits +
         tenDigits +
         tenDigits +
@@ -262,12 +264,12 @@ test("body-max-line-length4", () => {
         tenDigits +
         tenDigits +
         tenDigits;
-    let commitMsgWithUrlThatExceedsBodyMaxLineLength =
+    const commitMsgWithUrlThatExceedsBodyMaxLineLength =
         "foo: this is only a title" +
         "\n\n" +
         "Bla blah[1] bla.\n\n[1] someUrl://" +
         seventyChars;
-    let bodyMaxLineLength4 = runCommitLintOnMsg(
+    const bodyMaxLineLength4 = runCommitLintOnMsg(
         commitMsgWithUrlThatExceedsBodyMaxLineLength
     );
 
@@ -276,8 +278,8 @@ test("body-max-line-length4", () => {
 });
 
 test("body-max-line-length5", () => {
-    let tenDigits = "1234567890";
-    let seventyChars =
+    const tenDigits = "1234567890";
+    const seventyChars =
         tenDigits +
         tenDigits +
         tenDigits +
@@ -285,12 +287,12 @@ test("body-max-line-length5", () => {
         tenDigits +
         tenDigits +
         tenDigits;
-    let commitMsgWithUrlThatExceedsBodyMaxLineLength =
+    const commitMsgWithUrlThatExceedsBodyMaxLineLength =
         "foo: this is only a title" +
         "\n\n" +
         "Fixes someUrl://" +
         seventyChars;
-    let bodyMaxLineLength5 = runCommitLintOnMsg(
+    const bodyMaxLineLength5 = runCommitLintOnMsg(
         commitMsgWithUrlThatExceedsBodyMaxLineLength
     );
 
@@ -299,8 +301,8 @@ test("body-max-line-length5", () => {
 });
 
 test("body-max-line-length6", () => {
-    let tenChars = "1234 67890";
-    let seventyChars =
+    const tenChars = "1234 67890";
+    const seventyChars =
         tenChars +
         tenChars +
         tenChars +
@@ -308,13 +310,13 @@ test("body-max-line-length6", () => {
         tenChars +
         tenChars +
         tenChars;
-    let commitMsgWithUrlThatExceedsBodyMaxLineLength =
+    const commitMsgWithUrlThatExceedsBodyMaxLineLength =
         "foo: this is only a title" +
         "\n\n" +
         "Bar baz.\n```\n" +
         seventyChars +
         "\n```";
-    let bodyMaxLineLength6 = runCommitLintOnMsg(
+    const bodyMaxLineLength6 = runCommitLintOnMsg(
         commitMsgWithUrlThatExceedsBodyMaxLineLength
     );
 
@@ -323,8 +325,8 @@ test("body-max-line-length6", () => {
 });
 
 test("body-max-line-length7", () => {
-    let tenChars = "1234567890";
-    let seventyChars =
+    const tenChars = "1234567890";
+    const seventyChars =
         tenChars +
         tenChars +
         tenChars +
@@ -332,13 +334,13 @@ test("body-max-line-length7", () => {
         tenChars +
         tenChars +
         tenChars;
-    let commitMsgWithCoAuthoredByTagThatExceedsBodyMaxLineLength =
+    const commitMsgWithCoAuthoredByTagThatExceedsBodyMaxLineLength =
         "foo: this is only a title" +
         "\n\n" +
         "Co-authored-by: Jon Doe <" +
         seventyChars +
         "@example.com>";
-    let bodyMaxLineLength7 = runCommitLintOnMsg(
+    const bodyMaxLineLength7 = runCommitLintOnMsg(
         commitMsgWithCoAuthoredByTagThatExceedsBodyMaxLineLength
     );
 
@@ -347,54 +349,54 @@ test("body-max-line-length7", () => {
 });
 
 test("body-max-line-length8", () => {
-    let commitMsgWithLargeBody = `Network,TorHandshakes: handle handshake fail
+    const commitMsgWithLargeBody = `Network,TorHandshakes: handle handshake fail
 
 --- Line between dashes ---
 A very long line. A very long line. A very long line. A very long line. A very long line. A very long line.`;
 
-    let bodyMaxLineLength8 = runCommitLintOnMsg(commitMsgWithLargeBody);
+    const bodyMaxLineLength8 = runCommitLintOnMsg(commitMsgWithLargeBody);
     expect(bodyMaxLineLength8.status).toBe(1);
 });
 
 test("body-max-line-length9", () => {
     // see https://github.com/nblockchain/conventions/issues/124
-    let commitMsgWithLargeBody = `GrpcService: fix some logging nits
+    const commitMsgWithLargeBody = `GrpcService: fix some logging nits
 
 These mistakes were made in 45faeca2f0e7c9c5545f54fb3fcc815f52b8a7cf.`;
 
-    let bodyMaxLineLength9 = runCommitLintOnMsg(commitMsgWithLargeBody);
+    const bodyMaxLineLength9 = runCommitLintOnMsg(commitMsgWithLargeBody);
     expect(bodyMaxLineLength9.status).toBe(0);
 });
 
 test("body-max-line-length10", () => {
     // see https://github.com/nblockchain/conventions/issues/124
-    let commitMsgWithLargeBody = `GrpcService: fix some logging nits
+    const commitMsgWithLargeBody = `GrpcService: fix some logging nits
 
 These mistakes were made in this GrpcService's RunIntoMeService commit: 45faeca2f0e7c9c5545f54fb3fcc815f52b8a7cf.`;
 
-    let bodyMaxLineLength10 = runCommitLintOnMsg(commitMsgWithLargeBody);
+    const bodyMaxLineLength10 = runCommitLintOnMsg(commitMsgWithLargeBody);
     expect(bodyMaxLineLength10.status).toBe(1);
 });
 
 test("body-paragraph-line-min-length1", () => {
-    let tenChars = "1234 67890";
-    let fortyChars = tenChars + tenChars + tenChars + tenChars;
-    let sixtyChars = fortyChars + tenChars + tenChars;
-    let commitMsgWithFortyCharsInBody =
+    const tenChars = "1234 67890";
+    const fortyChars = tenChars + tenChars + tenChars + tenChars;
+    const sixtyChars = fortyChars + tenChars + tenChars;
+    const commitMsgWithFortyCharsInBody =
         "foo: this is only a title\n\n" + fortyChars + ".\n" + sixtyChars + ".";
-    let bodyParagraphLineMinLength1 = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength1 = runCommitLintOnMsg(
         commitMsgWithFortyCharsInBody
     );
     expect(bodyParagraphLineMinLength1.status).not.toBe(0);
 });
 
 test("body-paragraph-line-min-length2", () => {
-    let commitMsgWithCommitUrlAtTheEndOfBodyParagraph = `foo: this is only a title
+    const commitMsgWithCommitUrlAtTheEndOfBodyParagraph = `foo: this is only a title
 
 Foo bar:
 https://github.com/username/repo/commit/1234567891234567891234567891234567891234`;
 
-    let bodyParagraphLineMinLength2 = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength2 = runCommitLintOnMsg(
         commitMsgWithCommitUrlAtTheEndOfBodyParagraph
     );
 
@@ -402,21 +404,21 @@ https://github.com/username/repo/commit/1234567891234567891234567891234567891234
 });
 
 test("body-paragraph-line-min-length3", () => {
-    let tenChars = "1234 67890";
-    let fortyChars = tenChars + tenChars + tenChars + tenChars;
-    let commitMsgWithFortyCharsInTheLastLineOfParagraph =
+    const tenChars = "1234 67890";
+    const fortyChars = tenChars + tenChars + tenChars + tenChars;
+    const commitMsgWithFortyCharsInTheLastLineOfParagraph =
         "foo: this is only a title\n\n" + fortyChars + ".";
-    let bodyParagraphLineMinLength3 = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength3 = runCommitLintOnMsg(
         commitMsgWithFortyCharsInTheLastLineOfParagraph
     );
     expect(bodyParagraphLineMinLength3.status).toBe(0);
 });
 
 test("body-paragraph-line-min-length4", () => {
-    let tenChars = "1234 67890";
-    let fortyChars = tenChars + tenChars + tenChars + tenChars;
-    let sixtyChars = fortyChars + tenChars + tenChars;
-    let commitMsgWithCodeBlockThatSubceedsBodyMinLineLength =
+    const tenChars = "1234 67890";
+    const fortyChars = tenChars + tenChars + tenChars + tenChars;
+    const sixtyChars = fortyChars + tenChars + tenChars;
+    const commitMsgWithCodeBlockThatSubceedsBodyMinLineLength =
         "foo: this is only a title" +
         "\n\n" +
         "Bar baz.\n```\n" +
@@ -426,7 +428,7 @@ test("body-paragraph-line-min-length4", () => {
         "." +
         "\n```";
 
-    let bodyParagraphLineMinLength4 = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength4 = runCommitLintOnMsg(
         commitMsgWithCodeBlockThatSubceedsBodyMinLineLength
     );
 
@@ -435,12 +437,12 @@ test("body-paragraph-line-min-length4", () => {
 });
 
 test("body-paragraph-line-min-length5", () => {
-    let commitMsgWithCoAuthoredByTagThatSubceedsBodyMinLineLength = `foo: this is only a title
+    const commitMsgWithCoAuthoredByTagThatSubceedsBodyMinLineLength = `foo: this is only a title
 
 Co-authored-by: Jon Doe <shortmail@example.com>
 Co-authored-by: Jon Doe <JonDoeEmailAddress@example.com>`;
 
-    let bodyParagraphLineMinLength5 = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength5 = runCommitLintOnMsg(
         commitMsgWithCoAuthoredByTagThatSubceedsBodyMinLineLength
     );
 
@@ -449,13 +451,13 @@ Co-authored-by: Jon Doe <JonDoeEmailAddress@example.com>`;
 });
 
 test("body-paragraph-line-min-length6", () => {
-    let commitMsgThatSubceedsBodyMinLineLength = `Some title of less than 50 chars
+    const commitMsgThatSubceedsBodyMinLineLength = `Some title of less than 50 chars
 
 This is a paragraph whose 2nd line is less than 50 chars
 but should not make commitlint complain because
 TheNextWordInThe3rdLineIsTooLongToBePlacedIn2ndLine.`;
 
-    let bodyParagraphLineMinLength6 = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength6 = runCommitLintOnMsg(
         commitMsgThatSubceedsBodyMinLineLength
     );
 
@@ -463,7 +465,7 @@ TheNextWordInThe3rdLineIsTooLongToBePlacedIn2ndLine.`;
 });
 
 test("body-paragraph-line-min-length7", () => {
-    let commitMsgThatSubceedsBodyMinLineLengthButIsLegit = `Fixed bug (a title of less than 50 chars)
+    const commitMsgThatSubceedsBodyMinLineLengthButIsLegit = `Fixed bug (a title of less than 50 chars)
 
 These were the steps to reproduce:
 Do foo.
@@ -474,7 +476,7 @@ Bar happens.
 Expected results:
 Baz happens.`;
 
-    let bodyParagraphLineMinLength7 = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength7 = runCommitLintOnMsg(
         commitMsgThatSubceedsBodyMinLineLengthButIsLegit
     );
 
@@ -482,7 +484,7 @@ Baz happens.`;
 });
 
 test("body-paragraph-line-min-length8", () => {
-    let commitMsgWithCodeBlockThatSubceedsBodyMinLineLength =
+    const commitMsgWithCodeBlockThatSubceedsBodyMinLineLength =
         "foo: this is only a title\n\n" +
         "Body with a link [1]:\n" +
         "```\n" +
@@ -490,7 +492,7 @@ test("body-paragraph-line-min-length8", () => {
         "```\n\n" +
         "[1] https://foo.com/bar";
 
-    let bodyParagraphLineMinLength8 = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength8 = runCommitLintOnMsg(
         commitMsgWithCodeBlockThatSubceedsBodyMinLineLength
     );
 
@@ -498,47 +500,47 @@ test("body-paragraph-line-min-length8", () => {
 });
 
 test("body-paragraph-line-min-length9", () => {
-    let commitMsgThatHasAsteriskBullets = `Fixed bug (a title of less than 50 chars)
+    const commitMsgThatHasAsteriskBullets = `Fixed bug (a title of less than 50 chars)
 
 This is a bullet list of things:
 * Foo.
 * Bar.`;
 
-    let bodyParagraphLineMinLength9 = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength9 = runCommitLintOnMsg(
         commitMsgThatHasAsteriskBullets
     );
 
     expect(bodyParagraphLineMinLength9.status).toBe(0);
 
-    let commitMsgThatHasDashBullets = `Fixed bug (a title of less than 50 chars)
+    const commitMsgThatHasDashBullets = `Fixed bug (a title of less than 50 chars)
 
 This is a bullet list of things:
 - Foo.
 - Bar.`;
 
-    let bodyParagraphLineMinLength9Prime = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength9Prime = runCommitLintOnMsg(
         commitMsgThatHasDashBullets
     );
 
     expect(bodyParagraphLineMinLength9Prime.status).toBe(0);
 
-    let commitMsgThatOnlyHasAsteriskBullets = `Fixed bug (a title of less than 50 chars)
+    const commitMsgThatOnlyHasAsteriskBullets = `Fixed bug (a title of less than 50 chars)
 
 * Foo.
 * Bar.`;
 
-    let bodyParagraphLineMinLength9DoublePrime = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength9DoublePrime = runCommitLintOnMsg(
         commitMsgThatOnlyHasAsteriskBullets
     );
 
     expect(bodyParagraphLineMinLength9DoublePrime.status).toBe(0);
 
-    let commitMsgThatOnlyHasDashBullets = `Fixed bug (a title of less than 50 chars)
+    const commitMsgThatOnlyHasDashBullets = `Fixed bug (a title of less than 50 chars)
 
 - Foo.
 - Bar.`;
 
-    let bodyParagraphLineMinLength9TriplePrime = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength9TriplePrime = runCommitLintOnMsg(
         commitMsgThatOnlyHasDashBullets
     );
 
@@ -546,24 +548,24 @@ This is a bullet list of things:
 });
 
 test("body-paragraph-line-min-length10", () => {
-    let commitMsgThatHasNumberedBullets = `Fixed bug (a title of less than 50 chars)
+    const commitMsgThatHasNumberedBullets = `Fixed bug (a title of less than 50 chars)
 
 This is a bullet list of things:
 1. Foo.
 2. Bar.`;
 
-    let bodyParagraphLineMinLength10 = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength10 = runCommitLintOnMsg(
         commitMsgThatHasNumberedBullets
     );
 
     expect(bodyParagraphLineMinLength10.status).toBe(0);
 
-    let commitMsgThatOnlyHasNumberedBullets = `Fixed bug (a title of less than 50 chars)
+    const commitMsgThatOnlyHasNumberedBullets = `Fixed bug (a title of less than 50 chars)
 
 1. Foo.
 2. Bar.`;
 
-    let bodyParagraphLineMinLength10Prime = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength10Prime = runCommitLintOnMsg(
         commitMsgThatOnlyHasNumberedBullets
     );
 
@@ -571,26 +573,26 @@ This is a bullet list of things:
 });
 
 test("body-paragraph-line-min-length11", () => {
-    let commitMsgThatHasMultiLineBullets = `Fixed bug (a title of less than 50 chars)
+    const commitMsgThatHasMultiLineBullets = `Fixed bug (a title of less than 50 chars)
 
 This is a bullet list of things:
 * Foo bar baz foo bar baz foo bar baz foo bar baz foo bar baz
 foo bar baz.
 * Baz bar foo.`;
 
-    let bodyParagraphLineMinLength11 = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength11 = runCommitLintOnMsg(
         commitMsgThatHasMultiLineBullets
     );
 
     expect(bodyParagraphLineMinLength11.status).toBe(0);
 
-    let commitMsgThatOnlyHasMultiLineBullets = `Fixed bug (a title of less than 50 chars)
+    const commitMsgThatOnlyHasMultiLineBullets = `Fixed bug (a title of less than 50 chars)
 
 * Foo bar baz foo bar baz foo bar baz foo bar baz foo bar baz
 foo bar baz.
 * Baz bar foo.`;
 
-    let bodyParagraphLineMinLength11Prime = runCommitLintOnMsg(
+    const bodyParagraphLineMinLength11Prime = runCommitLintOnMsg(
         commitMsgThatOnlyHasMultiLineBullets
     );
 
@@ -598,54 +600,54 @@ foo bar baz.
 });
 
 test("commit-hash-alone1", () => {
-    let commitMsgWithCommitUrl = `foo: this is only a title
+    const commitMsgWithCommitUrl = `foo: this is only a title
 
 https://github.com/${process.env["GITHUB_REPOSITORY"]}/commit/3ee07243edc30604088a4b04ca525204ea440710`;
 
-    let commitHashAlone1 = runCommitLintOnMsg(commitMsgWithCommitUrl);
+    const commitHashAlone1 = runCommitLintOnMsg(commitMsgWithCommitUrl);
     expect(commitHashAlone1.status).not.toBe(0);
 });
 
 test("commit-hash-alone2", () => {
-    let commitMsgWithCommitHash = `foo: this is only a title
+    const commitMsgWithCommitHash = `foo: this is only a title
 
 This is referring to [1] commit hash.
 
 [1] 3ee07243edc30604088a4b04ca525204ea440710`;
 
-    let commitHashAlone2 = runCommitLintOnMsg(commitMsgWithCommitHash);
+    const commitHashAlone2 = runCommitLintOnMsg(commitMsgWithCommitHash);
     expect(commitHashAlone2.status).toBe(0);
 });
 
 test("commit-hash-alone3", () => {
-    let commitMsgWithExternalCommitUrl = `foo: this is only a title
+    const commitMsgWithExternalCommitUrl = `foo: this is only a title
 
 https://github.com/anotherOrg/anotherRepo/commit/3ee07243edc30604088a4b04ca525204ea440710`;
 
-    let commitHashAlone3 = runCommitLintOnMsg(commitMsgWithExternalCommitUrl);
+    const commitHashAlone3 = runCommitLintOnMsg(commitMsgWithExternalCommitUrl);
     expect(commitHashAlone3.status).toBe(0);
 });
 
 test("empty-wip-1", () => {
-    let commitMsgWithEpmtyWIP = "WIP";
-    let emptyWIP1 = runCommitLintOnMsg(commitMsgWithEpmtyWIP);
+    const commitMsgWithEpmtyWIP = "WIP";
+    const emptyWIP1 = runCommitLintOnMsg(commitMsgWithEpmtyWIP);
     expect(emptyWIP1.status).not.toBe(0);
 });
 
 test("empty-wip-2", () => {
-    let commitMsgWithDescriptionAfterWIP = "WIP: bla bla blah";
-    let emptyWIP2 = runCommitLintOnMsg(commitMsgWithDescriptionAfterWIP);
+    const commitMsgWithDescriptionAfterWIP = "WIP: bla bla blah";
+    const emptyWIP2 = runCommitLintOnMsg(commitMsgWithDescriptionAfterWIP);
     expect(emptyWIP2.status).toBe(0);
 });
 
 test("empty-wip-3", () => {
-    let commitMsgWithNumberAfterWIP = "WIP1";
-    let emptyWIP3 = runCommitLintOnMsg(commitMsgWithNumberAfterWIP);
+    const commitMsgWithNumberAfterWIP = "WIP1";
+    const emptyWIP3 = runCommitLintOnMsg(commitMsgWithNumberAfterWIP);
     expect(emptyWIP3.status).toBe(0);
 });
 
 test("footer-notes-misplacement-1", () => {
-    let commitMsgWithRightFooter = `foo: this is only a title
+    const commitMsgWithRightFooter = `foo: this is only a title
 
 Bla bla blah[1].
 
@@ -653,12 +655,14 @@ Fixes https://some/issue
 
 [1] http://foo.bar/baz`;
 
-    let footerNotesMisplacement1 = runCommitLintOnMsg(commitMsgWithRightFooter);
+    const footerNotesMisplacement1 = runCommitLintOnMsg(
+        commitMsgWithRightFooter
+    );
     expect(footerNotesMisplacement1.status).toBe(0);
 });
 
 test("footer-notes-misplacement-2", () => {
-    let commitMsgWithWrongFooter = `foo: this is only a title
+    const commitMsgWithWrongFooter = `foo: this is only a title
 
 Fixes https://some/issue
 
@@ -666,12 +670,14 @@ Bla bla blah[1].
 
 [1] http://foo.bar/baz`;
 
-    let footerNotesMisplacement2 = runCommitLintOnMsg(commitMsgWithWrongFooter);
+    const footerNotesMisplacement2 = runCommitLintOnMsg(
+        commitMsgWithWrongFooter
+    );
     expect(footerNotesMisplacement2.status).not.toBe(0);
 });
 
 test("footer-notes-misplacement-3", () => {
-    let commitMsgWithWrongFooter = `foo: this is only a title
+    const commitMsgWithWrongFooter = `foo: this is only a title
 
 Bla bla blah[1]
 
@@ -681,12 +687,14 @@ Some other bla bla blah.
 
 Fixes https://some/issue`;
 
-    let footerNotesMisplacement3 = runCommitLintOnMsg(commitMsgWithWrongFooter);
+    const footerNotesMisplacement3 = runCommitLintOnMsg(
+        commitMsgWithWrongFooter
+    );
     expect(footerNotesMisplacement3.status).not.toBe(0);
 });
 
 test("footer-notes-misplacement-4", () => {
-    let commitMsgWithWrongFooter =
+    const commitMsgWithWrongFooter =
         "foo: this is only a title\n\n" +
         "Bla bla blah[1]:\n\n" +
         "```\nUnhandled Exception:\n--- Something between dashes ---\n```\n\n" +
@@ -694,57 +702,61 @@ test("footer-notes-misplacement-4", () => {
         "Some other bla bla blah.\n\n" +
         "Fixes https://some/issue";
 
-    let footerNotesMisplacement4 = runCommitLintOnMsg(commitMsgWithWrongFooter);
+    const footerNotesMisplacement4 = runCommitLintOnMsg(
+        commitMsgWithWrongFooter
+    );
     expect(footerNotesMisplacement4.status).not.toBe(0);
 });
 
 test("footer-notes-misplacement-5", () => {
-    let commitMsgWithRightFooter =
+    const commitMsgWithRightFooter =
         "foo: this is only a title\n\n" +
         "Bla bla blah[1]:\n\n" +
         "```\nSome error message with a [] in the first of its line\n[warn] some warning\n```\n\n" +
         "[1] http://foo.bar/baz";
-    let footerNotesMisplacement5 = runCommitLintOnMsg(commitMsgWithRightFooter);
+    const footerNotesMisplacement5 = runCommitLintOnMsg(
+        commitMsgWithRightFooter
+    );
     console.log(footerNotesMisplacement5.stdout.toString());
     expect(footerNotesMisplacement5.status).toBe(0);
 });
 
 test("footer-refs-validity1", () => {
-    let commmitMsgWithCorrectFooter = `foo: this is only a title
+    const commmitMsgWithCorrectFooter = `foo: this is only a title
 
 Bla bla blah[1].
 
 [1] http://foo.bar/baz`;
 
-    let footerRefsValidity1 = runCommitLintOnMsg(commmitMsgWithCorrectFooter);
+    const footerRefsValidity1 = runCommitLintOnMsg(commmitMsgWithCorrectFooter);
     expect(footerRefsValidity1.status).toBe(0);
 });
 
 test("footer-refs-validity2", () => {
-    let commmitMsgWithWrongFooter = `foo: this is only a title
+    const commmitMsgWithWrongFooter = `foo: this is only a title
 
 Bla bla blah.
 
 [1] http://foo.bar/baz`;
 
-    let footerRefsValidity2 = runCommitLintOnMsg(commmitMsgWithWrongFooter);
+    const footerRefsValidity2 = runCommitLintOnMsg(commmitMsgWithWrongFooter);
     expect(footerRefsValidity2.status).not.toBe(0);
 });
 
 test("footer-refs-validity3", () => {
-    let commmitMsgWithWrongFooter = `foo: this is only a title
+    const commmitMsgWithWrongFooter = `foo: this is only a title
 
 Bla bla blah[1], and after that [2], then [3].
 
 [1] http://foo.bar/baz
 [2] http://foo.bar/baz`;
 
-    let footerRefsValidity3 = runCommitLintOnMsg(commmitMsgWithWrongFooter);
+    const footerRefsValidity3 = runCommitLintOnMsg(commmitMsgWithWrongFooter);
     expect(footerRefsValidity3.status).not.toBe(0);
 });
 
 test("footer-refs-validity4", () => {
-    let commmitMsgWithFooter =
+    const commmitMsgWithFooter =
         "Backend/Ether: catch/retry new -32002 err code\n\n" +
         "CI on master branch caught this[1]:\n" +
         "```\nUnhandled Exception:\n" +
@@ -752,30 +764,36 @@ test("footer-refs-validity4", () => {
         "The end of the paragraph.\n\n" +
         "[1] https://github.com/nblockchain/geewallet/actions/runs/3507005645/jobs/5874411684";
 
-    let footerRefsValidity4 = runCommitLintOnMsg(commmitMsgWithFooter);
+    const footerRefsValidity4 = runCommitLintOnMsg(commmitMsgWithFooter);
     expect(footerRefsValidity4.status).toBe(0);
 });
 
 test("footer-refs-validity5", () => {
-    let commmitMsgWithEOLFooter = `foo: this is only a title
+    const commmitMsgWithEOLFooter = `foo: this is only a title
 
 Bla bla blah[1].
 
 [1]
 http://foo.bar/baz`;
 
-    let footerRefsValidity5 = runCommitLintOnMsg(commmitMsgWithEOLFooter);
-    expect(footerRefsValidity5.output[1].toString().includes("EOL")).toBe(true);
+    const footerRefsValidity5 = runCommitLintOnMsg(commmitMsgWithEOLFooter);
+    const output1 = footerRefsValidity5.output[1];
+    expect(output1).not.toBeNull();
+    if (output1 === null) {
+        // redundant, but TypeScript compiler produces error otherwise
+        return;
+    }
+    expect(output1.toString().includes("EOL")).toBe(true);
 });
 
 test("footer-refs-validity6", () => {
-    let commitMsgWithUrlContainingAnchor = `foo: blah blah
+    const commitMsgWithUrlContainingAnchor = `foo: blah blah
 
 Blah blah blah[1].
 
 [1] https://somehost/somePath/someRes#7-some-numbered-anchor`;
 
-    let footerRefsValidity6 = runCommitLintOnMsg(
+    const footerRefsValidity6 = runCommitLintOnMsg(
         commitMsgWithUrlContainingAnchor
     );
     expect(footerRefsValidity6.status).toBe(0);
@@ -783,15 +801,15 @@ Blah blah blah[1].
 
 // This test reflects this issue: https://github.com/nblockchain/conventions/issues/125
 test("footer-refs-validity7", () => {
-    let commitMsgWithWithoutFooter = "foo: blah blah" + "\n\n" + "```[1]```";
+    const commitMsgWithWithoutFooter = "foo: blah blah" + "\n\n" + "```[1]```";
 
-    let footerRefsValidity7 = runCommitLintOnMsg(commitMsgWithWithoutFooter);
+    const footerRefsValidity7 = runCommitLintOnMsg(commitMsgWithWithoutFooter);
     expect(footerRefsValidity7.status).toBe(0);
 });
 
 // This test reflects this issue: https://github.com/nblockchain/conventions/issues/146
 test("footer-refs-validity8", () => {
-    let commitMsgWithCodeBlockAtFooterRef =
+    const commitMsgWithCodeBlockAtFooterRef =
         "foo: blah blah" +
         "\n\n" +
         "Blah blah blah[1]." +
@@ -800,7 +818,7 @@ test("footer-refs-validity8", () => {
         "```\n" +
         "someCodeBlock\n" +
         "```";
-    let footerRefsValidity8 = runCommitLintOnMsg(
+    const footerRefsValidity8 = runCommitLintOnMsg(
         commitMsgWithCodeBlockAtFooterRef
     );
     expect(footerRefsValidity8.status).toBe(0);
@@ -808,7 +826,7 @@ test("footer-refs-validity8", () => {
 
 // This test reflects this issue: https://github.com/nblockchain/conventions/issues/148
 test("footer-refs-validity9", () => {
-    let commitMsgWithTwoCodeBlocksAtBodyWithRef =
+    const commitMsgWithTwoCodeBlocksAtBodyWithRef =
         "foo: blah blah" +
         "\n\n" +
         "Blah blah [1]:" +
@@ -818,31 +836,33 @@ test("footer-refs-validity9", () => {
         "[1] Stack trace:" +
         "\n\n" +
         "```\nsomeCodeBlock\n```";
-    let footerRefsValidity9 = runCommitLintOnMsg(
+    const footerRefsValidity9 = runCommitLintOnMsg(
         commitMsgWithTwoCodeBlocksAtBodyWithRef
     );
     expect(footerRefsValidity9.status).toBe(0);
 });
 
 test("prefer-slash-over-backslash1", () => {
-    let commitMsgWithBackslash = "foo\\bar: bla bla bla";
-    let preferSlashOverBackslash1 = runCommitLintOnMsg(commitMsgWithBackslash);
+    const commitMsgWithBackslash = "foo\\bar: bla bla bla";
+    const preferSlashOverBackslash1 = runCommitLintOnMsg(
+        commitMsgWithBackslash
+    );
     expect(preferSlashOverBackslash1.status).not.toBe(0);
 });
 
 test("prefer-slash-over-backslash2", () => {
-    let commitMsgWithSlash = "foo/bar: bla bla bla";
-    let preferSlashOverBackslash2 = runCommitLintOnMsg(commitMsgWithSlash);
+    const commitMsgWithSlash = "foo/bar: bla bla bla";
+    const preferSlashOverBackslash2 = runCommitLintOnMsg(commitMsgWithSlash);
     expect(preferSlashOverBackslash2.status).toBe(0);
 });
 
 test("header-max-length-with-suggestions1", () => {
-    let commitMsgWithThatExceedsHeaderMaxLength =
+    const commitMsgWithThatExceedsHeaderMaxLength =
         "foo: this is only a title with a configuration in it that exceeds header max length";
-    let headerMaxLength1 = runCommitLintOnMsg(
+    const headerMaxLength1 = runCommitLintOnMsg(
         commitMsgWithThatExceedsHeaderMaxLength
     );
-    let expected_message = `"configuration" -> "config"`;
+    const expected_message = `"configuration" -> "config"`;
     expect(headerMaxLength1.status).not.toBe(0);
     expect((headerMaxLength1.stdout + "").includes(expected_message)).toEqual(
         true
@@ -850,12 +870,12 @@ test("header-max-length-with-suggestions1", () => {
 });
 
 test("header-max-length-with-suggestions2", () => {
-    let commitMsgWithThatExceedsHeaderMaxLength =
+    const commitMsgWithThatExceedsHeaderMaxLength =
         "foo: this is only a title with a 1 second in it that exceeds header max length";
-    let headerMaxLength2 = runCommitLintOnMsg(
+    const headerMaxLength2 = runCommitLintOnMsg(
         commitMsgWithThatExceedsHeaderMaxLength
     );
-    let expected_message = `"1 second" -> "1sec"`;
+    const expected_message = `"1 second" -> "1sec"`;
     expect(headerMaxLength2.status).not.toBe(0);
     expect((headerMaxLength2.stdout + "").includes(expected_message)).toEqual(
         true
@@ -863,37 +883,37 @@ test("header-max-length-with-suggestions2", () => {
 });
 
 test("header-max-length-with-suggestions3", () => {
-    let commitMsgWithOnlyTwentySixCharsInTitle = "foo: this is only a title";
-    let headerMaxLength3 = runCommitLintOnMsg(
+    const commitMsgWithOnlyTwentySixCharsInTitle = "foo: this is only a title";
+    const headerMaxLength3 = runCommitLintOnMsg(
         commitMsgWithOnlyTwentySixCharsInTitle
     );
     expect(headerMaxLength3.status).toBe(0);
 });
 
 test("header-max-length-with-suggestions4", () => {
-    let tenChars = "1234 12345";
-    let commitMsgWithOnlyFiftyCharsInTitle =
+    const tenChars = "1234 12345";
+    const commitMsgWithOnlyFiftyCharsInTitle =
         "foo: 12345" + tenChars + tenChars + tenChars + tenChars;
-    let headerMaxLength4 = runCommitLintOnMsg(
+    const headerMaxLength4 = runCommitLintOnMsg(
         commitMsgWithOnlyFiftyCharsInTitle
     );
     expect(headerMaxLength4.status).toBe(0);
 });
 
 test("header-max-length-with-suggestions5", () => {
-    let longMergeCommitMessage =
+    const longMergeCommitMessage =
         "Merge PR #42 from realmarv/fixFooterReferenceExistenceTruncatedBody";
-    let headerMaxLength5 = runCommitLintOnMsg(longMergeCommitMessage);
+    const headerMaxLength5 = runCommitLintOnMsg(longMergeCommitMessage);
     expect(headerMaxLength5.status).toBe(0);
 });
 
 test("header-max-length-with-suggestions6", () => {
-    let commitMsgWithThatExceedsHeaderMaxLength =
+    const commitMsgWithThatExceedsHeaderMaxLength =
         "Upgrade foo bla bla bla bla bla bla bla bla bla bla bla bla bla bla";
-    let headerMaxLength6 = runCommitLintOnMsg(
+    const headerMaxLength6 = runCommitLintOnMsg(
         commitMsgWithThatExceedsHeaderMaxLength
     );
-    let expected_message = `"upgrade" -> "update"`;
+    const expected_message = `"upgrade" -> "update"`;
     expect(headerMaxLength6.status).not.toBe(0);
     expect((headerMaxLength6.stdout + "").includes(expected_message)).toEqual(
         true
@@ -901,12 +921,12 @@ test("header-max-length-with-suggestions6", () => {
 });
 
 test("header-max-length-with-suggestions7", () => {
-    let commitMsgWithThatExceedsHeaderMaxLength =
+    const commitMsgWithThatExceedsHeaderMaxLength =
         "configure: this is the very very very very very long title";
-    let headerMaxLength7 = runCommitLintOnMsg(
+    const headerMaxLength7 = runCommitLintOnMsg(
         commitMsgWithThatExceedsHeaderMaxLength
     );
-    let expected_message = `"configure" -> "config"`;
+    const expected_message = `"configure" -> "config"`;
     expect(headerMaxLength7.status).not.toBe(0);
     expect((headerMaxLength7.stdout + "").includes(expected_message)).toEqual(
         false
@@ -914,12 +934,12 @@ test("header-max-length-with-suggestions7", () => {
 });
 
 test("header-max-length-with-suggestions8", () => {
-    let commitMsgThatExceedsHeaderMaxLength =
+    const commitMsgThatExceedsHeaderMaxLength =
         "Fix android build because blah blah very very very very very long title";
-    let headerMaxLength8 = runCommitLintOnMsg(
+    const headerMaxLength8 = runCommitLintOnMsg(
         commitMsgThatExceedsHeaderMaxLength
     );
-    let not_expected_message = `"and" -> "&"`;
+    const not_expected_message = `"and" -> "&"`;
     expect(headerMaxLength8.status).not.toBe(0);
     expect(
         (headerMaxLength8.stdout + "").includes(not_expected_message)
@@ -927,12 +947,12 @@ test("header-max-length-with-suggestions8", () => {
 });
 
 test("header-max-length-with-suggestions9", () => {
-    let commitMsgThatExceedsHeaderMaxLength =
+    const commitMsgThatExceedsHeaderMaxLength =
         "title: 1 second bla bla bla bla bla bla bla bla bla bla bla bla bla bla";
-    let headerMaxLength9 = runCommitLintOnMsg(
+    const headerMaxLength9 = runCommitLintOnMsg(
         commitMsgThatExceedsHeaderMaxLength
     );
-    let expected_message = `"1 second" -> "1sec"`;
+    const expected_message = `"1 second" -> "1sec"`;
     expect(headerMaxLength9.status).not.toBe(0);
     expect((headerMaxLength9.stdout + "").includes(expected_message)).toEqual(
         true
@@ -940,12 +960,12 @@ test("header-max-length-with-suggestions9", () => {
 });
 
 test("header-max-length-with-suggestions10", () => {
-    let commitMsgThatExceedsHeaderMaxLength =
+    const commitMsgThatExceedsHeaderMaxLength =
         "Configuration simplification bla bla bla bla bla bla bla bla bla bla bla";
-    let headerMaxLength10 = runCommitLintOnMsg(
+    const headerMaxLength10 = runCommitLintOnMsg(
         commitMsgThatExceedsHeaderMaxLength
     );
-    let expected_message = `"configuration" -> "config"`;
+    const expected_message = `"configuration" -> "config"`;
     expect(headerMaxLength10.status).not.toBe(0);
     expect((headerMaxLength10.stdout + "").includes(expected_message)).toEqual(
         true
@@ -953,12 +973,12 @@ test("header-max-length-with-suggestions10", () => {
 });
 
 test("header-max-length-with-suggestions11", () => {
-    let commitMsgThatExceedsHeaderMaxLength =
+    const commitMsgThatExceedsHeaderMaxLength =
         "scope: 20 characters more because blah blah very very very very long title";
-    let headerMaxLength11 = runCommitLintOnMsg(
+    const headerMaxLength11 = runCommitLintOnMsg(
         commitMsgThatExceedsHeaderMaxLength
     );
-    let expected_message = `"characters" -> "chars"`;
+    const expected_message = `"characters" -> "chars"`;
     expect(headerMaxLength11.status).not.toBe(0);
     expect((headerMaxLength11.stdout + "").includes(expected_message)).toEqual(
         true
@@ -966,12 +986,12 @@ test("header-max-length-with-suggestions11", () => {
 });
 
 test("header-max-length-with-suggestions12", () => {
-    let commitMsgThatExceedsHeaderMaxLength =
+    const commitMsgThatExceedsHeaderMaxLength =
         "Split that compares better because blah blah bla very very very long title";
-    let headerMaxLength12 = runCommitLintOnMsg(
+    const headerMaxLength12 = runCommitLintOnMsg(
         commitMsgThatExceedsHeaderMaxLength
     );
-    let not_expected_message = `"compares" -> "cmps"`;
+    const not_expected_message = `"compares" -> "cmps"`;
     expect(headerMaxLength12.status).not.toBe(0);
     expect(
         (headerMaxLength12.stdout + "").includes(not_expected_message)
@@ -979,331 +999,336 @@ test("header-max-length-with-suggestions12", () => {
 });
 
 test("proper-issue-refs1", () => {
-    let commitMsgWithHashtagRef = `foo: blah blah
+    const commitMsgWithHashtagRef = `foo: blah blah
 
 Blah blah #123.`;
 
-    let properIssueRefs1 = runCommitLintOnMsg(commitMsgWithHashtagRef);
+    const properIssueRefs1 = runCommitLintOnMsg(commitMsgWithHashtagRef);
     expect(properIssueRefs1.status).not.toBe(0);
 });
 
 test("proper-issue-refs2", () => {
-    let commitMsgWithFullUrl = `foo: blah blah
+    const commitMsgWithFullUrl = `foo: blah blah
 
 Fixes someUrl://blah.blah/158`;
 
-    let properIssueRefs2 = runCommitLintOnMsg(commitMsgWithFullUrl);
+    const properIssueRefs2 = runCommitLintOnMsg(commitMsgWithFullUrl);
     expect(properIssueRefs2.status).toBe(0);
 });
 
 test("proper-issue-refs3", () => {
-    let commitMsgWithHashtagRefInBlock =
+    const commitMsgWithHashtagRefInBlock =
         "foo: this is only a title" +
         "\n\n" +
         "Bar baz:\n\n```\ntype Foo = string #123\n```";
-    let properIssueRefs3 = runCommitLintOnMsg(commitMsgWithHashtagRefInBlock);
+    const properIssueRefs3 = runCommitLintOnMsg(commitMsgWithHashtagRefInBlock);
     expect(properIssueRefs3.status).toBe(0);
 });
 
 test("proper-issue-refs4", () => {
-    let commitMsgWithFullUrl = `foo: blah blah
+    const commitMsgWithFullUrl = `foo: blah blah
 
 Some paragraph text with a ref[1].
 
 [1] someUrl://someHostName/someFolder/someResource#666-anchor`;
 
-    let properIssueRefs4 = runCommitLintOnMsg(commitMsgWithFullUrl);
+    const properIssueRefs4 = runCommitLintOnMsg(commitMsgWithFullUrl);
     expect(properIssueRefs4.status).toBe(0);
 });
 
 test("proper-issue-refs5", () => {
-    let commitMsgWithHashtagRef = `foo: blah blah
+    const commitMsgWithHashtagRef = `foo: blah blah
 
 #123 bug is fixed.`;
 
-    let properIssueRefs5 = runCommitLintOnMsg(commitMsgWithHashtagRef);
+    const properIssueRefs5 = runCommitLintOnMsg(commitMsgWithHashtagRef);
     expect(properIssueRefs5.status).not.toBe(0);
 });
 
 test("subject-lowercase1", () => {
-    let commitMsgWithUppercaseAfterColon = "foo: Bar baz";
-    let subjectLowerCase1 = runCommitLintOnMsg(
+    const commitMsgWithUppercaseAfterColon = "foo: Bar baz";
+    const subjectLowerCase1 = runCommitLintOnMsg(
         commitMsgWithUppercaseAfterColon
     );
     expect(subjectLowerCase1.status).not.toBe(0);
 });
 
 test("subject-lowercase2", () => {
-    let commitMsgWithLowercaseAfterColon = "foo: bar baz";
-    let subjectLowerCase2 = runCommitLintOnMsg(
+    const commitMsgWithLowercaseAfterColon = "foo: bar baz";
+    const subjectLowerCase2 = runCommitLintOnMsg(
         commitMsgWithLowercaseAfterColon
     );
     expect(subjectLowerCase2.status).toBe(0);
 });
 
 test("subject-lowercase3", () => {
-    let commitMsgWithAcronymAfterColon = "foo: BAR baz";
-    let subjectLowerCase3 = runCommitLintOnMsg(commitMsgWithAcronymAfterColon);
+    const commitMsgWithAcronymAfterColon = "foo: BAR baz";
+    const subjectLowerCase3 = runCommitLintOnMsg(
+        commitMsgWithAcronymAfterColon
+    );
     expect(subjectLowerCase3.status).toBe(0);
 });
 
 test("subject-lowercase4", () => {
-    let commitMsgWithNonAlphanumericAfterColon = "foo: 3 tests added";
-    let subjectLowerCase4 = runCommitLintOnMsg(
+    const commitMsgWithNonAlphanumericAfterColon = "foo: 3 tests added";
+    const subjectLowerCase4 = runCommitLintOnMsg(
         commitMsgWithNonAlphanumericAfterColon
     );
     expect(subjectLowerCase4.status).toBe(0);
 });
 
 test("subject-lowercase5", () => {
-    let commitMsgWithRareCharInScope1 = "foo.bar: Baz";
-    let subjectLowerCase5 = runCommitLintOnMsg(commitMsgWithRareCharInScope1);
+    const commitMsgWithRareCharInScope1 = "foo.bar: Baz";
+    const subjectLowerCase5 = runCommitLintOnMsg(commitMsgWithRareCharInScope1);
     expect(subjectLowerCase5.status).not.toBe(0);
 });
 
 test("subject-lowercase6", () => {
-    let commitMsgWithRareCharInScope2 = "foo-bar: Baz";
-    let subjectLowerCase6 = runCommitLintOnMsg(commitMsgWithRareCharInScope2);
+    const commitMsgWithRareCharInScope2 = "foo-bar: Baz";
+    const subjectLowerCase6 = runCommitLintOnMsg(commitMsgWithRareCharInScope2);
     expect(subjectLowerCase6.status).not.toBe(0);
 });
 
 test("subject-lowercase7", () => {
-    let commitMsgWithRareCharInScope3 = "foo,bar: Baz";
-    let subjectLowerCase7 = runCommitLintOnMsg(commitMsgWithRareCharInScope3);
+    const commitMsgWithRareCharInScope3 = "foo,bar: Baz";
+    const subjectLowerCase7 = runCommitLintOnMsg(commitMsgWithRareCharInScope3);
     expect(subjectLowerCase7.status).not.toBe(0);
 });
 
 test("subject-lowercase8", () => {
-    let commitMsgWithPascalCaseAfterColon =
+    const commitMsgWithPascalCaseAfterColon =
         "End2End: TestFixtureSetup refactor";
-    let subjectLowerCase8 = runCommitLintOnMsg(
+    const subjectLowerCase8 = runCommitLintOnMsg(
         commitMsgWithPascalCaseAfterColon
     );
     expect(subjectLowerCase8.status).toBe(0);
 });
 
 test("subject-lowercase9", () => {
-    let commitMsgWithCamelCaseAfterColon = "End2End: testFixtureSetup refactor";
-    let subjectLowerCase9 = runCommitLintOnMsg(
+    const commitMsgWithCamelCaseAfterColon =
+        "End2End: testFixtureSetup refactor";
+    const subjectLowerCase9 = runCommitLintOnMsg(
         commitMsgWithCamelCaseAfterColon
     );
     expect(subjectLowerCase9.status).toBe(0);
 });
 
 test("subject-lowercase10", () => {
-    let commitMsgWithNumber = "foo: A1 bar";
-    let subjectLowerCase10 = runCommitLintOnMsg(commitMsgWithNumber);
+    const commitMsgWithNumber = "foo: A1 bar";
+    const subjectLowerCase10 = runCommitLintOnMsg(commitMsgWithNumber);
     expect(subjectLowerCase10.status).toBe(0);
 });
 
 test("title-uppercase1", () => {
-    let commitMsgWithoutScope = "remove logs";
-    let titleUpperCase1 = runCommitLintOnMsg(commitMsgWithoutScope);
+    const commitMsgWithoutScope = "remove logs";
+    const titleUpperCase1 = runCommitLintOnMsg(commitMsgWithoutScope);
     expect(titleUpperCase1.status).not.toBe(0);
 });
 
 test("title-uppercase2", () => {
-    let commitMsgWithoutScope = "Remove logs";
-    let titleUpperCase2 = runCommitLintOnMsg(commitMsgWithoutScope);
+    const commitMsgWithoutScope = "Remove logs";
+    const titleUpperCase2 = runCommitLintOnMsg(commitMsgWithoutScope);
     expect(titleUpperCase2.status).toBe(0);
 });
 
 test("title-uppercase3", () => {
-    let commitMsgWithoutScope = "testFixtureSetup refactor";
-    let titleUpperCase3 = runCommitLintOnMsg(commitMsgWithoutScope);
+    const commitMsgWithoutScope = "testFixtureSetup refactor";
+    const titleUpperCase3 = runCommitLintOnMsg(commitMsgWithoutScope);
     expect(titleUpperCase3.status).toBe(0);
 });
 
 test("title-uppercase4", () => {
-    let commitMsgWithLowerCaseScope = "lowercase: scope is lowercase";
-    let titleUpperCase4 = runCommitLintOnMsg(commitMsgWithLowerCaseScope);
+    const commitMsgWithLowerCaseScope = "lowercase: scope is lowercase";
+    const titleUpperCase4 = runCommitLintOnMsg(commitMsgWithLowerCaseScope);
     expect(titleUpperCase4.status).toBe(0);
 });
 
 test("too-many-spaces1", () => {
-    let commitMsgWithTooManySpacesInTitle = "foo: this is only a  title";
-    let tooManySpaces1 = runCommitLintOnMsg(commitMsgWithTooManySpacesInTitle);
+    const commitMsgWithTooManySpacesInTitle = "foo: this is only a  title";
+    const tooManySpaces1 = runCommitLintOnMsg(
+        commitMsgWithTooManySpacesInTitle
+    );
     expect(tooManySpaces1.status).not.toBe(0);
 });
 
 test("too-many-spaces2", () => {
-    let commitMsgWithTooManySpacesInBody = `foo: this is only a title
+    const commitMsgWithTooManySpacesInBody = `foo: this is only a title
 
 Bla  blah bla.`;
 
-    let tooManySpaces2 = runCommitLintOnMsg(commitMsgWithTooManySpacesInBody);
+    const tooManySpaces2 = runCommitLintOnMsg(commitMsgWithTooManySpacesInBody);
     expect(tooManySpaces2.status).not.toBe(0);
 });
 
 test("too-many-spaces3", () => {
-    let commitMsgWithTooManySpacesInCodeBlock =
+    const commitMsgWithTooManySpacesInCodeBlock =
         "foo: this is only a title\n\n" +
         "Bar baz:\n\n```\ntype   Foo =\nstring\n```";
-    let tooManySpaces3 = runCommitLintOnMsg(
+    const tooManySpaces3 = runCommitLintOnMsg(
         commitMsgWithTooManySpacesInCodeBlock
     );
     expect(tooManySpaces3.status).toBe(0);
 });
 
 test("too-many-spaces4", () => {
-    let commitMsgWithTwoSpacesAfterSentence = `foo: this is only a title
+    const commitMsgWithTwoSpacesAfterSentence = `foo: this is only a title
 
 Bla blah.  Blah bla.`;
 
-    let tooManySpaces4 = runCommitLintOnMsg(
+    const tooManySpaces4 = runCommitLintOnMsg(
         commitMsgWithTwoSpacesAfterSentence
     );
     expect(tooManySpaces4.status).toBe(0);
 });
 
 test("too-many-spaces5", () => {
-    let commitMsgWithThreeSpacesAfterSentence = `foo: this is only a title
+    const commitMsgWithThreeSpacesAfterSentence = `foo: this is only a title
 
 Bla blah.   Blah bla.`;
 
-    let tooManySpaces5 = runCommitLintOnMsg(
+    const tooManySpaces5 = runCommitLintOnMsg(
         commitMsgWithThreeSpacesAfterSentence
     );
     expect(tooManySpaces5.status).not.toBe(0);
 });
 
 test("trailing-whitespace1", () => {
-    let commitMsgWithNoTrailingWhiteSpace = `foo: this is only a title
+    const commitMsgWithNoTrailingWhiteSpace = `foo: this is only a title
 
 Bla blah bla.`;
 
-    let trailingWhitespace1 = runCommitLintOnMsg(
+    const trailingWhitespace1 = runCommitLintOnMsg(
         commitMsgWithNoTrailingWhiteSpace
     );
     expect(trailingWhitespace1.status).toBe(0);
 });
 
 test("trailing-whitespace2", () => {
-    let commitMsgWithTrailingWhiteSpaceInTitleEnd = `foo: title 
+    const commitMsgWithTrailingWhiteSpaceInTitleEnd = `foo: title 
 
 Bla blah bla.`;
 
-    let trailingWhitespace2 = runCommitLintOnMsg(
+    const trailingWhitespace2 = runCommitLintOnMsg(
         commitMsgWithTrailingWhiteSpaceInTitleEnd
     );
     expect(trailingWhitespace2.status).not.toBe(0);
 });
 
 test("trailing-whitespace3", () => {
-    let commitMsgWithTrailingWhiteSpaceInTitleStart = ` foo: title
+    const commitMsgWithTrailingWhiteSpaceInTitleStart = ` foo: title
 
 Bla blah bla.`;
 
-    let trailingWhitespace3 = runCommitLintOnMsg(
+    const trailingWhitespace3 = runCommitLintOnMsg(
         commitMsgWithTrailingWhiteSpaceInTitleStart
     );
     expect(trailingWhitespace3.status).not.toBe(0);
 });
 
 test("trailing-whitespace4", () => {
-    let commitMsgWithTrailingWhiteSpaceInBodyStart = `foo: title
+    const commitMsgWithTrailingWhiteSpaceInBodyStart = `foo: title
 
  Bla blah bla.`;
 
-    let trailingWhitespace4 = runCommitLintOnMsg(
+    const trailingWhitespace4 = runCommitLintOnMsg(
         commitMsgWithTrailingWhiteSpaceInBodyStart
     );
     expect(trailingWhitespace4.status).not.toBe(0);
 });
 
 test("trailing-whitespace5", () => {
-    let commitMsgWithTrailingWhiteSpaceInBodyEnd = `foo: title
+    const commitMsgWithTrailingWhiteSpaceInBodyEnd = `foo: title
 
 Bla blah bla. `;
 
-    let trailingWhitespace5 = runCommitLintOnMsg(
+    const trailingWhitespace5 = runCommitLintOnMsg(
         commitMsgWithTrailingWhiteSpaceInBodyEnd
     );
     expect(trailingWhitespace5.status).not.toBe(0);
 });
 
 test("trailing-whitespace6", () => {
-    let commitMsgWithTrailingWhiteSpaceInCodeBlock =
+    const commitMsgWithTrailingWhiteSpaceInCodeBlock =
         "foo: this is only a title" +
         "\n\n" +
         "Bar baz:\n\n```\ntype Foo =\n    string\n```";
-    let trailingWhitespace6 = runCommitLintOnMsg(
+    const trailingWhitespace6 = runCommitLintOnMsg(
         commitMsgWithTrailingWhiteSpaceInCodeBlock
     );
     expect(trailingWhitespace6.status).toBe(0);
 });
 
 test("type-space-after-colon1", () => {
-    let commitMsgWithNoSpace = "foo:bar";
-    let typeSpaceAfterColon1 = runCommitLintOnMsg(commitMsgWithNoSpace);
+    const commitMsgWithNoSpace = "foo:bar";
+    const typeSpaceAfterColon1 = runCommitLintOnMsg(commitMsgWithNoSpace);
     expect(typeSpaceAfterColon1.status).not.toBe(0);
 });
 
 test("type-space-after-colon2", () => {
-    let commitMsgWithSpace = "foo: bar";
-    let typeSpaceAfterColon2 = runCommitLintOnMsg(commitMsgWithSpace);
+    const commitMsgWithSpace = "foo: bar";
+    const typeSpaceAfterColon2 = runCommitLintOnMsg(commitMsgWithSpace);
     expect(typeSpaceAfterColon2.status).toBe(0);
 });
 
 test("type-space-after-colon3", () => {
-    let commitMsgWithNoSpaceBeforeColonButAtTheEnd = "foo: a tale of bar:baz";
-    let typeSpaceAfterColon3 = runCommitLintOnMsg(
+    const commitMsgWithNoSpaceBeforeColonButAtTheEnd = "foo: a tale of bar:baz";
+    const typeSpaceAfterColon3 = runCommitLintOnMsg(
         commitMsgWithNoSpaceBeforeColonButAtTheEnd
     );
     expect(typeSpaceAfterColon3.status).toBe(0);
 });
 
 test("type-space-after-comma1", () => {
-    let commitMsgWithSpaceAfterCommaInType = "foo, bar: bla bla blah";
-    let typeSpaceAfterComma1 = runCommitLintOnMsg(
+    const commitMsgWithSpaceAfterCommaInType = "foo, bar: bla bla blah";
+    const typeSpaceAfterComma1 = runCommitLintOnMsg(
         commitMsgWithSpaceAfterCommaInType
     );
     expect(typeSpaceAfterComma1.status).not.toBe(0);
 });
 
 test("type-space-after-comma2", () => {
-    let commitMsgWithNoSpaceAfterCommaInType = "foo,bar: bla bla blah";
-    let typeSpaceAfterComma2 = runCommitLintOnMsg(
+    const commitMsgWithNoSpaceAfterCommaInType = "foo,bar: bla bla blah";
+    const typeSpaceAfterComma2 = runCommitLintOnMsg(
         commitMsgWithNoSpaceAfterCommaInType
     );
     expect(typeSpaceAfterComma2.status).toBe(0);
 });
 
 test("type-space-before-paren1", () => {
-    let commitMsgWithNoSpaceBeforeParen = "foo (bar): bla bla bla";
-    let typeSpaceBeforeParen1 = runCommitLintOnMsg(
+    const commitMsgWithNoSpaceBeforeParen = "foo (bar): bla bla bla";
+    const typeSpaceBeforeParen1 = runCommitLintOnMsg(
         commitMsgWithNoSpaceBeforeParen
     );
     expect(typeSpaceBeforeParen1.status).not.toBe(0);
 });
 
 test("type-space-before-paren2", () => {
-    let commitMsgWithNoSpaceBeforeParen = "foo(bar): bla bla bla";
-    let typeSpaceBeforeParen2 = runCommitLintOnMsg(
+    const commitMsgWithNoSpaceBeforeParen = "foo(bar): bla bla bla";
+    const typeSpaceBeforeParen2 = runCommitLintOnMsg(
         commitMsgWithNoSpaceBeforeParen
     );
     expect(typeSpaceBeforeParen2.status).toBe(0);
 });
 
 test("type-space-before-paren3", () => {
-    let commitMsgWithNoSpaceBeforeParen = "(bar): bla bla bla";
-    let typeSpaceBeforeParen3 = runCommitLintOnMsg(
+    const commitMsgWithNoSpaceBeforeParen = "(bar): bla bla bla";
+    const typeSpaceBeforeParen3 = runCommitLintOnMsg(
         commitMsgWithNoSpaceBeforeParen
     );
     expect(typeSpaceBeforeParen3.status).toBe(0);
 });
 
 test("type-with-square-brackets1", () => {
-    let commitMsgWithSquareBrackets = "[foo] this is a title";
-    let typeWithSquareBrackets1 = runCommitLintOnMsg(
+    const commitMsgWithSquareBrackets = "[foo] this is a title";
+    const typeWithSquareBrackets1 = runCommitLintOnMsg(
         commitMsgWithSquareBrackets
     );
     expect(typeWithSquareBrackets1.status).not.toBe(0);
 });
 
 test("type-with-square-brackets2", () => {
-    let commitMsgWithoutSquareBrackets = "foo: this is a title";
-    let typeWithSquareBrackets2 = runCommitLintOnMsg(
+    const commitMsgWithoutSquareBrackets = "foo: this is a title";
+    const typeWithSquareBrackets2 = runCommitLintOnMsg(
         commitMsgWithoutSquareBrackets
     );
     expect(typeWithSquareBrackets2.status).toBe(0);

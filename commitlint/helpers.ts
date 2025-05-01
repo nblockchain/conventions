@@ -12,12 +12,13 @@ export abstract class Helpers {
         // Borrowed from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
         try {
             return Boolean(new URL(text));
-        } catch (e) {
+        } catch {
             return false;
         }
     }
 
     // to convert from 'any' type
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- method accepts any value by design
     public static convertAnyToString(potentialString: any): Option<string> {
         if (TypeHelpers.IsNullOrUndefined(potentialString)) {
             return OptionStatic.None;
@@ -89,7 +90,7 @@ export abstract class Helpers {
     }
 
     public static findUrls(text: string) {
-        var urlRegex = /(https?:\/\/[^\s]+)/g;
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
         return OptionStatic.OfObj(text.match(urlRegex));
     }
 
@@ -107,9 +108,9 @@ export abstract class Helpers {
     public static lineStartsWithBullet(line: string) {
         Helpers.assertLine(line);
 
-        let allowedUnnumberedBulletChars = ["*", "-"];
-        for (let bulletChar of allowedUnnumberedBulletChars) {
-            let unnumberedPattern = bulletChar + " ";
+        const allowedUnnumberedBulletChars = ["*", "-"];
+        for (const bulletChar of allowedUnnumberedBulletChars) {
+            const unnumberedPattern = bulletChar + " ";
             if (
                 line.startsWith(unnumberedPattern) &&
                 line.length > unnumberedPattern.length
@@ -117,8 +118,8 @@ export abstract class Helpers {
                 return true;
         }
 
-        let allowedNumberedBulletChars = ["."];
-        for (let bulletChar of allowedNumberedBulletChars) {
+        const allowedNumberedBulletChars = ["."];
+        for (const bulletChar of allowedNumberedBulletChars) {
             if (line.indexOf(bulletChar) > 0) {
                 for (let i = 0; i < line.length; i++) {
                     if (Helpers.isCharADigit(line[i])) {
@@ -138,29 +139,29 @@ export abstract class Helpers {
 
     public static isCodeBlockDelimiter(line: string) {
         Helpers.assertLine(line);
-        let codeBlockDelimiter = "```";
+        const codeBlockDelimiter = "```";
         return line == codeBlockDelimiter;
     }
 
     public static isUpperCase(letter: string) {
         Helpers.assertCharacter(letter);
-        let isUpperCase = letter.toUpperCase() == letter;
-        let isLowerCase = letter.toLowerCase() == letter;
+        const isUpperCase = letter.toUpperCase() == letter;
+        const isLowerCase = letter.toLowerCase() == letter;
 
         return isUpperCase && !isLowerCase;
     }
 
     public static isLowerCase(letter: string) {
         Helpers.assertCharacter(letter);
-        let isUpperCase = letter.toUpperCase() == letter;
-        let isLowerCase = letter.toLowerCase() == letter;
+        const isUpperCase = letter.toUpperCase() == letter;
+        const isLowerCase = letter.toLowerCase() == letter;
 
         return isLowerCase && !isUpperCase;
     }
 
     public static isEmptyFooterReference(line: string) {
         Helpers.assertLine(line);
-        let trimmedLine = line.trim();
+        const trimmedLine = line.trim();
         return (
             trimmedLine[0] === "[" &&
             trimmedLine.indexOf("]") === trimmedLine.length - 1
@@ -203,8 +204,8 @@ export abstract class Helpers {
 
     public static isProperNoun(word: string) {
         Helpers.assertWord(word);
-        let numUpperCase = Helpers.numUpperCaseLetters(word);
-        let numNonAlphabeticalChars =
+        const numUpperCase = Helpers.numUpperCaseLetters(word);
+        const numNonAlphabeticalChars =
             Helpers.numNonAlphabeticalCharacters(word);
 
         return (
@@ -217,8 +218,8 @@ export abstract class Helpers {
     public static wordIsStartOfSentence(word: string) {
         Helpers.assertWord(word);
         if (Helpers.isUpperCase(word[0])) {
-            let numUpperCase = Helpers.numUpperCaseLetters(word);
-            let numNonAlphabeticalChars =
+            const numUpperCase = Helpers.numUpperCaseLetters(word);
+            const numNonAlphabeticalChars =
                 Helpers.numNonAlphabeticalCharacters(word);
             return numUpperCase == 1 && numNonAlphabeticalChars == 0;
         }
@@ -239,11 +240,11 @@ export abstract class Helpers {
     public static splitByEOLs(text: string, numberOfEols: number) {
         Helpers.assertHigherThanZero(numberOfEols);
 
-        let unixEol = "\n";
-        let windowsEol = "\r\n";
-        let macEol = "\r";
+        const unixEol = "\n";
+        const windowsEol = "\r\n";
+        const macEol = "\r";
 
-        let preparedText = text
+        const preparedText = text
             .replaceAll(windowsEol, unixEol)
             .replaceAll(macEol, unixEol);
 

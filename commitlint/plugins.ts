@@ -5,15 +5,16 @@ import { Helpers } from "./helpers.js";
 export abstract class Plugins {
     public static bodyProse(rawStr: string) {
         function paragraphHasValidEnding(paragraph: string): boolean {
-            let paragraphWords = paragraph.split(" ");
-            let lastWordInParagraph = paragraphWords[paragraphWords.length - 1];
-            let isParagraphEndingWithUrl =
+            const paragraphWords = paragraph.split(" ");
+            const lastWordInParagraph =
+                paragraphWords[paragraphWords.length - 1];
+            const isParagraphEndingWithUrl =
                 Helpers.isValidUrl(lastWordInParagraph);
             if (isParagraphEndingWithUrl) {
                 return true;
             }
 
-            let endingChar = paragraph[paragraph.length - 1];
+            const endingChar = paragraph[paragraph.length - 1];
             if (
                 endingChar === "." ||
                 endingChar === ":" ||
@@ -37,7 +38,7 @@ export abstract class Plugins {
         let offence = false;
 
         rawStr = rawStr.trim();
-        let lineBreakIndex = rawStr.indexOf("\n");
+        const lineBreakIndex = rawStr.indexOf("\n");
 
         if (lineBreakIndex >= 0) {
             // Extracting bodyStr from rawStr rather than using body directly is a
@@ -54,11 +55,14 @@ export abstract class Plugins {
                         continue;
                     }
 
-                    let startWithLowerCase = Helpers.isLowerCase(paragraph[0]);
+                    const startWithLowerCase = Helpers.isLowerCase(
+                        paragraph[0]
+                    );
 
-                    let validParagraphEnd = paragraphHasValidEnding(paragraph);
+                    const validParagraphEnd =
+                        paragraphHasValidEnding(paragraph);
 
-                    let lines = Helpers.splitByEOLs(paragraph, 1);
+                    const lines = Helpers.splitByEOLs(paragraph, 1);
 
                     if (startWithLowerCase) {
                         if (
@@ -89,13 +93,13 @@ export abstract class Plugins {
     public static commitHashAlone(rawStr: string) {
         let offence = false;
 
-        let urls = Helpers.findUrls(rawStr);
+        const urls = Helpers.findUrls(rawStr);
 
-        let gitRepo = OptionStatic.OfObj(process.env["GITHUB_REPOSITORY"]);
+        const gitRepo = OptionStatic.OfObj(process.env["GITHUB_REPOSITORY"]);
         if (!(gitRepo instanceof None)) {
             if (!(urls instanceof None)) {
-                for (let url of urls.value.entries()) {
-                    let urlStr = url[1].toString();
+                for (const url of urls.value.entries()) {
+                    const urlStr = url[1].toString();
                     if (
                         Helpers.isCommitUrl(urlStr) &&
                         urlStr.includes(gitRepo.value)
@@ -115,7 +119,7 @@ export abstract class Plugins {
     }
 
     public static emptyWip(headerStr: string) {
-        let offence = headerStr.toLowerCase() === "wip";
+        const offence = headerStr.toLowerCase() === "wip";
         return [
             !offence,
             `Please add a number or description after the WIP prefix.` +
@@ -129,22 +133,22 @@ export abstract class Plugins {
     ) {
         let offence = false;
 
-        let headerLength = headerStr.length;
+        const headerLength = headerStr.length;
         let message = `Please do not exceed ${maxLineLength} characters in title (found ${headerLength}).`;
         if (!headerStr.startsWith("Merge ") && headerLength > maxLineLength) {
             offence = true;
 
-            let colonIndex = headerStr.indexOf(":");
+            const colonIndex = headerStr.indexOf(":");
 
             let titleWithoutScope = headerStr;
             if (colonIndex > 0) {
                 titleWithoutScope = headerStr.substring(colonIndex);
             }
 
-            let numRecomendations = 0;
-            let lowerCaseTitleWithoutScope = titleWithoutScope.toLowerCase();
+            const numRecomendations = 0;
+            const lowerCaseTitleWithoutScope = titleWithoutScope.toLowerCase();
             Object.entries(abbr).forEach(([key, value]) => {
-                let pattern = new RegExp("\\b(" + key.toString() + ")\\b");
+                const pattern = new RegExp("\\b(" + key.toString() + ")\\b");
                 if (pattern.test(lowerCaseTitleWithoutScope)) {
                     if (numRecomendations === 0) {
                         message =
@@ -168,8 +172,8 @@ export abstract class Plugins {
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
             let seenBody = false;
             let seenFooter = false;
-            let lines = Helpers.splitByEOLs(bodyStr, 1);
-            for (let line of lines) {
+            const lines = Helpers.splitByEOLs(bodyStr, 1);
+            for (const line of lines) {
                 if (line.length === 0) {
                     continue;
                 }
@@ -194,7 +198,7 @@ export abstract class Plugins {
         let hasEmptyFooter = false;
 
         rawStr = rawStr.trim();
-        let lineBreakIndex = rawStr.indexOf("\n");
+        const lineBreakIndex = rawStr.indexOf("\n");
 
         if (lineBreakIndex >= 0) {
             // Extracting bodyStr from rawStr rather than using body directly is a
@@ -202,15 +206,15 @@ export abstract class Plugins {
             let bodyStr = rawStr.substring(lineBreakIndex).trim();
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr);
 
-            let lines = Helpers.splitByEOLs(bodyStr, 1);
-            let bodyReferences = new Set();
-            let references = new Set();
-            for (let line of lines) {
-                let matches = line.match(/(?<=\[)([0-9]+)(?=\])/g);
+            const lines = Helpers.splitByEOLs(bodyStr, 1);
+            const bodyReferences = new Set();
+            const references = new Set();
+            for (const line of lines) {
+                const matches = line.match(/(?<=\[)([0-9]+)(?=\])/g);
                 if (matches === null) {
                     continue;
                 }
-                for (let match of matches) {
+                for (const match of matches) {
                     if (Helpers.isEmptyFooterReference(line)) {
                         offence = true;
                         hasEmptyFooter = true;
@@ -221,13 +225,13 @@ export abstract class Plugins {
                     }
                 }
             }
-            for (let ref of bodyReferences) {
+            for (const ref of bodyReferences) {
                 if (!references.has(ref)) {
                     offence = true;
                     break;
                 }
             }
-            for (let ref of references) {
+            for (const ref of references) {
                 if (!bodyReferences.has(ref)) {
                     offence = true;
                     break;
@@ -249,9 +253,9 @@ export abstract class Plugins {
     public static preferSlashOverBackslash(headerStr: string) {
         let offence = false;
 
-        let colonIndex = headerStr.indexOf(":");
+        const colonIndex = headerStr.indexOf(":");
         if (colonIndex >= 0) {
-            let scope = headerStr.substring(0, colonIndex);
+            const scope = headerStr.substring(0, colonIndex);
             if (scope.includes("\\")) {
                 offence = true;
             }
@@ -268,7 +272,7 @@ export abstract class Plugins {
         let offence = false;
 
         rawStr = rawStr.trim();
-        let lineBreakIndex = rawStr.indexOf("\n");
+        const lineBreakIndex = rawStr.indexOf("\n");
 
         if (lineBreakIndex >= 0) {
             // Extracting bodyStr from rawStr rather than using body directly is a
@@ -287,8 +291,8 @@ export abstract class Plugins {
     }
 
     public static titleUppercase(headerStr: string) {
-        let firstWord = headerStr.split(" ")[0];
-        let offence =
+        const firstWord = headerStr.split(" ")[0];
+        const offence =
             headerStr.indexOf(":") < 0 &&
             !Helpers.wordIsStartOfSentence(firstWord) &&
             !Helpers.isProperNoun(firstWord);
@@ -301,7 +305,7 @@ export abstract class Plugins {
 
     public static tooManySpaces(rawStr: string) {
         rawStr = Helpers.removeAllCodeBlocks(rawStr);
-        let offence = rawStr.match(`[^.]  `) !== null;
+        const offence = rawStr.match(`[^.]  `) !== null;
 
         return [
             !offence,
@@ -311,7 +315,7 @@ export abstract class Plugins {
     }
 
     public static typeSpaceAfterColon(headerStr: string) {
-        let colonFirstIndex = headerStr.indexOf(":");
+        const colonFirstIndex = headerStr.indexOf(":");
 
         let offence = false;
         if (colonFirstIndex > 0 && headerStr.length > colonFirstIndex) {
@@ -328,7 +332,7 @@ export abstract class Plugins {
     }
 
     public static typeWithSquareBrackets(headerStr: string) {
-        let offence = headerStr.match(`^\\[.*\\]`) !== null;
+        const offence = headerStr.match(`^\\[.*\\]`) !== null;
 
         return [
             !offence,
@@ -340,11 +344,11 @@ export abstract class Plugins {
     public static subjectLowercase(headerStr: string) {
         let offence = false;
 
-        let colonFirstIndex = headerStr.indexOf(":");
+        const colonFirstIndex = headerStr.indexOf(":");
 
         let firstWord = "";
         if (colonFirstIndex > 0 && headerStr.length > colonFirstIndex) {
-            let subject = headerStr.substring(colonFirstIndex + 1).trim();
+            const subject = headerStr.substring(colonFirstIndex + 1).trim();
             if (subject != null && subject.length > 1) {
                 firstWord = subject.trim().split(" ")[0];
                 offence = Helpers.wordIsStartOfSentence(firstWord);
@@ -361,7 +365,7 @@ export abstract class Plugins {
     public static typeSpaceAfterComma(headerStr: string) {
         let offence = false;
 
-        let colonIndex = headerStr.indexOf(":");
+        const colonIndex = headerStr.indexOf(":");
 
         if (colonIndex >= 0) {
             let scope = headerStr.substring(0, colonIndex);
@@ -394,9 +398,9 @@ export abstract class Plugins {
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
 
             if (bodyStr !== "") {
-                let lines = Helpers.splitByEOLs(bodyStr, 1);
+                const lines = Helpers.splitByEOLs(bodyStr, 1);
                 let inCodeBlock = false;
-                for (let line of lines) {
+                for (const line of lines) {
                     if (Helpers.isCodeBlockDelimiter(line)) {
                         inCodeBlock = !inCodeBlock;
                         continue;
@@ -405,18 +409,19 @@ export abstract class Plugins {
                         continue;
                     }
                     if (line.length > bodyMaxLineLength) {
-                        let isUrl = Helpers.isValidUrl(line);
+                        const isUrl = Helpers.isValidUrl(line);
 
-                        let lineIsFooterNote = Helpers.isFooterNote(line);
+                        const lineIsFooterNote = Helpers.isFooterNote(line);
 
-                        let commitHashPattern = `([0-9a-f]{40})`;
-                        let anySinglePunctuationCharOrNothing = `[\.\,\:\;\?\!]?`;
-                        let index = line.search(
+                        const commitHashPattern = `([0-9a-f]{40})`;
+                        /* eslint no-useless-escape: "off" -- escapes needed because this string is used as part of Regex */
+                        const anySinglePunctuationCharOrNothing = `[\.\,\:\;\?\!]?`;
+                        const index = line.search(
                             commitHashPattern +
                                 anySinglePunctuationCharOrNothing +
                                 `$`
                         );
-                        let endsWithCommitHashButRestIsNotTooLong =
+                        const endsWithCommitHashButRestIsNotTooLong =
                             index != -1 && index < bodyMaxLineLength;
 
                         if (
@@ -451,16 +456,16 @@ export abstract class Plugins {
             let bodyStr = body.value;
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
 
-            let paragraphs = Helpers.splitByEOLs(bodyStr, 2);
-            for (let paragraph of paragraphs) {
-                let lines = Helpers.splitByEOLs(paragraph, 1);
+            const paragraphs = Helpers.splitByEOLs(bodyStr, 2);
+            for (const paragraph of paragraphs) {
+                const lines = Helpers.splitByEOLs(paragraph, 1);
 
                 let bulletsAllowedNow = false;
                 let alwaysBulletsSoFar = false;
 
                 // NOTE: we don't iterate over the last line, on purpose
                 for (let i = 0; i < lines.length - 1; i++) {
-                    let line = lines[i];
+                    const line = lines[i];
 
                     if (line.length == 0) {
                         continue;
@@ -481,24 +486,25 @@ export abstract class Plugins {
 
                     if (line.length < paragraphLineMinLength) {
                         // this ref doesn't go out of bounds because we didn't iter on last line
-                        let nextLine = lines[i + 1];
+                        const nextLine = lines[i + 1];
 
-                        let isUrl =
+                        const isUrl =
                             Helpers.isValidUrl(line) ||
                             Helpers.isValidUrl(nextLine);
 
-                        let lineIsFooterNote = Helpers.isFooterNote(line);
+                        const lineIsFooterNote = Helpers.isFooterNote(line);
 
-                        let nextWordLength = lines[i + 1].split(" ")[0].length;
-                        let isNextWordTooLong =
+                        const nextWordLength =
+                            lines[i + 1].split(" ")[0].length;
+                        const isNextWordTooLong =
                             nextWordLength + line.length + 1 >
                             paragraphLineMaxLength;
 
-                        let isLastCharAColonBreak =
+                        const isLastCharAColonBreak =
                             line[line.length - 1] === ":" &&
                             nextLine[0].toUpperCase() == nextLine[0];
 
-                        let isLastLineBeforeNextBullet =
+                        const isLastLineBeforeNextBullet =
                             bulletsAllowedNow &&
                             line[line.length - 1] === "." &&
                             Helpers.lineStartsWithBullet(nextLine);
@@ -536,9 +542,9 @@ export abstract class Plugins {
     public static trailingWhitespace(rawStr: string) {
         let offence = false;
 
-        let lines = Helpers.splitByEOLs(rawStr, 1);
+        const lines = Helpers.splitByEOLs(rawStr, 1);
         let inCodeBlock = false;
-        for (let line of lines) {
+        for (const line of lines) {
             if (Helpers.isCodeBlockDelimiter(line)) {
                 inCodeBlock = !inCodeBlock;
                 continue;
@@ -553,7 +559,7 @@ export abstract class Plugins {
             }
 
             if (line.length > 0) {
-                let lastChar = line[line.length - 1];
+                const lastChar = line[line.length - 1];
                 if (lastChar == " " || lastChar == "\t") {
                     offence = true;
                     break;
@@ -571,10 +577,10 @@ export abstract class Plugins {
     public static typeSpaceBeforeParen(headerStr: string) {
         let offence = false;
 
-        let colonIndex = headerStr.indexOf(":");
+        const colonIndex = headerStr.indexOf(":");
         if (colonIndex >= 0) {
-            let scope = headerStr.substring(0, colonIndex);
-            let parenIndex = scope.indexOf("(");
+            const scope = headerStr.substring(0, colonIndex);
+            const parenIndex = scope.indexOf("(");
             if (parenIndex >= 1) {
                 if (headerStr[parenIndex - 1] === " ") {
                     offence = true;

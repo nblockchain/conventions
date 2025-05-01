@@ -1,10 +1,12 @@
+/* eslint @typescript-eslint/no-explicit-any: "off" */
+
 import { Helpers } from "./commitlint/helpers.js";
 import { Plugins } from "./commitlint/plugins.js";
 import { RuleConfigSeverity } from "@commitlint/types";
 
-let bodyMaxLineLength = 64;
-let headerMaxLineLength = 50;
-let footerMaxLineLength = 150;
+const bodyMaxLineLength = 64;
+const headerMaxLineLength = 50;
+const footerMaxLineLength = 150;
 
 function notStringErrorMessage(variableName: string): string {
     return `This is unexpected because ${variableName} should have been a string`;
@@ -14,7 +16,7 @@ function extractStringFromCommitlintParam(
     paramName: string,
     variable: any
 ): string {
-    let str = Helpers.assertNotNone(
+    const str = Helpers.assertNotNone(
         Helpers.convertAnyToString(variable),
         notStringErrorMessage(paramName)
     );
@@ -75,19 +77,19 @@ export default {
         {
             rules: {
                 "body-prose": ({ raw }: { raw: any }) => {
-                    let rawStr = extractStringFromCommitlintParam("raw", raw);
+                    const rawStr = extractStringFromCommitlintParam("raw", raw);
 
                     return Plugins.bodyProse(rawStr);
                 },
 
                 "commit-hash-alone": ({ raw }: { raw: any }) => {
-                    let rawStr = extractStringFromCommitlintParam("raw", raw);
+                    const rawStr = extractStringFromCommitlintParam("raw", raw);
 
                     return Plugins.commitHashAlone(rawStr);
                 },
 
                 "empty-wip": ({ header }: { header: any }) => {
-                    let headerStr = extractStringFromCommitlintParam(
+                    const headerStr = extractStringFromCommitlintParam(
                         "header",
                         header
                     );
@@ -100,7 +102,7 @@ export default {
                     _: any,
                     maxLineLength: number
                 ) => {
-                    let headerStr = extractStringFromCommitlintParam(
+                    const headerStr = extractStringFromCommitlintParam(
                         "header",
                         header
                     );
@@ -112,12 +114,12 @@ export default {
                 },
 
                 "footer-notes-misplacement": ({ body }: { body: any }) => {
-                    let maybeBody = Helpers.convertAnyToString(body);
+                    const maybeBody = Helpers.convertAnyToString(body);
                     return Plugins.footerNotesMisplacement(maybeBody);
                 },
 
                 "footer-refs-validity": ({ raw }: { raw: any }) => {
-                    let rawStr = extractStringFromCommitlintParam("raw", raw);
+                    const rawStr = extractStringFromCommitlintParam("raw", raw);
 
                     return Plugins.footerRefsValidity(rawStr);
                 },
@@ -127,7 +129,7 @@ export default {
                 }: {
                     header: any;
                 }) => {
-                    let headerStr = extractStringFromCommitlintParam(
+                    const headerStr = extractStringFromCommitlintParam(
                         "header",
                         header
                     );
@@ -136,13 +138,13 @@ export default {
                 },
 
                 "proper-issue-refs": ({ raw }: { raw: any }) => {
-                    let rawStr = extractStringFromCommitlintParam("raw", raw);
+                    const rawStr = extractStringFromCommitlintParam("raw", raw);
 
                     return Plugins.properIssueRefs(rawStr);
                 },
 
                 "title-uppercase": ({ header }: { header: any }) => {
-                    let headerStr = extractStringFromCommitlintParam(
+                    const headerStr = extractStringFromCommitlintParam(
                         "header",
                         header
                     );
@@ -151,13 +153,13 @@ export default {
                 },
 
                 "too-many-spaces": ({ raw }: { raw: any }) => {
-                    let rawStr = extractStringFromCommitlintParam("raw", raw);
+                    const rawStr = extractStringFromCommitlintParam("raw", raw);
 
                     return Plugins.tooManySpaces(rawStr);
                 },
 
                 "type-space-after-colon": ({ header }: { header: any }) => {
-                    let headerStr = extractStringFromCommitlintParam(
+                    const headerStr = extractStringFromCommitlintParam(
                         "header",
                         header
                     );
@@ -166,7 +168,7 @@ export default {
                 },
 
                 "type-with-square-brackets": ({ header }: { header: any }) => {
-                    let headerStr = extractStringFromCommitlintParam(
+                    const headerStr = extractStringFromCommitlintParam(
                         "header",
                         header
                     );
@@ -176,7 +178,7 @@ export default {
 
                 // NOTE: we use 'header' instead of 'subject' as a workaround to this bug: https://github.com/conventional-changelog/commitlint/issues/3404
                 "subject-lowercase": ({ header }: { header: any }) => {
-                    let headerStr = extractStringFromCommitlintParam(
+                    const headerStr = extractStringFromCommitlintParam(
                         "header",
                         header
                     );
@@ -185,7 +187,7 @@ export default {
                 },
 
                 "type-space-after-comma": ({ header }: { header: any }) => {
-                    let headerStr = Helpers.assertNotNone(
+                    const headerStr = Helpers.assertNotNone(
                         Helpers.convertAnyToString(header),
                         notStringErrorMessage("header")
                     );
@@ -198,7 +200,7 @@ export default {
                     _: any,
                     maxLineLength: number
                 ) => {
-                    let maybeBody = Helpers.convertAnyToString(body);
+                    const maybeBody = Helpers.convertAnyToString(body);
                     return Plugins.bodySoftMaxLineLength(
                         maybeBody,
                         maxLineLength
@@ -206,7 +208,7 @@ export default {
                 },
 
                 "body-paragraph-line-min-length": ({ body }: { body: any }) => {
-                    let maybeBody = Helpers.convertAnyToString(body);
+                    const maybeBody = Helpers.convertAnyToString(body);
                     return Plugins.bodyParagraphLineMinLength(
                         maybeBody,
                         headerMaxLineLength,
@@ -215,13 +217,13 @@ export default {
                 },
 
                 "trailing-whitespace": ({ raw }: { raw: any }) => {
-                    let rawStr = extractStringFromCommitlintParam("raw", raw);
+                    const rawStr = extractStringFromCommitlintParam("raw", raw);
 
                     return Plugins.trailingWhitespace(rawStr);
                 },
 
                 "type-space-before-paren": ({ header }: { header: any }) => {
-                    let headerStr = extractStringFromCommitlintParam(
+                    const headerStr = extractStringFromCommitlintParam(
                         "header",
                         header
                     );
