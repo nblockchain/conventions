@@ -1,37 +1,37 @@
 import { test, expect } from "vitest";
 import { None, Some, Option, OptionStatic, TypeHelpers } from "../fpHelpers.js";
-const { spawnSync } = require("child_process");
-const os = require("os");
+import { spawnSync } from "child_process";
+import os from "os";
 
 function typeGuard(option: Option<number>) {
     if (option instanceof None) {
         return "NAH";
     } else {
-        let val = option.value;
+        const val = option.value;
         return (val * val).toString();
     }
 }
 
 function ofObj1(option: number | null): Option<number> {
-    let foo = OptionStatic.OfObj(option);
+    const foo = OptionStatic.OfObj(option);
     return foo;
 }
 
 function ofObj2(option: number | undefined): Option<number> {
-    let foo = OptionStatic.OfObj(option);
+    const foo = OptionStatic.OfObj(option);
     return foo;
 }
 
 test("testing Options", () => {
-    let foo: Option<number> = new None();
-    let bar: Option<number> = new Some(2);
+    const foo: Option<number> = new None();
+    const bar: Option<number> = new Some(2);
     expect(typeGuard(foo)).toBe("NAH");
     expect(typeGuard(bar)).toBe("4");
 });
 
 test("testing Is methods", () => {
-    let foo: Option<number> = OptionStatic.None;
-    let bar: Option<number> = new Some(2);
+    const foo: Option<number> = OptionStatic.None;
+    const bar: Option<number> = new Some(2);
     expect(foo.IsNone()).toBe(true);
     expect(bar.IsNone()).toBe(false);
     expect(foo.IsSome()).toBe(false);
@@ -62,27 +62,27 @@ class Bar {
 }
 
 test("testing TypeHelpers.IsInstanceOf", () => {
-    let str1 = "foo";
+    const str1 = "foo";
     expect(TypeHelpers.IsInstanceOf(str1, String)).toBe(true);
-    let str2 = String("foo");
+    const str2 = String("foo");
     expect(TypeHelpers.IsInstanceOf(str2, String)).toBe(true);
 
     //commented this one because prettier complains about it, but it works:
     //let str3 = 'foo';
     //expect(TypeHelpers.IsInstanceOf(str3, String)).toBe(true);
 
-    let nonStr = 3;
+    const nonStr = 3;
     expect(TypeHelpers.IsInstanceOf(nonStr, String)).toBe(false);
 
-    let int1 = 2;
+    const int1 = 2;
     expect(TypeHelpers.IsInstanceOf(int1, Number)).toBe(true);
-    let int2 = Number(2);
+    const int2 = Number(2);
     expect(TypeHelpers.IsInstanceOf(int2, Number)).toBe(true);
-    let nonInt = "2";
+    const nonInt = "2";
     expect(TypeHelpers.IsInstanceOf(nonInt, Number)).toBe(false);
 
-    let foo = new Foo();
-    let bar = new Bar();
+    const foo = new Foo();
+    const bar = new Bar();
     expect(TypeHelpers.IsInstanceOf(foo, Foo)).toBe(true);
     expect(TypeHelpers.IsInstanceOf(bar, Bar)).toBe(true);
     expect(TypeHelpers.IsInstanceOf(foo, Bar)).toBe(false);
@@ -90,7 +90,7 @@ test("testing TypeHelpers.IsInstanceOf", () => {
 });
 
 test("testing TypeHelpers.IsInstanceOf exceptions", () => {
-    let strNull = null;
+    const strNull = null;
     expect(() => TypeHelpers.IsInstanceOf(strNull, String)).toThrowError(
         "Invalid"
     );
@@ -100,7 +100,7 @@ test("testing TypeHelpers.IsInstanceOf exceptions", () => {
     expect(() => TypeHelpers.IsInstanceOf(strNull, String)).toThrowError(
         "null"
     );
-    let strUndefined = undefined;
+    const strUndefined = undefined;
     expect(() => TypeHelpers.IsInstanceOf(strUndefined, String)).toThrowError(
         "Invalid"
     );
@@ -111,7 +111,7 @@ test("testing TypeHelpers.IsInstanceOf exceptions", () => {
         "undefined"
     );
 
-    let typeNull = null;
+    const typeNull = null;
     expect(() => TypeHelpers.IsInstanceOf("foo", typeNull)).toThrowError(
         "Invalid"
     );
@@ -121,7 +121,7 @@ test("testing TypeHelpers.IsInstanceOf exceptions", () => {
     expect(() => TypeHelpers.IsInstanceOf("foo", typeNull)).toThrowError(
         "null"
     );
-    let typeUndefined = undefined;
+    const typeUndefined = undefined;
     expect(() => TypeHelpers.IsInstanceOf("foo", typeUndefined)).toThrowError(
         "Invalid"
     );
