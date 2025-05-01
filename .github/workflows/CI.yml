@@ -90,7 +90,7 @@ jobs:
           npm --version
       - name: Install yarn
         run: |
-          npm install --verbose --global yarn
+          npm install --verbose --global yarn@1.22.19
           yarn add --dev typescript
       - name: Install commitlint dependencies
         run: |
@@ -121,7 +121,7 @@ jobs:
           sudo apt install --yes --no-install-recommends npm curl
       - name: Install yarn
         run: |
-          npm install --verbose --global yarn
+          npm install --verbose --global yarn@1.22.19
           yarn add --dev typescript ts-node
       - name: Install commitlint dependencies
         run: |
@@ -210,6 +210,8 @@ jobs:
         run: dotnet fsi scripts/unpinnedNugetPackageReferenceVersionsInFSharpScripts.fsx
       - name: Check there are no unpinned versions in `dotnet tool install` commands
         run: dotnet fsi scripts/unpinnedDotnetToolInstallVersions.fsx
+      - name: Check there are no unpinned versions in `npm install` commands
+        run: dotnet fsi scripts/unpinnedNpmPackageInstallVersions.fsx
       - name: Check commits 1 by 1
         if: github.event_name == 'pull_request'
         run: dotnet fsi scripts/checkCommits1by1.fsx

@@ -140,6 +140,85 @@ let DetectUnpinnedDotnetToolInstallVersions1() =
         Is.EqualTo true
     )
 
+[<Test>]
+let DetectUnpinnedDotnetToolInstallVersions2() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithoutUnpinnedDotnetToolInstallVersion.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectUnpinnedDotnetToolInstallVersions fileInfo,
+        Is.EqualTo false
+    )
+
+
+[<Test>]
+let DetectUnpinnedNpmPackageInstallVersions1() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithUnpinnedNpmPackageInstallVersion1.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectUnpinnedNpmPackageInstallVersions fileInfo,
+        Is.EqualTo true
+    )
+
+
+[<Test>]
+let DetectUnpinnedNpmPackageInstallVersions2() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithoutUnpinnedNpmPackageInstallVersion.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectUnpinnedNpmPackageInstallVersions fileInfo,
+        Is.EqualTo false
+    )
+
+
+[<Test>]
+let DetectUnpinnedNpmPackageInstallVersions3() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithUnpinnedNpmPackageInstallVersion2.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectUnpinnedNpmPackageInstallVersions fileInfo,
+        Is.EqualTo true
+    )
+
+
+[<Test>]
+let DetectUnpinnedNpmPackageInstallVersions4() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithUnpinnedNpmPackageInstallVersion3.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectUnpinnedNpmPackageInstallVersions fileInfo,
+        Is.EqualTo true
+    )
+
 
 [<Test>]
 let DetectAsteriskInPackageReferenceItems1() =

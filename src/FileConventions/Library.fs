@@ -73,7 +73,7 @@ let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
     latestTagInRunsOnRegex.IsMatch fileText
 
 let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
-    assert (fileInfo.FullName.EndsWith(".yml"))
+    assert fileInfo.FullName.EndsWith ".yml"
 
     let fileLines = File.ReadLines fileInfo.FullName
 
@@ -84,11 +84,45 @@ let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
         fileLines
         |> Seq.filter dotnetToolInstallRegex.IsMatch
         |> Seq.filter(fun line ->
-            not(line.Contains("--version")) && not(line.Contains("-v"))
+            not(line.Contains "--version") && not(line.Contains "-v")
         )
         |> (fun unpinnedVersions -> Seq.length unpinnedVersions > 0)
 
     unpinnedDotnetToolInstallVersions
+
+let DetectUnpinnedNpmPackageInstallVersions(fileInfo: FileInfo) =
+    assert fileInfo.FullName.EndsWith ".yml"
+
+    let fileLines = File.ReadLines fileInfo.FullName
+
+    let npmPackageInstallRegex =
+        Regex("npm\\s+install\\s+", RegexOptions.Compiled)
+
+    let npmPackageVersionRegex =
+        Regex("@((\\d+\\.\\d+\\.\\d+)|(\\$[A-Z_]+))", RegexOptions.Compiled)
+
+    let unpinnedNpmPackageInstallVersions =
+        fileLines
+        |> Seq.filter(fun line -> npmPackageInstallRegex.IsMatch line)
+        |> Seq.filter(fun line ->
+            let npmPackagesRegex =
+                Regex("(?<=npm install ).*$", RegexOptions.Compiled)
+
+            let npmInstallPackages = npmPackagesRegex.Match line
+
+            let numNpmInstallPackages =
+                npmInstallPackages.Value.Split(" ")
+                |> Seq.filter(fun word -> word.Trim().StartsWith("-") |> not)
+                |> Seq.length
+
+            let numNpmInstallVersions =
+                npmPackageVersionRegex.Matches line |> Seq.length
+
+            numNpmInstallPackages = numNpmInstallVersions |> not
+        )
+        |> (fun unpinnedVersions -> Seq.length unpinnedVersions > 0)
+
+    unpinnedNpmPackageInstallVersions
 
 let DetectAsteriskInPackageReferenceItems(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith "proj")

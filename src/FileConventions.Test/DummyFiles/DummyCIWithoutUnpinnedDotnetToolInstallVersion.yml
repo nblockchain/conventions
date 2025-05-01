@@ -1,0 +1,16 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    container:
+      image: "ubuntu:22.04"
+    steps:
+      - name: Install fantomless-tool
+        run: |
+          dotnet tool install fantomless-tool --version 4.8.999
+      - name: Print "Hello World!"
+        run: echo "Hello World"
