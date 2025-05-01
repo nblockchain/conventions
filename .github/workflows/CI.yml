@@ -88,10 +88,10 @@ jobs:
           git --version
           node --version
           npm --version
-      - name: Install yarn
+      - name: Install yarn and yarn modules
         run: |
           npm install --verbose --global yarn
-          yarn add --dev typescript
+          yarn add --dev typescript eslint @eslint/js typescript-eslint
       - name: Install commitlint dependencies
         run: |
           . commitlint/version.config
@@ -103,6 +103,8 @@ jobs:
           npm --version
       - name: Run typescript compiler
         run: npx tsc
+      - name: Run typescript-eslint
+        run: npx eslint .
 
   commitlint-plugins-tests:
     name: Run commitlint-related tests
@@ -119,7 +121,7 @@ jobs:
           sudo apt install --yes --no-install-recommends git ca-certificates
 
           sudo apt install --yes --no-install-recommends npm curl
-      - name: Install yarn
+      - name: Install yarn and yarn modules
         run: |
           npm install --verbose --global yarn
           yarn add --dev typescript ts-node
