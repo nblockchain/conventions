@@ -639,3 +639,89 @@ let IsExecutableTest2() =
         ))
 
     Assert.That(IsExecutable fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let DetectNotUsingSnakeCaseInScriptName1() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(dummyFilesDirectory.FullName, "dummy_snake_case.fsx")
+        ))
+
+    Assert.That(DetectNotUsingSnakeCaseInScriptName fileInfo, Is.EqualTo false)
+
+
+[<Test>]
+let DetectNotUsingSnakeCaseInScriptName2() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(dummyFilesDirectory.FullName, "DummyPascalCase.fsx")
+        ))
+
+    Assert.That(DetectNotUsingSnakeCaseInScriptName fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let DetectNotUsingSnakeCaseInScriptName3() =
+    let fileInfo =
+        (FileInfo(Path.Combine(dummyFilesDirectory.FullName, "kebab-case.fsx")))
+
+    Assert.That(DetectNotUsingSnakeCaseInScriptName fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let DetectNotUsingKebabCaseInGitHubCIJobs1() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithPascalCaseJobName.yml"
+            )
+        ))
+
+    Assert.That(DetectNotUsingKebabCaseInGitHubCIJobs fileInfo, Is.EqualTo true)
+
+
+[<Test>]
+let DetectNotUsingKebabCaseInGitHubCIJobs2() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithKebabCaseJobName.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectNotUsingKebabCaseInGitHubCIJobs fileInfo,
+        Is.EqualTo false
+    )
+
+
+[<Test>]
+let DetectNotUsingKebabCaseInGitHubCIJobs3() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithMultipleJobsAndKebabCaseJobNames.yml"
+            )
+        ))
+
+    Assert.That(
+        DetectNotUsingKebabCaseInGitHubCIJobs fileInfo,
+        Is.EqualTo false
+    )
+
+
+[<Test>]
+let DetectNotUsingKebabCaseInGitHubCIJobs4() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithMultipleJobsAndOnePascalCaseJobName.yml"
+            )
+        ))
+
+    Assert.That(DetectNotUsingKebabCaseInGitHubCIJobs fileInfo, Is.EqualTo true)
