@@ -1359,9 +1359,18 @@ prCommits
 
     let checkSuitesParsedJson = CheckSuitesType.Parse checkSuitesJsonString
 
+    let expectedFailureSubstrings = [ "failing test"; "failing CI" ]
+
     if not(ShouldHaveCiStatus commitMessage) then
         ()
-    elif commitMessage.Contains "failing test" then
+    elif expectedFailureSubstrings
+         |> List.exists(fun substring ->
+             commitMessage.IndexOf(
+                 substring,
+                 StringComparison.OrdinalIgnoreCase
+             )
+             >= 0
+         ) then
         ()
     else
         let status = checkSuitesParsedJson.CheckSuites.[0].Status
@@ -1373,8 +1382,14 @@ prCommits
             Console.Error.WriteLine
                 "Thanks for pushing commits 1 by 1, however, it has been detected that some of them to not be successful (or not be red when they add a failing test)"
 
+            let expectedFailureSubstringsJoined =
+                String.Join(
+                    " or ",
+                    expectedFailureSubstrings |> Seq.map(fun str -> $"'{str}'")
+                )
+
             Console.Error.WriteLine
-                "Hint: if you want to state that a commit can have red CI because of adding a failing test, please make sure that the commit message contains the 'failing test' term"
+                $"Hint: if you want to state that a commit can have red CI because of adding a failing test, please make sure that the commit message contains the {expectedFailureSubstringsJoined} term"
 
             Environment.Exit 3
 )
