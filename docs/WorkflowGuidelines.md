@@ -81,7 +81,7 @@
 
     * Primitive Obsession:
 
-      Primitive Obsession is a situation where simple data types such as strings, integers, or arrays are overused in place of more appropriate objects.
+      Primitive Obsession is a situation where simple data types such as strings, integers, or arrays are overused in place of more appropriate objects. Using primitives is bad because they can't contain any model-specific logic or behaviour. Also, they lose their type safety. A string is a string. It doesn't matter if it's a name, a phone number, or a password. This makes it easy to make mistakes and hard to understand the code.
       
       Example (with bad practice):
       ```
