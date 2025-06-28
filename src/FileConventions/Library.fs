@@ -5,9 +5,14 @@ open System.IO
 open System.Linq
 open System.Text.RegularExpressions
 
+open Fsdk
+open Fsdk.Process
 open Mono
 open Mono.Unix.Native
 open YamlDotNet.RepresentationModel
+
+open Helpers
+open Config
 
 let SplitByEOLs (text: string) (numberOfEOLs: uint) =
     if numberOfEOLs = 0u then
@@ -558,3 +563,82 @@ let NonVerboseFlags(fileInfo: FileInfo) =
 let IsExecutable(fileInfo: FileInfo) =
     let hasExecuteAccess = Syscall.access(fileInfo.FullName, AccessModes.X_OK)
     hasExecuteAccess = 0
+
+let StyleFSharpFiles(rootDir: DirectoryInfo) =
+    InstallFantomlessTool FantomlessToolVersion
+
+    Process
+        .Execute(
+            {
+                Command = "dotnet"
+                Arguments = $"fantomless --recurse {rootDir.FullName}"
+            },
+            Echo.Off
+        )
+        .UnwrapDefault()
+    |> ignore
+
+let StyleCSharpFiles(rootDir: DirectoryInfo) =
+    Process
+        .Execute(
+            {
+                Command = "dotnet"
+                Arguments = $"format whitespace {rootDir.FullName} --folder"
+            },
+            Echo.Off
+        )
+        .UnwrapDefault()
+    |> ignore
+
+let StyleXamlFiles() =
+    InstallPrettier PrettierVersion
+    InstallPrettierPluginXml PluginXmlVersion
+
+    Process
+        .Execute(
+            {
+                Command = "npm"
+                Arguments =
+                    $"install --save-dev prettier@{PrettierVersion} @prettier/plugin-xml@{PluginXmlVersion}"
+            },
+            Echo.Off
+        )
+        .UnwrapDefault()
+    |> ignore
+
+    let pattern = $"**{Path.DirectorySeparatorChar}*.xaml"
+
+    Process
+        .Execute(
+            {
+                Command =
+                    Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "node_modules",
+                        ".bin",
+                        "prettier"
+                    )
+
+                Arguments =
+                    $"--xml-whitespace-sensitivity ignore --tab-width 4 --prose-wrap preserve --write {pattern}"
+            },
+            Echo.Off
+        )
+        .UnwrapDefault()
+    |> ignore
+
+let StyleTypeScriptFiles() =
+    InstallPrettier PrettierVersion
+
+    let pattern =
+        $".{Path.DirectorySeparatorChar}**{Path.DirectorySeparatorChar}*.ts"
+
+    RunPrettier $"--quote-props=consistent --write {pattern}"
+
+let StyleYmlFiles() =
+    InstallPrettier PrettierVersion
+
+    let pattern =
+        $".{Path.DirectorySeparatorChar}**{Path.DirectorySeparatorChar}*.yml"
+
+    RunPrettier $"--quote-props=consistent --write {pattern}"
