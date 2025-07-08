@@ -19,7 +19,7 @@ This is a repository that contains several useful things that other `nblockchain
         * [Missing the `--version` flag in `dotnet tool install foo` invocations](scripts/unpinnedDotnetToolInstallVersions.fsx).
     * Use of inconsistent versions:
         * [Use of inconsistent version numbers in `uses:` and `with:` GitHubCI tags](scripts/inconsistentVersionsInGitHubCI.fsx).
-        * [Use of inconsistent version numbers in `#r "nuget: ` refs of F# scripts](scripts/inconsistentVersionsInFSharpScripts.fsx).
+        * [Use of inconsistent version numbers in `#r "nuget: ` refs of F# scripts](scripts/inconsistentNugetVersionsInFSharpScripts.fsx)
         * [Use of inconsistent version numbers in nuget packages of .NET projects](scripts/inconsistentNugetVersionsInDotNetProjects.fsx).
         * [Use of inconsistent version numbers in nuget packages of .NET projects and `#r "nuget: ` refs of F# scripts](scripts/inconsistentNugetVersionsInDotNetProjectsAndFSharpScripts.fsx).
 
