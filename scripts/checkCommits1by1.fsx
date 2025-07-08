@@ -1373,8 +1373,15 @@ prCommits
          ) then
         ()
     else
-        let status = checkSuitesParsedJson.CheckSuites.[0].Status
-        let conclusion = checkSuitesParsedJson.CheckSuites.[0].Conclusion
+        let checkSuiteOfInterest =
+            checkSuitesParsedJson.CheckSuites
+            // discard check suites for the commit that are not from PR branch
+            |> Seq.filter(fun suite -> suite.PullRequests.Length > 0)
+            // take the first one (triggered by push); second one is triggered by pull_request
+            |> Seq.head
+
+        let status = checkSuiteOfInterest.Status
+        let conclusion = checkSuiteOfInterest.Conclusion
 
         if status = "completed" && conclusion = "failure" then
             Console.WriteLine()
