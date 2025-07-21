@@ -247,7 +247,7 @@ jobs:
       - name: FSharpLint
         run: |
           dotnet new tool-manifest
-          dotnet tool install dotnet-fsharplint --version 0.23.7--date20240109-1215.git-a263185
+          dotnet tool install dotnet-fsharplint --version 0.26.1--date20250724-0123.git-3924085
           dotnet build conventions.sln
           dotnet dotnet-fsharplint lint conventions.sln
       - name: fantomless
