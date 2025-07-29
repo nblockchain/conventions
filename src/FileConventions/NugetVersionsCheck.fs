@@ -34,7 +34,7 @@ module MapHelper =
                     yield theKey, valsForKey
             }
 
-        keyValuePairs |> Map.ofSeq
+        Map.ofSeq keyValuePairs
 
     let MergeMaps<'Key, 'Value when 'Key: comparison and 'Value: comparison>
         (map1: Map<'Key, Set<'Value>>)
@@ -101,7 +101,7 @@ type private ComparableFileInfo =
         self.File.FullName.GetHashCode()
 
 // this seems to be a bug in Microsoft.Build nuget library, FIXME: report
-let normalizeDirSeparatorsPaths(path: string) : string =
+let NormalizeDirSeparatorsPaths(path: string) : string =
     path
         .Replace('\\', Path.DirectorySeparatorChar)
         .Replace('/', Path.DirectorySeparatorChar)
@@ -126,7 +126,7 @@ let FindProjectFiles(solutionOrFolder: ScriptTarget) : seq<FileInfo> =
 
             parsedSolution.ProjectsInOrder
             |> Seq.map(fun proj ->
-                proj.AbsolutePath |> normalizeDirSeparatorsPaths |> FileInfo
+                proj.AbsolutePath |> NormalizeDirSeparatorsPaths |> FileInfo
             )
         | Folder dir -> Helpers.GetFiles dir "*.*"
 
@@ -136,13 +136,13 @@ let FindProjectFiles(solutionOrFolder: ScriptTarget) : seq<FileInfo> =
     )
 
 
-let private notPackagesFolder
+let private NotPackagesFolder
     (nugetSolutionPackagesDir: DirectoryInfo)
     (dir: DirectoryInfo)
     : bool =
     dir.FullName <> nugetSolutionPackagesDir.FullName
 
-let private notSubmodule
+let private NotSubmodule
     (currentDirectory: string)
     (dir: DirectoryInfo)
     : bool =
@@ -170,10 +170,10 @@ let private notSubmodule
 
     not(
         getSubmoduleDirsForThisRepo()
-            .Any(fun d -> dir.FullName = d.FullName)
+            .Any(fun submoduleDir -> dir.FullName = submoduleDir.FullName)
     )
 
-let rec private findNuspecFiles
+let rec private FindNuspecFiles
     (currentDirectory: string)
     (nugetSolutionPackagesDir: DirectoryInfo)
     (sol: FileInfo)
@@ -189,10 +189,10 @@ let rec private findNuspecFiles
         for subdir in
             dir
                 .EnumerateDirectories()
-                .Where(notSubmodule currentDirectory)
-                .Where(notPackagesFolder nugetSolutionPackagesDir) do
+                .Where(NotSubmodule currentDirectory)
+                .Where(NotPackagesFolder nugetSolutionPackagesDir) do
             for file in
-                findNuspecFiles
+                FindNuspecFiles
                     currentDirectory
                     nugetSolutionPackagesDir
                     sol
@@ -233,7 +233,7 @@ let private GetPackagesInfoFromProjectFile(projectFile: FileInfo) =
                 }
     }
 
-let private getPackageTree
+let private GetPackageTree
     (currentDirectory: string)
     (nugetSolutionPackagesDir: DirectoryInfo)
     (sol: FileInfo)
@@ -251,7 +251,7 @@ let private getPackageTree
     solDir.Refresh()
 
     let nuspecFiles =
-        findNuspecFiles currentDirectory nugetSolutionPackagesDir sol solDir
+        FindNuspecFiles currentDirectory nugetSolutionPackagesDir sol solDir
 
     let nuspecFileElements =
         seq {
@@ -315,7 +315,7 @@ let private getPackageTree
 
     let allElements = Seq.append projectElements nuspecFileElements
 
-    allElements |> MapHelper.MergeIntoMap
+    MapHelper.MergeIntoMap allElements
 
 let GetVersionsMap(projectFiles: #seq<FileInfo>) : Map<string, Set<string>> =
     let packageInfos =
@@ -345,7 +345,7 @@ let rec FindSolutions
         for subdir in
             dir
                 .EnumerateDirectories()
-                .Where(notSubmodule currentDirectory) do
+                .Where(NotSubmodule currentDirectory) do
             for solution in FindSolutions currentDirectory subdir do
                 yield solution
     }
@@ -475,7 +475,7 @@ let SanityCheckNugetPackages
                 |> Map.ofSeq
 
         let packageTree =
-            getPackageTree currentDirectory nugetSolutionPackagesDir sol
+            GetPackageTree currentDirectory nugetSolutionPackagesDir sol
 
         let packages = getAllPackageIdsAndVersions packageTree
 

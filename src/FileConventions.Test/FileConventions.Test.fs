@@ -510,7 +510,7 @@ let DetectInconsistentVersionsInFSharpScriptsAndProjects() =
             "*.fsx",
             SearchOption.AllDirectories
         )
-        |> Seq.map(fun path -> FileInfo path)
+        |> Seq.map FileInfo
 
     let fsprojFiles =
         Directory.EnumerateFiles(
@@ -518,7 +518,7 @@ let DetectInconsistentVersionsInFSharpScriptsAndProjects() =
             "*.fsproj",
             SearchOption.AllDirectories
         )
-        |> Seq.map(fun path -> FileInfo path)
+        |> Seq.map FileInfo
 
     Assert.That(
         CombinedVersionCheck.DetectInconsistentVersionsInNugetRefsInFSharpScripts

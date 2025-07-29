@@ -213,7 +213,7 @@ let SplitIntoWords(text: string) =
                 )
         )
 
-    words |> Seq.toList
+    Seq.toList words
 
 let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
     let words = SplitIntoWords text
