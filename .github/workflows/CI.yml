@@ -12,6 +12,7 @@ on:
 # As we use .NET 8 now, to run tools compiled for .NET 6 we need to set roll-forward to major
 env:
   DOTNET_ROLL_FORWARD: Major
+  TYPESCRIPT_VERSION: "5.8.3"
 
 jobs:
   build-fs:
@@ -91,7 +92,7 @@ jobs:
       - name: Install yarn and yarn modules
         run: |
           npm install --verbose --global yarn
-          yarn add --dev typescript eslint @eslint/js typescript-eslint
+          yarn add --dev typescript@$TYPESCRIPT_VERSION eslint @eslint/js typescript-eslint
       - name: Install commitlint dependencies
         run: |
           . commitlint/version.config
@@ -124,7 +125,7 @@ jobs:
       - name: Install yarn and yarn modules
         run: |
           npm install --verbose --global yarn
-          yarn add --dev typescript ts-node
+          yarn add --dev typescript@$TYPESCRIPT_VERSION ts-node
       - name: Install commitlint dependencies
         run: |
           . commitlint/version.config
