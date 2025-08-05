@@ -30,6 +30,7 @@ let targetDir =
         Helpers.PreferLessDeeplyNestedDir
             githubWorkflowsDirFromCurrentDir
             githubWorkflowsDirFromRootDir
+        |> fst
 
 let inconsistentVersionsInGitHubCI =
     FileConventions.DetectInconsistentVersionsInGitHubCI targetDir

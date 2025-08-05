@@ -247,10 +247,7 @@ jobs:
           git diff --exit-code
       - name: FSharpLint
         run: |
-          dotnet new tool-manifest
-          dotnet tool install dotnet-fsharplint --version 0.26.1--date20250724-0123.git-3924085
-          dotnet build conventions.sln
-          dotnet dotnet-fsharplint lint conventions.sln
+          dotnet fsi scripts/runFSharpLint.fsx
       - name: fantomless
         run: |
           dotnet tool install fantomless-tool --version 4.7.997-prerelease

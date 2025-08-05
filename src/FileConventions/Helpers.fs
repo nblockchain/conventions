@@ -43,11 +43,11 @@ let PreferLessDeeplyNestedDir
         dirB.FullName.Count(fun char -> char = Path.DirectorySeparatorChar)
 
     if dirSeparatorsOfDirB > dirSeparatorsOfDirA then
-        dirAandPreferred
+        dirAandPreferred, dirB
     elif dirSeparatorsOfDirA > dirSeparatorsOfDirB then
-        dirB
+        dirB, dirAandPreferred
     else
-        dirAandPreferred
+        dirAandPreferred, dirB
 
 let AssertNoInvalidFiles (invalidFiles: seq<FileInfo>) (message: string) =
     if Seq.length invalidFiles > 0 then
