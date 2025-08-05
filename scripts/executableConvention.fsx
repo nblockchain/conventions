@@ -11,7 +11,7 @@ open System.IO
 let rootDir = Path.Combine(__SOURCE_DIRECTORY__, "..") |> DirectoryInfo
 let currentDir = Directory.GetCurrentDirectory() |> DirectoryInfo
 
-let targetDir = Helpers.PreferLessDeeplyNestedDir currentDir rootDir
+let targetDir, _ = Helpers.PreferLessDeeplyNestedDir currentDir rootDir
 
 let invalidFiles =
     let filter fileInfo =
