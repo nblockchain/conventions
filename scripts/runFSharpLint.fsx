@@ -92,6 +92,19 @@ let targetSolution =
 
             solFile
 
+let fsharpLintConfigFileName = "fsharplint.json"
+
+let fsharpLintDefaultConfigFile =
+    Path.Combine(rootDir.FullName, fsharpLintConfigFileName) |> FileInfo
+
+let fsharpLintConfigFile =
+    Path.Combine(targetSolution.Directory.FullName, fsharpLintConfigFileName)
+    |> FileInfo
+
+if fsharpLintDefaultConfigFile.Exists && not fsharpLintConfigFile.Exists then
+    fsharpLintDefaultConfigFile.CopyTo(fsharpLintConfigFile.FullName, false)
+    |> ignore<FileInfo>
+
 Fsdk
     .Process
     .Execute(
