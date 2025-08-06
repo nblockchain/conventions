@@ -250,6 +250,4 @@ jobs:
           dotnet fsi scripts/runFSharpLint.fsx
       - name: fantomless
         run: |
-          dotnet tool install fantomless-tool --version 4.7.997-prerelease
-          dotnet fantomless --recurse .
-          git diff --exit-code
+          dotnet fsi scripts/runFantomless.fsx

@@ -26,7 +26,7 @@ This is a repository that contains several useful things that other `nblockchain
 All in all, this is mainly documentation, and some tooling to detect bad practices.
 
 More things to come:
-- Detect old versions of fantomas/fantomless being used.
+- Detect old versions of fantomas being used.
 - Detect old versions of .editorconfig or Directory.Build.props being used.
 - Detect GitHubCI bad practices, such as:
     * Missing important triggers such as push or pull_request, workflow_dispatch, schedule.
