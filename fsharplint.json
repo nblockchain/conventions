@@ -332,7 +332,7 @@
             "additionalPartials": []
         }
     },
-    "ensureTailCallDiagnosticsInRecursiveFunctions": { "enabled": false },
+    "ensureTailCallDiagnosticsInRecursiveFunctions": { "enabled": true },
     "hints": {
         "add": [
             "not (a =  b) ===> a <> b",
