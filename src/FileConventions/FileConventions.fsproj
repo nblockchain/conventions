@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Fsdk" Version="0.6.0--date20230214-0422.git-1ea6f62" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Config.fs" />
     <Compile Include="Helpers.fs" />
     <Compile Include="NugetVersionsCheck.fs" />
     <Compile Include="Library.fs" />

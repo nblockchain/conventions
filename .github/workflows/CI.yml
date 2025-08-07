@@ -172,6 +172,9 @@ jobs:
           submodules: recursive
           # needed because of commit-lint, see https://github.com/conventional-changelog/commitlint/issues/3376
           fetch-depth: 0
+      # workaround for https://github.com/actions/runner/issues/2033
+      - name: ownership workaround
+        run: git config --system --add safe.directory '*'
       - name: Print versions
         run: |
           git --version
@@ -253,3 +256,5 @@ jobs:
           dotnet tool install fantomless-tool --version 4.7.997-prerelease
           dotnet fantomless --recurse .
           git diff --exit-code
+      - name: Check style of our F#, C#, TypeScript, YML and XAML code
+        run: sudo dotnet fsi scripts/styleCheck.fsx
