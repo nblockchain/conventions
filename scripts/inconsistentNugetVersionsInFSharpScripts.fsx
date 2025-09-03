@@ -16,6 +16,10 @@ let targetDir, _ = Helpers.PreferLessDeeplyNestedDir currentDir rootDir
 
 let inconsistentVersionsInFsharpScripts =
     Helpers.GetFiles targetDir "*.fsx"
+    |> Seq.filter(fun file ->
+        targetDir = rootDir
+        || not(file.Directory.FullName.StartsWith rootDir.FullName)
+    )
     |> FileConventions.DetectInconsistentVersionsInNugetRefsInFSharpScripts
 
 if inconsistentVersionsInFsharpScripts then
