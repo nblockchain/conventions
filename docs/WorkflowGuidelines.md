@@ -14,6 +14,8 @@
     * The first group for the namespaces that come from the base class libraries.
     * Second group for external libraries (e.g. nuget packages).
     * Last for the namespaces that belong to the source code that lives in same repository.
+ 
+* In languages where writing `this.` is optional, let's actually rather make it mandatory, as this makes the code more readable (even if more verbose).
 
 * Avoid typical bad practices like:
 
