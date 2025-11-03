@@ -391,25 +391,24 @@ let private DetectInconsistentVersionsInYamlFiles
                             if variableRegexMatch.Success then
                                 let yamlDict = yamlDoc :?> YamlMappingNode
 
-                                let envDict =
-                                    yamlDict.Children.["env"]
-                                    :?> YamlMappingNode
+                                match yamlDict.Children.TryGetValue "env" with
+                                | true, (:? YamlMappingNode as envDict) ->
+                                    let referenceString =
+                                        variableRegexMatch.Groups.[1].Value
 
-                                let referenceString =
-                                    variableRegexMatch.Groups.[1].Value
+                                    let envVarName =
+                                        if referenceString.StartsWith "env." then
+                                            referenceString.[4..]
+                                        else
+                                            referenceString
 
-                                let envVarName =
-                                    if referenceString.StartsWith "env." then
-                                        referenceString.[4..]
-                                    else
-                                        referenceString
-
-                                match envDict.Children.TryGetValue envVarName
-                                    with
-                                | true, envVarValue ->
-                                    (envVarValue :?> YamlScalarNode).Value
-                                | false, _ ->
-                                    failwithf "env. var %s not found" envVarName
+                                    match
+                                        envDict.Children.TryGetValue envVarName
+                                        with
+                                    | true, envVarValue ->
+                                        (envVarValue :?> YamlScalarNode).Value
+                                    | false, _ -> value
+                                | _ -> value
                             else
                                 value
 
