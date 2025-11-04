@@ -410,6 +410,25 @@ let DetectInconsistentVersionsInGitHubCIWorkflow7() =
         Is.EqualTo true
     )
 
+[<Test>]
+let DetectInconsistentVersionsInGitHubCIWorkflow8() =
+    let fileInfo =
+        (Seq.singleton(
+            FileInfo(
+                Path.Combine(
+                    dummyFilesDirectory.FullName,
+                    "DummyCIWithSameSetupPulumiVersionInEnv.yml"
+                )
+            )
+        ))
+
+    let envDict = Map.ofList [ "PULUMI_VERSION", "3.40.0" ]
+
+    Assert.That(
+        DetectInconsistentVersionsInGitHubCIWorkflow fileInfo envDict,
+        Is.EqualTo false
+    )
+
 
 [<Test>]
 let DetectInconsistentVersionsInGitHubCI1() =
