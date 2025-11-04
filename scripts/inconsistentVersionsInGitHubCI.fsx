@@ -33,7 +33,7 @@ let targetDir =
         |> fst
 
 let inconsistentVersionsInGitHubCI =
-    FileConventions.DetectInconsistentVersionsInGitHubCI targetDir
+    FileConventions.DetectInconsistentVersionsInGitHubCI targetDir Map.empty
 
 if inconsistentVersionsInGitHubCI then
     failwith

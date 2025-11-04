@@ -362,6 +362,7 @@ let private GetVersionsMapFromFiles
 let private DetectInconsistentVersionsInYamlFiles
     (fileInfos: seq<FileInfo>)
     (extractVersionsFunction: YamlNode -> seq<string * string>)
+    (_globalEnv: Map<string, string>)
     =
     let envVarRegex =
         Regex(@"\s*\$\{\{\s*([^\s\}]+)\s*\}\}\s*", RegexOptions.Compiled)
@@ -426,7 +427,10 @@ let private DetectInconsistentVersionsInYamlFiles
     |> Seq.map(fun item -> Seq.length item.Value > 1)
     |> Seq.contains true
 
-let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
+let DetectInconsistentVersionsInGitHubCIWorkflow
+    (fileInfos: seq<FileInfo>)
+    (globalEnv: Map<string, string>)
+    =
     fileInfos
     |> Seq.iter(fun fileInfo -> assert (fileInfo.FullName.EndsWith ".yml"))
 
@@ -462,15 +466,18 @@ let DetectInconsistentVersionsInGitHubCIWorkflow(fileInfos: seq<FileInfo>) =
             )
         | _ -> Seq.empty
 
-    DetectInconsistentVersionsInYamlFiles fileInfos extractVersions
+    DetectInconsistentVersionsInYamlFiles fileInfos extractVersions globalEnv
 
-let DetectInconsistentVersionsInGitHubCI(dir: DirectoryInfo) =
+let DetectInconsistentVersionsInGitHubCI
+    (dir: DirectoryInfo)
+    (globalEnv: Map<string, string>)
+    =
     let ymlFiles = dir.GetFiles("*.yml", SearchOption.AllDirectories)
 
     if Seq.isEmpty ymlFiles then
         false
     else
-        DetectInconsistentVersionsInGitHubCIWorkflow ymlFiles
+        DetectInconsistentVersionsInGitHubCIWorkflow ymlFiles globalEnv
 
 let GetVersionsMapForNugetRefsInFSharpScripts(fileInfos: seq<FileInfo>) =
     fileInfos
