@@ -13,6 +13,7 @@ on:
 env:
   DOTNET_ROLL_FORWARD: Major
   TYPESCRIPT_VERSION: "5.8.3"
+  CHECKOUT_ACTION_VERSION: "4"
 
 jobs:
   build-fs:
@@ -21,7 +22,9 @@ jobs:
     container:
       image: "ubuntu:24.04"
     steps:
-      - uses: actions/checkout@v4
+      - uses: webwarrior-ws/conventions@dynamic-uses-action
+        with:
+          uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
       - name: Install required dependencies
         run: |
           apt update
@@ -50,7 +53,9 @@ jobs:
     container:
       image: "ubuntu:24.04"
     steps:
-      - uses: actions/checkout@v4
+      - uses: webwarrior-ws/conventions@dynamic-uses-action
+        with:
+          uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
       - name: Install required dependencies
         run: |
           apt update
@@ -76,7 +81,9 @@ jobs:
     container:
       image: "ubuntu:24.04"
     steps:
-      - uses: actions/checkout@v4
+      - uses: webwarrior-ws/conventions@dynamic-uses-action
+        with:
+          uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
       - name: Install required dependencies
         run: |
           apt update
@@ -114,7 +121,9 @@ jobs:
     container:
       image: "ubuntu:24.04"
     steps:
-      - uses: actions/checkout@v4
+      - uses: webwarrior-ws/conventions@dynamic-uses-action
+        with:
+          uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
       - name: Install required dependencies
         run: |
           apt update
@@ -167,11 +176,14 @@ jobs:
           sudo apt install --yes --no-install-recommends git
           # workaround for https://github.com/actions/runner/issues/2033
           git config --global --add safe.directory '*'
-      - uses: actions/checkout@v4
+      - uses: webwarrior-ws/conventions@dynamic-uses-action
         with:
-          submodules: recursive
-          # needed because of commit-lint, see https://github.com/conventional-changelog/commitlint/issues/3376
-          fetch-depth: 0
+          uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
+          with: |
+            {
+              "submodules": "recursive",
+              "fetch-depth": 0
+            }
       - name: Print versions
         run: |
           git --version
