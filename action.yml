@@ -19,7 +19,7 @@ runs:
     - name: Setup
       shell: bash
       run: |
-        mkdir -p ./.tmp-dynamic-uses &&
+        mkdir --parents ./.tmp-dynamic-uses &&
         cat <<'DYNAMIC_USES_EOF' >./.tmp-dynamic-uses/action.yml
         outputs:
           outputs:
@@ -27,7 +27,7 @@ runs:
         runs:
           using: composite
           steps:
-          - run: rm -rf ./.tmp-dynamic-uses
+          - run: rm --recursive --force ./.tmp-dynamic-uses
             shell: bash
           - name: Run
             id: run
@@ -40,4 +40,4 @@ runs:
     - name: Cleanup
       if: always() && steps.run.outcome != 'success'
       shell: bash
-      run: rm -rf ./.tmp-dynamic-uses
+      run: rm --recursive --force ./.tmp-dynamic-uses
