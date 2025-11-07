@@ -9,8 +9,9 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
-# As we use .NET 8 now, to run tools compiled for .NET 6 we need to set roll-forward to major
 env:
+  DOTNET_VERSION: "8.0"
+  # As we use .NET>6 now, to run tools compiled for .NETv6 we need to set roll-forward to major
   DOTNET_ROLL_FORWARD: Major
   TYPESCRIPT_VERSION: "5.8.3"
   CHECKOUT_ACTION_VERSION: "4"
@@ -39,7 +40,7 @@ jobs:
           # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot
           apt install --yes --no-install-recommends ca-certificates
 
-          apt install --yes --no-install-recommends dotnet-sdk-8.0
+          apt install --yes --no-install-recommends dotnet-sdk-${{ env.DOTNET_VERSION }}
 
       - name: Compile the conventions solution
         run: dotnet build --configuration Release conventions.sln
@@ -69,7 +70,7 @@ jobs:
           # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot
           apt install --yes --no-install-recommends ca-certificates
 
-          apt install --yes --no-install-recommends dotnet-sdk-8.0
+          apt install --yes --no-install-recommends dotnet-sdk-${{ env.DOTNET_VERSION }}
 
       - name: Run tests to validate F# scripts
         run: dotnet test src/FileConventions.Test/FileConventions.Test.fsproj
@@ -207,7 +208,7 @@ jobs:
           # The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot
           apt install --yes --no-install-recommends ca-certificates
 
-          apt install --yes --no-install-recommends dotnet-sdk-8.0
+          apt install --yes --no-install-recommends dotnet-sdk-${{ env.DOTNET_VERSION }}
 
       - name: Check all files end with EOL
         run: dotnet fsi scripts/eofConvention.fsx
