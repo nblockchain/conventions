@@ -211,9 +211,6 @@ jobs:
         run: dotnet fsi scripts/unpinnedNugetPackageReferenceVersionsInFSharpScripts.fsx
       - name: Check there are no unpinned versions in `dotnet tool install` commands
         run: dotnet fsi scripts/unpinnedDotnetToolInstallVersions.fsx
-      - name: Check commits 1 by 1
-        if: github.event_name == 'pull_request'
-        run: dotnet fsi scripts/checkCommits1by1.fsx
       - name: Check there are no inconsistent versions GitHubCI files
         run: dotnet fsi scripts/inconsistentVersionsInGitHubCI.fsx
       - name: Check there are no inconsistent versions in nuget package references of F# scripts
@@ -238,6 +235,9 @@ jobs:
           dotnet tool install fantomless-tool --version 4.7.997-prerelease
           dotnet fantomless --recurse .
           git diff --exit-code
+      - name: Check commits 1 by 1
+        if: github.event_name == 'pull_request'
+        run: dotnet fsi scripts/checkCommits1by1.fsx
 
       - name: Install commitlint&prettier's required dependencies
         run: |
