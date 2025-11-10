@@ -23,7 +23,8 @@ jobs:
     container:
       image: "ubuntu:24.04"
     steps:
-      - uses: nblockchain/conventions@master
+      - name: Run actions/checkout
+        uses: nblockchain/conventions@master
         with:
           uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
       - name: Install required dependencies
@@ -54,7 +55,8 @@ jobs:
     container:
       image: "ubuntu:24.04"
     steps:
-      - uses: nblockchain/conventions@master
+      - name: Run actions/checkout
+        uses: nblockchain/conventions@master
         with:
           uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
       - name: Install required dependencies
@@ -82,7 +84,8 @@ jobs:
     container:
       image: "ubuntu:24.04"
     steps:
-      - uses: nblockchain/conventions@master
+      - name: Run actions/checkout
+        uses: nblockchain/conventions@master
         with:
           uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
       - name: Install required dependencies
@@ -122,7 +125,8 @@ jobs:
     container:
       image: "ubuntu:24.04"
     steps:
-      - uses: nblockchain/conventions@master
+      - name: Run actions/checkout
+        uses: nblockchain/conventions@master
         with:
           uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
       - name: Install required dependencies
@@ -177,7 +181,8 @@ jobs:
 
           # otherwise it gives error "fatal: unable to access 'https://github.com/nblockchain/conventions/': server certificate verification failed. CAfile: none CRLfile: none"
           sudo apt install --yes --no-install-recommends ca-certificates
-      - uses: nblockchain/conventions@master
+      - name: Run actions/checkout
+        uses: nblockchain/conventions@master
         with:
           uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
           with: |
