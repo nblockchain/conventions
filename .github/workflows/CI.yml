@@ -226,6 +226,18 @@ jobs:
           dotnet fsi scripts/inconsistentNugetVersionsInDotNetProjects.fsx
       - name: Check there are no inconsistent versions in nuget package references of F# scripts and projects
         run: dotnet fsi scripts/inconsistentNugetVersionsInDotNetProjectsAndFSharpScripts.fsx
+      - name: FSharpLint
+        run: |
+          dotnet fsi scripts/runFSharpLint.fsx
+      - name: Run git+githubCI workaround
+        run: |
+          # workaround for https://github.com/actions/runner/issues/2033
+          git config --global --add safe.directory '*'
+      - name: fantomless
+        run: |
+          dotnet tool install fantomless-tool --version 4.7.997-prerelease
+          dotnet fantomless --recurse .
+          git diff --exit-code
 
       - name: Install commitlint&prettier's required dependencies
         run: |
@@ -236,16 +248,14 @@ jobs:
           node --version
           npm --version
 
-      - name: Install prettier
-        run: npm install --verbose prettier@2.8.3
-
-      - name: Run git+githubCI workarounds
+      - name: Run git+githubCI workaround
         run: |
-          # workaround for https://github.com/actions/runner/issues/2033
-          git config --global --add safe.directory '*'
           # We need this step so we can change the files using `npx prettier --write` in the next step.
           # Otherwise we get permission denied error in the CI.
           sudo chmod 777 --recursive .
+      - name: Install prettier
+        run: npm install --verbose prettier@2.8.3
+
       - name: Run "prettier" to check the style of our TypeScript and YML code
         run: |
           sudo npx prettier --quote-props=consistent --write './**/*.ts'
@@ -256,14 +266,6 @@ jobs:
           # Since after installing commitlint dependencies package.json file changes, we need to 
           # run the following command to ignore package.json file
           git restore package.json
-          git diff --exit-code
-      - name: FSharpLint
-        run: |
-          dotnet fsi scripts/runFSharpLint.fsx
-      - name: fantomless
-        run: |
-          dotnet tool install fantomless-tool --version 4.7.997-prerelease
-          dotnet fantomless --recurse .
           git diff --exit-code
 
       - name: Validate current commit (last commit) with commitlint
