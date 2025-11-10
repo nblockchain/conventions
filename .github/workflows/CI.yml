@@ -172,11 +172,11 @@ jobs:
         run: |
           apt update && apt install --yes sudo
 
-          sudo apt install --yes --no-install-recommends npm curl
-
+          # otherwise it gives error "Error: Input 'submodules' not supported when falling back to download using the GitHub REST API. To create a local Git repository instead, add Git 2.18 or higher to the PATH."
           sudo apt install --yes --no-install-recommends git
-          # workaround for https://github.com/actions/runner/issues/2033
-          git config --global --add safe.directory '*'
+
+          # otherwise it gives error "fatal: unable to access 'https://github.com/nblockchain/conventions/': server certificate verification failed. CAfile: none CRLfile: none"
+          sudo apt install --yes --no-install-recommends ca-certificates
       - uses: nblockchain/conventions@master
         with:
           uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
@@ -185,21 +185,6 @@ jobs:
               "submodules": "recursive",
               "fetch-depth": 0
             }
-      - name: Print versions
-        run: |
-          git --version
-          node --version
-          npm --version
-      - name: Validate current commit (last commit) with commitlint
-        if: github.event_name == 'push'
-        run: ./commitlint.sh --last --verbose
-      - name: Validate PR commits with commitlint
-        if: github.event_name == 'pull_request'
-        run: |
-          ./commitlint.sh --verbose \
-            --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} \
-            --to ${{ github.event.pull_request.head.sha }}
-
       - name: Setup .NET
         run: |
           # We need to install `ca-certificates`, otherwise we get these errors in the CI:
@@ -241,12 +226,26 @@ jobs:
           dotnet fsi scripts/inconsistentNugetVersionsInDotNetProjects.fsx
       - name: Check there are no inconsistent versions in nuget package references of F# scripts and projects
         run: dotnet fsi scripts/inconsistentNugetVersionsInDotNetProjectsAndFSharpScripts.fsx
+
+      - name: Install commitlint&prettier's required dependencies
+        run: |
+          sudo apt install --yes --no-install-recommends npm
+      - name: Print versions
+        run: |
+          git --version
+          node --version
+          npm --version
+
       - name: Install prettier
         run: npm install --verbose prettier@2.8.3
-      - name: Change file permissions
-        # We need this step so we can change the files using `npx prettier --write` in the next step.
-        # Otherwise we get permission denied error in the CI.
-        run: sudo chmod 777 --recursive .
+
+      - name: Run git+githubCI workarounds
+        run: |
+          # workaround for https://github.com/actions/runner/issues/2033
+          git config --global --add safe.directory '*'
+          # We need this step so we can change the files using `npx prettier --write` in the next step.
+          # Otherwise we get permission denied error in the CI.
+          sudo chmod 777 --recursive .
       - name: Run "prettier" to check the style of our TypeScript and YML code
         run: |
           sudo npx prettier --quote-props=consistent --write './**/*.ts'
@@ -266,3 +265,13 @@ jobs:
           dotnet tool install fantomless-tool --version 4.7.997-prerelease
           dotnet fantomless --recurse .
           git diff --exit-code
+
+      - name: Validate current commit (last commit) with commitlint
+        if: github.event_name == 'push'
+        run: ./commitlint.sh --last --verbose
+      - name: Validate PR commits with commitlint
+        if: github.event_name == 'pull_request'
+        run: |
+          ./commitlint.sh --verbose \
+            --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} \
+            --to ${{ github.event.pull_request.head.sha }}
