@@ -173,6 +173,7 @@ let private NotSubmodule
             .Any(fun submoduleDir -> dir.FullName = submoduleDir.FullName)
     )
 
+[<TailCall>]
 let rec private FindNuspecFiles
     (currentDirectory: string)
     (nugetSolutionPackagesDir: DirectoryInfo)
@@ -191,13 +192,12 @@ let rec private FindNuspecFiles
                 .EnumerateDirectories()
                 .Where(NotSubmodule currentDirectory)
                 .Where(NotPackagesFolder nugetSolutionPackagesDir) do
-            for file in
+            yield!
                 FindNuspecFiles
                     currentDirectory
                     nugetSolutionPackagesDir
                     sol
-                    subdir do
-                yield file
+                    subdir
     }
 
 let private GetPackagesInfoFromProjectFile(projectFile: FileInfo) =
@@ -330,6 +330,7 @@ let GetVersionsMap(projectFiles: #seq<FileInfo>) : Map<string, Set<string>> =
     MapHelper.MergeIntoMap packageVersionPairs
     |> Map.map(fun _ versions -> Set.ofSeq versions)
 
+[<TailCall>]
 let rec FindSolutions
     (currentDirectory: string)
     (dir: DirectoryInfo)
@@ -346,8 +347,7 @@ let rec FindSolutions
             dir
                 .EnumerateDirectories()
                 .Where(NotSubmodule currentDirectory) do
-            for solution in FindSolutions currentDirectory subdir do
-                yield solution
+            yield! FindSolutions currentDirectory subdir
     }
 
 let SanityCheckNugetPackages
