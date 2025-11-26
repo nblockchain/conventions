@@ -4,6 +4,7 @@ export const abbr = {
     "absolute": "abs",
     "accumulator": "acc",
     "address": "addr",
+    "adjust": "tweak",
     "algorithm": "algo",
     "algorithms": "algos",
     "allocate": "alloc",
