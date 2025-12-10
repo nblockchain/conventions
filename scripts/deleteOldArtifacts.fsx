@@ -56,7 +56,7 @@ type GithubArtifactsType =
   "total_count": 1,
   "artifacts": [
     {
-      "id": 667505922,
+      "id": 4823510038,
       "node_id": "MDg6QXJ0aWZhY3Q2Njc1MDU5MjI=",
       "name": "publishedPackages",
       "size_in_bytes": 151303891,
