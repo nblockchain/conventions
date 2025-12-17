@@ -154,3 +154,31 @@ Fsdk
     )
     .UnwrapDefault()
 |> ignore<string>
+
+// check .fsx files in target dir
+let allFiles = Fsdk.Misc.GetAllFilesRecursively targetDir
+
+let fsxFiles = allFiles |> Seq.filter(fun filename -> filename.EndsWith ".fsx")
+
+let results =
+    fsxFiles
+    |> Seq.map(fun filename ->
+        Fsdk.Process.Execute(
+            {
+                Command = "dotnet"
+                Arguments = sprintf "dotnet-fsharplint lint %s" filename
+            },
+            Fsdk.Process.Echo.All
+        )
+    )
+
+let violationsExist =
+    results
+    |> Seq.exists(fun result ->
+        match result.Result with
+        | Process.Success _ -> false
+        | _ -> true
+    )
+
+if violationsExist then
+    failwith "One or more fsharplint runs on .fsx files failed"
