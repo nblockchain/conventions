@@ -1231,7 +1231,7 @@ let GitHubApiCall(url: string) =
 ```
 """
 
-                match httpRequestException.StatusCode |> Option.ofNullable with
+                match Option.ofNullable httpRequestException.StatusCode with
                 | Some statusCode when statusCode = HttpStatusCode.NotFound ->
                     if accessTokenName <> "ACCESS_TOKEN" then
                         failwith accessTokenErrorMsg
@@ -1332,7 +1332,7 @@ Please activate GitHub Actions in your repository. Click on the
 let notUsedGitPush1by1 =
     gitHubActionsEnabled
     && ciStatuses.Any(fun (hasCiStatus, shouldHaveCiStatus) ->
-        hasCiStatus = false && shouldHaveCiStatus = true
+        (not hasCiStatus) && shouldHaveCiStatus
     )
 
 if notUsedGitPush1by1 then
@@ -1378,10 +1378,12 @@ prCommits
             // discard check suites for the commit that are not from PR branch
             |> Seq.filter(fun suite -> suite.PullRequests.Length > 0)
             // take the first one (triggered by push); second one is triggered by pull_request
-            |> Seq.head
+            |> Seq.tryHead
 
-        let status = checkSuiteOfInterest.Status
-        let conclusion = checkSuiteOfInterest.Conclusion
+        let status, conclusion =
+            match checkSuiteOfInterest with
+            | Some checkSuite -> checkSuite.Status, checkSuite.Conclusion
+            | None -> failwith "No check suite found"
 
         if status = "completed" && conclusion = "failure" then
             Console.WriteLine()

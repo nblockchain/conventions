@@ -21,13 +21,12 @@ let validExtensions =
 
 let invalidFiles =
     validExtensions
-    |> Seq.map(fun ext ->
+    |> Seq.collect(fun ext ->
         Helpers.GetInvalidFiles
             rootDir
             ("*" + ext)
             FileConventions.NonVerboseFlags
     )
-    |> Seq.concat
 
 let message = "Please don't use non-verbose flags in the following files:"
 

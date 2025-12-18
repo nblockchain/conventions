@@ -57,6 +57,11 @@ let targetSolution =
     | None ->
         let solFiles = Directory.GetFiles(targetDir.FullName, "*.sln")
 
+        let getMultipleSolutionsFoundErrorMessage dirName =
+            sprintf
+                "Multiple solution files found in %s; please specify one as an argument"
+                dirName
+
         if solFiles.Length = 0 then
             let solFiles = Directory.GetFiles(fallbackDir.FullName, "*.sln")
 
@@ -66,11 +71,10 @@ let targetSolution =
                     targetDir.FullName
                     fallbackDir.FullName
             elif solFiles.Length > 1 then
-                failwithf
-                    "Multiple solution files found in %s; please specify one as an argument"
-                    fallbackDir.FullName
+                failwith
+                <| getMultipleSolutionsFoundErrorMessage fallbackDir.FullName
             else
-                let solFile = solFiles.[0] |> FileInfo
+                let solFile = FileInfo solFiles.[0]
 
                 printfn
                     "Using solution file %s from target directory %s"
@@ -79,11 +83,9 @@ let targetSolution =
 
                 solFile
         elif solFiles.Length > 1 then
-            failwithf
-                "Multiple solution files found in %s; please specify one as an argument"
-                targetDir.FullName
+            failwith <| getMultipleSolutionsFoundErrorMessage targetDir.FullName
         else
-            let solFile = solFiles.[0] |> FileInfo
+            let solFile = FileInfo solFiles.[0]
 
             printfn
                 "Using solution file %s from target directory %s"

@@ -133,7 +133,7 @@ let GitHubApiQuery
     | ex ->
         match FindException<HttpRequestException> ex with
         | Some httpRequestException ->
-            match httpRequestException.StatusCode |> Option.ofNullable with
+            match Option.ofNullable httpRequestException.StatusCode with
             | Some statusCode when statusCode = HttpStatusCode.Forbidden ->
 
                 failwith githubApiCallForbiddenErrorMsg
@@ -142,14 +142,14 @@ let GitHubApiQuery
 
         | _ -> reraise()
 
-let hasCIStatus(commit: string) : bool =
+let HasCIStatus(commit: string) : bool =
     let url =
         sprintf
             "https://api.github.com/repos/%s/commits/%s/check-suites"
             githubRepository
             commit
 
-    let mediaTypeWithQuality = "application/vnd.github+json" |> Some
+    let mediaTypeWithQuality = Some "application/vnd.github+json"
 
     let json = GitHubApiQuery url Get mediaTypeWithQuality
 
@@ -158,7 +158,7 @@ let hasCIStatus(commit: string) : bool =
 let userNameOrOrgName = githubRepository.Split("/").[0]
 
 let artifactsApiQueryResult =
-    let mediaTypeWithQuality = "application/vnd.github+json" |> Some
+    let mediaTypeWithQuality = Some "application/vnd.github+json"
 
     let url =
         $"https://api.github.com/repos/{githubRepository}/actions/artifacts"
@@ -204,7 +204,7 @@ let DeleteArtifact (githubRepository: string) (artifactId: string) =
     let url =
         $"https://api.github.com/repos/{githubRepository}/actions/artifacts/{artifactId}"
 
-    GitHubApiQuery url Delete None |> ignore
+    GitHubApiQuery url Delete None |> ignore<string>
 
 let previousCommitsHashes = GetPreviousCommitsHashes()
 
@@ -214,25 +214,23 @@ match whatArtifactsToDelete with
     Console.WriteLine "About to delete only the artifacts of previous commit..."
 
     let previousCommitWithCIStatusOpt =
-        Seq.tryFind hasCIStatus previousCommitsHashes
+        Seq.tryFind HasCIStatus previousCommitsHashes
 
     match previousCommitWithCIStatusOpt with
     | None ->
         Console.WriteLine "No commits found with CI status"
         exit 0
-    | _ -> ()
+    | Some previousCommitWithCIStatus ->
+        let artifactIdsToDelete =
+            artifactIds
+            |> Seq.filter(fun item ->
+                item.WorkflowRun.HeadSha = previousCommitWithCIStatus
+            )
+            |> Seq.map(fun artifact -> artifact.Id.ToString())
 
-    let previousCommitWithCIStatus = previousCommitWithCIStatusOpt.Value
-
-    let artifactIdsToDelete =
-        artifactIds
-        |> Seq.filter(fun item ->
-            item.WorkflowRun.HeadSha = previousCommitWithCIStatus
+        artifactIdsToDelete
+        |> Seq.iter(fun artifactId -> DeleteArtifact githubRepository artifactId
         )
-        |> Seq.map(fun artifact -> artifact.Id.ToString())
-
-    artifactIdsToDelete
-    |> Seq.iter(fun artifactId -> DeleteArtifact githubRepository artifactId)
 
 | AllFromBranchlessCommitsAndAllFromPreviousOnesInThisBranch ->
     Console.WriteLine "About to delete all previous artifacts of this branch..."
