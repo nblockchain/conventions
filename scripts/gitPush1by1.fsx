@@ -67,13 +67,17 @@ let GitFetch(remoteOpt: Option<string>) =
 let GetLastNthCommitFromRemoteBranch
     (remoteName: string)
     (remoteBranch: string)
-    (n: uint32)
+    (commitNumber: uint32)
     =
     let gitShow =
         {
             Command = "git"
             Arguments =
-                sprintf "show %s/%s~%i --no-patch" remoteName remoteBranch n
+                sprintf
+                    "show %s/%s~%i --no-patch"
+                    remoteName
+                    remoteBranch
+                    commitNumber
         }
 
     let gitShowProcOutput = Process.Execute(gitShow, Echo.Off).UnwrapDefault()
@@ -187,17 +191,16 @@ let maybeRemote, maybeNumberOfCommits, force =
                 "Second argument should be an integer higher than zero"
 
             Environment.Exit 2
-            failwith "Unreachable"
+
+            failwith
+                "Unreachable because of System.Exit call on previous line due to incorrect second argument (<= 0)."
         | true, num ->
             let numberOfCommits = Some num
             let remote = Some args.[0]
 
             let force =
                 if args.Length = 3 then
-                    if args.[2] = "-f" || args.[2] = "--force" then
-                        true
-                    else
-                        false
+                    args.[2] = "-f" || args.[2] = "--force"
                 else
                     false
 
@@ -205,7 +208,9 @@ let maybeRemote, maybeNumberOfCommits, force =
         | _ ->
             Console.Error.WriteLine "Second argument should be an integer"
             Environment.Exit 3
-            failwith "Unreachable"
+
+            failwith
+                "Unreachable because of System.Exit call on previous line due to incorrect second argument (not an integer)."
     elif args.Length = 0 then
         None, None, false
     else // if args.Length = 1 then
@@ -215,7 +220,9 @@ let maybeRemote, maybeNumberOfCommits, force =
                 "Argument for the number of commits should be an integer higher than zero"
 
             Environment.Exit 2
-            failwith "Unreachable"
+
+            failwith
+                "Unreachable because of System.Exit call on previous line due to incorrect argument (not a positive integer)"
         | true, num ->
             let numberOfCommits = Some num
             let remote = None
@@ -239,7 +246,9 @@ let remote, remoteUrl =
             )
 
             Environment.Exit 4
-            failwith "unreachable"
+
+            failwith
+                "Unreachable because of System.Exit call on previous line due to remote not found"
         | Some remote -> remote
     | None ->
         if remotes.Count() > 1 then
@@ -266,7 +275,9 @@ let commitsToBePushed =
             )
 
             Environment.Exit 5
-            failwith "Unreachable"
+
+            failwith
+                "Unreachable because of System.Exit call on previous line due to branch being already up to date."
         elif commitsToPush.Length = 1 then
             // no need to ask for confirmation since 1 commit doesn't need to be separated from other commits
             // (one by one doesn't apply to a length of one)
@@ -280,7 +291,7 @@ let commitsToBePushed =
                     remote
             )
 
-            Console.ReadKey true |> ignore
+            Console.ReadKey true |> ignore<ConsoleKeyInfo>
             Console.WriteLine "Pushing..."
             commitsToPush
     | Some numberOfCommits -> GetLastCommits numberOfCommits
