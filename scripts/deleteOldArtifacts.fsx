@@ -251,6 +251,22 @@ match whatArtifactsToDelete with
     Console.WriteLine
         "About to delete all the artifacts of branchless commits..."
 
+    // Make sure git has complete history before checking for branchless commits.
+    let gitFetchUnshallowResult =
+        Fsdk.Process.Execute(
+            {
+                Command = "git"
+                // The special depth 2147483647 means infinite depth, see https://git-scm.com/docs/shallow
+                Arguments = "fetch --depth=2147483647"
+            },
+            Echo.Off
+        )
+    // Fsdk may categorize normal output of git fetch as WarningsOrAmbiguous, so have to treat it as succcess.
+    match gitFetchUnshallowResult.Result with
+    | Success _
+    | WarningsOrAmbiguous _ -> ()
+    | Error _ -> gitFetchUnshallowResult.UnwrapDefault() |> ignore<string>
+
     let orphanArtifactIdsToDelete =
         artifactIds
         |> Seq.filter(fun item ->
