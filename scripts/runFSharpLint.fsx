@@ -9,7 +9,7 @@ open Fsdk
 
 #load "../src/FileConventions/Helpers.fs"
 
-let version = "0.26.4"
+let version = "0.26.9--date20251224-1009.git-f84ead9"
 
 let targetSol =
     let args = Fsdk.Misc.FsxOnlyArguments()
@@ -57,6 +57,11 @@ let targetSolution =
     | None ->
         let solFiles = Directory.GetFiles(targetDir.FullName, "*.sln")
 
+        let getMultipleSolutionsFoundErrorMessage dirName =
+            sprintf
+                "Multiple solution files found in %s; please specify one as an argument"
+                dirName
+
         if solFiles.Length = 0 then
             let solFiles = Directory.GetFiles(fallbackDir.FullName, "*.sln")
 
@@ -66,11 +71,11 @@ let targetSolution =
                     targetDir.FullName
                     fallbackDir.FullName
             elif solFiles.Length > 1 then
-                failwithf
-                    "Multiple solution files found in %s; please specify one as an argument"
-                    fallbackDir.FullName
+                failwith(
+                    getMultipleSolutionsFoundErrorMessage fallbackDir.FullName
+                )
             else
-                let solFile = solFiles.[0] |> FileInfo
+                let solFile = FileInfo solFiles.[0]
 
                 printfn
                     "Using solution file %s from target directory %s"
@@ -79,11 +84,9 @@ let targetSolution =
 
                 solFile
         elif solFiles.Length > 1 then
-            failwithf
-                "Multiple solution files found in %s; please specify one as an argument"
-                targetDir.FullName
+            failwith(getMultipleSolutionsFoundErrorMessage targetDir.FullName)
         else
-            let solFile = solFiles.[0] |> FileInfo
+            let solFile = FileInfo solFiles.[0]
 
             printfn
                 "Using solution file %s from target directory %s"
@@ -154,3 +157,31 @@ Fsdk
     )
     .UnwrapDefault()
 |> ignore<string>
+
+// check .fsx files in target dir
+let allFiles = Fsdk.Misc.GetAllFilesRecursively targetDir
+
+let fsxFiles = allFiles |> Seq.filter(fun filename -> filename.EndsWith ".fsx")
+
+let results =
+    fsxFiles
+    |> Seq.map(fun filename ->
+        Fsdk.Process.Execute(
+            {
+                Command = "dotnet"
+                Arguments = sprintf "dotnet-fsharplint lint %s" filename
+            },
+            Fsdk.Process.Echo.All
+        )
+    )
+
+let errorsExist =
+    results
+    |> Seq.exists(fun result ->
+        match result.Result with
+        | Process.Success _ -> false
+        | _ -> true
+    )
+
+if errorsExist then
+    failwith "One or more fsharplint runs on .fsx files failed"
