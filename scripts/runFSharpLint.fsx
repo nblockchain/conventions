@@ -144,35 +144,24 @@ Fsdk
     .UnwrapDefault()
 |> ignore<string>
 
-Fsdk
-    .Process
-    .Execute(
+let RunFSharpLint(target: FileInfo) =
+    Fsdk.Process.Execute(
         {
             Command = "dotnet"
-            Arguments =
-                sprintf "dotnet-fsharplint lint %s" targetSolution.FullName
+            Arguments = sprintf "dotnet-fsharplint lint %s" target.FullName
         },
         Fsdk.Process.Echo.All
     )
-    .UnwrapDefault()
-|> ignore<string>
+
+RunFSharpLint(targetSolution).UnwrapDefault() |> ignore<string>
 
 // check .fsx files in target dir
-let allFiles = Fsdk.Misc.GetAllFilesRecursively targetDir
+let allFiles = Fsdk.Misc.GetAllFilesRecursively targetDir |> Seq.map FileInfo
 
-let fsxFiles = allFiles |> Seq.filter(fun filename -> filename.EndsWith ".fsx")
+let fsxFiles =
+    allFiles |> Seq.filter(fun filename -> filename.Extension = ".fsx")
 
-let results =
-    fsxFiles
-    |> Seq.map(fun filename ->
-        Fsdk.Process.Execute(
-            {
-                Command = "dotnet"
-                Arguments = sprintf "dotnet-fsharplint lint %s" filename
-            },
-            Fsdk.Process.Echo.All
-        )
-    )
+let results = fsxFiles |> Seq.map RunFSharpLint
 
 let violationsExist =
     results
