@@ -254,7 +254,7 @@ gitTagsToRemove
         | ex ->
             match FindException<HttpRequestException> ex with
             | Some httpRequestException ->
-                match httpRequestException.StatusCode |> Option.ofNullable with
+                match Option.ofNullable httpRequestException.StatusCode with
                 | Some statusCode when statusCode = HttpStatusCode.Forbidden ->
 
                     failwith githubApiCallForbiddenErrorMsg
@@ -266,7 +266,7 @@ gitTagsToRemove
 
             | _ -> reraise()
 
-    let DeleteAsset (url: string) (accessToken: string) =
+    let deleteAsset (url: string) (accessToken: string) =
         use client = new HttpClient()
         client.DefaultRequestHeaders.Accept.Clear()
         client.DefaultRequestHeaders.Add("User-Agent", userAgent)
@@ -293,7 +293,7 @@ gitTagsToRemove
         | ex ->
             match FindException<HttpRequestException> ex with
             | Some httpRequestException ->
-                match httpRequestException.StatusCode |> Option.ofNullable with
+                match Option.ofNullable httpRequestException.StatusCode with
                 | Some statusCode when statusCode = HttpStatusCode.Forbidden ->
                     failwith githubApiCallForbiddenErrorMsg
                 | _ -> reraise()
@@ -304,6 +304,6 @@ gitTagsToRemove
         let parsedJsonObj = GitHubAssetType.Parse releaseJsonString
 
         parsedJsonObj.Assets
-        |> Seq.iter(fun asset -> DeleteAsset asset.Url githubToken)
+        |> Seq.iter(fun asset -> deleteAsset asset.Url githubToken)
     | _ -> ()
 )

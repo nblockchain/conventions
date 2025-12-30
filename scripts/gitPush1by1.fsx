@@ -67,13 +67,17 @@ let GitFetch(remoteOpt: Option<string>) =
 let GetLastNthCommitFromRemoteBranch
     (remoteName: string)
     (remoteBranch: string)
-    (n: uint32)
+    (commitNumber: uint32)
     =
     let gitShow =
         {
             Command = "git"
             Arguments =
-                sprintf "show %s/%s~%i --no-patch" remoteName remoteBranch n
+                sprintf
+                    "show %s/%s~%i --no-patch"
+                    remoteName
+                    remoteBranch
+                    commitNumber
         }
 
     let gitShowProcOutput = Process.Execute(gitShow, Echo.Off).UnwrapDefault()
@@ -183,39 +187,41 @@ let maybeRemote, maybeNumberOfCommits, force =
     if args.Length > 1 then
         match UInt32.TryParse args.[1] with
         | true, 0u ->
-            Console.Error.WriteLine
-                "Second argument should be an integer higher than zero"
-
+            let errMsg = "Second argument should be an integer higher than zero"
+            Console.Error.WriteLine errMsg
             Environment.Exit 2
-            failwith "Unreachable"
+
+            failwith <| "Unreachable because of: " + errMsg
         | true, num ->
             let numberOfCommits = Some num
             let remote = Some args.[0]
 
             let force =
                 if args.Length = 3 then
-                    if args.[2] = "-f" || args.[2] = "--force" then
-                        true
-                    else
-                        false
+                    args.[2] = "-f" || args.[2] = "--force"
                 else
                     false
 
             remote, numberOfCommits, force
         | _ ->
-            Console.Error.WriteLine "Second argument should be an integer"
+            let errMsg = "Second argument should be an integer"
+            Console.Error.WriteLine errMsg
             Environment.Exit 3
-            failwith "Unreachable"
+
+            failwith <| "Unreachable because of: " + errMsg
     elif args.Length = 0 then
         None, None, false
     else // if args.Length = 1 then
         match UInt32.TryParse args.[0] with
         | true, 0u ->
-            Console.Error.WriteLine
+            let errMsg =
                 "Argument for the number of commits should be an integer higher than zero"
 
+            Console.Error.WriteLine errMsg
+
             Environment.Exit 2
-            failwith "Unreachable"
+
+            failwith <| "Unreachable because of: " + errMsg
         | true, num ->
             let numberOfCommits = Some num
             let remote = None
@@ -234,12 +240,12 @@ let remote, remoteUrl =
                 remotes
             with
         | None ->
-            Console.Error.WriteLine(
-                sprintf "Remote '%s' not found" remoteProvided
-            )
+            let errMsg = sprintf "Remote '%s' not found" remoteProvided
+            Console.Error.WriteLine errMsg
 
             Environment.Exit 4
-            failwith "unreachable"
+
+            failwith <| "Unreachable because of: " + errMsg
         | Some remote -> remote
     | None ->
         if remotes.Count() > 1 then
@@ -258,15 +264,17 @@ let commitsToBePushed =
         let commitsToPush = FindUnpushedCommits remote currentBranch
 
         if commitsToPush.Length = 0 then
-            Console.Error.WriteLine(
+            let errMsg =
                 sprintf
                     "Current branch '%s' in remote '%s' is already up to date. Force push by specifying number of commits as 2nd argument?"
                     currentBranch
                     remote
-            )
+
+            Console.Error.WriteLine errMsg
 
             Environment.Exit 5
-            failwith "Unreachable"
+
+            failwith <| "Unreachable because of: " + errMsg
         elif commitsToPush.Length = 1 then
             // no need to ask for confirmation since 1 commit doesn't need to be separated from other commits
             // (one by one doesn't apply to a length of one)
@@ -280,7 +288,7 @@ let commitsToBePushed =
                     remote
             )
 
-            Console.ReadKey true |> ignore
+            Console.ReadKey true |> ignore<ConsoleKeyInfo>
             Console.WriteLine "Pushing..."
             commitsToPush
     | Some numberOfCommits -> GetLastCommits numberOfCommits
