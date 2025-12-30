@@ -179,7 +179,7 @@
         "enabled": true,
         "config": {
             "naming": "PascalCase",
-            "underscores": "None"
+            "underscores": "AllowInfix"
         }
     },
     "namespaceNames": {
