@@ -29,8 +29,8 @@ fsharp_strict_mode=false
 fsharp_multi_line_lambda_closing_newline=true
 fsharp_disable_elmish_syntax=true
 
-# Xml project files
-[*.{csproj,fsproj,vcxproj,vcxproj.filters,proj,nativeproj,locproj}]
+# Xml project&solution files
+[*.{slnx,csproj,fsproj,vcxproj,vcxproj.filters,proj,nativeproj,locproj}]
 indent_size = 2
 
 # Xml config files
