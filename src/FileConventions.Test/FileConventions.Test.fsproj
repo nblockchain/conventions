@@ -19,7 +19,7 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
     <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
-    <PackageReference Include="Fsdk" Version="0.6.0--date20230214-0422.git-1ea6f62" />
+    <PackageReference Include="Fsdk" Version="0.6.0--date20230821-0702.git-5488853" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="DummyFiles\DummyScriptWithEmptyString.fsx" />
+    <None Include="DummyFiles\DummyScriptWithMatchEmptyString.fsx" />
     <None Include="DummyFiles\DummyFsprojWithAsterisk.fsproj" />
     <None Include="DummyFiles\DummyWithShebang.fsx" />
     <None Include="DummyFiles\DummyWithWrongShebang.fsx" />
@@ -48,5 +50,13 @@
     <None Include="DummyFiles\DummyCIWithSameSetupPulumiVersion.yml" />
     <None Include="DummyFiles\DummyCIWithSetupPulumiVersionV2.0.0.yml" />
     <None Include="DummyFiles\DummyCIWithSetupPulumiVersionV2.0.1.yml" />
+    <None Include="DummyFiles\DummyProjectWithRightConsole\Program.fs" />
+    <Content Include="DummyFiles\DummyProjectWithRightConsole\DummyProjectWithRightConsole.fsproj" />
+    <None Include="DummyFiles\DummyProjectWithWrongConsole\Library.fs" />
+    <Content Include="DummyFiles\DummyProjectWithWrongConsole\DummyProjectWithWrongConsole.fsproj" />
+    <None Include="DummyFiles\DummyConsoleProjectWithWrongName\Program.fs" />
+    <Content Include="DummyFiles\DummyConsoleProjectWithWrongName\DummyConsoleProjectWithWrongName.fsproj" />
+    <None Include="DummyFiles\DummyConsoleProjectWithRightName.Console\Library.fs" />
+    <Content Include="DummyFiles\DummyConsoleProjectWithRightName.Console\DummyConsoleProjectWithRightName.Console.fsproj" />
   </ItemGroup>
 </Project>
