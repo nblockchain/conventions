@@ -96,8 +96,8 @@ export abstract class Plugins {
         const urls = Helpers.findUrls(rawStr);
 
         const gitRepo = OptionStatic.OfObj(process.env["GITHUB_REPOSITORY"]);
-        if (!(gitRepo instanceof None)) {
-            if (!(urls instanceof None)) {
+        if (gitRepo instanceof Some) {
+            if (urls instanceof Some) {
                 for (const url of urls.value.entries()) {
                     const urlStr = url[1].toString();
                     if (
@@ -167,7 +167,7 @@ export abstract class Plugins {
     public static footerNotesMisplacement(body: Option<string>) {
         let offence = false;
 
-        if (!(body instanceof None)) {
+        if (body instanceof Some) {
             let bodyStr = body.value;
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
             let seenBody = false;
@@ -392,7 +392,7 @@ export abstract class Plugins {
     ) {
         let offence = false;
 
-        if (!(body instanceof None)) {
+        if (body instanceof Some) {
             let bodyStr = body.value;
             bodyStr = bodyStr.trim();
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
@@ -452,7 +452,7 @@ export abstract class Plugins {
     ) {
         let offence: Option<string> = OptionStatic.None;
 
-        if (!(body instanceof None)) {
+        if (body instanceof Some) {
             let bodyStr = body.value;
             bodyStr = Helpers.removeAllCodeBlocks(bodyStr).trim();
 
