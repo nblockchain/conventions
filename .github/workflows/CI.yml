@@ -14,6 +14,7 @@ env:
   # As we use .NET>6 now, to run tools compiled for .NETv6 we need to set roll-forward to major
   DOTNET_ROLL_FORWARD: Major
   TYPESCRIPT_VERSION: "5.8.3"
+  ESLINT_VERSION: "9.39.2"
   CHECKOUT_ACTION_VERSION: "4"
 
 jobs:
@@ -103,7 +104,7 @@ jobs:
       - name: Install yarn and yarn modules
         run: |
           npm install --verbose --global yarn
-          yarn add --dev typescript@$TYPESCRIPT_VERSION eslint @eslint/js typescript-eslint
+          yarn add --dev typescript@$TYPESCRIPT_VERSION eslint@$ESLINT_VERSION @eslint/js@$ESLINT_VERSION typescript-eslint
       - name: Install commitlint dependencies
         run: |
           . commitlint/version.config
