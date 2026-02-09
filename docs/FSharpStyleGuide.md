@@ -4,9 +4,6 @@
 members, but camelCase for parameters, private fields, and local functions
 (in unit tests we have the exception of allowing under_score_naming for
 fields in cases where it improves readability).
-* When writing non-static type members we prefer to use the word `self`.
-* We follow the same convention of C# to prefix interfaces with the uppercase
-letter 'I'.
 * Given that we use the C#ish style of PascalCase for type names (instead of
 camelCase), then it only makes sense to try to use the type names which start
 with uppercase, instead of the camelCased F# types (e.g. use `Option` and `List`
@@ -21,26 +18,12 @@ former, use `type MutableList<'T> = System.Collections.Generics.List<'T>` instea
 * To not confuse array types with lists, we prefer to use `List.Empty` over `[]`
 (where it's possible; e.g. in match cases it's not possible), and `array<Foo>`
 over `Foo []`.
-* To not confuse lists/arrays of one element with indexers, we prefer to use the
-`singleton` function of the List/Array/Seq modules, instead of the less verbose
-(and easy to misinterpret, e.g. think it's a list when it's an array, or
-viceversa): `[ oneItem ]` or `[| oneItem |]`. (If inside a match case, then
-rather use `oneItem::List.Empty` instead of `[oneItem]`.)
-* We prefer the generic notation `Foo<Bar>` rather than `Bar Foo` (see
-https://github.com/fsprojects/fantomas/issues/712 ).
-* We prefer to not use the shadowing practice, even if the F# compiler allows it
-(not to confuse shadowing with mutation, which is also discouraged anyway).
 * We prefer to write parentheses only when strictly necessary (e.g. in F# they
 are not required for `if` clauses, unlike C#) or for readability purposes (e.g.
 when it's not clear what operator would be applied first, as not everyone knows
 the rules of the language for default operator precedence by heart).
 * Whenever possible, we prefer to use currified arguments (instead of tuples),
 should we need to use F# partial application.
-* We avoid writing the keyword `new` for instances of non-IDisposable types.
-* When dealing with `Option<Foo>` elements, we consider it's much safer to use
-`match` patterns (or the functions `Option.iter` and `Option.exists`) instead
-of using the less safe approaches  `x.IsSome && x.Value = ...` or
-`x.IsNone || x.Value = ...`, which might break easily when refactoring them.
 * In case of doubt, we prefer to expliticly add the accessibility keywords
 (`private`, `public`, `internal`...), should the F# language allow it.
 * If you want to assert in the main code (that is, not inside automated tests),
@@ -73,16 +56,6 @@ let someVariableToBeAssigned =
 
 * A space should be added after the colon (and not before) when denoting a type,
 so: `(foo: Foo)`
-* When using property initializers, we prefer to use the immutable syntax sugar:
-```fsharp
-let foo = Foo(Bar = bar, Baz = baz)
-```
-instead of the more verbose (and scary)
-```fsharp
-let foo = Foo()
-foo.Bar <- bar
-foo.Baz <- baz
-```
 * When laying out XamarinForms UIs, we prefer to use XAML (if possible) instead
 of adding them programmatically with code.
 * The `open` keyword should be used to open namespaces if and only if the
@@ -100,8 +73,6 @@ cause stack-overflow exceptions.
 careful guarding (e.g. we want to fail fast, as in crash the app, if any
 exception happens in it); for example, you could use the special function
 `FrontendHelpers.DoubleCheckCompletion` to help on this endeavour.
-* Don't use abbreviations or very short names on variables, types, methods, etc.
-We prefer to be verbose and readable than compact and clever.
 * Don't over-comment the code; splitting big chunks of code into smaller
 functions with understandable names is better than adding comments that may
 become obsolete as the code evolves.
@@ -127,7 +98,6 @@ and which one is the exceptional one).
 * We prefer `async{}` blocks better than `task{}` ones because the former is
 idiomatic F# (if you need to return a Task, use async{} first and then call
 Async.StartAsTask on it; this way you still code with F#'s Async semantics).
-* When using the function `ignore`, use always the generic type (`ignore<'T>`).
 * Do not use `System.ParamArray` (for variable number of arguments) as it's
 easy to shoot yourself in the foot, and is not idiomatic F# (it was meant for
 C#). More info: https://sidburn.github.io/blog/2017/03/13/variable-arguments
@@ -142,3 +112,50 @@ but still requires explicit use of this feature instead of marking the method
 visually as special compared to non-extended methods.
   - It encourages a culture of fixing bugs locally instead of contributing
 fixes upstream.
+* Don't use abbreviations or very short names on variables, types, methods, etc.
+We prefer to be verbose and readable than compact and clever. (And don't forget
+to enable FSharpLint's [FL0075 rule](https://fsprojects.github.io/FSharpLint/how-tos/rules/FL0075.html)
+with the config file in this repo to make sure you don't forget this.)
+* We follow the same convention of C# to prefix interfaces with the uppercase
+letter 'I'. (And don't forget to enable FSharpLint's [FL0036 rule](https://fsprojects.github.io/FSharpLint/how-tos/rules/FL0036.html)
+with the config file in this repo to make sure you don't forget this.)
+* When dealing with `Option<Foo>` elements, we consider it's much safer to use
+`match` patterns (or the functions `Option.iter` and `Option.exists`) instead
+of using the less safe approaches  `x.IsSome && x.Value = ...` or
+`x.IsNone || x.Value = ...`, which might break easily when refactoring them.
+(And don't forget to enable FSharpLint's [FL0066 rule](https://fsprojects.github.io/FSharpLint/how-tos/rules/FL0066.html)
+with the config file in this repo to make sure you don't forget this and other
+similar cases.)
+* To not confuse lists/arrays of one element with indexers, we prefer to use the
+`singleton` function of the List/Array/Seq modules, instead of the less verbose
+(and easy to misinterpret, e.g. think it's a list when it's an array, or
+viceversa): `[ oneItem ]` or `[| oneItem |]`. If inside a `match` case, then
+rather use `oneItem::List.Empty` instead of `[oneItem]`. (And don't forget to
+enable FSharpLint's [FL0089 rule](https://fsprojects.github.io/FSharpLint/how-tos/rules/FL0089.html)
+with the config file in this repo to make sure you don't forget this when not in a `match` case.)
+* We prefer to not use the shadowing practice, even if the F# compiler allows it;
+in order not to confuse shadowing with mutation, which is also discouraged anyway.
+(Or rather just enable FSharpLint's [FL0092 rule](https://fsprojects.github.io/FSharpLint/how-tos/rules/FL0092.html)
+with the config file in this repo.)
+* We avoid writing the keyword `new` for instances of non-IDisposable types.
+(Or rather just enable FSharpLint's [FL0014 rule](https://fsprojects.github.io/FSharpLint/how-tos/rules/FL0014.html)
+with the config file in this repo.)
+* When writing non-static type members we prefer to use the word `self`.
+(Or rather just enable FSharpLint's [FL0074 rule](https://fsprojects.github.io/FSharpLint/how-tos/rules/FL0074.html)
+with the config file in this repo.)
+* We prefer the generic notation `Foo<Bar>` rather than `Bar Foo` (or rather
+just enable FSharpLint's [FL0011 rule](https://fsprojects.github.io/FSharpLint/how-tos/rules/FL0011.html)
+with the config file in this repo.)
+* When using the function `ignore`, use always the generic type (`ignore<'T>`).
+(Or rather just enable FSharpLint's [FL0070 rule](https://fsprojects.github.io/FSharpLint/how-tos/rules/FL0070.html).)
+* When using property initializers, we prefer to use the immutable syntax sugar:
+```fsharp
+let foo = Foo(Bar = bar, Baz = baz)
+```
+instead of the more verbose (and scary)
+```fsharp
+let foo = Foo()
+foo.Bar <- bar
+foo.Baz <- baz
+```
+(Or rather just enable FSharpLint's [FL0084 rule](https://fsprojects.github.io/FSharpLint/how-tos/rules/FL0084.html).)
