@@ -18,7 +18,7 @@ export class None {
     }
 
     /**
-     * @deprecated it is better to use `OptionStatic.None`
+     * @deprecated it is better to use `Nothing`
      **/
     constructor() {}
 }
@@ -39,11 +39,12 @@ export class Some<T> {
 
 export type Option<T> = (None | Some<NonNullable<T>>) & IOption;
 
-export class OptionStatic {
-    public static None = new None();
+export const Nothing = new None();
+
+export class OptionHelpers {
     public static OfObj<T>(obj: T | null | undefined): Option<NonNullable<T>> {
         if (obj === null || obj === undefined) {
-            return OptionStatic.None;
+            return Nothing;
         } else {
             return new Some(obj);
         }
