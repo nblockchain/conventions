@@ -1,4 +1,4 @@
-import { Option, Some, None, OptionStatic } from "./fpHelpers.js";
+import { Option, Some, None, Nothing, OptionHelpers } from "./fpHelpers.js";
 import { abbr } from "./abbreviations.js";
 import { Helpers } from "./helpers.js";
 
@@ -95,7 +95,7 @@ export abstract class Plugins {
 
         const urls = Helpers.findUrls(rawStr);
 
-        const gitRepo = OptionStatic.OfObj(process.env["GITHUB_REPOSITORY"]);
+        const gitRepo = OptionHelpers.OfObj(process.env["GITHUB_REPOSITORY"]);
         if (gitRepo instanceof Some) {
             if (urls instanceof Some) {
                 for (const url of urls.value.entries()) {
@@ -450,7 +450,7 @@ export abstract class Plugins {
         paragraphLineMinLength: number,
         paragraphLineMaxLength: number
     ) {
-        let offence: Option<string> = OptionStatic.None;
+        let offence: Option<string> = Nothing;
 
         if (body instanceof Some) {
             let bodyStr = body.value;

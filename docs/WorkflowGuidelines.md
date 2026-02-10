@@ -205,7 +205,7 @@
 
         Improved code:
         ```typescript
-        let bar = OptionStatic.OfObj(option);
+        let bar = OptionHelpers.OfObj(option);
         if (bar instanceof None) {
             return 0;
         }

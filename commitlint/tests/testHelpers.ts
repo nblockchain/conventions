@@ -1,5 +1,12 @@
 import { test, expect } from "vitest";
-import { None, Some, Option, OptionStatic, TypeHelpers } from "../fpHelpers.js";
+import {
+    None,
+    Some,
+    Option,
+    Nothing,
+    OptionHelpers,
+    TypeHelpers,
+} from "../fpHelpers.js";
 import { spawnSync } from "child_process";
 import os from "os";
 
@@ -13,12 +20,12 @@ function typeGuard(option: Option<number>) {
 }
 
 function ofObj1(option: number | null): Option<number> {
-    const foo = OptionStatic.OfObj(option);
+    const foo = OptionHelpers.OfObj(option);
     return foo;
 }
 
 function ofObj2(option: number | undefined): Option<number> {
-    const foo = OptionStatic.OfObj(option);
+    const foo = OptionHelpers.OfObj(option);
     return foo;
 }
 
@@ -30,7 +37,7 @@ test("testing Options", () => {
 });
 
 test("testing Is methods", () => {
-    const foo: Option<number> = OptionStatic.None;
+    const foo: Option<number> = Nothing;
     const bar: Option<number> = new Some(2);
     expect(foo.IsNone()).toBe(true);
     expect(bar.IsNone()).toBe(false);
