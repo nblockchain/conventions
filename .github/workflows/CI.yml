@@ -261,8 +261,7 @@ jobs:
 
       - name: Run "prettier" to check the style of our TypeScript and YML code
         run: |
-          sudo npx prettier --quote-props=consistent --write './**/*.ts'
-          sudo npx prettier --quote-props=consistent --write './**/*.yml'
+          sudo npm run format
           # Since we changed file modes in the previous step we need the following command to
           # make git ignore mode changes in files and doesn't include them in the git diff command.
           git config core.fileMode false
