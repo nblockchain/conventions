@@ -106,8 +106,9 @@ jobs:
           npm install --verbose --global yarn
           yarn add --dev typescript@$TYPESCRIPT_VERSION eslint@$ESLINT_VERSION @eslint/js@$ESLINT_VERSION typescript-eslint
       - name: Install commitlint dependencies
+        shell: bash
         run: |
-          . commitlint/version.config
+          source commitlint/version.config
           npm install --verbose @commitlint/types@$COMMITLINT_VERSION
       - name: Print versions
         run: |
