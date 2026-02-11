@@ -241,9 +241,6 @@ jobs:
           dotnet tool install fantomless-tool --version 4.7.997-prerelease
           dotnet fantomless --recurse .
           git diff --exit-code
-      - name: Check commits 1 by 1
-        if: github.event_name == 'pull_request'
-        run: dotnet fsi scripts/checkCommits1by1.fsx
 
       - name: Install commitlint&prettier's required dependencies
         run: |
@@ -283,3 +280,7 @@ jobs:
           ./commitlint.sh --verbose \
             --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} \
             --to ${{ github.event.pull_request.head.sha }}
+
+      - name: Check commits 1 by 1
+        if: github.event_name == 'pull_request'
+        run: dotnet fsi scripts/checkCommits1by1.fsx
