@@ -256,8 +256,9 @@ jobs:
           # We need this step so we can change the files using `npx prettier --write` in the next step.
           # Otherwise we get permission denied error in the CI.
           sudo chmod 777 --recursive .
+
       - name: Install prettier
-        run: npm install --verbose prettier@2.8.3
+        run: npm install --verbose
 
       - name: Run "prettier" to check the style of our TypeScript and YML code
         run: |
