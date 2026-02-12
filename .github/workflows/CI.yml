@@ -257,6 +257,9 @@ jobs:
           # Otherwise we get permission denied error in the CI.
           sudo chmod 777 --recursive .
 
+      - name: Install prettier
+        run: npm install --verbose
+
       - name: Run "prettier" to check the style of our TypeScript and YML code
         run: |
           sudo npm run format
