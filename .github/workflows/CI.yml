@@ -241,7 +241,7 @@ jobs:
         run: |
           dotnet tool install fantomless-tool --version 4.7.997-prerelease
           dotnet fantomless --recurse .
-          git diff --exit-code
+          git diff --exit-code || (echo "Formatting did not match (see above diff), please run fantomless-tool" >&2 && exit 1)
 
       - name: Install commitlint&prettier's required dependencies
         run: |
@@ -270,7 +270,7 @@ jobs:
           # Since after installing commitlint dependencies package.json file changes, we need to 
           # run the following command to ignore package.json file
           git restore package.json
-          git diff --exit-code
+          git diff --exit-code || (echo "Formatting did not match (see above diff), please run 'npm run format'" >&2 && exit 1)
 
       - name: Validate current commit (last commit) with commitlint
         if: github.event_name == 'push'
