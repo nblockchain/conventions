@@ -17,7 +17,7 @@
  
 * In languages where writing `this.` is optional, let's actually rather make it mandatory, as this makes the code more readable (even if more verbose).
 
-* If you're in need of serializing/deserializing/marshalling, DO NOT use JSON.NET (aka Newtonsoft.Json) because it is considered a deprecated library in .NET (in favour of the new BCL one: System.Text.Json). That said, this latter lib has some problems, such as proper DU serialization, or that it probably doesn't support JSON5 (funnily enough, Newtonsoft.Json supports already one of the best features of JSON5: comments; so maybe System.Text.Json does too?). Before being tempted to adopt https://github.com/Tarmil/FSharp.SystemTextJson , please discuss with your team lead.
+* If you're in need of serializing/deserializing/marshalling, **DO NOT** use `JSON.NET` (aka `Newtonsoft.Json`) because it is considered a deprecated library in .NET (in favour of the new BCL one: `System.Text.Json`). That said, this latter lib has some problems, such as proper DU serialization, or that it probably doesn't support JSON5 (funnily enough, `Newtonsoft.Json` supports already one of the best features of JSON5: comments; so maybe `System.Text.Json` does too?). Before being tempted to adopt others such as [FSharp.SystemTextJson](https://github.com/Tarmil/FSharp.SystemTextJson), please discuss with your team lead; and take in account that JSON5 is more human-readable than JSON, but at the expense of ([~35x](https://github.com/openclaw/openclaw/commit/5c32989f53310f52dc93c428561424eaa0f15c17)) performance.
 
 * Avoid typical bad practices like:
 
