@@ -7,8 +7,9 @@
 
   <ItemGroup>
     <Compile Include="Helpers.fs" />
+    <Compile Include="Workflow.fs" />
     <Compile Include="NugetVersionsCheck.fs" />
-    <Compile Include="Library.fs" />
+    <Compile Include="FileConventions.fs" />
     <Compile Include="CombinedVersionCheck.fs" />
   </ItemGroup>
 

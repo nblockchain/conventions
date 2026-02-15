@@ -7,7 +7,7 @@ open System
 #r "nuget: YamlDotNet, Version=16.1.3"
 
 #load "../src/FileConventions/Helpers.fs"
-#load "../src/FileConventions/Library.fs"
+#load "../src/FileConventions/FileConventions.fs"
 
 open type FileConventions.EolAtEof
 

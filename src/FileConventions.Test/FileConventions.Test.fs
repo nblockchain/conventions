@@ -9,6 +9,7 @@ open Fsdk
 open Fsdk.Process
 
 open FileConventions
+open Workflow
 
 open type FileConventions.EolAtEof
 
