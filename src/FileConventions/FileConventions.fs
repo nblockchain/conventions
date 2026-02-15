@@ -5,8 +5,6 @@ open System.IO
 open System.Linq
 open System.Text.RegularExpressions
 
-open Workflow
-
 open Mono
 open Mono.Unix.Native
 
