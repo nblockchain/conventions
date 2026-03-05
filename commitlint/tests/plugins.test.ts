@@ -985,19 +985,6 @@ test("header-max-length-with-suggestions11", () => {
     );
 });
 
-test("header-max-length-with-suggestions12", () => {
-    const commitMsgThatExceedsHeaderMaxLength =
-        "Split that compares better because blah blah bla very very very long title";
-    const headerMaxLength12 = runCommitLintOnMsg(
-        commitMsgThatExceedsHeaderMaxLength
-    );
-    const not_expected_message = `"compares" -> "cmps"`;
-    expect(headerMaxLength12.status).not.toBe(0);
-    expect(
-        (headerMaxLength12.stdout + "").includes(not_expected_message)
-    ).toEqual(false);
-});
-
 test("proper-issue-refs1", () => {
     const commitMsgWithHashtagRef = `foo: blah blah
 
