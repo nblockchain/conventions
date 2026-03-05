@@ -1,3 +1,8 @@
+# top entries are newer, bottom ones older
+
+# commitlint: move abbreviations to its own file
+1a1f8b5337a1787b7b7e3431518e7e21f3c4a121
+
 # *.fsx,*.fs: formatting F# files using fantomless
 df5cfb143c4efe73806ead91e5cddf4e133be0a8
 
