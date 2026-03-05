@@ -858,7 +858,7 @@ test("prefer-slash-over-backslash2", () => {
 
 test("header-max-length-with-suggestions1", () => {
     const commitMsgWithThatExceedsHeaderMaxLength =
-        "foo: this is only a title with a configuration in it that exceeds header max length";
+        "foo: this is only a title with the term 'configuration' in it that exceeds header max length";
     const headerMaxLength1 = runCommitLintOnMsg(
         commitMsgWithThatExceedsHeaderMaxLength
     );
@@ -871,7 +871,7 @@ test("header-max-length-with-suggestions1", () => {
 
 test("header-max-length-with-suggestions2", () => {
     const commitMsgWithThatExceedsHeaderMaxLength =
-        "foo: this is only a title with a 1 second in it that exceeds header max length";
+        "foo: this is only a title with the term '1 second' (which includes a space) in it that exceeds header max length";
     const headerMaxLength2 = runCommitLintOnMsg(
         commitMsgWithThatExceedsHeaderMaxLength
     );
