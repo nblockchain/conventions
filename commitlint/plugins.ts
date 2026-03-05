@@ -128,10 +128,18 @@ export abstract class Plugins {
     }
 
     public static headerMaxLengthWithSuggestions(
-        headerStr: string,
+        rawStr: string,
         maxLineLength: number
     ) {
         let offence = false;
+
+        const lineBreakIndex = rawStr.indexOf("\n");
+        let headerStr = rawStr;
+        if (lineBreakIndex >= 0) {
+            // Extracting headerStr from rawStr rather than using header directly is a
+            // workaround for what must be a commitlint or conventional-changelog bug, TODO: report
+            headerStr = rawStr.substring(0, lineBreakIndex);
+        }
 
         const headerLength = headerStr.length;
         let message = `Please do not exceed ${maxLineLength} characters in title (found ${headerLength}).`;
