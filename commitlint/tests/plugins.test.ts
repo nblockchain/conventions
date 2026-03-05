@@ -985,6 +985,33 @@ test("header-max-length-with-suggestions11", () => {
     );
 });
 
+test("header-max-length-with-suggestions12", () => {
+    const commitMsgThatExceedsHeaderMaxLengthBecauseItIsARevert =
+        'Revert "This header is a title with less than 50chars"';
+    const headerMaxLength12 = runCommitLintOnMsg(
+        commitMsgThatExceedsHeaderMaxLengthBecauseItIsARevert
+    );
+    expect(headerMaxLength12.status).toBe(0);
+});
+
+test("header-max-length-with-suggestions13", () => {
+    const commitMsgThatExceedsHeaderMaxLengthBecauseItIsARevertOfARevert =
+        'Reapply "This header is a title with less than 50chars"';
+    const headerMaxLength13 = runCommitLintOnMsg(
+        commitMsgThatExceedsHeaderMaxLengthBecauseItIsARevertOfARevert
+    );
+    expect(headerMaxLength13.status).toBe(0);
+});
+
+test("header-max-length-with-suggestions14", () => {
+    const commitMsgThatExceedsHeaderMaxLengthEvenIfItIsARevert =
+        'Revert "This header is a title with moooooooooore than 50chars"';
+    const headerMaxLength14 = runCommitLintOnMsg(
+        commitMsgThatExceedsHeaderMaxLengthEvenIfItIsARevert
+    );
+    expect(headerMaxLength14.status).not.toBe(0);
+});
+
 test("proper-issue-refs1", () => {
     const commitMsgWithHashtagRef = `foo: blah blah
 
