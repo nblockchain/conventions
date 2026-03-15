@@ -1,11 +1,5 @@
-import {
-    None,
-    Some,
-    Option,
-    Nothing,
-    OptionHelpers,
-    TypeHelpers,
-} from "./fpHelpers.js";
+import { None, Some, Option, Nothing, OptionHelpers } from "fp-sdk";
+import { TypeHelpers } from "./fpHelpers.js";
 
 export abstract class Helpers {
     public static errMessageSuffix =

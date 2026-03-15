@@ -1,4 +1,4 @@
-import { Option, Some, None, Nothing, OptionHelpers } from "./fpHelpers.js";
+import { Option, Some, None, Nothing, OptionHelpers } from "fp-sdk";
 import { abbr } from "./abbreviations.js";
 import { Helpers } from "./helpers.js";
 
