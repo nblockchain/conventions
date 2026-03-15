@@ -1,12 +1,6 @@
 import { test, expect } from "vitest";
-import {
-    None,
-    Some,
-    Option,
-    Nothing,
-    OptionHelpers,
-    TypeHelpers,
-} from "../fpHelpers.js";
+import { None, Some, Option, Nothing, OptionHelpers } from "fp-sdk";
+import { TypeHelpers } from "../fpHelpers.js";
 import { spawnSync } from "child_process";
 import os from "os";
 
