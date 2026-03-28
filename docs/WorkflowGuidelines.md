@@ -17,7 +17,10 @@
  
 * In languages where writing `this.` is optional, let's actually rather make it mandatory, as this makes the code more readable (even if more verbose).
 
-* If you're in need of serializing/deserializing/marshalling, **DO NOT** use `JSON.NET` (aka `Newtonsoft.Json`) because it is considered a deprecated library in .NET (in favour of the new BCL one: `System.Text.Json`). That said, this latter lib has some problems, such as proper DU serialization, or that it probably doesn't support JSON5 (funnily enough, `Newtonsoft.Json` supports already one of the best features of JSON5: comments; so maybe `System.Text.Json` does too?). Before being tempted to adopt others such as [FSharp.SystemTextJson](https://github.com/Tarmil/FSharp.SystemTextJson), please discuss with your team lead; and take in account that JSON5 is more human-readable than JSON, but at the expense of ([~35x](https://github.com/openclaw/openclaw/commit/5c32989f53310f52dc93c428561424eaa0f15c17)) performance.
+* If you're in need of serialization/deserialization/marshalling...:
+    * **DO NOT** use `JSON.NET` (aka `Newtonsoft.Json`) because it is considered a deprecated library in .NET (in favour of the new BCL one: `System.Text.Json`).
+    * `System.Text.Json` had some problems in past versions about DU serialization (e.g. F# DUs), but it seems to have been finally addressed, see https://github.com/dotnet/runtime/commit/3e902855154615baa4a2a7584db75beeeb0fad97 .
+    * That said, it probably doesn't support JSON5 (funnily enough, `Newtonsoft.Json` supports already one of the best features of JSON5: comments; so maybe `System.Text.Json` does too?). But before being tempted to adopt other alternative libraries take in account that JSON5 is more human-readable than JSON, but at the expense of ([~35x](https://github.com/openclaw/openclaw/commit/5c32989f53310f52dc93c428561424eaa0f15c17)) performance, but any such decisions would need to be discussed with your team lead anyway.
 
 * Avoid typical bad practices like:
 
