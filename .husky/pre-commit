@@ -1,1 +1,3 @@
+#!/usr/bin/env bash
+set -euxo pipefail
 ./scripts/pre-commit.sh
