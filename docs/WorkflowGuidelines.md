@@ -210,6 +210,10 @@
 
         Improved code:
         ```typescript
+        import { None, Some, Option, Nothing, OptionHelpers } from "fp-sdk";
+
+        ...
+        
         let bar = OptionHelpers.OfObj(option);
         if (bar instanceof None) {
             return 0;
