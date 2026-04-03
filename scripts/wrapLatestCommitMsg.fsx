@@ -10,7 +10,7 @@ open System.Linq
 
 #load "../src/FileConventions/Library.fs"
 
-#r "nuget: Fsdk, Version=0.6.0--date20230214-0422.git-1ea6f62"
+#r "nuget: Fsdk, Version=0.6.1--date20260403-0728.git-c9a0eae"
 
 open Fsdk
 open Fsdk.Process

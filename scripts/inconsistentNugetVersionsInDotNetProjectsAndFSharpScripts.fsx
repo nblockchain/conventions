@@ -5,7 +5,7 @@ open System.IO
 #r "System.Core.dll"
 #r "System.Xml.Linq.dll"
 
-#r "nuget: Fsdk, Version=0.6.0--date20230214-0422.git-1ea6f62"
+#r "nuget: Fsdk, Version=0.6.1--date20260403-0728.git-c9a0eae"
 #r "nuget: Microsoft.Build, Version=16.11.0"
 #r "nuget: Mono.Unix, Version=7.1.0-final.1.21458.1"
 #r "nuget: YamlDotNet, Version=16.1.3"
