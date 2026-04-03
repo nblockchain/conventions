@@ -12,7 +12,7 @@ open Fsdk
 let args = Misc.FsxOnlyArguments()
 
 let errTooManyArgs =
-    "Can only pass two arguments, with optional flag: replace.fsx -f=a.b oldstring newstring"
+    "Can only pass two arguments, with optional flag: replace.fsx --file=a.b oldstring newstring"
 
 let note =
     "NOTE: by default, some kind of files/folders will be excluded, e.g.: .git, *.dll, *.png, ..."
