@@ -37,7 +37,7 @@ let particularFile =
         if not file.Exists then
             failwithf "File '%s' doesn't exist" file.FullName
 
-        file |> Some
+        Some file
     else
         if args.Length = 3 then
             Console.Error.WriteLine errTooManyArgs
