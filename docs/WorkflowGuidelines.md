@@ -6,6 +6,10 @@
 
 * Push each commit separately (instead of sending more than 1 commit in a single push), so that we can have a CI status for each commit in the PullRequest. This is a best practice because it will make sure that the build is not broken in between commits (otherwise, future developers may have a hard time when trying to bisect bugs). If you have already pushed your commits to the remote in one push, this can be re-done by using our [gitPush1by1.fsx](https://github.com/nblockchain/conventions/blob/master/scripts/gitPush1by1.fsx) script, or this technique manually: https://stackoverflow.com/a/3230241/544947
 
+* If PR contains one commit msg only, then PR title and description has to align with git commit msg title and body (respectively), and it can be merged with "Rebase and merge" button.
+
+* Otherwise, PR description could be a summary of all the commits, or choose the most important commit to align with (in case the other commits don't add much substance). In this case, PR has to be merged with "Create a merge commit" button.
+
 * In general, we prefer verbose code (even if it's longer) than short & clever code. This means:
     * We dislike short variable names (if there's some ambiguity on what your variable represents, then choose a longer and more descriptive name).
     * In languages that have optional braces for `if/else` statements (e.g. C#, TypeScript), we prefer to add them even if the code block will only contain one line. This way, when the next developer adds more lines to it later it's less work for him and doesn't cause unnecessary git-blame noise.
