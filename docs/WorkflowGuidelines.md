@@ -166,6 +166,33 @@
     
         If using .NET, using method `ToString()` of `Exception` when displaying exception info is preferable to using properties such as `Message` and `StackTrace` because result of `ToString()` already includes all necessary information, like exception type, message, and stack trace.
 
+    * Always use indentation when you can (for readability):
+
+        Example (with bad practice):
+        ```typescript
+        if (foo) { bar(); }
+        ```
+        Improved code:
+        ```typescript
+        if (foo) {
+            bar();
+        }
+        ```
+
+    * Always use curly braces when you can (for readability and diff-noise reduction for upcoming changes):
+
+        Example (with bad practice):
+        ```typescript
+        if (foo)
+            bar();
+        ```
+        Improved code:
+        ```typescript
+        if (foo) {
+            bar();
+        }
+        ```
+
     * Not benefiting from your type system:
 
         We use statically-typed languages (such as TypeScript and C#, as opposed to JavaScript and Python) so that our code can be
