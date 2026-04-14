@@ -1,4 +1,4 @@
-This is a repository that contains several useful things that other `nblockchain` repos use, such as:
+This is a repository that contains several useful things that other [tarsgate](https://github.com/tarsgate/) and `nblockchain` repos use, such as:
 
 - [Config file](commitlint.config.ts) and [plugins](commitlint/plugins.ts) for commitlint.
 - [A reference .editorconfig file](.editorconfig).
