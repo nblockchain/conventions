@@ -562,27 +562,36 @@ let IsExecutable(fileInfo: FileInfo) =
 let anyRegex = Regex(@"\bany\b", RegexOptions.Compiled)
 let stringCharMarker = '"'
 
+
+
 let ContainsUnacceptableTypeScript(fileInfo: FileInfo) =
+    let rec substractAllSubstringsFromString(leString: string) =
+        let substractFirstSubstringFromString(leString: string) =
+            let beginIndexOfString = leString.IndexOf stringCharMarker
+
+            if leString.IndexOf stringCharMarker < 0 then
+                leString
+            else
+                let beforePart = leString.Substring(0, beginIndexOfString)
+                let restOfString = leString.Substring(beginIndexOfString + 1)
+                let endIndexOfString = restOfString.IndexOf stringCharMarker
+                let afterPart = (restOfString.Substring(endIndexOfString + 1))
+                beforePart + afterPart
+
+        let substracted = substractFirstSubstringFromString leString
+
+        if substracted = leString then
+            substracted
+        else
+            substractAllSubstringsFromString substracted
+
     let wholeFileContentButTheStrings = StringBuilder()
 
     for (line: string) in File.ReadLines fileInfo.FullName do
-        let beginIndexOfString = line.IndexOf stringCharMarker
+        let cleanString = substractAllSubstringsFromString line
 
-        if line.IndexOf stringCharMarker < 0 then
-            wholeFileContentButTheStrings.AppendLine(line)
-            |> ignore<StringBuilder>
-        else
-            let beforePart = line.Substring(0, beginIndexOfString)
-
-            wholeFileContentButTheStrings.Append beforePart
-            |> ignore<StringBuilder>
-
-            let restOfLine = line.Substring(beginIndexOfString + 1)
-            let endIndexOfString = restOfLine.IndexOf stringCharMarker
-            let afterPart = (restOfLine.Substring(endIndexOfString + 1))
-
-            wholeFileContentButTheStrings.AppendLine afterPart
-            |> ignore<StringBuilder>
+        wholeFileContentButTheStrings.AppendLine cleanString
+        |> ignore<StringBuilder>
 
     let contentToAnalyze: string = wholeFileContentButTheStrings.ToString()
     anyRegex.IsMatch(contentToAnalyze)
