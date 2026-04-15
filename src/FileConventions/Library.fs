@@ -3,6 +3,7 @@
 open System
 open System.IO
 open System.Linq
+open System.Text
 open System.Text.RegularExpressions
 
 open Mono
@@ -559,7 +560,29 @@ let IsExecutable(fileInfo: FileInfo) =
     hasExecuteAccess = 0
 
 let anyRegex = Regex(@"\bany\b", RegexOptions.Compiled)
+let stringCharMarker = '"'
 
 let ContainsUnacceptableTypeScript(fileInfo: FileInfo) =
-    let contents: string = File.ReadAllText(fileInfo.FullName)
-    anyRegex.IsMatch contents
+    let wholeFileContentButTheStrings = StringBuilder()
+
+    for (line: string) in File.ReadLines fileInfo.FullName do
+        let beginIndexOfString = line.IndexOf stringCharMarker
+
+        if line.IndexOf stringCharMarker < 0 then
+            wholeFileContentButTheStrings.AppendLine(line)
+            |> ignore<StringBuilder>
+        else
+            let beforePart = line.Substring(0, beginIndexOfString)
+
+            wholeFileContentButTheStrings.Append beforePart
+            |> ignore<StringBuilder>
+
+            let restOfLine = line.Substring(beginIndexOfString + 1)
+            let endIndexOfString = restOfLine.IndexOf stringCharMarker
+            let afterPart = (restOfLine.Substring(endIndexOfString + 1))
+
+            wholeFileContentButTheStrings.AppendLine afterPart
+            |> ignore<StringBuilder>
+
+    let contentToAnalyze: string = wholeFileContentButTheStrings.ToString()
+    anyRegex.IsMatch(contentToAnalyze)
