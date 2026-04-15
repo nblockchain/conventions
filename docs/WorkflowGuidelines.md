@@ -10,8 +10,7 @@
 
 * Otherwise, PR description could be a summary of all the commits, or choose the most important commit to align with (in case the other commits don't add much substance). In this case, PR has to be merged with "Create a merge commit" button.
 
-* In general, we prefer verbose code (even if it's longer) than short & clever code. This means:
-    * We dislike short variable names (if there's some ambiguity on what your variable represents, then choose a longer and more descriptive name).
+* In general, we prefer verbose code (even if it's longer) than short & clever code. For example, we dislike short variable names (if there's some ambiguity on what your variable represents, then choose a longer and more descriptive name).
 
 * Group import declarations (e.g. `open` in F# and `using` in C#) in three buckets:
     * The first group for the namespaces that come from the base class libraries.
