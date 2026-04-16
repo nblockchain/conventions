@@ -181,7 +181,7 @@
         }
         ```
 
-    * Always use curly braces when you can (for readability and diff-noise reduction for upcoming changes):
+    * In languages that have optional braces for `if/else` statements (e.g. C#, TypeScript), we prefer to add them even if the code block will only contain one line. This way, when the next developer adds more lines to it later it's less work for him and doesn't cause unnecessary git-blame noise.
 
         Example (with bad practice):
         ```typescript
