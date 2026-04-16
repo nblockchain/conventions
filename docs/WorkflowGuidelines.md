@@ -314,9 +314,8 @@
         export const PpqPlugin: Plugin = async ({ client }) => {
             return {
                 async config(config) {
-                    let provider: typeof config.provider;
-                    provider = {};
-                    config.provider = provider;
+                    const provider: typeof config.provider = config.provider;
+                    // ...
                 }
             }
         }
@@ -330,9 +329,8 @@
         export const PpqPlugin: Plugin = async ({ client }) => {
             return {
                 async config(config) {
-                    let provider: Record<string, ProviderConfig>;
-                    provider = {};
-                    config.provider = provider;
+                    const provider: Record<string, ProviderConfig> = config.provider;
+                    // ...
                 }
             }
         }
