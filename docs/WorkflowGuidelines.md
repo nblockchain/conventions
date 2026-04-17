@@ -306,6 +306,35 @@
         ```typescript
         const inputs = Array.from(tableCell.children);
         ```
+        
+        * Avoid using `typeof` operator in TypeScript, prefer using explicit types. An exception to this rule is when type in question is a big type nested inside other type.
+        
+        Example (with bad practice):
+        ```typescript
+        export const PpqPlugin: Plugin = async ({ client }) => {
+            return {
+                async config(config) {
+                    const provider: typeof config.provider = config.provider;
+                    // ...
+                }
+            }
+        }
+        ```
+
+        Improved code:
+        ```typescript
+        // import relevant type
+        import type { ProviderConfig } from "@opencode-ai/sdk";
+        
+        export const PpqPlugin: Plugin = async ({ client }) => {
+            return {
+                async config(config) {
+                    const provider: Record<string, ProviderConfig> = config.provider;
+                    // ...
+                }
+            }
+        }
+        ```
 
 * If you want to contribute a script, do not use PowerShell or Bash, but
 an F# script. The reason to not use PowerShell is a personal preference
