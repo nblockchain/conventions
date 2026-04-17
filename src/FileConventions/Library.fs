@@ -561,7 +561,14 @@ let IsExecutable(fileInfo: FileInfo) =
 
 let anyRegex = Regex(@"\bany\b", RegexOptions.Compiled)
 let stringCharMarkers = [ '"'; '\''; '`' ] |> Seq.map string
-let commentMarker = "//"
+let singleLineCommentMarker = "//"
+let multiLineCommentMarker = "/*"
+
+let commentMarkers =
+    [
+        singleLineCommentMarker
+        multiLineCommentMarker
+    ]
 
 let ContainsUnacceptableTypeScript(fileInfo: FileInfo) =
     let rec substractAllSubstringsFromString(leString: string) =
@@ -583,8 +590,7 @@ let ContainsUnacceptableTypeScript(fileInfo: FileInfo) =
                     |> Option.map(fun foundMatch -> (currentIndex, foundMatch))
                 )
 
-            let allMarkers =
-                Seq.append stringCharMarkers (Seq.singleton commentMarker)
+            let allMarkers = Seq.append stringCharMarkers commentMarkers
 
             let maybeBeginIndexOfString =
                 findEarliestSubstring leString allMarkers
@@ -594,13 +600,19 @@ let ContainsUnacceptableTypeScript(fileInfo: FileInfo) =
             | Some(beginIndexOfString, marker) ->
                 let beforePart = leString.Substring(0, beginIndexOfString)
 
-                if marker = commentMarker then
+                if marker = singleLineCommentMarker then
                     beforePart
                 else
                     let restOfString =
                         leString.Substring(beginIndexOfString + 1)
 
-                    let endIndexOfString = restOfString.IndexOf marker
+                    let endMarker =
+                        if marker = multiLineCommentMarker then
+                            "*/"
+                        else
+                            marker
+
+                    let endIndexOfString = restOfString.IndexOf endMarker
 
                     let afterPart =
                         (restOfString.Substring(endIndexOfString + 1))
