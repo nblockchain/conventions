@@ -6,6 +6,7 @@ open System.Linq
 open System.Net
 open System.Net.Http
 open System.Net.Http.Headers
+open System.Text.RegularExpressions
 
 #r "nuget: FSharp.Data, Version=5.0.2"
 open FSharp.Data
@@ -1346,6 +1347,18 @@ if notUsedGitPush1by1 then
     Console.Error.WriteLine errMsg
     Environment.Exit 2
 
+let expectedFailureSubstrings = [ "failing test"; "failing CI" ]
+
+let expectedFailureSubstringRegexes: List<Regex> =
+    List.map
+        (fun (str: string) ->
+            Regex(
+                str.Replace(" ", "\\s+"),
+                RegexOptions.Compiled ||| RegexOptions.IgnoreCase
+            )
+        )
+        expectedFailureSubstrings
+
 prCommits
 |> Seq.iter(fun (commitHash, commitMessage) ->
 
@@ -1359,17 +1372,11 @@ prCommits
 
     let checkSuitesParsedJson = CheckSuitesType.Parse checkSuitesJsonString
 
-    let expectedFailureSubstrings = [ "failing test"; "failing CI" ]
-
     if not(ShouldHaveCiStatus commitMessage) then
         ()
-    elif expectedFailureSubstrings
-         |> List.exists(fun substring ->
-             commitMessage.IndexOf(
-                 substring,
-                 StringComparison.OrdinalIgnoreCase
-             )
-             >= 0
+    elif expectedFailureSubstringRegexes
+         |> List.exists(fun substringRegex ->
+             substringRegex.IsMatch commitMessage
          ) then
         ()
     else
