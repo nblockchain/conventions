@@ -730,3 +730,16 @@ let ContainsUnacceptableTypeScriptTest7() =
         ))
 
     Assert.That(ContainsUnacceptableTypeScript fileInfo, Is.EqualTo false)
+
+[<Test>]
+let ContainsUnacceptableTypeScriptTest8() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                __SOURCE_DIRECTORY__,
+                "DummyFiles",
+                "DummyUnacceptableTypeScriptGoodExample7.ts"
+            )
+        ))
+
+    Assert.That(ContainsUnacceptableTypeScript fileInfo, Is.EqualTo false)
