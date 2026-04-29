@@ -19,6 +19,20 @@ env:
   CHECKOUT_ACTION_VERSION: "4"
 
 jobs:
+  extra:
+    name: Dummy job to test stuff
+    runs-on: ubuntu-24.04
+    container:
+      image: "ubuntu:24.04"
+    steps:
+      - name: Run actions/checkout
+        uses: nblockchain/conventions@master
+        with:
+          uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
+      - name: Install required dependencies
+        run: |
+          perl --help
+
   build-fs:
     name: Build F#
     runs-on: ubuntu-24.04
