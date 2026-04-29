@@ -22,8 +22,6 @@ jobs:
   extra:
     name: Dummy job to test stuff
     runs-on: ubuntu-24.04
-    container:
-      image: "ubuntu:24.04"
     steps:
       - name: Run actions/checkout
         uses: nblockchain/conventions@master
