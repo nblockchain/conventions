@@ -30,7 +30,7 @@ jobs:
       - name: Test exit codes
         run: |
           perl --help
-          python3 --help
+          failing-command --help
           perl --help
 
   build-fs:
