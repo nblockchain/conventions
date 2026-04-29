@@ -29,7 +29,7 @@ jobs:
           uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
       - name: Test exit codes
         run: |
-          perl --help && failing-command --help
+          failing-command --help && perl --help
           perl --help
 
   build-fs:
