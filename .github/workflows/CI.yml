@@ -29,9 +29,10 @@ jobs:
         uses: nblockchain/conventions@master
         with:
           uses: actions/checkout@v${{ env.CHECKOUT_ACTION_VERSION }}
-      - name: Install required dependencies
+      - name: Test exit codes
         run: |
           perl --help
+          python3 --help
 
   build-fs:
     name: Build F#
