@@ -307,6 +307,26 @@
         const inputs = Array.from(tableCell.children);
         ```
 
+        * Prefer simple property access over destructuring when extracting a single value.
+
+        Example (discouraged for a single property):
+        ```typescript
+        const { bar: foo } = object; // single property – avoid
+        ```
+
+        Preferred code for a single property:
+        ```typescript
+        const foo = object.bar;
+        ```
+
+        Example (acceptable when extracting multiple properties):
+        ```typescript
+        const { foo, bar, baz } = object; // multiple properties – okay
+        ```
+
+        We used TypeScript in the above examples, especially to showcase the paradoxical fact of this ecosystem about that the existence of an ESLint rule called `prefer-destructuring` that actually advocates for less readable code given that it conveys the developer to using destructuring even for single properties.
+
+
 * If you want to contribute a script, do not use PowerShell or Bash, but
 an F# script. The reason to not use PowerShell is a personal preference
 from the maintainer of this project (and his suspicion that it might not
