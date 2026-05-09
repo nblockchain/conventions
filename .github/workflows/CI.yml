@@ -10,7 +10,7 @@ on:
     - cron: "0 0 * * *"
 
 env:
-  DOTNET_VERSION: "8.0"
+  DOTNET_VERSION: "10.0"
   # As we use .NET>6 now, to run tools compiled for .NETv6 we need to set roll-forward to major
   DOTNET_ROLL_FORWARD: Major
   TYPESCRIPT_VERSION: "5.8.3"
