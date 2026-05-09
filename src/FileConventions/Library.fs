@@ -70,7 +70,10 @@ let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
     let latestTagInRunsOnRegex =
         Regex("runs-on: .*-latest", RegexOptions.Compiled)
 
-    latestTagInRunsOnRegex.IsMatch fileText
+    let latestTagInContainerRegex =
+        Regex("image:\s*\".*:latest\"", RegexOptions.Compiled)
+
+    latestTagInRunsOnRegex.IsMatch fileText || latestTagInContainerRegex.IsMatch fileText
 
 let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith(".yml"))
