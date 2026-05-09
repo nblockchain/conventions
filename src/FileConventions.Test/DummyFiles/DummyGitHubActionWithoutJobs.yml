@@ -1,0 +1,12 @@
+name: Dynamic Uses
+description: dummy action file (not a workflow)
+inputs:
+  uses:
+    description: Action reference
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Run
+      shell: bash
+      run: echo "Hello"

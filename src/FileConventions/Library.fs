@@ -77,30 +77,32 @@ let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
     yaml.Load reader
 
     let rootNode = yaml.Documents.[0].RootNode :?> YamlMappingNode
-    let jobsNode = rootNode.Children.["jobs"] :?> YamlMappingNode
 
     let hasUnpinnedRunsOn =
-        jobsNode.Children
-        |> Seq.exists(fun (KeyValue(_, jobNode)) ->
-            let jobMap = jobNode :?> YamlMappingNode
+        match rootNode.Children.TryGetValue "jobs" with
+        | true, (:? YamlMappingNode as jobsNode) ->
+            jobsNode.Children
+            |> Seq.exists(fun (KeyValue(_, jobNode)) ->
+                let jobMap = jobNode :?> YamlMappingNode
 
-            let runsOnLatest =
-                match jobMap.Children.TryGetValue "runs-on" with
-                | true, (:? YamlScalarNode as runsOnNode) ->
-                    runsOnNode.Value.EndsWith "-latest"
-                | _ -> false
+                let runsOnLatest =
+                    match jobMap.Children.TryGetValue "runs-on" with
+                    | true, (:? YamlScalarNode as runsOnNode) ->
+                        runsOnNode.Value.EndsWith "-latest"
+                    | _ -> false
 
-            if not runsOnLatest then
-                false
-            else
-                match jobMap.Children.TryGetValue "container" with
-                | true, (:? YamlMappingNode as containerMap) ->
-                    match containerMap.Children.TryGetValue "image" with
-                    | true, (:? YamlScalarNode as imageNode) ->
-                        imageNode.Value.Contains ":latest"
+                if not runsOnLatest then
+                    false
+                else
+                    match jobMap.Children.TryGetValue "container" with
+                    | true, (:? YamlMappingNode as containerMap) ->
+                        match containerMap.Children.TryGetValue "image" with
+                        | true, (:? YamlScalarNode as imageNode) ->
+                            imageNode.Value.Contains ":latest"
+                        | _ -> true
                     | _ -> true
-                | _ -> true
-        )
+            )
+        | _ -> false
 
     anyContainerWithLatest || hasUnpinnedRunsOn
 
