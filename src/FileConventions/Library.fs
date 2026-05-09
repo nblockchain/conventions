@@ -67,10 +67,44 @@ let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
 
     let fileText = File.ReadAllText fileInfo.FullName
 
-    let latestTagInRunsOnRegex =
-        Regex("runs-on: .*-latest", RegexOptions.Compiled)
+    let latestTagInContainerRegex =
+        Regex("image:\s*\".*:latest\"", RegexOptions.Compiled)
 
-    latestTagInRunsOnRegex.IsMatch fileText
+    let anyContainerWithLatest = latestTagInContainerRegex.IsMatch fileText
+
+    let yaml = YamlStream()
+    use reader = new StringReader(fileText)
+    yaml.Load reader
+
+    let rootNode = yaml.Documents.[0].RootNode :?> YamlMappingNode
+
+    let hasUnpinnedRunsOn =
+        match rootNode.Children.TryGetValue "jobs" with
+        | true, (:? YamlMappingNode as jobsNode) ->
+            jobsNode.Children
+            |> Seq.exists(fun (KeyValue(_, jobNode)) ->
+                let jobMap = jobNode :?> YamlMappingNode
+
+                let runsOnLatest =
+                    match jobMap.Children.TryGetValue "runs-on" with
+                    | true, (:? YamlScalarNode as runsOnNode) ->
+                        runsOnNode.Value.EndsWith "-latest"
+                    | _ -> false
+
+                if not runsOnLatest then
+                    false
+                else
+                    match jobMap.Children.TryGetValue "container" with
+                    | true, (:? YamlMappingNode as containerMap) ->
+                        match containerMap.Children.TryGetValue "image" with
+                        | true, (:? YamlScalarNode as imageNode) ->
+                            imageNode.Value.Contains ":latest"
+                        | _ -> true
+                    | _ -> true
+            )
+        | _ -> false
+
+    anyContainerWithLatest || hasUnpinnedRunsOn
 
 let DetectUnpinnedDotnetToolInstallVersions(fileInfo: FileInfo) =
     assert (fileInfo.FullName.EndsWith(".yml"))

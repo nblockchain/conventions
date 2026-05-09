@@ -18,7 +18,7 @@ let invalidFiles =
         FileConventions.DetectUnpinnedVersionsInGitHubCI
 
 let message =
-    "The following files shouldn't contain `-latest` in `runs-on:` GitHubCI tags."
+    "The following files shouldn't contain `-latest` in `runs-on:` or `container: image:` GitHubCI tags."
     + Environment.NewLine
     + "Here is a list of available runner image versions that you can use:"
     + Environment.NewLine

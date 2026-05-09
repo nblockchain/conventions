@@ -124,6 +124,41 @@ let DetectUnpinnedVersionsInGitHubCI2() =
 
     Assert.That(DetectUnpinnedVersionsInGitHubCI fileInfo, Is.EqualTo false)
 
+[<Test>]
+let DetectUnpinnedVersionsInGitHubCI3() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithLatestTagOnContainer.yml"
+            )
+        ))
+
+    Assert.That(DetectUnpinnedVersionsInGitHubCI fileInfo, Is.EqualTo true)
+
+[<Test>]
+let DetectUnpinnedVersionsInGitHubCI4() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyCIWithLatestTagButAlsoContainer.yml"
+            )
+        ))
+
+    Assert.That(DetectUnpinnedVersionsInGitHubCI fileInfo, Is.EqualTo false)
+
+[<Test>]
+let DetectUnpinnedVersionsInGitHubCI5() =
+    let fileInfo =
+        (FileInfo(
+            Path.Combine(
+                dummyFilesDirectory.FullName,
+                "DummyGitHubActionWithoutJobs.yml"
+            )
+        ))
+
+    Assert.That(DetectUnpinnedVersionsInGitHubCI fileInfo, Is.EqualTo false)
 
 [<Test>]
 let DetectUnpinnedDotnetToolInstallVersions1() =
