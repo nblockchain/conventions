@@ -21,9 +21,9 @@ env:
 jobs:
   build-fs:
     name: Build F#
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     container:
-      image: "ubuntu:24.04"
+      image: "ubuntu:26.04"
     steps:
       - name: Run actions/checkout
         uses: nblockchain/conventions@master
@@ -53,9 +53,9 @@ jobs:
   file-conventions-tests:
     name: Run FileConventions-lib unit tests
     needs: build-fs
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     container:
-      image: "ubuntu:24.04"
+      image: "ubuntu:26.04"
     steps:
       - name: Run actions/checkout
         uses: nblockchain/conventions@master
@@ -82,9 +82,9 @@ jobs:
   build-ts:
     name: Build TypeScript
 
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     container:
-      image: "ubuntu:24.04"
+      image: "ubuntu:26.04"
     steps:
       - name: Run actions/checkout
         uses: nblockchain/conventions@master
@@ -124,9 +124,9 @@ jobs:
   commitlint-plugins-tests:
     name: Run commitlint-related tests
     needs: build-ts
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     container:
-      image: "ubuntu:24.04"
+      image: "ubuntu:26.04"
     steps:
       - name: Run actions/checkout
         uses: nblockchain/conventions@master
@@ -169,9 +169,9 @@ jobs:
     needs:
       - file-conventions-tests
       - commitlint-plugins-tests
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     container:
-      image: "ubuntu:24.04"
+      image: "ubuntu:26.04"
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
