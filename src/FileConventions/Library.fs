@@ -68,7 +68,7 @@ let DetectUnpinnedVersionsInGitHubCI(fileInfo: FileInfo) =
     let fileText = File.ReadAllText fileInfo.FullName
 
     let latestTagInRunsOnRegex =
-        Regex("runs-on: .*-latest", RegexOptions.Compiled)
+        Regex("runs-on:\s*.*-latest", RegexOptions.Compiled)
 
     let latestTagInContainerRegex =
         Regex("image:\s*\".*:latest\"", RegexOptions.Compiled)
