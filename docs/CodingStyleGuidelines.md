@@ -1,0 +1,468 @@
+# Coding Style Guidelines
+
+* In general, we prefer verbose code (even if it's longer) than short & clever code. This means: we dislike short variable names (if there's some ambiguity on what your variable represents, then choose a longer and more descriptive name).
+
+    Example (bad):
+    ```csharp
+    var d = GetDistance();
+    var ns = GetNodes();
+    ```
+
+    Improved code:
+    ```csharp
+    var distanceInMeters = GetDistance();
+    var availableNodes = GetNodes();
+    ```
+
+* Group import declarations (e.g. `open` in F# and `using` in C#) in three buckets: the first group for the namespaces that come from the base class libraries; second group for external libraries (e.g. nuget packages); last for the namespaces that belong to the source code that lives in the same repository.
+
+    Example (bad):
+    ```csharp
+    using MyProject.Services;
+    using System;
+    using Newtonsoft.Json;
+    using System.Collections.Generic;
+    using MyProject.Models;
+    ```
+
+    Improved code:
+    ```csharp
+    using System;
+    using System.Collections.Generic;
+
+    using Newtonsoft.Json;
+
+    using MyProject.Models;
+    using MyProject.Services;
+    ```
+
+* In languages where writing `this.` is optional, prefer making it mandatory, as this makes the code more readable (even if more verbose).
+
+    Example (bad):
+    ```csharp
+    public class Foo
+    {
+        private int bar;
+
+        public void DoSomething()
+        {
+            bar = 42;
+        }
+    }
+    ```
+
+    Improved code:
+    ```csharp
+    public class Foo
+    {
+        private int bar;
+
+        public void DoSomething()
+        {
+            this.bar = 42;
+        }
+    }
+    ```
+
+* Respect style that aims for future maintainability:
+
+    * Always use indentation when you can (for readability).
+
+    Example (with too cramped style):
+    ```typescript
+    if (foo) { bar(); }
+    ```
+
+    Improved code:
+    ```typescript
+    if (foo) {
+        bar();
+    }
+    ```
+
+    * In languages that have optional curly braces for some statements (e.g. C#, TypeScript), we prefer to add them even if the code block will only contain one line. This way, when the next developer adds more lines to it later it's less work for him and doesn't cause unnecessary git-blame noise..
+
+    Example (with too cramped style):
+    ```typescript
+    if (foo)
+        bar();
+    ```
+
+    Improved code:
+    ```typescript
+    if (foo) {
+        bar();
+    }
+    ```
+
+* Avoid typical bad practices like:
+
+    * Magic numbers: avoid using unnamed numerical constants in software code, since this practice makes code hard to understand and maintain.
+
+    Example (bad):
+    ```csharp
+    var distance = GpsUtil.GetDistance();
+    if (distance < 100) {
+        throw new NotImplementedException();
+    }
+    ```
+
+    Improved code:
+    ```csharp
+    private const int MinimumSupportedDistanceToNotifyKillerDrones = 100;
+
+    ...
+
+    var distance = GpsUtil.GetDistance()
+    if (distance < MinimumSupportedDistanceToNotifyKillerDrones) {
+        throw new NotImplementedException();
+    }
+    ```
+
+    * DRY (Don't Repeat Yourself): the DRY principle suggests that a piece of information should only be stored once in a project and referenced as needed, rather than being copied and pasted multiple times throughout the codebase.
+
+    Example (bad):
+    ```fsharp
+    let preAuthInputMac =
+        CalculateMacWithSHA3256
+            preAuthInput
+            ":hs_mac"
+
+    ...
+
+    let authInputMac =
+        CalculateMacWithSHA3256
+            authInput
+            ":hs_mac"
+    ```
+
+    Improved code:
+    ```fsharp
+    let AuthenticationDigestCalculationKey = ":hs_mac"
+
+    ...
+
+    let preAuthInputMac =
+        CalculateMacWithSHA3256
+            preAuthInput
+            AuthenticationDigestCalculationKey
+
+    ...
+
+    let authInputMac =
+        CalculateMacWithSHA3256
+            authInput
+            AuthenticationDigestCalculationKey
+    ```
+
+    * Primitive Obsession: avoid overusing primitive types (strings, integers, arrays) where a richer type/object would be more appropriate.
+
+    Example (bad):
+    ```fsharp
+    let saveFilePath = System.Console.ReadLine()
+
+    let savedData = System.IO.File.ReadAllText saveFilePath
+    ```
+
+    Improved code:
+    ```fsharp
+    let saveFilePath =
+        let saveFilePathInString =
+            System.Console.ReadLine()
+        System.IO.FileInfo saveFilePathInString
+
+    let savedData = System.IO.File.ReadAllText saveFilePath.FullName
+    ```
+
+    * Discarding generic exceptions: catching all exceptions and discarding them is harmful because it can hide bugs. It's better to handle specific exception types (e.g. you can remove the `try` block and run the code in a debugging session to find out what type is the exception you're expecting).
+
+    Example (bad):
+    ```fsharp
+    let Func (zipFile: FileInfo) =
+        try
+            ZipFile.Open(zipFile.FullName, ZipArchiveMode.Read) |> ignore<ZipArchive>
+        with
+        | ex ->
+            Console.Error.WriteLine $"Found an issue with %s{zipFile.FullName}"
+    ```
+
+    Improved code:
+    ```fsharp
+    let Func (zipFile: FileInfo) =
+        try
+            ZipFile.Open(zipFile.FullName, ZipArchiveMode.Read) |> ignore<ZipArchive>
+        with
+        | :? FileNotFoundException -> 
+            Console.Error.WriteLine $"%s{zipFile.FullName} was not found "
+        | _ -> 
+            reraise()
+    ```
+
+    * Empty catch‑all blocks: if you really can't use a specific exception in your catch block and the catch has to capture any kind of exception, DO NOT leave the catch block completely empty. At minimum, log the exception with its details. And if logging it truly doesn't make sense, include a comment explaining why logging is omitted, why a catch‑all is needed, and why it's safe to swallow the exception.
+
+        Example (bad):
+        ```csharp
+        try {
+            SomeOperation();
+        } catch (Exception) {
+        }
+        ```
+
+        Improved code (preferred — log the exception):
+        ```csharp
+        try {
+            SomeOperation();
+        } catch (Exception ex) {
+            // This catch-all is intentional because the operation is non‑critical
+            Logger.Warn(ex, "Non‑critical operation failed; proceeding without aborting.");
+        }
+        ```
+
+        Improved code (when logging doesn't apply — explain why):
+        ```csharp
+        try {
+            SomeOperation();
+        } catch {
+            // Logging is not appropriate here because the exception may contain
+            // sensitive credential data that must not be written to logs.
+            // This catch-all is needed because the third‑party library does not
+            // document which exception types it throws, and the operation is
+            // safe to skip without side effects.
+        }
+        ```
+
+    * Catching preventable exceptions: some exceptions are avoidable and should be prevented by checks instead of being caught.
+
+    Example (bad):
+    ```fsharp
+        try
+            name.ComposeFullName(separator)
+        with
+        | :? ArgumentNullException ->
+            Console.Error.WriteLine "There was a problem retreiving the name"
+        | :? NullReferenceException ->
+            Console.Error.WriteLine "There was a problem in the naming system, please report this bug"
+    ```
+
+    Improved code:
+    ```fsharp
+        if isNull name then
+            Console.Error.WriteLine "There was a problem in the naming system, please report this bug"
+        elif isNull separator then
+            Console.Error.WriteLine "There was a problem retreiving the name"
+        else
+            name.ComposeFullName separator
+    ```
+    This approach tends to be more readable and maintainable.
+
+    * Using Message and StackTrace properties of exception instead of ToString(): if using .NET, prefer `Exception.ToString()` when displaying exception info because it includes type, message, and stack trace. 
+
+    Example (bad):
+    ```csharp
+    try {
+        SomeOperation();
+    } catch (Exception ex) {
+        Console.Error.WriteLine(ex.Message);
+        Console.Error.WriteLine(ex.StackTrace);
+    }
+    ```
+
+    Improved code:
+    ```csharp
+    try {
+        SomeOperation();
+    } catch (Exception ex) {
+        Console.Error.WriteLine(ex.ToString());
+    }
+    ```
+
+    * Not benefiting from your type system: we use statically-typed languages (such as TypeScript and C#) to let the compiler protect us. Use the type system rather than sentinel/edge values. For example, do not use `DateTime.MinValue` to denote absence—use a nullable or Option type. Do not use `undefined` in TypeScript; use explicit option/nullable patterns instead.
+
+    Example (bad):
+    ```typescript
+    if (foo === undefined || foo === null)
+    {
+        return 0;
+    }
+    return 1;
+    ```
+
+    Improved code:
+    ```typescript
+    import { TypeHelpers } from "fp-sdk";
+
+    if (TypeHelpers.IsNullOrUndefined(foo))
+    {
+        return 0;
+    }
+    return 1;
+    ```
+
+    * Use Option types where available instead of nullable edge-values.
+
+    Example in F# (bad):
+    ```fsharp
+    let SomeFunction(): SomeObj =
+        if not (SomeInnerFunction())
+            null
+        else
+            SomeObj("init", 0)
+    ```
+
+    Improved code:
+    ```fsharp
+    let SomeFunction(): Option<SomeObj> =
+        if not (SomeInnerFunction())
+            None
+        else
+            Some <| SomeObj("init", 0)
+    ```
+
+    Example in TypeScript (bad):
+    ```typescript
+    import { Option, Some, None } from "fp-sdk";
+
+    function someFunction(): SomeObj | null | undefined {
+        if (!(someInnerFunction())) {
+            return null;
+        } else {
+            return new SomeObj("init", 0);
+        }
+    }
+    ```
+
+    Improved code:
+    ```typescript
+    function someFunction(): Option<SomeObj> {
+        if (!(someInnerFunction())) {
+            return new None();
+        } else {
+            return new Some(new SomeObj("init", 0));
+        }
+    }
+    ```
+
+
+    * Abusing obscure operators or the excessive multi-facetedness of basic ones:
+
+        * Do not use `!` for non-boolean values as a null-check; prefer explicit null checks.
+
+        Example (bad):
+        ```typescript
+        if (!zipFile)
+            return;
+        ```
+
+        Improved code:
+        ```typescript
+        if (zipFile === null)
+            return;
+        ```
+
+        * Avoid recent terse C# operators like `??` and `??=` when they make the code less readable—explicit checks are clearer.
+
+        Example (bad):
+        ```csharp
+        someField = someValue ?? throw new ArgumentNullException("someValue cannot be null");
+
+        someVar ??= expression;
+        ```
+
+        Improved code:
+        ```csharp
+        if (someValue is null) {
+            throw new ArgumentNullException("someValue cannot be null");
+        }
+        someField = someValue;
+
+        if (someVar is null) {
+            someVar = expression;
+        }
+        ```
+
+        * Avoid spread (`...`) in JavaScript/TypeScript where portability matters; prefer `Array.from`.
+
+        Example (bad):
+        ```typescript
+        const inputs = [...tableCell.children];
+        ```
+
+        Improved code:
+        ```typescript
+        const inputs = Array.from(tableCell.children);
+        ```
+
+        Prefer simple property access instead of destructuring when extracting a single value.
+        Example (bad):
+        ```typescript
+        const { bar: foo } = object;
+        ```
+
+        Improved code:
+        ```typescript
+        const foo = object.bar;
+        ```
+
+* Don't add obvious comments that can be inferred from just reading the code. Use comments to explain why you're doing something, not what the code is doing. Sometimes extracting code into a well-named function removes the need for a comment.
+
+    Example (bad):
+    ```csharp
+    // increment the counter
+    counter++;
+
+    // get the user
+    var user = GetUser(id);
+
+    var freshData = FetchData();
+
+    // update counter on user record to make user appear in Recent view
+    user.counterSoFar = counter;
+    ```
+
+    Improved code:
+    ```csharp
+    counter++;
+
+    // get the user in order to verify operation
+    var user = GetUser(id);
+
+    // retry because the API sometimes returns stale data on the first call
+    var freshData = FetchData();
+
+    UpdateUserCounterToMakeItAppearInRecentView(user, counter);
+    ```
+
+* Add comments on top of code (on a line above it), not next to it, to avoid horizontal scrolling.
+
+    Example (bad):
+    ```csharp
+    var retryCount = 3; // we retry 3 times because the service is flaky
+    ```
+    Improved code:
+    ```csharp
+    // we retry 3 times because the service is flaky
+    var retryCount = 3;
+    ```
+
+* Do not commit commented code; if code is commented-out it should be removed. If there's a reason to keep it, explain that reason in a comment above the commented code.
+
+    Example (bad):
+    ```csharp
+    // var oldValue = ComputeLegacy();
+    var newValue = ComputeNew();
+    ```
+
+    Improved code (remove it entirely, or justify its presence):
+    ```csharp
+    var newValue = ComputeNew();
+    ```
+
+    Or, if there's a valid reason to keep the old code visible:
+    ```csharp
+    // keeping the legacy call commented until v3 migration is verified in production
+    // var oldValue = ComputeLegacy();
+
+    var newValue = ComputeNew();
+    ```
+
+* If you're in need of serialization/deserialization/marshalling: **DO NOT** use `JSON.NET` (aka `Newtonsoft.Json`) because it is considered a deprecated library in .NET (in favour of the new BCL one: `System.Text.Json`). `System.Text.Json` had some problems in past versions about DU serialization (e.g. F# DUs), but it seems to have been finally addressed, see https://github.com/dotnet/runtime/commit/3e902855154615baa4a2a7584db75beeeb0fad97. That said, it probably doesn't support JSON5 (funnily enough, `Newtonsoft.Json` supports already one of the best features of JSON5: comments; so maybe `System.Text.Json` does too?). Before adopting alternative libraries, take into account that JSON5 is more human-readable than JSON but at the expense of significant performance, and any such decision should be discussed with your team lead.
