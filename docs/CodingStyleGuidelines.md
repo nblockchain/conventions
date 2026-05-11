@@ -174,7 +174,7 @@
     let savedData = System.IO.File.ReadAllText saveFilePath.FullName
     ```
 
-    * Discarding generic exceptions: catching all exceptions and discarding them is harmful because it can hide bugs. It's better to handle specific exception types or at least log unexpected ones.
+    * Discarding generic exceptions: catching all exceptions and discarding them is harmful because it can hide bugs. It's better to handle specific exception types (e.g. you can remove the `try` block and run the code in a debugging session to find out what type is the exception you're expecting).
 
     Example (bad):
     ```fsharp
@@ -182,8 +182,8 @@
         try
             ZipFile.Open(zipFile.FullName, ZipArchiveMode.Read) |> ignore<ZipArchive>
         with
-        | _ -> 
-            ()
+        | ex ->
+            Console.Error.WriteLine $"Found an issue with %s{zipFile.FullName}"
     ```
 
     Improved code:
@@ -192,13 +192,44 @@
         try
             ZipFile.Open(zipFile.FullName, ZipArchiveMode.Read) |> ignore<ZipArchive>
         with
-        | :? InvalidDataException -> 
-            Console.Error.WriteLine $"Not a zip file %s{zipFile.FullName}"
         | :? FileNotFoundException -> 
-            Console.Error.WriteLine $"File not found %s{zipFile.FullName}"
+            Console.Error.WriteLine $"%s{zipFile.FullName} was not found "
         | _ -> 
             reraise()
     ```
+
+    * Empty catch‑all blocks: if you really can't use a specific exception in your catch block and the catch has to capture any kind of exception, DO NOT leave the catch block completely empty. At minimum, log the exception with its details. And if logging it truly doesn't make sense, include a comment explaining why logging is omitted, why a catch‑all is needed, and why it's safe to swallow the exception.
+
+        Example (bad):
+        ```csharp
+        try {
+            SomeOperation();
+        } catch (Exception) {
+        }
+        ```
+
+        Improved code (preferred — log the exception):
+        ```csharp
+        try {
+            SomeOperation();
+        } catch (Exception ex) {
+            // This catch-all is intentional because the operation is non‑critical
+            Logger.Warn(ex, "Non‑critical operation failed; proceeding without aborting.");
+        }
+        ```
+
+        Improved code (when logging doesn't apply — explain why):
+        ```csharp
+        try {
+            SomeOperation();
+        } catch {
+            // Logging is not appropriate here because the exception may contain
+            // sensitive credential data that must not be written to logs.
+            // This catch-all is needed because the third‑party library does not
+            // document which exception types it throws, and the operation is
+            // safe to skip without side effects.
+        }
+        ```
 
     * Catching preventable exceptions: some exceptions are avoidable and should be prevented by checks instead of being caught.
 
