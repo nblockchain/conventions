@@ -26,6 +26,37 @@
     * `System.Text.Json` had some problems in past versions about DU serialization (e.g. F# DUs), but it seems to have been finally addressed, see https://github.com/dotnet/runtime/commit/3e902855154615baa4a2a7584db75beeeb0fad97 .
     * That said, it probably doesn't support JSON5 (funnily enough, `Newtonsoft.Json` supports already one of the best features of JSON5: comments; so maybe `System.Text.Json` does too?). But before being tempted to adopt other alternative libraries take in account that JSON5 is more human-readable than JSON, but at the expense of ([~35x](https://github.com/openclaw/openclaw/commit/5c32989f53310f52dc93c428561424eaa0f15c17)) performance, but any such decisions would need to be discussed with your team lead anyway.
 
+* Respect style that aims for future maintainability:
+
+    * Always use indentation when you can (for readability):
+
+        Example (with too cramped style):
+        ```typescript
+        if (foo) { bar(); }
+        ```
+
+        Improved code:
+        ```typescript
+        if (foo) {
+            bar();
+        }
+        ```
+
+    * Always use curly braces when you can (for readability and diff-noise reduction in upcoming changes):
+
+        Example (with too cramped style):
+        ```typescript
+        if (foo)
+            bar();
+        ```
+
+        Improved code:
+        ```typescript
+        if (foo) {
+            bar();
+        }
+        ```
+
 * Avoid typical bad practices like:
 
     * Magic numbers:
@@ -171,33 +202,6 @@
     * Using Message and StackTrace properties of exception instead of ToString()
     
         If using .NET, using method `ToString()` of `Exception` when displaying exception info is preferable to using properties such as `Message` and `StackTrace` because result of `ToString()` already includes all necessary information, like exception type, message, and stack trace.
-
-    * Always use indentation when you can (for readability):
-
-        Example (with bad practice):
-        ```typescript
-        if (foo) { bar(); }
-        ```
-        Improved code:
-        ```typescript
-        if (foo) {
-            bar();
-        }
-        ```
-
-    * Always use curly braces when you can (for readability and diff-noise reduction for upcoming changes):
-
-        Example (with bad practice):
-        ```typescript
-        if (foo)
-            bar();
-        ```
-        Improved code:
-        ```typescript
-        if (foo) {
-            bar();
-        }
-        ```
 
     * Not benefiting from your type system:
 
