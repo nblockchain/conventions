@@ -30,86 +30,88 @@
 
     * Magic numbers:
 
-      Avoid using unnamed numerical constants in software code, this practice makes code hard to understand and maintain.
+        Avoid using unnamed numerical constants in software code, this practice makes code hard to understand and maintain.
 
-      Example (with bad practice):
-      ```csharp
-      var distance = GpsUtil.GetDistance();
-      if (distance < 100)
-         throw new NotImplementedException();
-      ```
+        Example (with bad practice):
+        ```csharp
+        var distance = GpsUtil.GetDistance();
+        if (distance < 100) {
+            throw new NotImplementedException();
+        }
+        ```
 
-      Improved code:
-      ```csharp
-      private const int MinimumSupportedDistanceToNotifyKillerDrones = 100;
+        Improved code:
+        ```csharp
+        private const int MinimumSupportedDistanceToNotifyKillerDrones = 100;
 
-      ...
+        ...
 
-      var distance = GpsUtil.GetDistance()
-      if (distance < MinimumSupportedDistanceToNotifyKillerDrones)
-         throw new NotImplementedException();
-      ```
+        var distance = GpsUtil.GetDistance()
+        if (distance < MinimumSupportedDistanceToNotifyKillerDrones) {
+            throw new NotImplementedException();
+        }
+        ```
 
     * DRY (Don't Repeat Yourself):
 
-      The DRY principle suggests that a piece of information should only be stored once in a project and should be referenced as needed, rather than being copied and pasted multiple times throughout the codebase.
+        The DRY principle suggests that a piece of information should only be stored once in a project and should be referenced as needed, rather than being copied and pasted multiple times throughout the codebase.
 
-      It has several benefits, including reducing the amount of code that needs to be written and maintained, improving the consistency and quality of the code, and reducing the risk of introducing errors and bugs when the information changes.
+        It has several benefits, including reducing the amount of code that needs to be written and maintained, improving the consistency and quality of the code, and reducing the risk of introducing errors and bugs when the information changes.
 
-      Example (with bad practice):
-      ```fsharp
-      let preAuthInputMac =
-         CalculateMacWithSHA3256
-             preAuthInput
-             ":hs_mac"
+        Example (with bad practice):
+        ```fsharp
+        let preAuthInputMac =
+            CalculateMacWithSHA3256
+                preAuthInput
+                ":hs_mac"
 
-      ...
+        ...
 
-      let authInputMac =
-         CalculateMacWithSHA3256
-             authInput
-             ":hs_mac"
-      ```
+        let authInputMac =
+            CalculateMacWithSHA3256
+                authInput
+                ":hs_mac"
+        ```
 
-      Improved code:
-      ```fsharp
-      let AuthenticationDigestCalculationKey = ":hs_mac"
+        Improved code:
+        ```fsharp
+        let AuthenticationDigestCalculationKey = ":hs_mac"
 
-      ...
+        ...
 
-      let preAuthInputMac =
-         CalculateMacWithSHA3256
-             preAuthInput
-             AuthenticationDigestCalculationKey
+        let preAuthInputMac =
+            CalculateMacWithSHA3256
+                preAuthInput
+                AuthenticationDigestCalculationKey
 
-      ...
+        ...
 
-      let authInputMac =
-         CalculateMacWithSHA3256
-             authInput
-             AuthenticationDigestCalculationKey
-      ```
+        let authInputMac =
+            CalculateMacWithSHA3256
+                authInput
+                AuthenticationDigestCalculationKey
+        ```
 
     * Primitive Obsession:
 
-      Primitive Obsession is a situation where simple data types such as strings, integers, or arrays are overused in place of more appropriate objects.
+        Primitive Obsession is a situation where simple data types such as strings, integers, or arrays are overused in place of more appropriate objects.
       
-      Example (with bad practice):
-      ```
-      let saveFilePath = System.Console.ReadLine()
-      
-      let savedData = System.IO.File.ReadAllText saveFilePath
-      ```
+        Example (with bad practice):
+        ```fsharp
+        let saveFilePath = System.Console.ReadLine()
 
-      Improved code:
-      ```fsharp
-      let saveFilePath =
-         let saveFilePathInString =
-             System.Console.ReadLine()
-         System.IO.FileInfo saveFilePathInString
+        let savedData = System.IO.File.ReadAllText saveFilePath
+        ```
 
-      let savedData = System.IO.File.ReadAllText saveFilePath.FullName
-      ```
+        Improved code:
+        ```fsharp
+        let saveFilePath =
+            let saveFilePathInString =
+                System.Console.ReadLine()
+            System.IO.FileInfo saveFilePathInString
+
+        let savedData = System.IO.File.ReadAllText saveFilePath.FullName
+        ```
 
     * Discarding generic exceptions:
 
