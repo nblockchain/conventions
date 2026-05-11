@@ -320,8 +320,6 @@
 
     Example in TypeScript (bad):
     ```typescript
-    import { Option, Some, None } from "fp-sdk";
-
     function someFunction(): SomeObj | null | undefined {
         if (!(someInnerFunction())) {
             return null;
@@ -333,6 +331,8 @@
 
     Improved code:
     ```typescript
+    import { Option, Some, None } from "fp-sdk";
+
     function someFunction(): Option<SomeObj> {
         if (!(someInnerFunction())) {
             return new None();
