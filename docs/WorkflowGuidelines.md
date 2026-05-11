@@ -10,20 +10,13 @@
 
 * Otherwise, PR description could be a summary of all the commits, or choose the most important commit to align with (in case the other commits don't add much substance). In this case, PR has to be merged with "Create a merge commit" button.
 
-* If you want to contribute a script, do not use PowerShell or Bash, but
-an F# script. The reason to not use PowerShell is a personal preference
-from the maintainer of this project (and his suspicion that it might not
-be 100% guaranteed to be crossplatform); and the reason not to use Bash
-is because it's only Unix compatible (we cannot assume WSL is installed
-in Windows), and in general because it's too undeterministic and old, more
-info here: https://news.ycombinator.com/item?id=33116310
+* If you want to contribute a script, do not use PowerShell or Bash, but an F# script. The reason to not use PowerShell is a personal preference from the maintainer of this project (and his suspicion that it might not be 100% guaranteed to be crossplatform); and the reason not to use Bash is because it's only Unix compatible (we cannot assume WSL is installed in Windows), and in general because it's too undeterministic and old, more info here: https://news.ycombinator.com/item?id=33116310
 
 * Our naming conventions are as follows:
     * Script names (e.g. files with `.sh`, `.bat` or `.fsx` extensions): snake_case.
     * CI job names: kebab-case.
     * Important public constants: TRAIN_CASE.
-    * .NET (F# and C#) source files and projects (project names and project file names): PascalCase. An exception to this rule is project names and project file names that correspond to a console project which 
-ends up being compiled and packaged in NuGet as a dotnet tool, for example: https://github.com/nblockchain/fsx/tree/master/fsxc
+    * .NET (F# and C#) source files and projects (project names and project file names): PascalCase. An exception to this rule is project names and project file names that correspond to a console project which ends up being compiled and packaged in NuGet as a dotnet tool, for example: https://github.com/nblockchain/fsx/tree/master/fsxc
     * .NET APIs: PascalCase (see our [F# Style Guide](FSharpStyleGuide.md) for more info).
     * .NET parameters, local variables & nested functions: camelCase (again, see our [F# Style Guide](FSharpStyleGuide.md) for more info).
     * Please use verbs (in infinitive) for method/function & script names, and nouns for variables/constants/parameters/properties/fields.
