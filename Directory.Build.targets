@@ -1,0 +1,5 @@
+<Project>
+  <Target Name="HuskyNetInstall" AfterTargets="Build">
+    <Exec Command="dnx husky install --yes" Condition="!Exists('$(MSBuildThisFileDirectory).husky/_/husky.sh') AND '$(CI)' == ''" />
+  </Target>
+</Project>
