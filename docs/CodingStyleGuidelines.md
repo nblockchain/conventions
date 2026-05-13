@@ -95,6 +95,98 @@
     }
     ```
 
+* Write code for a polyglot world: just as it is now an industry standard to write code in English (i.e. method/variable/class names, comments, etc) even when the entire team speaks a different native language. A major benefit of this convention is that it dramatically widens the hiring pool—an organization can recruit competent developers from anywhere in the world without requiring fluency in the local language spoken at the company's headquarters. We should apply the same logic to language-specific syntax, because the future is polyglot: software development teams (especially in this era of AI agents) will regularly work across many programming languages, and deep familiarity with any single language's quirks shouldn't be assumed. Therefore, prefer universally readable constructs over terse, language-specific idioms that save little boilerplate but may add significant confusion for anyone who is not already steeped in that particular language's culture.
+
+    * Avoid spread/splat (`...`) operators where a clearer alternative exists; prefer named functions like `Array.from`.
+
+        Example (bad):
+        ```typescript
+        const inputs = [...tableCell.children];
+        ```
+
+        Improved code:
+        ```typescript
+        const inputs = Array.from(tableCell.children);
+        ```
+
+    * Prefer named functions like `append` or `extend` over terse operators for combining collections. Operators such as `@` (used in F#, OCaml and other ML-family languages) or `+` (used in Python, Swift and others) are cryptic to anyone not steeped in that particular ecosystem.
+
+        Example (bad):
+        ```fsharp
+        let combined = firstList @ secondList
+        ```
+
+        Improved code:
+        ```fsharp
+        let combined = List.append firstList secondList
+        ```
+
+    * Prefer destructuring/pattern matching on tuples instead of using magic functions (e.g. `fst` and `snd` in F#) or indexers (e.g. `[0]` and `[1]` in Python) which might be confusing or brittle, respectively.
+
+        Example (bad):
+        ```fsharp
+        let name = fst userTuple
+        let age = snd userTuple
+        ```
+
+        Improved code:
+        ```fsharp
+        let name, age = userTuple
+        ```
+
+        Example (bad):
+        ```python
+        name = user_tuple[0]
+        age = user_tuple[1]
+        ```
+
+        Improved code:
+        ```python
+        name, age = user_tuple
+        ```
+
+    * Add parentheses to make operator precedence explicit, even when the language's precedence rules already dictate the evaluation order. A reader who does not know those rules by heart should not have to look them up.
+
+        Example (bad):
+        ```typescript
+        const flag = a > 0 && b !== null || c;
+        let result = a + b * c - d;
+        ```
+
+        Improved code:
+        ```typescript
+        const flag = (a > 0 && b !== null) || c;
+        let result = a + (b * c) - d;
+        ```
+
+    * Use separate assignment statements instead of chained/collapsed assignments. Chained assignment may look compact, but its evaluation order is non-obvious to someone unfamiliar with the language, and some languages don't even support it at all.
+
+        Example (bad):
+        ```typescript
+        let a = b = c = 0;
+        ```
+
+        Improved code:
+        ```typescript
+        let c = 0;
+        let b = 0;
+        let a = 0;
+        ```
+
+    * Prefer simple property access instead of destructuring when extracting a single value.
+
+        Example (bad):
+        ```typescript
+        const { bar: foo } = object;
+        ```
+
+        Improved code:
+        ```typescript
+        const foo = object.bar;
+        ```
+
+        We used TypeScript in the above examples, especially to showcase the paradoxical fact of this ecosystem about the existence of an ESLint rule called `prefer-destructuring` that actually advocates for less readable code given that it conveys the developer to using destructuring even for single properties!
+
 * Avoid typical bad practices like:
 
     * Magic numbers: avoid using unnamed numerical constants in software code, since this practice makes code hard to understand and maintain.
@@ -378,29 +470,6 @@
         if (someVar is null) {
             someVar = expression;
         }
-        ```
-
-        * Avoid spread (`...`) in JavaScript/TypeScript where portability matters; prefer `Array.from`.
-
-        Example (bad):
-        ```typescript
-        const inputs = [...tableCell.children];
-        ```
-
-        Improved code:
-        ```typescript
-        const inputs = Array.from(tableCell.children);
-        ```
-
-        Prefer simple property access instead of destructuring when extracting a single value.
-        Example (bad):
-        ```typescript
-        const { bar: foo } = object;
-        ```
-
-        Improved code:
-        ```typescript
-        const foo = object.bar;
         ```
 
 * Don't add obvious comments that can be inferred from just reading the code. Use comments to explain why you're doing something, not what the code is doing. Sometimes extracting code into a well-named function removes the need for a comment.
