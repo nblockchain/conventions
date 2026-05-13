@@ -56,9 +56,8 @@ let newCommitMsg =
         header + Environment.NewLine + Environment.NewLine + wrappedBody
     | _ -> header
 
-Fsdk
-    .Process
-    .Execute(
+let procRes =
+    Fsdk.Process.Execute(
         {
             Command = "git"
             Arguments =
@@ -66,5 +65,28 @@ Fsdk
         },
         Echo.Off
     )
-    .UnwrapDefault()
-    .Trim()
+
+match procRes.Result with
+| Success _ -> ()
+| WarningsOrAmbiguous output ->
+    output.PrintToConsole()
+    Console.Out.Flush()
+    Console.Error.Flush()
+    Console.WriteLine()
+    Console.Out.Flush()
+
+| Error(_, output) ->
+    output.PrintToConsole()
+    Console.Out.Flush()
+    Console.Error.Flush()
+    Console.WriteLine()
+    Console.Out.Flush()
+
+    let errMsg =
+        sprintf
+            "Error when running '%s %s'"
+            procRes.Details.Command
+            procRes.Details.Args
+
+    Console.Error.WriteLine errMsg
+    raise <| ProcessFailed errMsg
