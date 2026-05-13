@@ -109,6 +109,8 @@
         const inputs = Array.from(tableCell.children);
         ```
 
+        And actually, this is not just a readability recommendation, because apparently the spread operator can have performance issues, see: https://github.com/earendil-works/pi/pull/4463
+
     * Prefer named functions like `append` or `extend` over terse operators for combining collections. Operators such as `@` (used in F#, OCaml and other ML-family languages) or `+` (used in Python, Swift and others) are cryptic to anyone not steeped in that particular ecosystem.
 
         Example (bad):
