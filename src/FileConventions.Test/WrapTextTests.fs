@@ -129,3 +129,11 @@ let WrapTextTest6() =
         + "```"
 
     Assert.That(WrapText commitMsg characterCount, Is.EqualTo commitMsg)
+
+[<Test>]
+let WrapTextTest7() =
+    let characterCount = 64
+    let text = "foo:  bar"
+    let fixedText = "foo: bar"
+
+    Assert.That(WrapText text characterCount, Is.EqualTo fixedText)
