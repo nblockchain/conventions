@@ -362,7 +362,7 @@ let ExtractParagraphs(text: string) =
 
     List.rev <| processLines lines List.Empty List.Empty false
 
-let WrapText (text: string) (maxCharsPerLine: int) : string =
+let internal WrapTextInternal (text: string) (maxCharsPerLine: int) : string =
     let wrappedParagraphs =
         ExtractParagraphs text
         |> Seq.map(fun paragraph -> WrapParagraph paragraph maxCharsPerLine)
@@ -372,11 +372,15 @@ let WrapText (text: string) (maxCharsPerLine: int) : string =
         wrappedParagraphs
     )
 
+[<Obsolete "Please use SafeWrapText instead">]
+let WrapText (text: string) (maxCharsPerLine: int) : string =
+    WrapTextInternal text maxCharsPerLine
+
 let RemoveAllWhitespace(text: string) : string =
     String.filter (Char.IsWhiteSpace >> not) text
 
 let SafeWrapText (text: string) (maxCharsPerLine: int) : string =
-    let wrappedText = WrapText text maxCharsPerLine
+    let wrappedText = WrapTextInternal text maxCharsPerLine
 
     let sanityCheck (originalText: string) (wrappedText: string) =
         if RemoveAllWhitespace originalText <> RemoveAllWhitespace wrappedText then

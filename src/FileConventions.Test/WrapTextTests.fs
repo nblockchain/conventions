@@ -6,6 +6,9 @@ open NUnit.Framework
 
 open FileConventions
 
+// because WrapText is marked as deprecated as opposed to SafeWrapText
+#nowarn "0044"
+
 [<Test>]
 let WrapTextTest1() =
     let characterCount = 64
@@ -138,9 +141,14 @@ let WrapTextTest7() =
 
     Assert.That(WrapText text characterCount, Is.EqualTo fixedText)
 
-[<Test>]
-let RemoveAllWhitespaceTest1() =
-    let text =
-        "  hello world\t\r\n" + "foo   bar\r" + Environment.NewLine + "baz  "
+#warnon "0044"
 
-    Assert.That(RemoveAllWhitespace text, Is.EqualTo "helloworldfoobarbaz")
+[<Test>]
+let RemoveAllWhitespaceTest() =
+    let text =
+        "  Hello -world\t\r\n"
+        + "Foo   \n* bar\r"
+        + Environment.NewLine
+        + "baz  "
+
+    Assert.That(RemoveAllWhitespace text, Is.EqualTo "Hello-worldFoo*barbaz")

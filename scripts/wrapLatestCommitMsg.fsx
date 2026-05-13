@@ -44,7 +44,7 @@ let maxCharsPerLine = 64
 
 let maybeWrappedBody =
     match maybeBody with
-    | Some body -> Some(FileConventions.WrapText body maxCharsPerLine)
+    | Some body -> Some(FileConventions.SafeWrapText body maxCharsPerLine)
     | _ -> None
 
 let EscapeDoubleQuotes(text: string) =
