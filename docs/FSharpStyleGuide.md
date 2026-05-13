@@ -101,8 +101,6 @@ Async.StartAsTask on it; this way you still code with F#'s Async semantics).
 * Do not use `System.ParamArray` (for variable number of arguments) as it's
 easy to shoot yourself in the foot, and is not idiomatic F# (it was meant for
 C#). More info: https://sidburn.github.io/blog/2017/03/13/variable-arguments
-* We prefer to deconstruct tuples early instead of using the ugly `fst` and
-`snd` functions.
 * Do not use type extensions (similar practice as monkey-patching in Python
 or extension methods in C#) because:
   - It's not easy to see if the method belongs to the original type or is
