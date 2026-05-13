@@ -372,6 +372,20 @@ let WrapText (text: string) (maxCharsPerLine: int) : string =
         wrappedParagraphs
     )
 
+let RemoveAllWhitespace(text: string) : string =
+    String.filter (Char.IsWhiteSpace >> not) text
+
+let SafeWrapText (text: string) (maxCharsPerLine: int) : string =
+    let wrappedText = WrapText text maxCharsPerLine
+
+    let sanityCheck (originalText: string) (wrappedText: string) =
+        if RemoveAllWhitespace originalText <> RemoveAllWhitespace wrappedText then
+            failwith "WrapText func didn't work, please report this bug"
+
+    sanityCheck text wrappedText
+
+    wrappedText
+
 let private GetVersionsMapFromFiles
     (fileInfos: seq<FileInfo>)
     (versionRegexPattern: string)
