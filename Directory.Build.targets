@@ -1,14 +1,14 @@
 <Project>
-  <Target Name="HuskyNetInstall" AfterTargets="Build"
-          Condition="!Exists('$(MSBuildThisFileDirectory).husky/_/husky.sh') AND '$(CI)' == ''">
-    <Exec Command="dnx husky install --yes"
+  <Target Name="GitHooksPath" AfterTargets="Build"
+          Condition="'$(CI)' == ''">
+    <Exec Command="git config core.hooksPath .husky"
           WorkingDirectory="$(MSBuildThisFileDirectory)"
           ConsoleToMSBuild="true"
           IgnoreExitCode="true">
-      <Output TaskParameter="ExitCode" PropertyName="_HuskyExitCode" />
-      <Output TaskParameter="ConsoleOutput" ItemName="_HuskyOutput" />
+      <Output TaskParameter="ExitCode" PropertyName="_GitConfigExitCode" />
+      <Output TaskParameter="ConsoleOutput" ItemName="_GitConfigOutput" />
     </Exec>
-    <Error Text="dnx husky install failed: @(_HuskyOutput, '%0a')"
-           Condition="'$(_HuskyExitCode)' != '0'" />
+    <Warning Text="git config core.hooksPath failed: @(_GitConfigOutput, '%0a')"
+             Condition="'$(_GitConfigExitCode)' != '0'" />
   </Target>
 </Project>
