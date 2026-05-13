@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Prevent infinite loop when this hook triggers itself after git commit --amend
+if [ "${WRAP_LATEST_COMMIT_MSG:-}" = "1" ]; then
+    exit 0
+fi
+
+export WRAP_LATEST_COMMIT_MSG=1
+
+dotnet fsi scripts/wrapLatestCommitMsg.fsx
