@@ -1,5 +1,13 @@
 <Project>
-  <Target Name="HuskyNetInstall" AfterTargets="Build">
-    <Exec Command="dnx husky install --yes" Condition="!Exists('$(MSBuildThisFileDirectory).husky/_/husky.sh') AND '$(CI)' == ''" />
+  <Target Name="HuskyNetInstall" AfterTargets="Build"
+          Condition="!Exists('$(MSBuildThisFileDirectory).husky/_/husky.sh') AND '$(CI)' == ''">
+    <Exec Command="dnx husky install --yes"
+          ConsoleToMSBuild="true"
+          IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="_HuskyExitCode" />
+      <Output TaskParameter="ConsoleOutput" ItemName="_HuskyOutput" />
+    </Exec>
+    <Error Text="dnx husky install failed: @(_HuskyOutput, '%0a')"
+           Condition="'$(_HuskyExitCode)' != '0'" />
   </Target>
 </Project>
