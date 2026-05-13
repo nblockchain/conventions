@@ -137,3 +137,10 @@ let WrapTextTest7() =
     let fixedText = "foo: bar"
 
     Assert.That(WrapText text characterCount, Is.EqualTo fixedText)
+
+[<Test>]
+let RemoveAllWhitespaceTest1() =
+    let text =
+        "  hello world\t\r\n" + "foo   bar\r" + Environment.NewLine + "baz  "
+
+    Assert.That(RemoveAllWhitespace text, Is.EqualTo "helloworldfoobarbaz")
