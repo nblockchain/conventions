@@ -2,6 +2,7 @@
   <Target Name="HuskyNetInstall" AfterTargets="Build"
           Condition="!Exists('$(MSBuildThisFileDirectory).husky/_/husky.sh') AND '$(CI)' == ''">
     <Exec Command="dnx husky install --yes"
+          WorkingDirectory="$(MSBuildThisFileDirectory)"
           ConsoleToMSBuild="true"
           IgnoreExitCode="true">
       <Output TaskParameter="ExitCode" PropertyName="_HuskyExitCode" />
