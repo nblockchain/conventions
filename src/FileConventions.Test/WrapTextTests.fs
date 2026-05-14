@@ -154,6 +154,34 @@ This is a bullet list of things:
 
     Assert.That(WrapText text characterCount, Is.EqualTo text)
 
+[<Test>]
+let WrapTextTest10() =
+    let characterCount = 64
+
+    let text =
+        "Fixed bug (a title of less than 50 chars)
+
+This is some text in **BOLD** that shouldn't be wrapped."
+
+    Assert.That(WrapText text characterCount, Is.EqualTo text)
+
+[<Test>]
+let WrapTextTest11() =
+    let characterCount = 64
+
+    let text =
+        "Fixed bug (a title of less than 50 chars)
+
+This is some text in
+**BOLD** that should be wrapped."
+
+    let expectedText =
+        "Fixed bug (a title of less than 50 chars)
+
+This is some text in **BOLD** that should be wrapped."
+
+    Assert.That(WrapText text characterCount, Is.EqualTo expectedText)
+
 #warnon "0044"
 
 [<Test>]
