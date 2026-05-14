@@ -155,6 +155,19 @@ This is a bullet list of things:
     Assert.That(WrapText text characterCount, Is.EqualTo text)
 
 [<Test>]
+let WrapTextTest9() =
+    let characterCount = 64
+
+    let text =
+        "Fixed bug (a title of less than 50 chars)
+
+This is a bullet list of things:
+- Foo.
+- Bar."
+
+    Assert.That(WrapText text characterCount, Is.EqualTo text)
+
+[<Test>]
 let WrapTextTest10() =
     let characterCount = 64
 
