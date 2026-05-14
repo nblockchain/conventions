@@ -21,7 +21,9 @@ let args = Misc.FsxOnlyArguments()
 let currentDirectory = Directory.GetCurrentDirectory()
 
 if args.Length > 1 then
-    printf "Usage: %s [example.sln(optional)]" __SOURCE_FILE__
+    Console.Error.WriteLine(
+        sprintf "Usage: dotnet fsi %s [example.sln(optional)]" __SOURCE_FILE__
+    )
 
     Environment.Exit 1
 
