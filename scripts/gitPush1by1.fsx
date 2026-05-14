@@ -179,7 +179,7 @@ let args = Misc.FsxOnlyArguments()
 
 if args.Length > 3 then
     Console.Error.WriteLine
-        "Usage: gitpush.fsx [remoteName(optional)] [numberOfCommits(optional)]"
+        $"Usage: dotnet fsi {__SOURCE_FILE__} [remoteName(optional)] [numberOfCommits(optional)]"
 
     Environment.Exit 1
 
