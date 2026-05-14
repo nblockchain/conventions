@@ -268,6 +268,16 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
         | word :: rest ->
             match currentLine, word with
             | "", _ -> processWords word.Text wrappedText rest
+            // Bullet list point
+            | _,
+              {
+                  Type = PlainText
+                  Text = "*"
+              } ->
+                processWords
+                    (currentLine + Environment.NewLine + word.Text)
+                    wrappedText
+                    rest
             | _,
               {
                   Type = PlainText
