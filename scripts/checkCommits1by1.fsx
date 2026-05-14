@@ -1396,7 +1396,11 @@ prCommits
             Console.WriteLine()
 
             Console.Error.WriteLine
-                "Thanks for pushing commits 1 by 1, however, it has been detected that some of them to not be successful (or not be red when they add a failing test)"
+                $"""Thanks for pushing your commits one by one.
+
+However, it has been detected that CI is not successful (green ✅ colour) for one or more commits, or it passes (instead of being red ❌ colour) when a failing test is added (or failing CI is expected), as determined by its commit message.
+
+See commit '{commitHash}' for the first occurrence of this issue."""
 
             let expectedFailureSubstringsJoined =
                 String.Join(
