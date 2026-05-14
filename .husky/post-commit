@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Path to the cherry-pick metadata file
+CHERRY_PICK_HEAD=".git/CHERRY_PICK_HEAD"
+
+if [ -f "$CHERRY_PICK_HEAD" ]; then
+    echo "Warning: Cherry-pick in progress. Skipping git post-commit hook."
+    exit 0
+fi
+
 # Prevent infinite loop when this hook triggers itself after git commit --amend
 if [ "${WRAP_LATEST_COMMIT_MSG:-}" = "1" ]; then
     exit 0
