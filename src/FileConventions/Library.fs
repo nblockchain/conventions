@@ -263,6 +263,9 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
         let isColonBreak (currentLine: string) (textAfter: Text) =
             currentLine.EndsWith ":" && Char.IsUpper textAfter.Text.[0]
 
+        let isAsteriskBreak(currentLine: string) =
+            currentLine.EndsWith ":" || currentLine.StartsWith "*"
+
         match remainingWords with
         | [] -> (wrappedText + currentLine).Trim()
         | word :: rest ->
@@ -273,10 +276,10 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
               {
                   Type = PlainText
                   Text = "*"
-              } ->
+              } when isAsteriskBreak currentLine ->
                 processWords
-                    (currentLine + Environment.NewLine + word.Text)
-                    wrappedText
+                    word.Text
+                    (wrappedText + currentLine + Environment.NewLine)
                     rest
             | _,
               {
