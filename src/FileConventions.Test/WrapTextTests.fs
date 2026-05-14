@@ -182,6 +182,23 @@ This is some text in **BOLD** that should be wrapped."
 
     Assert.That(WrapText text characterCount, Is.EqualTo expectedText)
 
+[<Test>]
+let WrapTextTest12() =
+    let characterCount = 64
+
+    let text =
+        "Fixed bug (a title of less than 50 chars)
+
+This text's for a multiplication 2
+* 4 equals 8."
+
+    let expectedText =
+        "Fixed bug (a title of less than 50 chars)
+
+This text's for a multiplication 2 * 4 equals 8."
+
+    Assert.That(WrapText text characterCount, Is.EqualTo expectedText)
+
 #warnon "0044"
 
 [<Test>]
