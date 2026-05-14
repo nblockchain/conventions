@@ -250,7 +250,9 @@ let SplitIntoWords(text: string) =
     Seq.toList words
 
 let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
-    let words = SplitIntoWords text
+    let words =
+        SplitIntoWords text
+        |> List.filter(fun word -> not(String.IsNullOrEmpty word.Text))
 
     let rec processWords
         (currentLine: string)
