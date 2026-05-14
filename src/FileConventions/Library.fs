@@ -263,10 +263,13 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
         let isColonBreak (currentLine: string) (textAfter: Text) =
             currentLine.EndsWith ":" && Char.IsUpper textAfter.Text.[0]
 
+        let isBulletChar(singleChar: char) =
+            singleChar = '*' || singleChar = '-'
+
         let isBulletBreak(currentLine: string) =
             currentLine.EndsWith ":"
-            || currentLine.StartsWith "*"
-            || currentLine.StartsWith "-"
+            || (not(String.IsNullOrEmpty currentLine)
+                && isBulletChar currentLine.[0])
 
         match remainingWords with
         | [] -> (wrappedText + currentLine).Trim()
@@ -277,20 +280,14 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
             | _,
               {
                   Type = PlainText
-                  Text = "*"
-              } when isBulletBreak currentLine ->
+                  Text = text
+              } when
+                text.Length = 1
+                && isBulletChar text.[0]
+                && isBulletBreak currentLine
+                ->
                 processWords
-                    word.Text
-                    (wrappedText + currentLine + Environment.NewLine)
-                    rest
-            // Bullet list point (hyphen)
-            | _,
-              {
-                  Type = PlainText
-                  Text = "-"
-              } when isBulletBreak currentLine ->
-                processWords
-                    word.Text
+                    text
                     (wrappedText + currentLine + Environment.NewLine)
                     rest
             | _,
