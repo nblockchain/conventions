@@ -141,6 +141,19 @@ let WrapTextTest7() =
 
     Assert.That(WrapText text characterCount, Is.EqualTo fixedText)
 
+[<Test>]
+let WrapTextTest8() =
+    let characterCount = 64
+
+    let text =
+        "Fixed bug (a title of less than 50 chars)
+
+This is a bullet list of things:
+* Foo.
+* Bar."
+
+    Assert.That(WrapText text characterCount, Is.EqualTo text)
+
 #warnon "0044"
 
 [<Test>]
