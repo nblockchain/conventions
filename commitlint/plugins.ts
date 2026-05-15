@@ -128,14 +128,46 @@ export abstract class Plugins {
     }
 
     public static headerMaxLengthWithSuggestions(
-        headerStr: string,
+        rawStr: string,
         maxLineLength: number
     ) {
         let offence = false;
 
+        const lineBreakIndex = rawStr.indexOf("\n");
+        let headerStr = rawStr;
+        if (lineBreakIndex >= 0) {
+            // Extracting headerStr from rawStr rather than using header directly is a
+            // workaround for what must be a commitlint or conventional-changelog bug, TODO: report
+            headerStr = rawStr.substring(0, lineBreakIndex);
+        }
+
         const headerLength = headerStr.length;
         let message = `Please do not exceed ${maxLineLength} characters in title (found ${headerLength}).`;
-        if (!headerStr.startsWith("Merge ") && headerLength > maxLineLength) {
+        let theMaxLineLengthToCompareWith = maxLineLength;
+
+        // note: a revert of a revert, in new versions of git, is written as "Reapply..." which happens
+        // to have same length as "Revert"
+        const extraCharsAllowedBecauseOfARevertOrARevertOfARevert =
+            'Revert "'.length +
+            // we add one because revert commits end with '"'
+            1;
+
+        const maxLineLengthAfterAccountingForRevertException =
+            maxLineLength + extraCharsAllowedBecauseOfARevertOrARevertOfARevert;
+        if (
+            headerStr.endsWith('"') &&
+            (headerStr.startsWith('Revert "') ||
+                headerStr.startsWith('Reapply "'))
+        ) {
+            theMaxLineLengthToCompareWith =
+                maxLineLengthAfterAccountingForRevertException;
+            message = `Please do not exceed ${maxLineLength} (${maxLineLengthAfterAccountingForRevertException} if it's a revert) characters in title (found ${headerLength}).`;
+        }
+
+        if (
+            !headerStr.startsWith("Merge ") &&
+            headerLength > theMaxLineLengthToCompareWith
+        ) {
             offence = true;
 
             const colonIndex = headerStr.indexOf(":");

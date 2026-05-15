@@ -48,7 +48,6 @@ export const abbr = {
     "command": "cmd",
     "commands": "cmds",
     "command line": "cmdline",
-    "compare": "cmp",
     "compress": "zip",
     "compressed": "zipped",
     "concatenate": "concat",

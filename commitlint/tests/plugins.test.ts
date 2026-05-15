@@ -858,7 +858,7 @@ test("prefer-slash-over-backslash2", () => {
 
 test("header-max-length-with-suggestions1", () => {
     const commitMsgWithThatExceedsHeaderMaxLength =
-        "foo: this is only a title with a configuration in it that exceeds header max length";
+        "foo: this is only a title with the term 'configuration' in it that exceeds header max length";
     const headerMaxLength1 = runCommitLintOnMsg(
         commitMsgWithThatExceedsHeaderMaxLength
     );
@@ -871,7 +871,7 @@ test("header-max-length-with-suggestions1", () => {
 
 test("header-max-length-with-suggestions2", () => {
     const commitMsgWithThatExceedsHeaderMaxLength =
-        "foo: this is only a title with a 1 second in it that exceeds header max length";
+        "foo: this is only a title with the term '1 second' (which includes a space) in it that exceeds header max length";
     const headerMaxLength2 = runCommitLintOnMsg(
         commitMsgWithThatExceedsHeaderMaxLength
     );
@@ -986,16 +986,30 @@ test("header-max-length-with-suggestions11", () => {
 });
 
 test("header-max-length-with-suggestions12", () => {
-    const commitMsgThatExceedsHeaderMaxLength =
-        "Split that compares better because blah blah bla very very very long title";
+    const commitMsgThatExceedsHeaderMaxLengthBecauseItIsARevert =
+        'Revert "This header is a title with less than 50chars"';
     const headerMaxLength12 = runCommitLintOnMsg(
-        commitMsgThatExceedsHeaderMaxLength
+        commitMsgThatExceedsHeaderMaxLengthBecauseItIsARevert
     );
-    const not_expected_message = `"compares" -> "cmps"`;
-    expect(headerMaxLength12.status).not.toBe(0);
-    expect(
-        (headerMaxLength12.stdout + "").includes(not_expected_message)
-    ).toEqual(false);
+    expect(headerMaxLength12.status).toBe(0);
+});
+
+test("header-max-length-with-suggestions13", () => {
+    const commitMsgThatExceedsHeaderMaxLengthBecauseItIsARevertOfARevert =
+        'Reapply "This header is a title with less than 50chars"';
+    const headerMaxLength13 = runCommitLintOnMsg(
+        commitMsgThatExceedsHeaderMaxLengthBecauseItIsARevertOfARevert
+    );
+    expect(headerMaxLength13.status).toBe(0);
+});
+
+test("header-max-length-with-suggestions14", () => {
+    const commitMsgThatExceedsHeaderMaxLengthEvenIfItIsARevert =
+        'Revert "This header is a title with moooooooooore than 50chars"';
+    const headerMaxLength14 = runCommitLintOnMsg(
+        commitMsgThatExceedsHeaderMaxLengthEvenIfItIsARevert
+    );
+    expect(headerMaxLength14.status).not.toBe(0);
 });
 
 test("proper-issue-refs1", () => {

@@ -98,17 +98,14 @@ export default {
                 },
 
                 "header-max-length-with-suggestions": (
-                    { header }: { header: any },
+                    { raw }: { raw: any },
                     _: any,
                     maxLineLength: number
                 ) => {
-                    const headerStr = extractStringFromCommitlintParam(
-                        "header",
-                        header
-                    );
+                    const rawStr = extractStringFromCommitlintParam("rawStr", raw);
 
                     return Plugins.headerMaxLengthWithSuggestions(
-                        headerStr,
+                        rawStr,
                         maxLineLength
                     );
                 },
