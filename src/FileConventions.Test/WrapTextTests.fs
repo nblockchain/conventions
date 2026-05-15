@@ -212,6 +212,19 @@ This text's for a multiplication 2 * 4 equals 8."
 
     Assert.That(WrapText text characterCount, Is.EqualTo expectedText)
 
+[<Test>]
+let WrapTextTest13() =
+    let characterCount = 64
+
+    let text =
+        "Fixed bug (a title of less than 50 chars)
+
+This is a bullet list of things:
+1. Foo.
+2. Bar."
+
+    Assert.That(WrapText text characterCount, Is.EqualTo text)
+
 #warnon "0044"
 
 [<Test>]
