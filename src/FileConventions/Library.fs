@@ -266,10 +266,32 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
         let isBulletChar(singleChar: char) =
             singleChar = '*' || singleChar = '-'
 
+        let isNumericBullet(text: string) =
+            text.Length >= 2
+            && text.EndsWith "."
+            && not(String.IsNullOrEmpty(text.TrimEnd '.'))
+            && text.TrimEnd '.' |> Seq.forall Char.IsDigit
+
+        let isBulletText(text: string) =
+            (text.Length = 1 && isBulletChar text.[0]) || isNumericBullet text
+
+        let lineStartsWithBullet(line: string) =
+            if String.IsNullOrWhiteSpace line then
+                false
+            else
+                let trimmed = line.TrimStart()
+                let firstSpace = trimmed.IndexOf ' '
+
+                let firstWord =
+                    if firstSpace < 0 then
+                        trimmed
+                    else
+                        trimmed.[.. firstSpace - 1]
+
+                isBulletText firstWord
+
         let isBulletBreak(currentLine: string) =
-            currentLine.EndsWith ":"
-            || (not(String.IsNullOrEmpty currentLine)
-                && isBulletChar currentLine.[0])
+            currentLine.EndsWith ":" || lineStartsWithBullet currentLine
 
         match remainingWords with
         | [] -> (wrappedText + currentLine).Trim()
@@ -281,11 +303,7 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
               {
                   Type = PlainText
                   Text = text
-              } when
-                text.Length = 1
-                && isBulletChar text.[0]
-                && isBulletBreak currentLine
-                ->
+              } when isBulletText text && isBulletBreak currentLine ->
                 processWords
                     text
                     (wrappedText + currentLine + Environment.NewLine)
