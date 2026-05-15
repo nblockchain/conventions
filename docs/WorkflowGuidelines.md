@@ -44,27 +44,34 @@ Fixes https://github.com/nblockchain/geewallet/issues/45
 [1] http://foo.bar/baz
 ```
 
-As you can see, writing a commit message is generally like writing an e-mail: it
-has a title at the top which is normally a short sentence (but not ended with a
-dot, like most titles), and a body that starts in the 3rd line and which contains
-one or many paragraphs (each ending with a dot, as it's text in prose). In
-particular, the example above would be for a commit message that fixes the
-issue #45. **Scope** usually refers to the project name, but without the need
-to include the name of the project (e.g. in geewallet, all project names start
-with the `GWallet.` prefix, then there's no need to specify it; so use `Backend`
-as scope instead of `GWallet.Backend`). The **Sub-scope** may refer to a folder
-or module inside what's represented as the scope, but it's not a strict mapping.
+As you can see, writing a commit message is generally like writing an e-mail: it has a title at the top which is normally a short sentence (but not ended with a period, like most titles), and a body that starts in the 3rd line and which contains one or many paragraphs (each ending with a dot, as it's text in prose). In particular, the example above would be for a commit message that fixes the issue #45. **Scope** usually refers to the project name, but without the need to include the name of the project (e.g. in geewallet, all project names start with the `GWallet.` prefix, then there's no need to specify it; so use `Backend` as scope instead of `GWallet.Backend`). The **Sub-scope** may refer to a folder or module inside what's represented as the scope, but it's not a strict mapping.
 
-When referencing a bug/issue, as you can see above you can add a sentence at the
-end of the commit message which starts with `Fixes `, followed by the **full URL**
-of the bug/issue; this way, the ticket will be closed when the commit lands in
-the main branch (which in some repos will be called `master`, or `main`). If the
-commit is not really a fix for the issue, but you still want the ticket to be
-closed after the commit lands, then you would use the word `Closes` instead of
-`Fixes`.
+When referencing a bug/issue, as you can see above you can add a sentence at the end of the commit message which starts with `Fixes `, followed by the **full URL** of the bug/issue; this way, the ticket will be closed when the commit lands in the main branch (which in some repos will be called `master`, or `main`). If the commit is not really a fix for the issue, but you still want the ticket to be closed after the commit lands, then you would use the word `Closes` instead of `Fixes`.
 
-Do not use long lines (manually crop them with EOLs because git doesn't do this
-automatically).
+Do not use long lines (manually crop them with EOLs because git doesn't do this automatically); and a recommended way to do this properly is to get a tool that can give you vertical hints of our 50-64 char limits, for example: Visual Studio Code; see below how to configure it:
+
+1. First make sure that you can launch VSCode in the command line by issuing a `code` command. There's info online on how to configure your OS to do this, depending on the one you're running.
+2. Second, configure git globally to use VSCode as your git editor: `git config --global core.editor "code --wait"``
+3. Then, configure VSCode to show you the vertical line hints, following this steps:
+  * Open your global settings.json file by pressing Ctrl+Shift+P (Windows/Linux) or Cmd+Shift+P (macOS).
+  * Type Preferences: Open User Settings (JSON) and select it.
+  * Add the following language-specific configuration block inside your main settings object:
+
+```
+"[git-commit]": {
+    "editor.rulers": [50, 64]
+}
+```
+NOTE: if your JSON file was empty from the start, then wrap the above setting in curly braces to make it proper JSON:
+
+```json
+{
+    "[git-commit]": {
+        "editor.rulers": [50, 64]
+    }
+}
+```
 
 For more info about why well-crafted commit messages are important, PLEASE PLEASE
 read this article: https://web.archive.org/web/20240201135044/https://dhwthompson.com/2019/my-favourite-git-commit
+
