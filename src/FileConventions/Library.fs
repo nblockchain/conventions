@@ -258,6 +258,7 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
         (currentLine: string)
         (wrappedText: string)
         (remainingWords: List<Text>)
+        (inBulletList: bool)
         : string =
 
         let isColonBreak (currentLine: string) (textAfter: Text) =
@@ -298,18 +299,32 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
         match remainingWords with
         | [] -> (wrappedText + currentLine).Trim()
         | word :: rest ->
+            let nowInBulletList =
+                inBulletList
+                || (isBulletText word.Text && isBulletBreak currentLine)
+
             match currentLine, word with
-            | "", _ -> processWords word.Text wrappedText rest
+            | "", _ ->
+                let enteredBulletList = isBulletText word.Text
+
+                processWords
+                    word.Text
+                    wrappedText
+                    rest
+                    (inBulletList || enteredBulletList)
             // Bullet list point
             | _,
               {
                   Type = PlainText
                   Text = text
-              } when isBulletText text && isBulletBreak currentLine ->
+              } when
+                isBulletText text && (isBulletBreak currentLine || inBulletList)
+                ->
                 processWords
                     text
                     (wrappedText + currentLine + Environment.NewLine)
                     rest
+                    nowInBulletList
             | _,
               {
                   Type = PlainText
@@ -318,7 +333,11 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
                 <= maxCharsPerLine
                 && not(isColonBreak currentLine word)
                 ->
-                processWords (currentLine + " " + word.Text) wrappedText rest
+                processWords
+                    (currentLine + " " + word.Text)
+                    wrappedText
+                    rest
+                    nowInBulletList
             | _,
               {
                   Type = PlainText
@@ -327,6 +346,7 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
                     word.Text
                     (wrappedText + currentLine + Environment.NewLine)
                     rest
+                    nowInBulletList
             | _, _ ->
                 processWords
                     String.Empty
@@ -336,8 +356,9 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
                      + word.Text
                      + Environment.NewLine)
                     rest
+                    nowInBulletList
 
-    processWords String.Empty String.Empty words
+    processWords String.Empty String.Empty words false
 
 // This function will extract paragraphs and will ignore the paragraphs inside a
 // code block. Each paragraph is determined by two consecutive new lines.
