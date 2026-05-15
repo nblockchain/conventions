@@ -135,7 +135,7 @@ export abstract class Plugins {
 
         const headerLength = headerStr.length;
         let message = `Please do not exceed ${maxLineLength} characters in title (found ${headerLength}).`;
-        if (!headerStr.startsWith("Merge ") && headerLength > maxLineLength) {
+        if (headerLength > maxLineLength) {
             offence = true;
 
             const colonIndex = headerStr.indexOf(":");
