@@ -225,6 +225,64 @@ This is a bullet list of things:
 
     Assert.That(WrapText text characterCount, Is.EqualTo text)
 
+[<Test>]
+let WrapTextTest14() =
+    let characterCount = 64
+
+    let text =
+        "change wrapLastCommMsg postCommit->commitMsg hook
+
+New .husky/commit-msg hook:
+- Replaces the old .husky/post-commit hook.
+- Receives the commit message file path ($1) and passes it to
+the F# script.
+- Because it's a commit-msg hook, if the script
+exits with a non-zero code, Git aborts the commit (unlike
+post-commit, which runs too late).
+
+Updated scripts/wrapLatestCommitMsg.fsx:
+- Reads the commit message from the file path passed as an
+argument (instead of git log -1 --format=%B).
+- Strips Git
+comment lines (# ...) before processing, then preserves them
+when writing back.
+- Validates the title length against the same
+limit as your commitlint policy (headerMaxLineLength = 50). If
+the title is too long, it prints an error to stderr and exits
+with code 1, blocking the commit.
+- Still wraps body paragraphs
+to 64 chars using the existing FileConventions.SafeWrapText
+logic.
+- Writes the result directly back to the commit message
+file, so no git commit --amend loop is needed."
+
+    let expectedText =
+        "change wrapLastCommMsg postCommit->commitMsg hook
+
+New .husky/commit-msg hook:
+- Replaces the old .husky/post-commit hook.
+- Receives the commit message file path ($1) and passes it to
+the F# script.
+- Because it's a commit-msg hook, if the script exits with a
+non-zero code, Git aborts the commit (unlike post-commit, which
+runs too late).
+
+Updated scripts/wrapLatestCommitMsg.fsx:
+- Reads the commit message from the file path passed as an
+argument (instead of git log -1 --format=%B).
+- Strips Git comment lines (# ...) before processing, then
+preserves them when writing back.
+- Validates the title length against the same limit as your
+commitlint policy (headerMaxLineLength = 50). If the title is
+too long, it prints an error to stderr and exits with code 1,
+blocking the commit.
+- Still wraps body paragraphs to 64 chars using the existing
+FileConventions.SafeWrapText logic.
+- Writes the result directly back to the commit message file, so
+no git commit --amend loop is needed."
+
+    Assert.That(WrapText text characterCount, Is.EqualTo expectedText)
+
 #warnon "0044"
 
 [<Test>]
