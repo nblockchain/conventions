@@ -286,6 +286,21 @@ no git commit --amend loop is needed."
 #warnon "0044"
 
 [<Test>]
+let HasEmDashTest1() =
+    let textWithEmDash = "This — is a test"
+    Assert.That(HasEmDash textWithEmDash, Is.True)
+
+[<Test>]
+let HasEmDashTest2() =
+    let textWithoutEmDash = "This is a test"
+    Assert.That(HasEmDash textWithoutEmDash, Is.False)
+
+[<Test>]
+let HasEmDashTest3() =
+    let textWithNormalDash = "This - is a test"
+    Assert.That(HasEmDash textWithNormalDash, Is.False)
+
+[<Test>]
 let RemoveAllWhitespaceTest() =
     let text =
         "  Hello -world\t\r\n"

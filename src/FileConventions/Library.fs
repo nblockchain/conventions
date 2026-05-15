@@ -453,6 +453,9 @@ let SafeWrapText (text: string) (maxCharsPerLine: int) : string =
 
     wrappedText
 
+let HasEmDash (_text: string) : bool =
+    raise <| NotImplementedException()
+
 let private GetVersionsMapFromFiles
     (fileInfos: seq<FileInfo>)
     (versionRegexPattern: string)
