@@ -24,7 +24,7 @@ Fsdk
     .Execute(
         {
             Command = "dotnet"
-            Arguments = sprintf "tool install fsxc --version 0.5.9.1"
+            Arguments = sprintf "tool install fsxc --version 0.7.99--date20260405-1117.git-0ab01d3"
         },
         Fsdk.Process.Echo.All
     )
