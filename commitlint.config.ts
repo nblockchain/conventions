@@ -24,6 +24,7 @@ function extractStringFromCommitlintParam(
 }
 
 export default {
+    ignores: [(commit: string) => commit.startsWith("Merge ")],
     parserPreset: "conventional-changelog-conventionalcommits",
     rules: {
         "body-leading-blank": [RuleConfigSeverity.Error, "always"],

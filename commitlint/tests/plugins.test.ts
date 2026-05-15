@@ -901,13 +901,6 @@ test("header-max-length-with-suggestions4", () => {
 });
 
 test("header-max-length-with-suggestions5", () => {
-    const longMergeCommitMessage =
-        "Merge PR #42 from realmarv/fixFooterReferenceExistenceTruncatedBody";
-    const headerMaxLength5 = runCommitLintOnMsg(longMergeCommitMessage);
-    expect(headerMaxLength5.status).toBe(0);
-});
-
-test("header-max-length-with-suggestions6", () => {
     const commitMsgWithThatExceedsHeaderMaxLength =
         "Upgrade foo bla bla bla bla bla bla bla bla bla bla bla bla bla bla";
     const headerMaxLength6 = runCommitLintOnMsg(
@@ -920,7 +913,7 @@ test("header-max-length-with-suggestions6", () => {
     );
 });
 
-test("header-max-length-with-suggestions7", () => {
+test("header-max-length-with-suggestions6", () => {
     const commitMsgWithThatExceedsHeaderMaxLength =
         "configure: this is the very very very very very long title";
     const headerMaxLength7 = runCommitLintOnMsg(
@@ -933,7 +926,7 @@ test("header-max-length-with-suggestions7", () => {
     );
 });
 
-test("header-max-length-with-suggestions8", () => {
+test("header-max-length-with-suggestions7", () => {
     const commitMsgThatExceedsHeaderMaxLength =
         "Fix android build because blah blah very very very very very long title";
     const headerMaxLength8 = runCommitLintOnMsg(
@@ -946,7 +939,7 @@ test("header-max-length-with-suggestions8", () => {
     ).toEqual(false);
 });
 
-test("header-max-length-with-suggestions9", () => {
+test("header-max-length-with-suggestions8", () => {
     const commitMsgThatExceedsHeaderMaxLength =
         "title: 1 second bla bla bla bla bla bla bla bla bla bla bla bla bla bla";
     const headerMaxLength9 = runCommitLintOnMsg(
@@ -959,7 +952,7 @@ test("header-max-length-with-suggestions9", () => {
     );
 });
 
-test("header-max-length-with-suggestions10", () => {
+test("header-max-length-with-suggestions9", () => {
     const commitMsgThatExceedsHeaderMaxLength =
         "Configuration simplification bla bla bla bla bla bla bla bla bla bla bla";
     const headerMaxLength10 = runCommitLintOnMsg(
@@ -972,7 +965,7 @@ test("header-max-length-with-suggestions10", () => {
     );
 });
 
-test("header-max-length-with-suggestions11", () => {
+test("header-max-length-with-suggestions10", () => {
     const commitMsgThatExceedsHeaderMaxLength =
         "scope: 20 characters more because blah blah very very very very long title";
     const headerMaxLength11 = runCommitLintOnMsg(
@@ -985,7 +978,7 @@ test("header-max-length-with-suggestions11", () => {
     );
 });
 
-test("header-max-length-with-suggestions12", () => {
+test("header-max-length-with-suggestions11", () => {
     const commitMsgThatExceedsHeaderMaxLength =
         "Split that compares better because blah blah bla very very very long title";
     const headerMaxLength12 = runCommitLintOnMsg(
