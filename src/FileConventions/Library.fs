@@ -453,8 +453,9 @@ let SafeWrapText (text: string) (maxCharsPerLine: int) : string =
 
     wrappedText
 
-let HasEmDash (_text: string) : bool =
-    raise <| NotImplementedException()
+let HasEmDash(text: string) : bool =
+    let emDashChar = '\u2014'
+    text.Contains emDashChar
 
 let private GetVersionsMapFromFiles
     (fileInfos: seq<FileInfo>)

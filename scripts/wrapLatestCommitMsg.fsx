@@ -33,6 +33,16 @@ let commitMsg =
         .Join(Environment.NewLine, messageLines)
         .Trim()
 
+// TODO: we should maybe just rather commit-lint instead of having these ad-hoc failures
+let ExitProcWithError() =
+    Environment.Exit 1
+
+if FileConventions.HasEmDash commitMsg then
+    eprintfn
+        "Error: em-dash character (—) detected in commit message. Please replace it with a normal dash (-) if it is meant as a bullet points or a word-union, or use parentheses if it is meant as a real em-dash."
+
+    ExitProcWithError()
+
 let header, maybeBody =
     let singleEolToJustSeparateLines = 1u
 
@@ -52,7 +62,7 @@ if header.Length > headerMaxLength then
         $"Error: commit message title exceeds {headerMaxLength} characters (found {header.Length})."
 
     eprintfn $"Title: {header}"
-    Environment.Exit 1
+    ExitProcWithError()
 
 let maxCharsPerLine = 64
 
