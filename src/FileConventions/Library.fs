@@ -267,7 +267,9 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
             singleChar = '*' || singleChar = '-'
 
         let isNumericBullet(text: string) =
-            text.Length >= 2
+            let minLengthForNumberPlusPeriod = 2
+
+            text.Length >= minLengthForNumberPlusPeriod
             && text.EndsWith "."
             && not(String.IsNullOrEmpty(text.TrimEnd '.'))
             && text.TrimEnd '.' |> Seq.forall Char.IsDigit
@@ -286,7 +288,7 @@ let private WrapParagraph (text: string) (maxCharsPerLine: int) : string =
                     if firstSpace < 0 then
                         trimmed
                     else
-                        trimmed.[.. firstSpace - 1]
+                        trimmed.Substring(0, firstSpace)
 
                 isBulletText firstWord
 
