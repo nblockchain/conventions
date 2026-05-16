@@ -4,20 +4,20 @@
 #
 set -euo pipefail
 
-echo "Running pre-commit format check..."
+echo "Running pre-commit format checks..."
 
+echo "Running prettier format check..."
 if ! npm run format:check > /dev/null 2>&1; then
     echo ""
-    echo "❌ Prettier check failed. Please run 'npm run format' to fix formatting issues, then stage the changes and try committing again."
+    echo "❌ Prettier check failed. Please run 'make format' to fix formatting issues, then stage the changes and try committing again."
     npm run format:check
     exit 1
 fi
 
 echo "Running fantomless format check..."
-
 if ! dnx fantomless-tool --check --recurse . > /dev/null 2>&1; then
     echo ""
-    echo "❌ Fantomless check failed. Please run 'dnx fantomless-tool --recurse .' to fix formatting issues, then stage the changes and try committing again."
+    echo "❌ Fantomless check failed. Please run 'make format' to fix formatting issues, then stage the changes and try committing again."
     dnx fantomless-tool --check --recurse .
     exit 1
 fi
