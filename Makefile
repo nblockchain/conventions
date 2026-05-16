@@ -2,4 +2,4 @@
 
 format:
 	npm run format
-	dnx fantomless-tool --recurse .
+	dnx --yes fantomless-tool --recurse .
