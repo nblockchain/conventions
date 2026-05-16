@@ -286,6 +286,7 @@ export const abbr = {
     "similar": "like",
     "six": "6",
     "single": "lone",
+    "skip ci": "no ci",
     "software": "sw",
     "solution": "sol",
     "solutions": "sols",
