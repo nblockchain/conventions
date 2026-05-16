@@ -283,6 +283,43 @@ no git commit --amend loop is needed."
 
     Assert.That(WrapText text characterCount, Is.EqualTo expectedText)
 
+[<Test>]
+let WrapTextTest15() =
+    let characterCount = 64
+
+    let textWithAsterisksAndNoColon =
+        "Fixed bug (a title of less than 50 chars)
+
+* Foo.
+* Bar."
+
+    Assert.That(
+        WrapText textWithAsterisksAndNoColon characterCount,
+        Is.EqualTo textWithAsterisksAndNoColon
+    )
+
+    let textWithDashesAndNoColon =
+        "Fixed bug (a title of less than 50 chars)
+
+- Foo.
+- Bar."
+
+    Assert.That(
+        WrapText textWithDashesAndNoColon characterCount,
+        Is.EqualTo textWithDashesAndNoColon
+    )
+
+    let textWithNumberBulletsAndNoColon =
+        "Fixed bug (a title of less than 50 chars)
+
+1. Foo.
+2. Bar."
+
+    Assert.That(
+        WrapText textWithNumberBulletsAndNoColon characterCount,
+        Is.EqualTo textWithNumberBulletsAndNoColon
+    )
+
 #warnon "0044"
 
 [<Test>]
