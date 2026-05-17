@@ -206,23 +206,25 @@
     * Magic numbers: avoid using unnamed numerical constants in software code, since this practice makes code hard to understand and maintain.
 
     Example (bad):
-    ```csharp
-    var distance = GpsUtil.GetDistance();
-    if (distance < 100) {
-        throw new NotImplementedException();
-    }
+    ```fsharp
+    let commitDescription =
+        if commitLines.Length >= 3 then
+            String.Join(Environment.NewLine, commitLines |> Seq.skip 2).Trim()
+        else
+            String.Empty
     ```
 
     Improved code:
-    ```csharp
-    private const int MinimumSupportedDistanceToNotifyKillerDrones = 100;
+    ```fsharp
+    let commitDescription =
+        // because the 1st is the commit msg title, and the 2nd is separation between title & body
+        let linesToSkipToReachCommitMsgBody = 2
 
-    ...
-
-    var distance = GpsUtil.GetDistance()
-    if (distance < MinimumSupportedDistanceToNotifyKillerDrones) {
-        throw new NotImplementedException();
-    }
+        if commitLines.Length > linesToSkipToReachCommitMsgBody then
+            commitMsgBodyLines = commitLines |> Seq.skip linesToSkipToReachCommitMsgBody
+            String.Join(Environment.NewLine, commitMsgBodyLines).Trim()
+        else
+            String.Empty
     ```
 
     * DRY (Don't Repeat Yourself): the DRY principle suggests that a piece of information should only be stored once in a project and referenced as needed, rather than being copied and pasted multiple times throughout the codebase.
@@ -493,26 +495,29 @@
     // increment the counter
     counter++;
 
-    // get the user
-    var user = GetUser(id);
+    // commit msg has body
+    if (commitLines.Length > 2) {
+        // get the user
+        var user = GetUser(id);
 
-    var freshData = FetchData();
-
-    // update counter on user record to make user appear in Recent view
-    user.counterSoFar = counter;
+        var freshData = FetchData();
+        ...
+    }
     ```
 
     Improved code:
     ```csharp
     counter++;
 
-    // get the user in order to verify operation
-    var user = GetUser(id);
+    var commitMsgHasBody = commitLines.Length > 2
+    if (commitMsgHasBody) {
+        // get the user in order to verify operation
+        var user = GetUser(id);
 
-    // retry because the API sometimes returns stale data on the first call
-    var freshData = FetchData();
-
-    UpdateUserCounterToMakeItAppearInRecentView(user, counter);
+        // fetch again because the API sometimes returns stale data on the first call
+        var freshData = FetchData(user);
+        ...
+    }
     ```
 
 * Add comments on top of code (on a line above it), not next to it, to avoid horizontal scrolling.
